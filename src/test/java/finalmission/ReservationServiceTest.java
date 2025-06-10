@@ -1,6 +1,5 @@
 package finalmission;
 
-import finalmission.dto.LoginMember;
 import finalmission.dto.ReservationRegisterDto;
 import finalmission.model.Member;
 import finalmission.model.Reservation;
@@ -59,7 +58,7 @@ public class ReservationServiceTest {
         );
 
         // when
-        reservationService.registerReservation(reservationRegisterDto, new LoginMember(member.getId()));
+        reservationService.registerReservation(reservationRegisterDto, member);
 
         // then
         List<Reservation> foundReservation = reservationRepository.findAll();
@@ -81,7 +80,7 @@ public class ReservationServiceTest {
 
         // when & then
         assertThatThrownBy(() -> reservationService.getReservation(reservation.getId(),
-                new LoginMember(member.getId())))
+                member))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -94,8 +93,7 @@ public class ReservationServiceTest {
         Seat seat = saveSeat();
         Reservation reservation = saveReservation(anotherMember, seat);
         // when & then
-        assertThatThrownBy(() -> reservationService.updateReservation(reservation.getId(), null,
-                new LoginMember(member.getId())))
+        assertThatThrownBy(() -> reservationService.updateReservation(reservation.getId(), null, member))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -108,8 +106,7 @@ public class ReservationServiceTest {
         Seat seat = saveSeat();
 
         // when & then
-        assertThatThrownBy(() -> reservationService.updateReservation(123L, null,
-                new LoginMember(member.getId())))
+        assertThatThrownBy(() -> reservationService.updateReservation(123L, null, member))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -123,8 +120,7 @@ public class ReservationServiceTest {
         Reservation reservation = saveReservation(anotherMember, seat);
 
         // when & then
-        assertThatThrownBy(() -> reservationService.updateReservation(reservation.getId(), null,
-                new LoginMember(member.getId())))
+        assertThatThrownBy(() -> reservationService.updateReservation(reservation.getId(), null, member))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -137,8 +133,7 @@ public class ReservationServiceTest {
         Seat seat = saveSeat();
 
         // when & then
-        assertThatThrownBy(() -> reservationService.updateReservation(123L, null,
-                new LoginMember(member.getId())))
+        assertThatThrownBy(() -> reservationService.updateReservation(123L, null, member))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -151,7 +146,7 @@ public class ReservationServiceTest {
         Reservation reservation = saveReservation(member, seat);
 
         // when
-        reservationService.deleteReservation(reservation.getId(), new LoginMember(member.getId()));
+        reservationService.deleteReservation(reservation.getId(), member);
 
         // then
         assertThat(reservationRepository.findById(reservation.getId())).isEmpty();

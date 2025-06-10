@@ -1,6 +1,5 @@
 package finalmission.presentation.service;
 
-import finalmission.dto.LoginMember;
 import finalmission.dto.ReservationDetailResponseDto;
 import finalmission.dto.ReservationRegisterDto;
 import finalmission.dto.ReservationResponseDto;
@@ -28,17 +27,14 @@ public class ReservationService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void registerReservation(ReservationRegisterDto reservationRegisterDto, LoginMember loginMember) {
-        Member member = findMember(loginMember);
+    public void registerReservation(ReservationRegisterDto reservationRegisterDto, Member member) {
         Seat seat = findSeat(reservationRegisterDto.seatId());
 
         Reservation reservation = reservationRegisterDto.toReservation(member, seat);
         reservationRepository.save(reservation);
     }
 
-    public List<ReservationResponseDto> getMyReservations(LoginMember loginMember) {
-        Member member = findMember(loginMember);
-
+    public List<ReservationResponseDto> getMyReservations(Member member) {
         List<Reservation> foundReservations = reservationRepository.findByMember(member);
         return foundReservations.stream()
                 .map(reservation -> {
@@ -56,8 +52,7 @@ public class ReservationService {
                 .toList();
     }
 
-    public ReservationDetailResponseDto getReservation(Long reservationId, LoginMember loginMember) {
-        Member member = findMember(loginMember);
+    public ReservationDetailResponseDto getReservation(Long reservationId, Member member) {
         Reservation reservation = findReservation(reservationId);
 
         checkAuthorityOfReservation(reservation, member);
@@ -76,8 +71,7 @@ public class ReservationService {
 
     @Transactional
     public void updateReservation(Long reservationId, ReservationUpdateDto reservationUpdateDto,
-                                  LoginMember loginMember) {
-        Member member = findMember(loginMember);
+                                  Member member) {
         Reservation reservation = findReservation(reservationId);
         checkAuthorityOfReservation(reservation, member);
 
@@ -87,8 +81,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void deleteReservation(Long reservationId, LoginMember loginMember) {
-        Member member = findMember(loginMember);
+    public void deleteReservation(Long reservationId, Member member) {
         Reservation reservation = findReservation(reservationId);
         checkAuthorityOfReservation(reservation, member);
 
@@ -109,10 +102,5 @@ public class ReservationService {
     private Seat findSeat(Long id) {
         return seatRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 좌석입니다."));
-    }
-
-    private Member findMember(LoginMember loginMember) {
-        return memberRepository.findById(loginMember.id())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
     }
 }

@@ -1,11 +1,12 @@
 package finalmission.presentation.controller;
 
-import finalmission.dto.LoginMember;
 import finalmission.dto.ReservationDetailResponseDto;
 import finalmission.dto.ReservationRegisterDto;
 import finalmission.dto.ReservationResponseDto;
 import finalmission.dto.ReservationUpdateDto;
+import finalmission.model.Member;
 import finalmission.presentation.service.ReservationService;
+import finalmission.service.AuthenticatedMember;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,30 +27,30 @@ public class ReservationController {
 
     @PostMapping
     public void registerReservation(@RequestBody ReservationRegisterDto reservationRegisterDto,
-                                    LoginMember loginMember) {
-        reservationService.registerReservation(reservationRegisterDto, loginMember);
+                                    @AuthenticatedMember Member member) {
+        reservationService.registerReservation(reservationRegisterDto, member);
     }
 
     @GetMapping("/mine")
-    public List<ReservationResponseDto> getMyReservations(LoginMember loginMember) {
-        return reservationService.getMyReservations(loginMember);
+    public List<ReservationResponseDto> getMyReservations(@AuthenticatedMember Member member) {
+        return reservationService.getMyReservations(member);
     }
 
     @GetMapping("/{reservationId}")
     public ReservationDetailResponseDto getReservationInDetail(@PathVariable Long reservationId,
-                                                               LoginMember loginMember) {
-        return reservationService.getReservation(reservationId, loginMember);
+                                                               @AuthenticatedMember Member member) {
+        return reservationService.getReservation(reservationId, member);
     }
 
     @PutMapping("/{reservationId}")
     public void updateReservation(@PathVariable Long reservationId,
                                   @RequestBody ReservationUpdateDto reservationUpdateDto,
-                                  LoginMember loginMember) {
-        reservationService.updateReservation(reservationId, reservationUpdateDto, loginMember);
+                                  @AuthenticatedMember Member member) {
+        reservationService.updateReservation(reservationId, reservationUpdateDto, member);
     }
 
     @DeleteMapping("/{reservationId}")
-    public void deleteReservation(@PathVariable Long reservationId, LoginMember loginMember) {
-        reservationService.deleteReservation(reservationId, loginMember);
+    public void deleteReservation(@PathVariable Long reservationId, @AuthenticatedMember Member member) {
+        reservationService.deleteReservation(reservationId, member);
     }
 }
