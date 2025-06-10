@@ -6,6 +6,7 @@ import finalmission.domain.reservation.entity.Reservation;
 import finalmission.domain.reservation.exception.DuplicateReservationException;
 import finalmission.domain.reservation.exception.ReservationNotFoundException;
 import finalmission.infrastructure.member.JpaMemberRepository;
+import finalmission.infrastructure.openapi.HolidayApi;
 import finalmission.infrastructure.reservation.JpaReservationRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,6 +21,7 @@ public class ReservationService {
 
     private final JpaReservationRepository reservationRepository;
     private final JpaMemberRepository memberRepository;
+    private final HolidayApi holidayApi;
 
     @Transactional
     public Reservation create(
@@ -31,8 +33,7 @@ public class ReservationService {
         final Member member = memberRepository.findByNameAndPhoneNumber(name, phoneNumber);
         final Reservation reservation = new Reservation(member, lesson, date, time);
         checkDuplicateReservation(lesson, date, time);
-        //TODO : 공휴일인지도 확인을 해야함.
-        //여기서 Restclient를 이용해서 외부 API에 request를 보내야함.
+        final String response = holidayApi.requestHoliday();
         final Reservation savedReservation = reservationRepository.save(reservation);
 
         return savedReservation;

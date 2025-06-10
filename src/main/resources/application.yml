@@ -26,4 +26,4 @@ spring:
 
 openapi:
   public-holidays:
-    service-key: "9fDRHHnLRP5Rlocx3yfWBY6aJj+uF2CY4CMysP7LC3UObkhWIWh73N+3E9tj0ELDmpRBaQkpM7MToAxwlqAkHQ=="
+    request-url: "https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?serviceKey=9fDRHHnLRP5Rlocx3yfWBY6aJj%2BuF2CY4CMysP7LC3UObkhWIWh73N%2B3E9tj0ELDmpRBaQkpM7MToAxwlqAkHQ%3D%3D&solYear=2025&solMonth=05&_type=json"
