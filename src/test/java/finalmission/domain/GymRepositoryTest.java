@@ -1,7 +1,10 @@
 package finalmission.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +24,12 @@ class GymRepositoryTest {
         var savedGym = gymRepository.save(gym);
 
         assertThat(gymRepository.findById(savedGym.getId())).hasValue(gym);
+    }
+
+    @Test
+    @DisplayName("조회하려는 ID가 없으면 예외가 발생한다.")
+    void getById() {
+        assertThatThrownBy(() -> gymRepository.getById(UUID.randomUUID()))
+            .isInstanceOf(NoSuchElementException.class);
     }
 }
