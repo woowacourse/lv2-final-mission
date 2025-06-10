@@ -5,7 +5,6 @@
 ### 예약 기능
 - POST "/reservations"
 - 사용자는 회의실을 예약할 수 있습니다.
-- 예약 성공시 예약 확인 메일을 전송합니다. (외부 API : Twilio SendGrid)
 
 ### 예약 현황 조회
 - GET "/reservations/search"
@@ -25,11 +24,11 @@
 - DELETE "/reservations"
 - 사용자는 본인의 예약을 삭제할 수 있습니다.
 
-### 회원 가입 - O
+### 회원 가입
 - POST "/members/signup"
 - 사용자는 회원가입을 할 수 있습니다.
 - 이름 추천 기능을 제공합니다. (외부 API : Randommer.io)
 
-### 로그인 - O
+### 로그인
 - GET "/members/login"
 - 사용자는 로그인을 할 수 있습니다.
