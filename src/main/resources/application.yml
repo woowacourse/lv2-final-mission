@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: lv2-final-mission
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  # DB connection setting
+  datasource:
+    url: jdbc:h2:mem:database
+    username: sa
+    password: password
+  # DB initialization
+  sql:
+    init:
+      mode: embedded
+  # JPA settings
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+
+openapi:
+  public-holidays:
+    request-url: "https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?serviceKey=9fDRHHnLRP5Rlocx3yfWBY6aJj%2BuF2CY4CMysP7LC3UObkhWIWh73N%2B3E9tj0ELDmpRBaQkpM7MToAxwlqAkHQ%3D%3D&solYear=2025&solMonth=05&_type=json"
