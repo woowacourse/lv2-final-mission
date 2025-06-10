@@ -4,6 +4,7 @@ import finalmission.domain.Member;
 import finalmission.infrastructure.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class FakeMemberRepository implements MemberRepository {
@@ -17,5 +18,12 @@ public class FakeMemberRepository implements MemberRepository {
                 member.getPassword());
         members.add(newMember);
         return newMember;
+    }
+
+    @Override
+    public Optional<Member> findByEmail(String email) {
+        return members.stream()
+                .filter(member -> member.getEmail().equals(email))
+                .findFirst();
     }
 }

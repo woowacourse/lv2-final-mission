@@ -1,7 +1,7 @@
 package finalmission.presentation;
 
-import finalmission.dto.MemberRequest;
-import finalmission.dto.MemberResponse;
+import finalmission.dto.request.MemberRequest;
+import finalmission.dto.response.MemberResponse;
 import finalmission.service.MemberService;
 import java.net.URI;
 import org.springframework.http.ResponseEntity;

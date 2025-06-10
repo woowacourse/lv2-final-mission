@@ -1,8 +1,8 @@
 package finalmission.service;
 
 import finalmission.domain.Member;
-import finalmission.dto.MemberRequest;
-import finalmission.dto.MemberResponse;
+import finalmission.dto.request.MemberRequest;
+import finalmission.dto.response.MemberResponse;
 import finalmission.infrastructure.MemberRepository;
 import org.springframework.stereotype.Service;
 

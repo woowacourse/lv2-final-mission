@@ -1,7 +1,9 @@
 package finalmission.unit.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import finalmission.presentation.AuthController;
 import finalmission.presentation.MemberController;
+import finalmission.service.AuthService;
 import finalmission.service.MemberService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -11,7 +13,8 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(value = {
-        MemberController.class
+        MemberController.class,
+        AuthController.class
 })
 @ExtendWith(value = {MockitoExtension.class})
 public abstract class ControllerTest {
@@ -24,4 +27,7 @@ public abstract class ControllerTest {
 
     @MockitoBean
     MemberService memberService;
+
+    @MockitoBean
+    AuthService authService;
 }

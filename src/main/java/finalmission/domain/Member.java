@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Member {
@@ -34,6 +35,13 @@ public class Member {
         this.password = password;
     }
 
+    public void validatePassword(String password) {
+        if (this.password.equals(password)) {
+            return;
+        }
+        throw new WrongPasswordException();
+    }
+
     public Long getId() {
         return id;
     }
@@ -48,5 +56,18 @@ public class Member {
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Member member)) {
+            return false;
+        }
+        return Objects.equals(id, member.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

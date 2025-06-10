@@ -1,4 +1,4 @@
-package finalmission.dto;
+package finalmission.dto.response;
 
 import finalmission.domain.Member;
 

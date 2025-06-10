@@ -2,8 +2,8 @@ package finalmission.unit.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import finalmission.dto.MemberRequest;
-import finalmission.dto.MemberResponse;
+import finalmission.dto.request.MemberRequest;
+import finalmission.dto.response.MemberResponse;
 import finalmission.service.MemberService;
 import finalmission.unit.fake.FakeMemberRepository;
 import org.junit.jupiter.api.Test;
