@@ -1,5 +1,7 @@
 package finalmission.infrastructure.randommer;
 
+import finalmission.dto.NameGenerateRequestDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,16 @@ public class RandommerRestClient {
                 .header("X-Api-Key", apiKey)
                 .retrieve()
                 .body(new ParameterizedTypeReference<String>() {
+                });
+    }
+
+    public List<String> generateNames(NameGenerateRequestDto nameGenerateRequestDto) {
+        return restClient.get()
+                .uri("?nameType=firstname&quantity=" + nameGenerateRequestDto.quantity())
+                .accept(MediaType.ALL)
+                .header("X-Api-Key", apiKey)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<String>>() {
                 });
     }
 }
