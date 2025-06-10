@@ -30,7 +30,7 @@ import org.springframework.test.context.TestPropertySource;
 public class ReservationIntegrationTest {
 
     public static final String TOKEN = "token";
-    private static final LocalDateTime TIME = LocalDateTime.now().plusDays(1);
+    private static final LocalDateTime TIME = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.MINUTES);
     private static final String DESCRIPTION = "description";
     private static final long ROOM_ID = 1L;
 
