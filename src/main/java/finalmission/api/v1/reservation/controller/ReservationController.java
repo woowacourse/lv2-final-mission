@@ -3,6 +3,7 @@ package finalmission.api.v1.reservation.controller;
 import finalmission.api.v1.reservation.dto.ReservationDeleteRequest;
 import finalmission.api.v1.reservation.dto.ReservationDetailGetRequest;
 import finalmission.api.v1.reservation.dto.ReservationDetailResponse;
+import finalmission.api.v1.reservation.dto.ReservationModifyRequest;
 import finalmission.api.v1.reservation.dto.ReservationRequest;
 import finalmission.api.v1.reservation.dto.ReservationResponse;
 import finalmission.api.v1.reservation.service.ReservationService;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +42,14 @@ public class ReservationController {
             @Valid @RequestBody final ReservationDetailGetRequest request
     ) {
         return reservationService.getReservationDetail(id, request);
+    }
+
+    @PatchMapping("/{id}")
+    public ReservationResponse modifyReservation(
+            @NotNull @PathVariable final Long id,
+            @Valid @RequestBody final ReservationModifyRequest request
+    ) {
+        return reservationService.modifyReservation(id, request);
     }
 
     @DeleteMapping("/{id}")

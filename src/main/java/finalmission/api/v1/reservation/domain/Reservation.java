@@ -52,5 +52,9 @@ public class Reservation {
     public boolean isSamePhoneNumber(final String phoneNumber) {
         return this.phoneNumber.equals(phoneNumber);
     }
+
+    public void modifyPhoneNumber(final String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
 

@@ -7,6 +7,7 @@ import finalmission.api.v1.reservation.domain.ReservationTime;
 import finalmission.api.v1.reservation.dto.ReservationDeleteRequest;
 import finalmission.api.v1.reservation.dto.ReservationDetailGetRequest;
 import finalmission.api.v1.reservation.dto.ReservationDetailResponse;
+import finalmission.api.v1.reservation.dto.ReservationModifyRequest;
 import finalmission.api.v1.reservation.dto.ReservationRequest;
 import finalmission.api.v1.reservation.dto.ReservationResponse;
 import finalmission.api.v1.reservation.repository.ReservationRepository;
@@ -40,12 +41,12 @@ public class ReservationService {
                 .reservationTime(reservationTime)
                 .build();
         final Reservation newReservation = reservationRepository.save(reservation);
-        return new ReservationResponse(newReservation, reservation.getDate(), reservationTime.getTime());
+        return new ReservationResponse(newReservation);
     }
 
+    @Transactional(readOnly = true)
     public ReservationDetailResponse getReservationDetail(final Long id, final ReservationDetailGetRequest request) {
-        final Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 예약입니다."));
+        final Reservation reservation = getReservation(id);
         if (reservation.isSamePhoneNumber(request.phoneNumber())) {
             return new ReservationDetailResponse(reservation, reservation.getDate(), reservation.getReservationTime().getTime());
         }
@@ -53,13 +54,29 @@ public class ReservationService {
     }
 
 
+    @Transactional
     public void deleteReservation(final Long id, final ReservationDeleteRequest request) {
-        final Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 예약입니다."));
+        final Reservation reservation = getReservation(id);
         if (reservation.isSamePhoneNumber(request.phoneNumber())) {
             reservationRepository.deleteById(id);
             return;
         }
         throw new ReservationException("내 예약만 삭제할 수 있습니다.");
+    }
+
+    @Transactional
+    public ReservationResponse modifyReservation(final Long id, final ReservationModifyRequest request) {
+        final Reservation reservation = getReservation(id);
+        if (reservation.isSamePhoneNumber(request.phoneNumber())) {
+            reservation.modifyPhoneNumber(request.newPhoneNumber());
+            return new ReservationResponse(reservation);
+        }
+        throw new ReservationException("내 예약만 수정할 수 있습니다.");
+
+    }
+
+    private Reservation getReservation(final Long id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 예약입니다."));
     }
 }
