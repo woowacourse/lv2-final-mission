@@ -10,6 +10,8 @@ import finalmission.room.domain.Room;
 import finalmission.room.dto.RoomResponse;
 import finalmission.room.repository.RoomRepository;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,5 +43,19 @@ public class ReservationService {
         return reservationRepository.findAll().stream()
                 .map(reservation -> new ReservationResponse(new MemberResponse(reservation.getMember().getName()), new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime()))
                 .toList();
+    }
+
+    @Transactional
+    public void deleteReservation(Long id, Long memberId) {
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+
+        if (reservation.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 예약 id입니다.");
+        }
+        if (!Objects.equals(reservation.get().getMember().getId(), memberId)) {
+            throw new IllegalArgumentException("해당 예약을 삭제할 권한이 없습니다.");
+        }
+
+        reservationRepository.deleteById(id);
     }
 }

@@ -6,7 +6,9 @@ import finalmission.reservation.dto.ReservationResponse;
 import finalmission.reservation.service.ReservationService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,5 +32,11 @@ public class ReservationController {
     @GetMapping
     private ResponseEntity<List<ReservationResponse>> getReservations() {
         return ResponseEntity.ok(reservationService.getAll());
+    }
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<Void> deleteReservation(@PathVariable Long id, Member member) {
+        reservationService.deleteReservation(id, member.getId());
+        return ResponseEntity.ok().build();
     }
 }
