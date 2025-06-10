@@ -64,7 +64,17 @@ public class Reservation {
         if (dateTime.isBefore(currentDateTime)) {
             throw new IllegalArgumentException("과거로 예약할 수 없습니다.");
         }
-        refrigerator.reserve(monsterEnergy, quantity);
+        refrigerator.decrease(monsterEnergy, quantity);
         return new Reservation(null, monsterEnergy, quantity, dateTime, refrigerator, member);
+    }
+
+    public void updateQuantity(int quantity) {
+        refrigerator.increment(monsterEnergy, this.quantity);
+        refrigerator.decrease(monsterEnergy, quantity);
+        this.quantity = quantity;
+    }
+
+    public boolean isMemberId(Long memberId) {
+        return member.getId().equals(memberId);
     }
 }

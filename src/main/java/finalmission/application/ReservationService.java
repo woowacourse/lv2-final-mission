@@ -1,8 +1,10 @@
 package finalmission.application;
 
 import finalmission.application.dto.request.CreateReservationRequest;
+import finalmission.application.dto.request.UpdateReservationRequest;
 import finalmission.application.dto.response.CreateReservationResponse;
 import finalmission.application.dto.response.ReservationDetailResponse;
+import finalmission.application.support.exception.BusinessRuleViolationException;
 import finalmission.application.support.exception.NotFoundEntityException;
 import finalmission.domain.Member;
 import finalmission.domain.MemberRepository;
@@ -58,6 +60,15 @@ public class ReservationService {
                 .toList();
     }
 
+    @Transactional
+    public void update(Long memberId, Long reservationId, UpdateReservationRequest updateReservationRequest) {
+        Reservation reservation = getReservation(reservationId);
+        if (!reservation.isMemberId(memberId)) {
+            throw new BusinessRuleViolationException("예약을 생성한 사용자만 수정이 가능합니다.");
+        }
+        reservation.updateQuantity(updateReservationRequest.quantity());
+    }
+
     private Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundEntityException("해당 사용자가 존재하지 않습니다."));
@@ -66,5 +77,10 @@ public class ReservationService {
     private Refrigerator getRefrigerator(String refrigeratorId) {
         return refrigeratorRepository.findById(refrigeratorId)
                 .orElseThrow(() -> new NotFoundEntityException("해당 ID의 냉장고가 존재하지 않습니다."));
+    }
+
+    private Reservation getReservation(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundEntityException("해당 예약이 존재하지 않습니다."));
     }
 }

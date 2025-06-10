@@ -25,7 +25,16 @@ public class Refrigerator {
         this.id = id;
     }
 
-    public void reserve(MonsterEnergy monsterEnergy, int quantity) {
+    public void increment(MonsterEnergy monsterEnergy, int quantity) {
+        for (MonsterEnergyStock monsterEnergyStock : monsterEnergyStocks) {
+            if (monsterEnergyStock.isMonsterEnergy(monsterEnergy)) {
+                monsterEnergyStock.increment(quantity);
+                break;
+            }
+        }
+    }
+
+    public void decrease(MonsterEnergy monsterEnergy, int quantity) {
         boolean isReserved = false;
         for (MonsterEnergyStock monsterEnergyStock : monsterEnergyStocks) {
             if (monsterEnergyStock.isMonsterEnergy(monsterEnergy)) {

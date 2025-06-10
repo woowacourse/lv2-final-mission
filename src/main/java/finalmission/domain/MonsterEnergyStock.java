@@ -43,6 +43,10 @@ public class MonsterEnergyStock {
         System.out.println("stock = " + stock);
     }
 
+    public void increment(int quantity) {
+        this.stock += quantity;
+    }
+
     public boolean isMonsterEnergy(MonsterEnergy monsterEnergy) {
         return this.monsterEnergy == monsterEnergy;
     }

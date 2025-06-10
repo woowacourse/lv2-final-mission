@@ -2,6 +2,7 @@ package finalmission.presentation;
 
 import finalmission.application.ReservationService;
 import finalmission.application.dto.request.CreateReservationRequest;
+import finalmission.application.dto.request.UpdateReservationRequest;
 import finalmission.application.dto.response.CreateReservationResponse;
 import finalmission.application.dto.response.ReservationDetailResponse;
 import finalmission.presentation.support.methodresolver.AuthInfo;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,5 +52,15 @@ public class ReservationController {
                 refrigeratorId
         );
         return ResponseEntity.ok(reservationDetailResponses);
+    }
+
+    @PatchMapping("/{reservationId}")
+    public ResponseEntity<Void> updateReservation(
+            @PathVariable Long reservationId,
+            @AuthPrincipal AuthInfo authInfo,
+            @RequestBody UpdateReservationRequest updateReservationRequest
+    ) {
+        reservationService.update(authInfo.memberId(), reservationId, updateReservationRequest);
+        return ResponseEntity.noContent().build();
     }
 }
