@@ -18,10 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RandomNameGenerator randomNameGenerator;
 
     @Transactional
     public MemberResponse create(MemberRequest request) {
-        Name name = new Name(request.name());
+        Name name = new Name(randomNameGenerator.generateName());
         Password password = new Password(request.password(), passwordEncoder);
         Email email = new Email(request.email());
         validateEmailDuplicated(email);
