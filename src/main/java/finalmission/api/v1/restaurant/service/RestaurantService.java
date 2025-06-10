@@ -13,10 +13,7 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
 
     public List<RestaurantResponse> findAll() {
-        return restaurantRepository.findAll()
-                .stream()
-                .map(RestaurantResponse::new)
-                .toList();
+        return restaurantRepository.findAll().stream().map(RestaurantResponse::new).toList();
 
     }
 }

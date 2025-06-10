@@ -2,10 +2,14 @@ package finalmission.api.v1.restaurant.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,8 +27,8 @@ public class Restaurant {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private Long reservationCapacity;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<ReservationCapacity> reservationCapacities = new ArrayList<>();
 
     @Column(nullable = false)
     private String address;
@@ -36,12 +40,12 @@ public class Restaurant {
     private LocalTime closingTime;
 
     @Builder
-    public Restaurant(final Long id, final String name, final Long reservationCapacity, final String address,
-                      final LocalTime openTime,
-                      final LocalTime closingTime) {
+    public Restaurant(final Long id, final String name, final List<ReservationCapacity> reservationCapacities,
+                      final String address,
+                      final LocalTime openTime, final LocalTime closingTime) {
         this.id = id;
         this.name = name;
-        this.reservationCapacity = reservationCapacity;
+        this.reservationCapacities = reservationCapacities;
         this.address = address;
         this.openTime = openTime;
         this.closingTime = closingTime;
