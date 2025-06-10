@@ -2,10 +2,12 @@ package finalmission.presentation;
 
 import finalmission.dto.request.LoginRequest;
 import finalmission.service.AuthService;
+import finalmission.service.PasswordResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +38,11 @@ public class AuthController {
                 .path("/")
                 .build();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+    }
+
+    @GetMapping("/password-recommend")
+    public ResponseEntity<PasswordResponse> recommendPassword() {
+        PasswordResponse response = authService.recommendPassword();
+        return ResponseEntity.ok(response);
     }
 }
