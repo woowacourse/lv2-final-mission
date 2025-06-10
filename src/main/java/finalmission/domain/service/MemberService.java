@@ -19,7 +19,7 @@ public class MemberService {
     }
 
     public void registerMember(SignUpRequest request) {
-        Member member = Member.createWithoutId(request.name(), request.email(), request.password());
+        Member member = Member.createWithoutId(request.name(), request.email(), request.password(), 2);
 
         if (memberRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("이메일은 중복될 수 없습니다.");

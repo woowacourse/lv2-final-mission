@@ -25,6 +25,9 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private int ptNumber;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
@@ -33,15 +36,16 @@ public class Member {
 
     }
 
-    protected Member(Long id, String name, String email, String password) {
+    protected Member(Long id, String name, String email, String password, int ptNumber) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.ptNumber = ptNumber;
     }
 
-    public static Member createWithoutId(String name, String email, String password) {
-        return new Member(null, name, email, password);
+    public static Member createWithoutId(String name, String email, String password, int ptNumber) {
+        return new Member(null, name, email, password, ptNumber);
     }
 
     public boolean matchPassword(String comparedPassword) {
@@ -66,5 +70,9 @@ public class Member {
 
     public Trainer getTrainer() {
         return trainer;
+    }
+
+    public int getPtNumber() {
+        return ptNumber;
     }
 }
