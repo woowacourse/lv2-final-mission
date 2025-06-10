@@ -69,6 +69,14 @@ public class ReservationService {
         reservation.updateQuantity(updateReservationRequest.quantity());
     }
 
+    public void delete(Long memberId, Long reservationId) {
+        Reservation reservation = getReservation(reservationId);
+        if (!reservation.isMemberId(memberId)) {
+            throw new BusinessRuleViolationException("예약을 생성한 사용자만 삭제가 가능합니다.");
+        }
+        reservationRepository.delete(reservation);
+    }
+
     private Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundEntityException("해당 사용자가 존재하지 않습니다."));
