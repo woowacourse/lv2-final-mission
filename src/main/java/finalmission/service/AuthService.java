@@ -3,7 +3,7 @@ package finalmission.service;
 import finalmission.dto.LoginRequestDto;
 import finalmission.model.Member;
 import finalmission.repository.MemberRepository;
-import finalmission.support.JwtProvider;
+import finalmission.support.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
 
-    private final JwtProvider jwtProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public String login(LoginRequestDto loginRequestDto) {
         Member member = memberRepository.findByEmail(loginRequestDto.email())
@@ -23,6 +23,6 @@ public class AuthService {
             throw new IllegalArgumentException("올바르지 않는 비밀번호입니다.");
         }
 
-        return jwtProvider.createToken(member.getEmail());
+        return jwtTokenProvider.createToken(String.valueOf(member.getId()));
     }
 }

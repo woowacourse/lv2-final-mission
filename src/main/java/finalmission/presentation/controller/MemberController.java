@@ -1,4 +1,4 @@
-package finalmission.controller;
+package finalmission.presentation.controller;
 
 import finalmission.dto.MemberRegisterDto;
 import finalmission.service.MemberService;
