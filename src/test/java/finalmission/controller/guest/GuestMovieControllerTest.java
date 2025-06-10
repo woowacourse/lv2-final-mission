@@ -4,10 +4,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
 import finalmission.entity.Movie;
+import finalmission.entity.MovieReservation;
 import finalmission.entity.MovieSlot;
 import finalmission.fixture.MovieFixture;
 import finalmission.fixture.MovieSlotFixture;
 import finalmission.repository.MovieRepository;
+import finalmission.repository.MovieReservationRepository;
 import finalmission.repository.MovieSlotRepository;
 import io.restassured.RestAssured;
 import java.util.List;
@@ -32,6 +34,8 @@ class GuestMovieControllerTest {
     private MovieRepository movieRepository;
     @Autowired
     private MovieSlotRepository movieSlotRepository;
+    @Autowired
+    private MovieReservationRepository movieReservationRepository;
 
     @BeforeEach
     void setUp() {
@@ -60,6 +64,33 @@ class GuestMovieControllerTest {
     }
 
     @Test
+    @DisplayName("손님 영화 조회 - 성공 - 남은 좌석 확인")
+    void readMovieSlotCheckLeftSeats() {
+        // given
+        Movie movie = MovieFixture.createDefault();
+        movieRepository.save(movie);
+
+        MovieSlot movieSlot = MovieSlotFixture.create(movie);
+        movieSlotRepository.save(movieSlot);
+
+        Integer selectSeat = 1;
+        MovieReservation movieReservation = new MovieReservation("회원 이름", movieSlot, selectSeat);
+        movieReservationRepository.save(movieReservation);
+
+        // when & then
+        Integer exceptedLeftSeats = movieSlot.getSeats() - 1;
+        RestAssured
+                .given()
+                .when()
+                .get("/movies")
+                .then()
+                .body("$", hasSize(1))
+                .body("[0].movieName", equalTo(movie.getName()))
+                .body("[0].totalSeats", equalTo(movieSlot.getSeats()))
+                .body("[0].leftSeats", equalTo(exceptedLeftSeats));
+    }
+
+    @Test
     @DisplayName("손님 영화 조회 - 성공 - 필터링")
     void readMovieSlotFiltering() {
         // given
@@ -80,6 +111,7 @@ class GuestMovieControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .body("$", hasSize(1))
                 .body("[0].movieName", equalTo(movies.getFirst().getName()))
-                .body("[0].totalSeats", equalTo(movieSlots.getFirst().getSeats()));
+                .body("[0].totalSeats", equalTo(movieSlots.getFirst().getSeats()))
+                .body("[0].leftSeats", equalTo(movieSlots.getFirst().getSeats()));
     }
 }
