@@ -4,11 +4,13 @@ import finalmission.common.BaseEntity;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public class Player extends BaseEntity {
 
     private String nickname;
@@ -26,7 +28,7 @@ public class Player extends BaseEntity {
     }
 
     public void stop() {
-        requirdGo();
+        requireGo();
         playerStatus = PlayerStatus.STOP;
     }
 
@@ -37,7 +39,7 @@ public class Player extends BaseEntity {
         throw new IllegalStateException("넌 이미 진행 중이다");
     }
 
-    private void requirdGo() {
+    private void requireGo() {
         if (playerStatus.isGo()) {
             return;
         }

@@ -3,6 +3,7 @@ package finalmission.facade.application;
 import finalmission.apply.application.ApplyCounter;
 import finalmission.apply.application.ApplyCreator;
 import finalmission.party.application.PartyStatusUpdater;
+import finalmission.party.application.VacancyGetter;
 import finalmission.player.application.PlayerFinder;
 import finalmission.player.application.PlayerStatusUpdater;
 import lombok.RequiredArgsConstructor;
