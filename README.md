@@ -12,7 +12,8 @@
     - content: 팝업 설명
     - startAt: 시작일
     - endAt: 종료일
-    - maxEnteredMemberCount : 최대 수용 인원
+    - maxEnteredMemberCount: 최대 수용 인원
+    - shopkeeper: 상점주
 
 ### 예약 기능
 
@@ -25,15 +26,23 @@
 - 예약 도메인 모델
     - id: 예약 ID
     - member: 예약자
+    - popupStore: 상점
     - reservedAt: 예약 시간
 
 ### 멤버 기능
 
 - 가입할 수 있다.
-- 탈퇴할 수 있다.
 
 - 멤버 도메인 모델
     - id: 멤버 ID
+    - name: 이름
+
+### 점주 기능
+
+- 가입할 수 있다.
+
+- 점주 도메인 모델
+    - id: 점주 ID
     - name: 이름
 
 ---

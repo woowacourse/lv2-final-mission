@@ -7,6 +7,7 @@ public record CreatePopUpStoreIn(
         String content,
         LocalDateTime startAt,
         LocalDateTime endAt,
-        int maxEnteredMemberCount
+        int maxEnteredMemberCount,
+        Long shopkeeperId
 ) {
 }
