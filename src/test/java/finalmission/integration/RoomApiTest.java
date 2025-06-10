@@ -97,8 +97,7 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .param("id", room.getId())
-                .when().get("/room")
+                .when().get("/room/{id}", room.getId())
                 .then().log().all()
                 .statusCode(200)
                 .body("name", response -> equalTo("5대5 내전 구함"));
@@ -158,7 +157,7 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .when().get("/room/all")
+                .when().get("/room")
                 .then().log().all()
                 .statusCode(200)
                 .body("[0].name", response -> equalTo("5대5 내전 구함"));

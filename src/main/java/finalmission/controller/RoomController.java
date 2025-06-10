@@ -30,8 +30,8 @@ public class RoomController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    public ResponseEntity<RoomResponse> findById(@RequestParam("id") final Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<RoomResponse> findById(@PathVariable("id") final Long id) {
         final RoomResponse response = roomService.getById(id);
 
         return ResponseEntity.ok(response);
@@ -46,7 +46,7 @@ public class RoomController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<RoomWithoutParticipantsResponse>> findAll() {
         final List<RoomWithoutParticipantsResponse> response = roomService.findAll();
 
