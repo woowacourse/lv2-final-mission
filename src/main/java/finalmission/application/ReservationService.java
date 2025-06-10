@@ -77,6 +77,16 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
+    public ReservationDetailResponse getReservationById(Long reservationId) {
+        Reservation reservation = getReservation(reservationId);
+        return new ReservationDetailResponse(
+                reservation.getId(),
+                reservation.getMonsterEnergy(),
+                reservation.getQuantity(),
+                reservation.getDateTime()
+        );
+    }
+
     private Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundEntityException("해당 사용자가 존재하지 않습니다."));

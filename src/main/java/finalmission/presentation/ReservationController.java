@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/refrigerator/{refrigeratorId}/reservations")
+@RequestMapping("/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @PostMapping
+    @PostMapping("/refrigerator/{refrigeratorId}")
     public ResponseEntity<CreateReservationResponse> createReservation(
             @PathVariable String refrigeratorId,
             @Valid @RequestBody CreateReservationRequest createReservationRequest,
@@ -43,7 +43,7 @@ public class ReservationController {
                 .body(createReservationResponse);
     }
 
-    @GetMapping
+    @GetMapping("/refrigerator/{refrigeratorId}")
     public ResponseEntity<List<ReservationDetailResponse>> findAll(
             @PathVariable String refrigeratorId,
             @AuthPrincipal AuthInfo authInfo
@@ -72,5 +72,13 @@ public class ReservationController {
     ) {
         reservationService.delete(authInfo.memberId(), reservationId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{reservationId}")
+    public ResponseEntity<ReservationDetailResponse> getReservation(
+            @PathVariable Long reservationId
+    ) {
+        ReservationDetailResponse reservationDetailResponse = reservationService.getReservationById(reservationId);
+        return ResponseEntity.ok(reservationDetailResponse);
     }
 }
