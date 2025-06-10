@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Name {
+public class UserName {
 
     @Column(name = "name")
     private String value;
 
-    public Name(final String value) {
+    public UserName(final String value) {
         this.value = value;
     }
 }

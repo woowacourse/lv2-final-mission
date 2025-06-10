@@ -3,9 +3,9 @@ package woowaTable.user.application.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import woowaTable.user.domain.Customer;
-import woowaTable.user.domain.Name;
 import woowaTable.user.domain.Owner;
 import woowaTable.user.domain.Password;
+import woowaTable.user.domain.UserName;
 
 public record SignupRequest(
         @Email String email,
@@ -14,7 +14,7 @@ public record SignupRequest(
 ) {
     public Customer toCustomer() {
         return new Customer(
-                new Name(name),
+                new UserName(name),
                 new woowaTable.user.domain.Email(email),
                 new Password(password)
         );
@@ -22,7 +22,7 @@ public record SignupRequest(
 
     public Owner toOwner() {
         return new Owner(
-                new Name(name),
+                new UserName(name),
                 new woowaTable.user.domain.Email(email),
                 new Password(password)
         );

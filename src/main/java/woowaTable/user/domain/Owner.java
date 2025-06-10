@@ -21,7 +21,7 @@ public class Owner implements User {
     private Long id;
 
     @Embedded
-    private Name name;
+    private UserName userName;
 
     @Embedded
     private Email email;
@@ -31,22 +31,22 @@ public class Owner implements User {
 
     private Owner(
             final Long id,
-            final Name name,
+            final UserName userName,
             final Email email,
             final Password password
     ) {
         this.id = id;
-        this.name = name;
+        this.userName = userName;
         this.email = email;
         this.password = password;
     }
 
     public Owner(
-            final Name name,
+            final UserName userName,
             final Email email,
             final Password password
     ) {
-        this(null, name, email, password);
+        this(null, userName, email, password);
     }
 
     @Override
