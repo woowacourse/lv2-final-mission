@@ -34,13 +34,13 @@ public class ReservationController {
     }
 
     @GetMapping("/mine/{userId}")
-    public List<ReservationResponse> getAllReservationsByUserId(@PathVariable String userId) {
+    public List<ReservationResponse> getAllReservationsByUserId(@PathVariable Long userId) {
         return reservationService.getAllByUserId(userId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{userId}/{reservationId}")
-    public void deleteReservation(@PathVariable String userId,
+    public void deleteReservation(@PathVariable Long userId,
                                   @PathVariable Long reservationId) {
         reservationService.cancelReservation(reservationId, userId);
     }

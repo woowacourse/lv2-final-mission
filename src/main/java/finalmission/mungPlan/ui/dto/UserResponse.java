@@ -3,7 +3,7 @@ package finalmission.mungPlan.ui.dto;
 import finalmission.mungPlan.domain.User;
 
 public record UserResponse(
-    String id,
+    Long id,
     String name
 ) {
 

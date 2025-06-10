@@ -46,7 +46,7 @@ public class ReservationService {
         return new ReservationResponse(reservation);
     }
 
-    public void cancelReservation(Long reservationId, String userId) {
+    public void cancelReservation(Long reservationId, Long userId) {
         Reservation reservation = getReservationById(reservationId);
         if(reservation.isOwnedBy(userId)) {
             reservationRepository.delete(reservation);
@@ -60,7 +60,7 @@ public class ReservationService {
                 .orElseThrow(() -> new NotFoundException("reservation", reservationId));
     }
 
-    public List<ReservationResponse> getAllByUserId(String userId) {
+    public List<ReservationResponse> getAllByUserId(Long userId) {
         List<Reservation> reservations = reservationRepository.findByUserId(userId);
         return reservations.stream()
                 .map(ReservationResponse::new)
