@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import finalmission.dto.request.LoginRequest;
 import finalmission.service.AuthService;

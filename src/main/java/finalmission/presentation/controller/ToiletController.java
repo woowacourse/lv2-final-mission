@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import finalmission.dto.response.ToiletResponse;
 import finalmission.service.ToiletService;

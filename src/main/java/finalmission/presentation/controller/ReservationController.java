@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import finalmission.dto.request.ReservationRequest;
 import finalmission.dto.response.ReservationResponse;

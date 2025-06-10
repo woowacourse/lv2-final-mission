@@ -6,6 +6,7 @@ import finalmission.domain.Toilet;
 import finalmission.dto.request.ReservationRequest;
 import finalmission.dto.response.ReservationResponse;
 import finalmission.exception.MemberNotFoundException;
+import finalmission.exception.ToiletNotFoundException;
 import finalmission.infrastructure.MemberRepository;
 import finalmission.infrastructure.ReservationRepository;
 import finalmission.infrastructure.ToiletRepository;

@@ -1,6 +1,5 @@
-package finalmission.service;
+package finalmission.exception;
 
-import finalmission.exception.ApplicationException;
 import org.springframework.http.HttpStatus;
 
 public class ToiletNotFoundException extends ApplicationException {
