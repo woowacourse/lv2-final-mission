@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JpaReservationRepository extends ListCrudRepository<Reservation, Long> {
 
-    boolean findByLessonAndDateAndTime(final String lesson, final LocalDate date, final LocalTime time);
-
     List<Reservation> findByMember(final Member member);
+
+    boolean existsByLessonAndDateAndTime(final String lesson, final LocalDate date, final LocalTime time);
 }

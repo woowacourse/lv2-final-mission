@@ -3,6 +3,7 @@ package finalmission.domain.reservation.service;
 import finalmission.domain.member.entity.Member;
 import finalmission.domain.member.exception.MemberNotFoundException;
 import finalmission.domain.reservation.entity.Reservation;
+import finalmission.domain.reservation.exception.DuplicateReservationException;
 import finalmission.domain.reservation.exception.ReservationNotFoundException;
 import finalmission.infrastructure.member.JpaMemberRepository;
 import finalmission.infrastructure.reservation.JpaReservationRepository;
@@ -29,7 +30,7 @@ public class ReservationService {
             final LocalTime time) {
         final Member member = memberRepository.findByNameAndPhoneNumber(name, phoneNumber);
         final Reservation reservation = new Reservation(member, lesson, date, time);
-        //checkDuplicateReservation(lesson, date, time);
+        checkDuplicateReservation(lesson, date, time);
         //TODO : 공휴일인지도 확인을 해야함.
         //여기서 Restclient를 이용해서 외부 API에 request를 보내야함.
         final Reservation savedReservation = reservationRepository.save(reservation);
@@ -54,24 +55,31 @@ public class ReservationService {
 
     @Transactional(readOnly = true)
     public List<Reservation> getMyReservations(final Long id) {
-        final Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException("일치하는 회원이 존재하지 않습니다."));
+        final Member member = checkMemberPresence(id);
 
         return reservationRepository.findByMember(member);
     }
 
     @Transactional(readOnly = true)
     public Reservation findReservation(final Long id) {
-        final Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new ReservationNotFoundException("일치하는 예약이 존재하지 않습니다."));
+        final Reservation reservation = checkReservationPresence(id);
 
         return reservation;
     }
 
-//    //TODO : 뭔가 잘못됨.
-//    private void checkDuplicateReservation(final String lesson, final LocalDate date, final LocalTime time) {
-//        if (reservationRepository.findByLessonAndDateAndTime(lesson, date, time)) {
-//            throw new DuplicateReservationException("해당 수업에 대한 예약이 이미 존재합니다.");
-//        }
-//    }
+    private Reservation checkReservationPresence(Long id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotFoundException("일치하는 예약이 존재하지 않습니다."));
+    }
+
+    private Member checkMemberPresence(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException("일치하는 회원이 존재하지 않습니다."));
+    }
+
+    private void checkDuplicateReservation(final String lesson, final LocalDate date, final LocalTime time) {
+        if (reservationRepository.existsByLessonAndDateAndTime(lesson, date, time)) {
+            throw new DuplicateReservationException("해당 수업에 대한 예약이 이미 존재합니다.");
+        }
+    }
 }
