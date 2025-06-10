@@ -2,13 +2,24 @@ package finalmission.meetingroom.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import finalmission.meetingroom.domain.MeetingRoom;
 import finalmission.meetingroom.domain.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+
+    @Override
+    @Query("""
+            SELECT r
+            FROM Reservation r
+            JOIN FETCH r.meetingRoom
+            JOIN FETCH r.member
+            """)
+    List<Reservation> findAll();
 
     boolean existsByMeetingRoomAndReservationDateAndStartAtBetween(
             MeetingRoom meetingRoom,

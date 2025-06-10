@@ -1,5 +1,7 @@
 package finalmission.meetingroom.controller;
 
+import static org.hamcrest.CoreMatchers.is;
+
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -36,6 +38,35 @@ class ReservationControllerTest {
                 .when().post("/reservations")
                 .then().log().all()
                 .statusCode(201);
+    }
+
+    @DisplayName("모든 회의실 예약 현황을 조회한다.")
+    @Test
+    void getMeetingRoomReservations() {
+        String tokenValue = getUserTokenValue();
+        Map<String, Object> reservationParams = Map.of(
+                "meetingRoomName", "임팩트룸",
+                "reservationDate", LocalDate.now().plusDays(1L),
+                "startAt", "10:00",
+                "endAt", "11:00"
+        );
+
+        RestAssured.given().log().all()
+                .cookie("token", tokenValue)
+                .contentType(ContentType.JSON)
+                .body(reservationParams)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(201);
+
+        RestAssured.given().log().all()
+                .cookie("token", tokenValue)
+                .contentType(ContentType.JSON)
+                .body(reservationParams)
+                .when().get("/reservations")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(1));
     }
 
     private String getUserTokenValue() {
