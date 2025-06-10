@@ -1,15 +1,14 @@
-package finalmission.line;
+package finalmission.line.domain;
 
 import java.util.List;
 import finalmission.station.domain.Station;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Line {
 
     @Id
