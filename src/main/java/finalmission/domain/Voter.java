@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-public class Member {
+public class Voter {
 
     @EmbeddedId
     private final Id id = Id.random();
@@ -20,7 +20,7 @@ public class Member {
     @ManyToOne
     private final Room room;
 
-    public Member(String name, String password, Room room) {
+    public Voter(String name, String password, Room room) {
         this.name = name;
         this.password = password;
         this.room = room;

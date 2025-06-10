@@ -2,5 +2,5 @@ package finalmission.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberRepository extends JpaRepository<Member, Id> {
+public interface VoterRepository extends JpaRepository<Voter, Id> {
 }

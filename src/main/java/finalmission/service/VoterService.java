@@ -3,20 +3,22 @@ package finalmission.service;
 import finalmission.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class VoterService {
 
     private final RoomRepository roomRepository;
-    private final MemberRepository memberRepository;
+    private final VoterRepository voterRepository;
 
+    @Transactional
     public void register(String roomId, String name, String password) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
         if (room.containsNameOf(name)) {
-            throw new IllegalArgumentException("이미 해당 이름으로 등록된 사용자가 존재합니다.");
+            throw new IllegalArgumentException("이미 해당 이름으로 등록된 투표자가 존재합니다.");
         }
-        Member member = new Member(name, password, room);
-        memberRepository.save(member);
+        Voter voter = new Voter(name, password, room);
+        voterRepository.save(voter);
     }
 }

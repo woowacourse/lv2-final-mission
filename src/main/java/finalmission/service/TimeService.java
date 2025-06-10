@@ -14,17 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TimeService {
 
-    private final MemberRepository memberRepository;
+    private final VoterRepository voterRepository;
     private final RoomRepository roomRepository;
     private final TimeRepository timeRepository;
 
     @Transactional
     public void addTime(String roomId, String memberId, List<LocalDateTime> values) {
-        Member member = memberRepository.findById(new Id(memberId)).orElseThrow();
+        Voter voter = voterRepository.findById(new Id(memberId)).orElseThrow();
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
 
         List<Time> createdTimes = values.stream()
-                .map(dateTime -> room.createTime(member, dateTime))
+                .map(dateTime -> room.createTime(voter, dateTime))
                 .toList();
         timeRepository.saveAll(createdTimes);
     }

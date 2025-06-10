@@ -21,14 +21,14 @@ public class Time {
     private final LocalDateTime dateTime;
 
     @ManyToOne
-    private final Member member;
+    private final Voter voter;
 
     @ManyToOne
     private final Room room;
 
-    public Time(LocalDateTime dateTime, Room room, Member member) {
+    public Time(LocalDateTime dateTime, Room room, Voter voter) {
         this.dateTime = dateTime;
-        this.member = member;
+        this.voter = voter;
         this.room = room;
     }
 
@@ -51,10 +51,10 @@ public class Time {
     }
 
     public boolean createdBy(String name) {
-        return this.member.hasName(name);
+        return this.voter.hasName(name);
     }
 
     public String getCreatorName() {
-        return this.member.getName();
+        return this.voter.getName();
     }
 }
