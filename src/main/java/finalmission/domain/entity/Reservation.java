@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 public class Reservation {
@@ -42,8 +43,11 @@ public class Reservation {
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
-
     protected Reservation() {
+    }
+
+    public LocalTime reservedTime() {
+        return this.lessonTime.getTime();
     }
 
     public Long getId() {
@@ -68,5 +72,9 @@ public class Reservation {
 
     public Trainer getTrainer() {
         return trainer;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }
