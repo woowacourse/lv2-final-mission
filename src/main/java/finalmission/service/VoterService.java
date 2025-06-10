@@ -1,6 +1,7 @@
 package finalmission.service;
 
 import finalmission.domain.*;
+import finalmission.dto.response.RegisterResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,7 @@ public class VoterService {
     private final VoterRepository voterRepository;
 
     @Transactional
-    public void register(String roomId, String name, String password) {
+    public RegisterResponse register(String roomId, String name, String password) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
         if (room.containsNameOf(name)) {
             throw new IllegalArgumentException("이미 해당 이름으로 등록된 투표자가 존재합니다.");
@@ -22,6 +23,7 @@ public class VoterService {
         String newName = name == null ? nameGenerator.generate() : name;
         Voter voter = new Voter(newName, password, room);
         voterRepository.save(voter);
+        return new RegisterResponse(voter.getName());
     }
 
     @Transactional

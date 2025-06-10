@@ -21,6 +21,14 @@ Content-Type: application/json
   "password": "{{password}}"
 }
 
+### 익명 투표자 추가
+POST http://localhost:8080/voter/{{roomId}}
+Content-Type: application/json
+
+{
+  "password": "{{password}}"
+}
+
 ### 투표
 POST http://localhost:8080/vote/{{roomId}}?
     name={{name}}&

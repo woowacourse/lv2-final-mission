@@ -30,6 +30,7 @@ Location: /room/abcd1234
 ### 2. 투표자 가입하기
 
 - 투표를 하기 위해서는 투표자로 가입해야 합니다.
+    - 투표자의 이름을 지정하지 않은 경우에는 랜덤 이름이 생성됩니다.
 - 예시
 
 ```text
@@ -41,7 +42,12 @@ Content-Type: application/json
   "password": "1234"
 }
 
-HTTP/1.1 204
+HTTP/1.1 200 
+Content-Type: application/json
+
+{
+  "name": "dompoo"
+}
 ```
 
 ### 3. 투표하기

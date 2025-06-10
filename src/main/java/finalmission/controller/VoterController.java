@@ -1,6 +1,7 @@
 package finalmission.controller;
 
 import finalmission.dto.request.RegisterRequest;
+import finalmission.dto.response.RegisterResponse;
 import finalmission.service.VoterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-
 @RestController
 @RequiredArgsConstructor
 public class VoterController {
@@ -18,12 +17,11 @@ public class VoterController {
     private final VoterService voterService;
 
     @PostMapping("/voter/{roomId}")
-    public ResponseEntity<Void> register(
+    public ResponseEntity<RegisterResponse> register(
             @PathVariable("roomId") String roomId,
             @RequestBody RegisterRequest request
     ) {
-        voterService.register(roomId, request.name(), request.password());
-        URI createdLocation = URI.create("/time/" + roomId + "/my");
-        return ResponseEntity.created(createdLocation).build();
+        RegisterResponse response = voterService.register(roomId, request.name(), request.password());
+        return ResponseEntity.ok(response);
     }
 }
