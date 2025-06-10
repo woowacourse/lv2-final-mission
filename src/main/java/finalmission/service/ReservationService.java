@@ -5,7 +5,9 @@ import finalmission.domain.Reservation;
 import finalmission.domain.Toilet;
 import finalmission.dto.request.ReservationRequest;
 import finalmission.dto.response.ReservationResponse;
+import finalmission.exception.CanNotDeleteReservationException;
 import finalmission.exception.MemberNotFoundException;
+import finalmission.exception.ReservationNotFoundException;
 import finalmission.exception.ToiletNotFoundException;
 import finalmission.infrastructure.MemberRepository;
 import finalmission.infrastructure.ReservationRepository;
@@ -52,5 +54,16 @@ public class ReservationService {
                 .stream()
                 .map(ReservationResponse::from)
                 .toList();
+    }
+
+    public void deleteReservationById(Long memberId, Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(ReservationNotFoundException::new);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+        if (!reservation.getMember().equals(member)) {
+            throw new CanNotDeleteReservationException();
+        }
+        reservationRepository.deleteById(reservationId);
     }
 }
