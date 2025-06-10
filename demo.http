@@ -1,0 +1,12 @@
+POST localhost:8080/room
+
+###
+
+POST localhost:8080/room/{{roomId}}
+Content-Type: application/json
+
+{
+  "values": [
+    "2025-05-17T20:00:00"
+  ]
+}

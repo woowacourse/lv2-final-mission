@@ -16,7 +16,7 @@ import java.util.List;
 public class Time {
 
     @EmbeddedId
-    private final Id id;
+    private final Id id = Id.random();
     private final String username;
     private final LocalDateTime dateTime;
 
@@ -24,7 +24,6 @@ public class Time {
     private final Room room;
 
     public Time(String username, LocalDateTime dateTime, Room room) {
-        this.id = Id.random();
         this.username = username;
         this.dateTime = dateTime;
         this.room = room;

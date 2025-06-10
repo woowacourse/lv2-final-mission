@@ -20,12 +20,13 @@ public class RandommerNameGenerator implements NameGenerator {
         this.apiKey = randommerApiKey;
     }
 
-    // TODO : 응답 형식이랑 다를 수 있음
     @Override
     public String generate() {
-        return restClient.get()
+        String result = restClient.get()
                 .header("X-Api-Key", apiKey)
                 .retrieve()
                 .body(String.class);
+        System.out.println(result);
+        return result.substring(2, result.length() - 2);
     }
 }
