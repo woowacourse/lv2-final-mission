@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: lv2-final-mission
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  # DB connection setting
+  datasource:
+    url: jdbc:h2:mem:database
+    username: sa
+    password: password
+  # DB initialization
+  sql:
+    init:
+      mode: embedded
+  # JPA settings
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+
+openapi:
+  public-holidays:
+    service-key: "9fDRHHnLRP5Rlocx3yfWBY6aJj+uF2CY4CMysP7LC3UObkhWIWh73N+3E9tj0ELDmpRBaQkpM7MToAxwlqAkHQ=="
