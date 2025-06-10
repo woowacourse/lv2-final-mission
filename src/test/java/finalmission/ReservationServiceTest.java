@@ -4,6 +4,7 @@ import finalmission.dto.LoginMember;
 import finalmission.dto.ReservationRegisterDto;
 import finalmission.model.Member;
 import finalmission.model.Reservation;
+import finalmission.model.ReservationSchedule;
 import finalmission.model.Seat;
 import finalmission.presentation.service.ReservationService;
 import finalmission.repository.MemberRepository;
@@ -76,13 +77,7 @@ public class ReservationServiceTest {
         Member member = saveMember("example@gmail.com");
         Member anotherMember = saveMember("new@gmail.com");
         Seat seat = saveSeat();
-        Reservation reservation = reservationRepository.save(new Reservation(
-                anotherMember,
-                seat,
-                LocalDate.now().plusDays(1),
-                LocalTime.of(12, 30),
-                LocalTime.of(13, 30)
-        ));
+        Reservation reservation = saveReservation(anotherMember, seat);
 
         // when & then
         assertThatThrownBy(() -> reservationService.getReservation(reservation.getId(),
@@ -97,14 +92,7 @@ public class ReservationServiceTest {
         Member member = saveMember("example@gmail.com");
         Member anotherMember = saveMember("new@gmail.com");
         Seat seat = saveSeat();
-        Reservation reservation = reservationRepository.save(new Reservation(
-                anotherMember,
-                seat,
-                LocalDate.now().plusDays(1),
-                LocalTime.of(12, 30),
-                LocalTime.of(13, 30)
-        ));
-
+        Reservation reservation = saveReservation(anotherMember, seat);
         // when & then
         assertThatThrownBy(() -> reservationService.updateReservation(reservation.getId(), null,
                 new LoginMember(member.getId())))
@@ -121,6 +109,18 @@ public class ReservationServiceTest {
                 "히로",
                 email,
                 "password"
+        ));
+    }
+
+    private Reservation saveReservation(Member anotherMember, Seat seat) {
+        return reservationRepository.save(new Reservation(
+                anotherMember,
+                seat,
+                new ReservationSchedule(
+                        LocalDate.now().plusDays(1),
+                        LocalTime.of(12, 30),
+                        LocalTime.of(13, 30)
+                )
         ));
     }
 }

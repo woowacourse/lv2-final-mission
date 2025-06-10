@@ -1,5 +1,6 @@
 package finalmission.model;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,11 +28,8 @@ public class Reservation {
 
     private LocalDateTime registeredAt;
 
-    private LocalDate reservationDate;
-
-    private LocalTime startAt;
-
-    private LocalTime endAt;
+    @Embedded
+    private ReservationSchedule reservationSchedule;
 
     public boolean isOwnedBy(Member member) {
         return member.getId().equals(this.member.getId());
@@ -39,36 +37,27 @@ public class Reservation {
 
     public void update(Reservation updatedReservation) {
         this.registeredAt = updatedReservation.getRegisteredAt();
-        this.reservationDate = updatedReservation.getReservationDate();
-        this.startAt = updatedReservation.getStartAt();
-        this.endAt = updatedReservation.getEndAt();
+        this.reservationSchedule = updatedReservation.getReservationSchedule();
     }
 
-    public Reservation(Member member, Seat seat, LocalDate reservationDate, LocalTime startAt, LocalTime endAt) {
+    public Reservation(Member member, Seat seat, ReservationSchedule reservationSchedule) {
         LocalDateTime now = LocalDateTime.now();
 
         this.member = member;
         this.seat = seat;
-        this.reservationDate = reservationDate;
-        this.startAt = startAt;
-        this.endAt = endAt;
+        this.reservationSchedule = reservationSchedule;
         this.registeredAt = now;
-
-        validateDateAndTime(now);
     }
 
-    private void validateDateAndTime(LocalDateTime now) {
-        if (reservationDate.isBefore(now.toLocalDate())) {
-            throw new IllegalArgumentException("예약 날짜는 오늘보다 이전일 수 없습니다.");
-        }
+    public LocalDate getReservationDate() {
+        return reservationSchedule.getReservationDate();
+    }
 
-        if (endAt.isBefore(startAt)) {
-            throw new IllegalArgumentException("예약 시작 시각은 예약 종료 시각보다 이전이어야 합니다.");
-        }
+    public LocalTime getStartAt() {
+        return reservationSchedule.getStartAt();
+    }
 
-        if (reservationDate.isEqual(now.toLocalDate()) && startAt.isBefore(now.toLocalTime())) {
-            throw new IllegalArgumentException("예약 시작 시각은 현재보다 이후여야 합니다.");
-        }
-
+    public LocalTime getEndAt() {
+        return reservationSchedule.getEndAt();
     }
 }

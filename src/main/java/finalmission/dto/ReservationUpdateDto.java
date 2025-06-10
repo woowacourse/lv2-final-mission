@@ -2,6 +2,7 @@ package finalmission.dto;
 
 import finalmission.model.Member;
 import finalmission.model.Reservation;
+import finalmission.model.ReservationSchedule;
 import finalmission.model.Seat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,9 +17,11 @@ public record ReservationUpdateDto(
         return new Reservation(
                 member,
                 seat,
-                reservationDate,
-                startAt,
-                endAt
+                new ReservationSchedule(
+                        reservationDate,
+                        startAt,
+                        endAt
+                )
         );
     }
 }

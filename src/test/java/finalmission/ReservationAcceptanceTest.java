@@ -4,6 +4,7 @@ import finalmission.dto.ReservationDetailResponseDto;
 import finalmission.dto.ReservationResponseDto;
 import finalmission.model.Member;
 import finalmission.model.Reservation;
+import finalmission.model.ReservationSchedule;
 import finalmission.model.Seat;
 import finalmission.repository.MemberRepository;
 import finalmission.repository.ReservationRepository;
@@ -158,9 +159,11 @@ public class ReservationAcceptanceTest {
                 new Reservation(
                         member,
                         seat,
-                        date,
-                        LocalTime.of(12, 30),
-                        LocalTime.of(13, 30)
+                        new ReservationSchedule(
+                                date,
+                                LocalTime.of(12, 30),
+                                LocalTime.of(13, 30)
+                        )
                 )
         );
     }
