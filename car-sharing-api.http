@@ -1,0 +1,69 @@
+### 회원가입
+POST http://localhost:8080/signup
+Content-Type: application/json
+
+{
+  "email": "bello@email.com",
+  "password": "1234",
+  "name": "bello",
+  "age": 15
+}
+
+<> 2025-06-10T160506.400.json
+<> 2025-06-10T160143.500.json
+
+### 로그인
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "bell2@email.com",
+  "password": "1234"
+}
+
+### 차량 생성
+POST http://localhost:8080/cars
+Content-Type: application/json
+
+{
+  "name": "아반떼",
+  "licensePlate": "123하4567",
+  "feePerMinute": 500
+}
+
+### 전체 차량 조회
+GET http://localhost:8080/cars
+Content-Type: application/json
+
+### 렌트하기
+POST http://localhost:8080/rent
+Content-Type: application/json
+Cookie: token=eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NDk1MzM5NDksInN1YiI6IjEifQ.ErOBIDJI7L4SVLGJoZhe6Nt-YX-NNjHP_ZN4CAOpvXNslvrGoiXb8M-G5hzk0w3TJ_ZUDxxcmyHyWQKzdOFPhQ;
+
+{
+  "carId": 2,
+  "date": "2025-06-12",
+  "startTime": "14:00",
+  "returnTime": "16:00"
+}
+
+<> 2025-06-10T171848-1.400.json
+<> 2025-06-10T171848.400.json
+
+### 예약 현황 조회
+GET http://localhost:8080/rent
+Content-Type: application/json
+
+### 내 예약 목록 조회
+GET http://localhost:8080/rent/mine
+Content-Type: application/json
+Cookie: token=eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NDk1MzM5NDksInN1YiI6IjEifQ.ErOBIDJI7L4SVLGJoZhe6Nt-YX-NNjHP_ZN4CAOpvXNslvrGoiXb8M-G5hzk0w3TJ_ZUDxxcmyHyWQKzdOFPhQ;
+
+<> 2025-06-10T155248.200.json
+<> 2025-06-10T154921.200.json
+
+### 예약 취소
+DELETE http://localhost:8080/rent/1
+Cookie: token=eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NDk1MzM5NDksInN1YiI6IjEifQ.ErOBIDJI7L4SVLGJoZhe6Nt-YX-NNjHP_ZN4CAOpvXNslvrGoiXb8M-G5hzk0w3TJ_ZUDxxcmyHyWQKzdOFPhQ;
+# 다른사람 token
+#Cookie: token=eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NDk1MzgxOTEsInN1YiI6IjIifQ.nBxjKt-mw57qsyYZKPJ4AXZVKsZHu-k6DeicwWhlXB042GHbqBtdKEXI8wri5Wcy1RTzqNiz1v1i_PQRW9pNLQ;
