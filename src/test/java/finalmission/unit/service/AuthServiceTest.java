@@ -10,6 +10,7 @@ import finalmission.dto.request.LoginRequest;
 import finalmission.exception.EmailNotExistException;
 import finalmission.exception.WrongPasswordException;
 import finalmission.infrastructure.MemberRepository;
+import finalmission.infrastructure.PasswordClient;
 import finalmission.infrastructure.TokenProvider;
 import finalmission.service.AuthService;
 import finalmission.unit.fake.FakeMemberRepository;
@@ -21,12 +22,15 @@ public class AuthServiceTest {
 
     TokenProvider tokenProvider;
 
+    PasswordClient passwordClient;
+
     MemberRepository memberRepository;
 
     public AuthServiceTest() {
         tokenProvider = mock(TokenProvider.class);
+        passwordClient = mock(PasswordClient.class);
         memberRepository = new FakeMemberRepository();
-        this.authService = new AuthService(memberRepository, tokenProvider);
+        this.authService = new AuthService(memberRepository, tokenProvider, passwordClient);
     }
 
     @Test
