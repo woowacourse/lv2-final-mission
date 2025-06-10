@@ -1,9 +1,6 @@
 package finalmission.controller;
 
-import finalmission.dto.RoomCreateResponse;
-import finalmission.dto.TimeAddRequest;
-import finalmission.dto.TimeResponses;
-import finalmission.dto.TimeStaticsResponses;
+import finalmission.dto.*;
 import finalmission.service.NameGenerator;
 import finalmission.service.TimeVoteService;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +14,20 @@ public class TimeVoteController {
     private final TimeVoteService service;
 
     @PostMapping("/room")
-    public RoomCreateResponse createRoom() {
-        return service.createRoom();
+    public RoomCreateResponse createRoom(
+            @RequestBody RoomCreateRequest request
+    ) {
+        return service.createRoom(request.startDate(), request.endDate(), request.startTime(), request.endTime());
     }
 
-    @PostMapping("/room/{roomId}")
+    @GetMapping("/room/{roomId}")
+    public RoomResponse getRoomInfo(
+            @PathVariable("roomId") String roomId
+    ) {
+        return service.getRoomInfo(roomId);
+    }
+
+    @PostMapping("/time/{roomId}")
     public void addTime(
             @PathVariable("roomId") String roomId,
             @RequestBody TimeAddRequest request
@@ -30,14 +36,14 @@ public class TimeVoteController {
         service.addTime(roomId, username, request.values());
     }
 
-    @GetMapping("/room/{roomId}")
+    @GetMapping("/time/{roomId}")
     public TimeStaticsResponses getTimeStatics(
             @PathVariable("roomId") String roomId
     ) {
         return service.getTimeStatics(roomId);
     }
 
-    @GetMapping("/room/{roomId}/my")
+    @GetMapping("/time/{roomId}/my")
     public TimeResponses getMyTimes(
             @PathVariable("roomId") String roomId,
             @RequestParam("username") String username
@@ -46,8 +52,8 @@ public class TimeVoteController {
 
     }
 
-    @DeleteMapping("/room/{roomId}")
-    public void deleteAllOf(
+    @DeleteMapping("/time/{roomId}")
+    public void deleteAllTimeOf(
             @PathVariable("roomId") String roomId,
             @RequestParam("username") String username
     ) {

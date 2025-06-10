@@ -2,13 +2,16 @@ package finalmission.service;
 
 import finalmission.domain.*;
 import finalmission.dto.RoomCreateResponse;
+import finalmission.dto.RoomResponse;
 import finalmission.dto.TimeResponses;
 import finalmission.dto.TimeStaticsResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -19,10 +22,17 @@ public class TimeVoteService {
     private final TimeRepository timeRepository;
 
     @Transactional
-    public RoomCreateResponse createRoom() {
-        Room room = new Room();
+    public RoomCreateResponse createRoom(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        Room room = new Room(startDate, endDate, startTime, endTime);
         roomRepository.save(room);
         return RoomCreateResponse.from(room);
+    }
+
+    @Transactional(readOnly = true)
+    public RoomResponse getRoomInfo(String roomId) {
+        Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
+
+        return RoomResponse.from(room);
     }
 
     @Transactional
