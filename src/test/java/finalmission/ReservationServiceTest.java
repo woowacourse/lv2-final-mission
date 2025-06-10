@@ -99,6 +99,64 @@ public class ReservationServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    @DisplayName("존재하지 않는 예약에 대한 수정 시도 시 예외가 발생한다")
+    void test4() {
+        // given
+        Member member = saveMember("example@gmail.com");
+        Member anotherMember = saveMember("new@gmail.com");
+        Seat seat = saveSeat();
+
+        // when & then
+        assertThatThrownBy(() -> reservationService.updateReservation(123L, null,
+                new LoginMember(member.getId())))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("나의 예약이 아닌데 예약 삭제를 시도하는 경우 예외를 던진다")
+    void test5() {
+        // given
+        Member member = saveMember("example@gmail.com");
+        Member anotherMember = saveMember("new@gmail.com");
+        Seat seat = saveSeat();
+        Reservation reservation = saveReservation(anotherMember, seat);
+
+        // when & then
+        assertThatThrownBy(() -> reservationService.updateReservation(reservation.getId(), null,
+                new LoginMember(member.getId())))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 예약에 대한 삭제 시도 시 예외가 발생한다")
+    void test6() {
+        // given
+        Member member = saveMember("example@gmail.com");
+        Member anotherMember = saveMember("new@gmail.com");
+        Seat seat = saveSeat();
+
+        // when & then
+        assertThatThrownBy(() -> reservationService.updateReservation(123L, null,
+                new LoginMember(member.getId())))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("예약의 소유자가 예약을 삭제하는 경우 정상적으로 삭제된다")
+    void test7() {
+        // given
+        Member member = saveMember("example@gmail.com");
+        Seat seat = saveSeat();
+        Reservation reservation = saveReservation(member, seat);
+
+        // when
+        reservationService.deleteReservation(reservation.getId(), new LoginMember(member.getId()));
+
+        // then
+        assertThat(reservationRepository.findById(reservation.getId())).isEmpty();
+    }
+
 
     private Seat saveSeat() {
         return seatRepository.save(new Seat("백스윙", 1));

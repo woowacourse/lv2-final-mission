@@ -86,6 +86,15 @@ public class ReservationService {
         reservation.update(newReservation);
     }
 
+    @Transactional
+    public void deleteReservation(Long reservationId, LoginMember loginMember) {
+        Member member = findMember(loginMember);
+        Reservation reservation = findReservation(reservationId);
+        checkAuthorityOfReservation(reservation, member);
+
+        reservationRepository.delete(reservation);
+    }
+
     private static void checkAuthorityOfReservation(Reservation reservation, Member member) {
         if (!reservation.isOwnedBy(member)) {
             throw new IllegalArgumentException("해당 예약 내역에 접근할 권한이 없습니다.");

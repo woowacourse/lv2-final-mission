@@ -8,6 +8,7 @@ import finalmission.dto.ReservationUpdateDto;
 import finalmission.presentation.service.ReservationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +46,10 @@ public class ReservationController {
                                   @RequestBody ReservationUpdateDto reservationUpdateDto,
                                   LoginMember loginMember) {
         reservationService.updateReservation(reservationId, reservationUpdateDto, loginMember);
+    }
+
+    @DeleteMapping("/{reservationId}")
+    public void deleteReservation(@PathVariable Long reservationId, LoginMember loginMember) {
+        reservationService.deleteReservation(reservationId, loginMember);
     }
 }

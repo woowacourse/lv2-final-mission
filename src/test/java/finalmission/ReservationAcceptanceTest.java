@@ -154,6 +154,26 @@ public class ReservationAcceptanceTest {
         );
     }
 
+    @Test
+    @DisplayName("예약을 삭제한다")
+    void test5() {
+        // given
+        Member member = saveMember();
+        Seat seat = saveSeat();
+        LocalDate date = LocalDate.now().plusDays(1);
+        Reservation reservation = saveReservation(member, seat, date);
+
+        // when
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", jwtTokenProvider.createToken(String.valueOf(member.getId())))
+                .when().delete("/reservation/" + reservation.getId())
+                .then().log().all();
+
+        // then
+        assertThat(reservationRepository.findById(reservation.getId())).isEmpty();
+    }
+
     private Reservation saveReservation(Member member, Seat seat, LocalDate date) {
         return reservationRepository.save(
                 new Reservation(
