@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 @Component
-public class RandommerClient {
+public class RandommerClient implements RandomNicknameGenerator {
 
     @Value("${randommer.url}")
     private String randommerApiUrl;
