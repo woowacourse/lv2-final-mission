@@ -1,6 +1,5 @@
-package finalmission.domain;
+package finalmission.exception;
 
-import finalmission.exception.ApplicationException;
 import org.springframework.http.HttpStatus;
 
 public class WrongPasswordException extends ApplicationException {
