@@ -3,6 +3,7 @@ package finalmission.reservation.service;
 import finalmission.member.domain.Member;
 import finalmission.member.domain.vo.Role;
 import finalmission.reservation.service.dto.CreateReservationInformationRequest;
+import finalmission.reservation.service.dto.CreateReservationRequest;
 import finalmission.restaurant.domain.Restaurant;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -26,6 +27,22 @@ class ReservationServiceTest {
 
     @Autowired
     private ReservationService reservationService;
+
+    @DisplayName("존재하지 않는 예약 정보로 예약을 생성할 수 없다.")
+    @Test
+    void cannotCreateReservationWithNotExistInformation() {
+        // given
+        Member customer = new Member(Role.CUSTOMER, "고객", "customer@test.com", "12341234");
+
+        entityManager.persist(customer);
+
+        CreateReservationRequest request = new CreateReservationRequest(1L);
+
+        // when & then
+        assertThatThrownBy(() -> {
+            reservationService.createReservation(request, customer.getId());
+        }).isInstanceOf(IllegalArgumentException.class);
+     }
 
     @DisplayName("식당 소유자가 아닌 경우, 예약 가능 정보를 추가할 수 없다.")
     @Test
