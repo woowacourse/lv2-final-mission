@@ -11,9 +11,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation {
 
@@ -57,7 +59,12 @@ public class Reservation {
                                      int quantity,
                                      LocalDateTime dateTime,
                                      Refrigerator refrigerator,
-                                     Member member) {
+                                     Member member,
+                                     LocalDateTime currentDateTime) {
+        if (dateTime.isBefore(currentDateTime)) {
+            throw new IllegalArgumentException("과거로 예약할 수 없습니다.");
+        }
+        refrigerator.reserve(monsterEnergy, quantity);
         return new Reservation(null, monsterEnergy, quantity, dateTime, refrigerator, member);
     }
 }

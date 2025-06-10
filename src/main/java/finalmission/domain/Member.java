@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,5 +49,19 @@ public class Member {
 
     public boolean isPassword(String password) {
         return this.password.equals(password);
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof Member member)) {
+            return false;
+        }
+
+        return Objects.equals(getId(), member.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
     }
 }
