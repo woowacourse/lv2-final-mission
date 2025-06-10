@@ -1,5 +1,6 @@
 package finalmission;
 
+import finalmission.dto.ReservationDetailResponseDto;
 import finalmission.dto.ReservationResponseDto;
 import finalmission.model.Member;
 import finalmission.model.Reservation;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,6 +93,32 @@ public class ReservationAcceptanceTest {
 
         // then
         assertThat(response).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("나의 상세 예약 내역을 조회한다")
+    void test3() {
+        // given
+        Member member = saveMember();
+        Seat seat = saveSeat();
+        LocalDate date = LocalDate.now().plusDays(1);
+        Reservation reservation = saveReservation(member, seat, date);
+
+        // when
+        ReservationDetailResponseDto response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", jwtTokenProvider.createToken(String.valueOf(member.getId())))
+                .when().get("/reservation/" + reservation.getId())
+                .then().log().all()
+                .statusCode(200).extract().as(ReservationDetailResponseDto.class);
+
+        // then
+        assertAll(
+                () -> assertThat(response.roomName()).isEqualTo(seat.getRoomName()),
+                () -> assertThat(response.seatNumber()).isEqualTo(seat.getSeatNumber()),
+                () -> assertThat(response.id()).isEqualTo(reservation.getId()),
+                () -> assertThat(response.reservationDate()).isEqualTo(date)
+        );
     }
 
     private Reservation saveReservation(Member member, Seat seat, LocalDate date) {

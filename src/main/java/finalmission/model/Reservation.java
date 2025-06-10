@@ -33,6 +33,10 @@ public class Reservation {
 
     private LocalTime endAt;
 
+    public boolean isOwnedBy(Member member) {
+        return member.getId().equals(this.member.getId());
+    }
+
     public Reservation(Member member, Seat seat, LocalDate reservationDate, LocalTime startAt, LocalTime endAt) {
         LocalDateTime now = LocalDateTime.now();
 

@@ -1,6 +1,7 @@
 package finalmission.presentation.service;
 
 import finalmission.dto.LoginMember;
+import finalmission.dto.ReservationDetailResponseDto;
 import finalmission.dto.ReservationRegisterDto;
 import finalmission.dto.ReservationResponseDto;
 import finalmission.model.Member;
@@ -52,6 +53,27 @@ public class ReservationService {
                     );
                 })
                 .toList();
+    }
+
+    public ReservationDetailResponseDto getReservation(Long reservationId, LoginMember loginMember) {
+        Member member = findMember(loginMember);
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약 내역입니다."));
+
+        if (!reservation.isOwnedBy(member)) {
+            throw new IllegalArgumentException("해당 예약 내역에 접근할 권한이 없습니다.");
+        }
+
+        Seat seat = reservation.getSeat();
+        return new ReservationDetailResponseDto(
+                reservation.getId(),
+                seat.getRoomName(),
+                seat.getSeatNumber(),
+                reservation.getRegisteredAt(),
+                reservation.getReservationDate(),
+                reservation.getStartAt(),
+                reservation.getEndAt()
+        );
     }
 
     private Seat findSeat(ReservationRegisterDto reservationRegisterDto) {

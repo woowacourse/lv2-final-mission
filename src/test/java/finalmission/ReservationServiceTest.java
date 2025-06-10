@@ -12,6 +12,7 @@ import finalmission.repository.SeatRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import org.junit.jupiter.api.DisplayName;
@@ -41,12 +42,8 @@ public class ReservationServiceTest {
     @DisplayName("예약이 정상적으로 저장된다")
     void test1() {
         // given
-        Member member = memberRepository.save(new Member(
-                "히로",
-                "example@gmail.com",
-                "password"
-        ));
-        Seat seat = seatRepository.save(new Seat("백스윙", 1));
+        Member member = saveMember("example@gmail.com");
+        Seat seat = saveSeat();
         ReservationRegisterDto reservationRegisterDto = new ReservationRegisterDto(
                 seat.getId(),
                 LocalDate.now().plusDays(1),
@@ -64,5 +61,38 @@ public class ReservationServiceTest {
                 () -> assertThat(savedReservation.getMember().getName()).isEqualTo("히로"),
                 () -> assertThat(savedReservation.getReservationDate()).isEqualTo(LocalDate.now().plusDays(1))
         );
+    }
+
+    @Test
+    @DisplayName("예약 상세 조회 시 나의 예약이 아닌 경우 예외를 던진다")
+    void test2() {
+        // given
+        Member member = saveMember("example@gmail.com");
+        Member anotherMember = saveMember("new@gmail.com");
+        Seat seat = saveSeat();
+        Reservation reservation = reservationRepository.save(new Reservation(
+                anotherMember,
+                seat,
+                LocalDate.now().plusDays(1),
+                LocalTime.of(12, 30),
+                LocalTime.of(13, 30)
+        ));
+
+        // when & then
+        assertThatThrownBy(() -> reservationService.getReservation(reservation.getId(),
+                new LoginMember(member.getId())))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private Seat saveSeat() {
+        return seatRepository.save(new Seat("백스윙", 1));
+    }
+
+    private Member saveMember(String email) {
+        return memberRepository.save(new Member(
+                "히로",
+                email,
+                "password"
+        ));
     }
 }
