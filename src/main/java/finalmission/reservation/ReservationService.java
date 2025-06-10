@@ -1,6 +1,7 @@
 package finalmission.reservation;
 
 import java.util.List;
+import java.util.Objects;
 import finalmission.member.MemberRepository;
 import finalmission.member.domain.Member;
 import finalmission.reservation.domain.Reservation;
@@ -59,5 +60,19 @@ public class ReservationService {
 
     public List<Reservation> readAllReservation() {
         return reservationRepository.findAll();
+    }
+
+    public void deleteReservation(Member member, Long id) {
+        Member foundMember = memberRepository.findByPhoneNumber(member.getPhoneNumber())
+                .orElseThrow(IllegalArgumentException::new);
+
+        Reservation foundReservation = reservationRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+
+        if (!Objects.equals(foundReservation.getMember().getId(), foundMember.getId())) {
+            throw new IllegalArgumentException("자신의 예약이 아니라서 삭제할 수 없습니다.") ;
+        }
+
+        reservationRepository.delete(foundReservation);
     }
 }
