@@ -22,6 +22,8 @@ public class Master {
 
     private String email;
 
+    private String name;
+
     private String password;
 
     @Override
