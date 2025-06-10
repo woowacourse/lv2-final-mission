@@ -7,21 +7,29 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @Column(name = "email")
-    String email;
-    @Column(name = "password")
-    String password;
-    @Column(name = "name")
-    String name;
+    private Long id;
 
-    protected Member() {
-    }
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+
+    protected Member() {}
 
     public Member(final String email, final String password, final String name) {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.role = Role.USER;
     }
 
     public static Member beforeSave(
@@ -46,5 +54,9 @@ public class Member {
 
     public String getName() {
         return name;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }

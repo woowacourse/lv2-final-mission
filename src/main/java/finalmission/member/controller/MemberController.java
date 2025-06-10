@@ -25,10 +25,7 @@ public class MemberController {
     public MemberController(final MemberService memberService) {
         this.memberService = memberService;
     }
-
-    /*
-       회원가입
-    */
+    
     @PostMapping
     public ResponseEntity<MemberResponse> create(@RequestBody @Valid MemberRequest request) {
         Member member = memberService.create(request);

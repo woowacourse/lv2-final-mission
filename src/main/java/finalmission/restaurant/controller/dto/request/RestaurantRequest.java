@@ -1,10 +1,13 @@
 package finalmission.restaurant.controller.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public record RestaurantRequest(
-        String name,
-        String description,
-        String address,
-        int zipcode,
-        int tableCount
+        @NotBlank String name,
+        @NotNull String description,
+        @NotBlank String address,
+        @NotNull int zipcode,
+        @NotNull int tableCount
 ) {
 }
