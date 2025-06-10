@@ -44,7 +44,8 @@ public class RoomService {
     }
 
     public List<RoomWithoutParticipantsResponse> findByMemberId(final Long memberId) {
-        final List<RoomMember> roomMembers = roomMemberRepository.findByMemberId(memberId);
+        final Member member = memberService.getById(memberId);
+        final List<RoomMember> roomMembers = roomMemberRepository.findByMemberId(member.getId());
 
         return roomMembers.stream()
                 .map(RoomMember::getRoom)
