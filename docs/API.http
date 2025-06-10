@@ -13,7 +13,7 @@ Content-Type: application/json
 GET http://localhost:8080/room/{{roomId}}
 
 ### 투표자 추가
-POST http://localhost:8080/member/{{roomId}}
+POST http://localhost:8080/voter/{{roomId}}
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### 투표
-POST http://localhost:8080/time/{{roomId}}?
+POST http://localhost:8080/vote/{{roomId}}?
     name={{name2}}&
     password={{password}}
 Content-Type: application/json
@@ -36,14 +36,14 @@ Content-Type: application/json
 }
 
 ### 내 투표 확인
-GET http://localhost:8080/time/{{roomId}}/my?
+GET http://localhost:8080/vote/{{roomId}}/my?
     name={{name}}&
     password={{password}}
 
 ### 투표 통계 확인
-GET http://localhost:8080/time/{{roomId}}
+GET http://localhost:8080/vote/{{roomId}}
 
 ### 내 투표 제거
-DELETE http://localhost:8080/time/{{roomId}}?
+DELETE http://localhost:8080/vote/{{roomId}}?
     name={{name}}&
     password={{password}}
