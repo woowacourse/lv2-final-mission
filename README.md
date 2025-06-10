@@ -117,6 +117,7 @@ Content-Type: application/json
   "endDate": "2025-05-30",
   "startTime": "08:00:00",
   "endTime": "22:00:00",
+  "isAnonymousRoom": true,
   "voterNames": [dompoo, dompoo2]
 }
 ```

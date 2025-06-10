@@ -13,6 +13,7 @@ public record RoomResponse(
         LocalDate endDate,
         LocalTime startTime,
         LocalTime endTime,
+        boolean isAnonymousRoom,
         Set<String> voterNames
 ) {
     public static RoomResponse from(Room room) {
@@ -21,6 +22,7 @@ public record RoomResponse(
                 room.getEndDate(),
                 room.getStartTime(),
                 room.getEndTime(),
+                room.isAnonymous(),
                 room.getVotes().stream()
                         .map(Vote::getVoterName)
                         .collect(Collectors.toSet())
