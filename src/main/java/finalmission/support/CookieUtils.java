@@ -22,7 +22,7 @@ public class CookieUtils {
         Cookie[] cookies = request.getCookies();
 
         if (cookies == null) {
-            throw new IllegalArgumentException("해당 경로로 접근할 권한이 없습니다.");
+            throw new IllegalArgumentException("요청에 쿠키가 포함되어야 합니다.");
         }
 
         Cookie foundCookie = Arrays.stream(cookies)
