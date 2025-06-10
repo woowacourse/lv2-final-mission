@@ -7,6 +7,7 @@ import finalmission.domain.vo.LolName;
 import finalmission.exception.NotFoundException;
 import finalmission.exception.UnauthorizedException;
 import finalmission.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,12 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final RiotRestClient riotRestClient;
 
+    @Transactional
     public void create(final MemberSignUpRequest request) {
+        if (memberRepository.existsByLolName(request.lolName())) {
+            throw new IllegalArgumentException("이미 가입한 유저입니다.");
+        }
+
         if (!riotRestClient.existsLolName(request.lolName())) {
             throw new NotFoundException("존재하지 않는 RIOT 이름 및 태그입니다.");
         }
