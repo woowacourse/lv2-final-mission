@@ -10,6 +10,8 @@ import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.domain.RestaurantRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReservationService {
 
@@ -35,5 +37,9 @@ public class ReservationService {
                 restaurant,
                 reservationRequest.personnel());
         return ReservationResponse.from(reservationRepository.save(reservation));
+    }
+
+    public List<ReservationResponse> findAll() {
+        return ReservationResponse.from(reservationRepository.findAll());
     }
 }

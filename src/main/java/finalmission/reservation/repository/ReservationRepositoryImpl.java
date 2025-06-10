@@ -4,6 +4,8 @@ import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.domain.ReservationRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class ReservationRepositoryImpl implements ReservationRepository {
 
@@ -16,5 +18,10 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     @Override
     public Reservation save(Reservation reservation) {
         return jpaReservationRepository.save(reservation);
+    }
+
+    @Override
+    public List<Reservation> findAll() {
+        return jpaReservationRepository.findAll();
     }
 }

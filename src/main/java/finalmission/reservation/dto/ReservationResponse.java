@@ -5,6 +5,7 @@ import finalmission.reservation.domain.Reservation;
 import finalmission.restaurant.dto.RestaurantResponse;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ReservationResponse(
         Long id,
@@ -21,5 +22,11 @@ public record ReservationResponse(
                 RestaurantResponse.from(reservation.getRestaurant()),
                 reservation.getPersonnel()
         );
+    }
+
+    public static List<ReservationResponse> from(List<Reservation> reservations) {
+        return reservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
     }
 }
