@@ -114,7 +114,7 @@ Content-Type: application/json
 ```
 
 #### 예약
-+ [ ] 예약 추가
++ [x] 예약 추가
 ```
 POST /reservations HTTP/1.1
 {  

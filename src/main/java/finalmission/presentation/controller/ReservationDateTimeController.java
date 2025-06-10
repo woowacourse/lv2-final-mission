@@ -4,7 +4,6 @@ import finalmission.application.dto.ReservationDateTimeIdRequest;
 import finalmission.application.dto.ReservationDateTimeRequest;
 import finalmission.application.dto.ReservationDateTimeResponse;
 import finalmission.application.service.ReservationDateTimeService;
-import finalmission.domain.ReservationDateTime;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;

@@ -24,6 +24,12 @@ public class Reservation {
     protected Reservation() {
     }
 
+    public Reservation(final Coach coach, final Crew crew, final ReservationDateTime reservationDateTime) {
+        this.coach = coach;
+        this.crew = crew;
+        this.reservationDateTime = reservationDateTime;
+    }
+
     public Long getId() {
         return id;
     }

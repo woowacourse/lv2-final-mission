@@ -1,7 +1,34 @@
 package finalmission.presentation.controller;
 
+import finalmission.application.dto.ReservationRequest;
+import finalmission.application.service.ReservationService;
+import jakarta.validation.Valid;
+import java.net.URI;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class ReservationController {
+    private final ReservationService reservationService;
+
+    public ReservationController(final ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createReservation(
+            final @RequestBody @Valid ReservationRequest reservationRequest
+    ) {
+        return ResponseEntity.created(createUri(reservationService.createReservation(reservationRequest))).build();
+    }
+
+    private URI createUri(Long reservationId) {
+        return ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(reservationId)
+                .toUri();
+    }
 }
