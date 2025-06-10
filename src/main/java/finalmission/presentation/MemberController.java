@@ -6,6 +6,7 @@ import finalmission.service.MemberService;
 import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +21,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<MemberResponse> signUp(MemberRequest request) {
+    public ResponseEntity<MemberResponse> signUp(@RequestBody MemberRequest request) {
         MemberResponse response = memberService.createMember(request);
         return ResponseEntity.created(URI.create("/api/members/" + response.id())).body(response);
     }
