@@ -7,5 +7,6 @@ public record LoginCheckRequest(
         Role role
 ) {
     public static LoginCheckRequest of(final Long id, final Role role) {
+        return new LoginCheckRequest(id, role);
     }
 }
