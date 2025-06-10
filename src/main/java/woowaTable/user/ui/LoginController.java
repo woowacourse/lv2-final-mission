@@ -62,4 +62,12 @@ public class LoginController {
         final LoginCheckResponse loginCheckResponse = loginService.signupOwner(request);
         return ResponseEntity.ok(loginCheckResponse);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        final String cookie = tokenCookieService.createTokenCookie("", 0);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie)
+                .build();
+    }
 }
