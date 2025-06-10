@@ -2,8 +2,8 @@
 
 ## 서비스에서 제공하는 api
 
-- [ ] 회원가입(/signup POST)
-- [ ] 로그인(/login POST)
+- [x] 회원가입(/signup POST)
+- [x] 로그인(/login POST)
 - [ ] 좌석 예약(/reservations POST)
 - [ ] 모든 예약 확인(/reservations GET)
 
