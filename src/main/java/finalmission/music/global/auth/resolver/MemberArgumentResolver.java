@@ -1,5 +1,6 @@
-package finalmission.music.config;
+package finalmission.music.global.auth.resolver;
 
+import finalmission.music.global.auth.LoginMember;
 import finalmission.music.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

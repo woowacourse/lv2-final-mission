@@ -1,6 +1,6 @@
 package finalmission.music.controller;
 
-import finalmission.music.config.LoginMember;
+import finalmission.music.global.auth.LoginMember;
 import finalmission.music.controller.dto.MyReservationResponse;
 import finalmission.music.controller.dto.ReservationRequest;
 import finalmission.music.controller.dto.ReservationResponse;

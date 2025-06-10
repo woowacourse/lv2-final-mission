@@ -1,4 +1,4 @@
-package finalmission.music.config;
+package finalmission.music.global.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

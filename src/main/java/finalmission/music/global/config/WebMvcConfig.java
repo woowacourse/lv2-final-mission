@@ -1,5 +1,7 @@
-package finalmission.music.config;
+package finalmission.music.global.config;
 
+import finalmission.music.global.auth.interceptor.MemberAuthInterceptor;
+import finalmission.music.global.auth.resolver.MemberArgumentResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

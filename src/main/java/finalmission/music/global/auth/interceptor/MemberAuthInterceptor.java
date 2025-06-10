@@ -1,4 +1,4 @@
-package finalmission.music.config;
+package finalmission.music.global.auth.interceptor;
 
 import finalmission.music.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
