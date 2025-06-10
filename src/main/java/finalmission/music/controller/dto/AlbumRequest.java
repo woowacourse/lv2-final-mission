@@ -1,4 +1,12 @@
 package finalmission.music.controller.dto;
 
-public record AlbumRequest(String name, String type) {
+import java.time.LocalDate;
+
+public record AlbumRequest(
+    String name,
+    String artistName,
+    int totalTracks,
+    LocalDate releaseDate,
+    String spotifyId
+) {
 }

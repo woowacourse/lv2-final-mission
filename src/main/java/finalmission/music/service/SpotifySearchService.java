@@ -1,6 +1,6 @@
 package finalmission.music.service;
 
-import finalmission.music.domain.spotify.SpotifyAlbumSearchResponse;
+import finalmission.music.controller.dto.SpotifyAlbumSearchResponse;
 import finalmission.music.domain.spotify.SpotifyAlbums;
 import finalmission.music.domain.spotify.SpotifyToken;
 import java.util.Objects;

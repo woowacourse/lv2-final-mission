@@ -22,14 +22,14 @@ public class Album {
     private String artistName;
     private int totalTracks;
     private LocalDate releaseDate;
-    private String spotify_id;
+    private String spotifyId;
 
     public Album(String name, String artistName, int totalTracks, LocalDate releaseDate,
-                 String spotify_id) {
+                 String spotifyId) {
         this.name = name;
         this.artistName = artistName;
         this.totalTracks = totalTracks;
         this.releaseDate = releaseDate;
-        this.spotify_id = spotify_id;
+        this.spotifyId = spotifyId;
     }
 }
