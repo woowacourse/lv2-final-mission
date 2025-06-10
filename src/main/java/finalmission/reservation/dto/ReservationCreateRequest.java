@@ -7,8 +7,7 @@ import java.time.LocalDate;
 public record ReservationCreateRequest(
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate reservationDate,
-        long umbrellaId,
-        long memberId,
+        Long umbrellaId,
         String paymentKey,
         String orderId,
         Long amount) {

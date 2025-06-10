@@ -42,19 +42,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public void validateToken(final String token) {
-        try {
-            Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(token);
-        } catch (ExpiredJwtException e) {
-            throw new LoginException("만료된 토큰입니다.");
-        } catch (JwtException e) {
-            throw new LoginException("올바르지 않은 토큰 형태입니다.");
-        }
-    }
-
     public Long getMemberId(final String token) {
         try {
             String id = Jwts.parser()

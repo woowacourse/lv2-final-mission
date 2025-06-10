@@ -1,4 +1,4 @@
 package finalmission.member.dto;
 
-public record LoginInfo(long memberId) {
+public record LoginInfo(Long memberId) {
 }

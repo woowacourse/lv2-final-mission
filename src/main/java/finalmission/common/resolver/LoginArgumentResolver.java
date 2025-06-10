@@ -17,10 +17,8 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
-        boolean hasAnnotation = parameter.hasParameterAnnotation(LoginMember.class);
-        boolean hasLoginMemberType = LoginMember.class.isAssignableFrom(parameter.getParameterType());
-
-        return hasAnnotation && hasLoginMemberType;
+        return parameter.hasParameterAnnotation(LoginMember.class)
+                && parameter.getParameterType().equals(LoginInfo.class);
     }
 
     @Override
@@ -28,7 +26,7 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
                                      final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String token = jwtTokenProvider.extractTokenFromCookie(request.getCookies());
-        Long memberId = jwtTokenProvider.getMemberId(token);
+        long memberId = jwtTokenProvider.getMemberId(token);
         return new LoginInfo(memberId);
     }
 }

@@ -24,8 +24,9 @@ public class ReservationService {
     private final UmbrellaRepository umbrellaRepository;
 
     @Transactional
-    public ReservationResponse createPendingReservation(final ReservationCreateRequest request){
-        Member findMember = findMember(request.memberId());
+    public ReservationResponse createPendingReservation(final ReservationCreateRequest request, final long memberId){
+
+        Member findMember = findMember(memberId);
         Umbrella findUmbrella = findUmbrella(request.umbrellaId());
 
         if(countAvailableUmbrellaReservation(request.reservationDate(), findUmbrella) <= 0){
@@ -33,7 +34,8 @@ public class ReservationService {
         }
 
         Reservation pendingWithoutId = Reservation.createPendingWithoutId(request.reservationDate(), findMember, findUmbrella);
-        return ReservationResponse.from(pendingWithoutId);
+        Reservation saveReservation = reservationRepository.save(pendingWithoutId);
+        return ReservationResponse.from(saveReservation);
     }
 
     private Member findMember(final long memberId) {
