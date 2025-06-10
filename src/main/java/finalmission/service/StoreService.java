@@ -8,10 +8,14 @@ import finalmission.domain.WaitingLine;
 import finalmission.dto.request.StoreCreateRequest;
 import finalmission.dto.response.MemberResponse;
 import finalmission.dto.response.StoreCreateResponse;
+import finalmission.dto.response.StoreResponse;
 import finalmission.dto.response.WaitingLineCreateResponse;
 import finalmission.infra.auth.LoginMember;
 import finalmission.repository.StoreRepository;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StoreService {
@@ -27,6 +31,7 @@ public class StoreService {
         this.storeRepository = storeRepository;
     }
 
+    @Transactional
     public StoreCreateResponse save(StoreCreateRequest storeCreateRequest, LoginMember loginMember) {
         MemberResponse memberResponse = memberService.findById(loginMember.id());
         Member master = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
@@ -39,5 +44,16 @@ public class StoreService {
                 0.0, master, savedWaitingLine);
 
         return StoreCreateResponse.from(storeRepository.save(store));
+    }
+
+    @Transactional(readOnly = true)
+    public StoreResponse findById(Long id) {
+        Optional<Store> store = storeRepository.findById(id);
+
+        if (store.isEmpty()) {
+            throw new NoSuchElementException("[ERROR] 가게가 존재하지 않습니다.");
+        }
+
+        return StoreResponse.from(store.get());
     }
 }

@@ -1,15 +1,15 @@
 package finalmission.dto.response;
 
-import finalmission.domain.Member;
 import finalmission.domain.WaitingLine;
+import finalmission.domain.WaitingMember;
 import java.util.List;
 
 public record WaitingLineCreateResponse(
         Long id,
-        List<Member> waiting
+        List<WaitingMember> waiting
 ) {
 
     public static WaitingLineCreateResponse from(WaitingLine waitingLine) {
-        return new WaitingLineCreateResponse(waitingLine.getId(), waitingLine.getWaiting());
+        return new WaitingLineCreateResponse(waitingLine.getId(), waitingLine.getWaitingMembers());
     }
 }

@@ -7,6 +7,7 @@ import finalmission.dto.response.MemberResponse;
 import finalmission.infra.auth.LoginMember;
 import finalmission.infra.jwt.JwtTokenProvider;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService {
@@ -19,6 +20,7 @@ public class AuthService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    @Transactional(readOnly = true)
     public String login(LoginRequest loginRequest) {
         MemberResponse memberResponse = memberService.findByEmail(loginRequest.email());
         Member member = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
@@ -30,6 +32,7 @@ public class AuthService {
         throw new IllegalArgumentException("[ERROR] 올바르지 않은 비밀번호입니다.");
     }
 
+    @Transactional(readOnly = true)
     public LoginMember findMemberByToken(String token) {
         if (!jwtTokenProvider.validateToken(token)) {
             throw new IllegalArgumentException("[ERROR] 유효하지 않은 토큰입니다.");
@@ -40,6 +43,7 @@ public class AuthService {
                 memberResponse.memberRole());
     }
 
+    @Transactional(readOnly = true)
     public MemberRole findRoleByToken(String token) {
         if (!jwtTokenProvider.validateToken(token)) {
             throw new IllegalArgumentException("[ERROR] 유효하지 않은 토큰입니다.");

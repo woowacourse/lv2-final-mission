@@ -1,5 +1,6 @@
 package finalmission.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,33 +24,28 @@ public class WaitingLine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
-    private List<Member> waiting;
+    @OneToMany(mappedBy = "waitingLine", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WaitingMember> waitingMembers = new ArrayList<>();
 
     public static WaitingLine makeNewWaiting() {
         return new WaitingLine(null, new ArrayList<>());
     }
 
     public void addMember(Member member) {
-        waiting.add(member);
+        WaitingMember waitingMember = new WaitingMember(member, this);
+        waitingMembers.add(waitingMember);
     }
 
     public boolean hasMember(Member member) {
-        for (Member currentMember : waiting) {
-            if (currentMember.equals(member)) {
-                return true;
-            }
-        }
-        return false;
+        return waitingMembers.stream()
+                .anyMatch(wm -> wm.getMember().equals(member));
     }
 
     public int getSequenceByMember(Member member) {
-        int sequence = 1;
-        for (Member currentMember : waiting) {
-            if (currentMember.equals(member)) {
-                return sequence;
+        for (int i = 0; i < waitingMembers.size(); i++) {
+            if (waitingMembers.get(i).getMember().equals(member)) {
+                return i + 1;
             }
-            sequence++;
         }
         return -1;
     }

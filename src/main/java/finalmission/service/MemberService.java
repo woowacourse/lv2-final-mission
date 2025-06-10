@@ -9,6 +9,7 @@ import finalmission.repository.MemberRepository;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberService {
@@ -19,12 +20,14 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    @Transactional
     public MemberCreateResponse save(MemberCreateRequest memberCreateRequest) {
         Member member = new Member(memberCreateRequest.email(), memberCreateRequest.name(),
                 memberCreateRequest.password(), MemberRole.MASTER);
         return MemberCreateResponse.from(memberRepository.save(member));
     }
 
+    @Transactional(readOnly = true)
     public MemberResponse findById(Long id) {
         Optional<Member> member = memberRepository.findById(id);
 
@@ -34,6 +37,7 @@ public class MemberService {
         return MemberResponse.from(member.get());
     }
 
+    @Transactional(readOnly = true)
     public MemberResponse findByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
 
