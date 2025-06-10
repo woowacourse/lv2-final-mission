@@ -3,6 +3,8 @@ package finalmission.reservation.domain;
 import finalmission.member.domain.Member;
 import finalmission.popupstore.domain.PopupStore;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,19 +35,28 @@ public class Reservation {
 
     private LocalDateTime reservedAt;
 
+    @Enumerated(value = EnumType.STRING)
+    private ReservationStatus reservationStatus;
+
     private Reservation(final Member reserver,
                         final PopupStore popupStore,
-                        final LocalDateTime reservedAt) {
+                        final LocalDateTime reservedAt,
+                        final ReservationStatus reservationStatus) {
         this.reserver = reserver;
         this.popupStore = popupStore;
         this.reservedAt = reservedAt;
+        this.reservationStatus = reservationStatus;
     }
 
     public static Reservation reserve(
             final Member reserver,
             final PopupStore popupStore,
-            final LocalDateTime reservedAt
+            final LocalDateTime reservedAt,
+            final boolean isFulledPopupStore
     ) {
-        return new Reservation(reserver, popupStore, reservedAt);
+        if (isFulledPopupStore) {
+            return new Reservation(reserver, popupStore, reservedAt, ReservationStatus.WAITING);
+        }
+        return new Reservation(reserver, popupStore, reservedAt, ReservationStatus.ENTERED);
     }
 }

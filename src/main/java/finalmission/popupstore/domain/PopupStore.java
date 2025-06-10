@@ -62,4 +62,8 @@ public class PopupStore {
     ) {
         return new PopupStore(null, title, content, startAt, endAt, maxEnteredMemberCount, shopkeeper);
     }
+
+    public boolean isFulled(int currentEnteredCount) {
+        return currentEnteredCount >= maxEnteredMemberCount;
+    }
 }
