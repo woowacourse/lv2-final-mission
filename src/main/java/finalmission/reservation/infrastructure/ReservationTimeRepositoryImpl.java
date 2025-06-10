@@ -1,8 +1,8 @@
-package finalmission.restaurant.infrastructure;
+package finalmission.reservation.infrastructure;
 
 import finalmission.exception.resource.ResourceNotFoundException;
-import finalmission.restaurant.domain.ReservationTime;
-import finalmission.restaurant.domain.repository.ReservationTimeRepository;
+import finalmission.reservation.domain.ReservationTime;
+import finalmission.reservation.domain.ReservationTimeRepository;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

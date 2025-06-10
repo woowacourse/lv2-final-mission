@@ -1,6 +1,5 @@
-package finalmission.restaurant.domain.repository;
+package finalmission.reservation.domain;
 
-import finalmission.restaurant.domain.ReservationTime;
 import java.time.LocalTime;
 import java.util.List;
 

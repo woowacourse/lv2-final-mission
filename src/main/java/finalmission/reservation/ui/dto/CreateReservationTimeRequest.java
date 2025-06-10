@@ -1,4 +1,4 @@
-package finalmission.restaurant.ui.dto;
+package finalmission.reservation.ui.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;

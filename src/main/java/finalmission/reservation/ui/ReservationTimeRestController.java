@@ -1,11 +1,11 @@
-package finalmission.restaurant.ui;
+package finalmission.reservation.ui;
 
 import static finalmission.auth.domain.AuthRole.ADMIN;
 
 import finalmission.auth.domain.RequiresRole;
-import finalmission.restaurant.application.ReservationTimeService;
-import finalmission.restaurant.ui.dto.CreateReservationTimeRequest;
-import finalmission.restaurant.ui.dto.ReservationTimeResponse;
+import finalmission.reservation.application.ReservationTimeService;
+import finalmission.reservation.ui.dto.CreateReservationTimeRequest;
+import finalmission.reservation.ui.dto.ReservationTimeResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;

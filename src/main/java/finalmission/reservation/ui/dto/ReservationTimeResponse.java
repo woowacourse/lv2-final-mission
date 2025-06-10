@@ -1,7 +1,7 @@
-package finalmission.restaurant.ui.dto;
+package finalmission.reservation.ui.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import finalmission.restaurant.domain.ReservationTime;
+import finalmission.reservation.domain.ReservationTime;
 import java.time.LocalTime;
 
 public record ReservationTimeResponse(

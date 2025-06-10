@@ -1,4 +1,4 @@
-package finalmission.restaurant.domain;
+package finalmission.reservation.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

@@ -1,5 +1,6 @@
 package finalmission.restaurant.domain;
 
+import finalmission.reservation.domain.ReservationTime;
 import java.time.LocalTime;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;

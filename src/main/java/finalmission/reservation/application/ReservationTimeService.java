@@ -1,11 +1,11 @@
-package finalmission.restaurant.application;
+package finalmission.reservation.application;
 
 import finalmission.exception.resource.AlreadyExistException;
 import finalmission.exception.resource.ResourceInUseException;
-import finalmission.restaurant.domain.ReservationTime;
-import finalmission.restaurant.domain.repository.ReservationTimeRepository;
-import finalmission.restaurant.ui.dto.CreateReservationTimeRequest;
-import finalmission.restaurant.ui.dto.ReservationTimeResponse;
+import finalmission.reservation.domain.ReservationTime;
+import finalmission.reservation.domain.ReservationTimeRepository;
+import finalmission.reservation.ui.dto.CreateReservationTimeRequest;
+import finalmission.reservation.ui.dto.ReservationTimeResponse;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
