@@ -46,20 +46,6 @@ CREW
 COACH
 ```
 #### 크루
-+ 크루가입(GUEST)
-```
-POST /crews HTTP/1.1
-Content-Type: application/json
-{  
-    "nickname": "링크",
-    "password": "qwerty"
-}
-```
-```
-HTTP/1.1 201
-Content-Type: application/json
-Location: /crews/{id} 
-```
 + 크루 목록 조회(COACH)
 ```
 GET /crews HTTP/1.1
@@ -86,23 +72,9 @@ Content-Type: application/json
 ```
 HTTP/1.1 200
 Content-Type: application/json
-Set-Cookie: token=~~
 ```
 
 #### 코치
-+ 코치 추가(COACH)
-```
-POST /coaches HTTP/1.1
-{  
-    "nickname": "링크",
-    "education": "BE"
-}
-```
-```
-HTTP/1.1 201
-Content-Type: application/json
-Location: /coaches/{id} 
-```
 + 코치 목록 조회(COACH)
 ```
 GET /coaches HTTP/1.1
@@ -117,13 +89,6 @@ Content-Type: application/json
         "education": "Captain"
     }
 }
-```
-+ 코치 삭제(COACH)
-```
-DELETE /coaches/{id} HTTP/1.1
-```
-```
-HTTP/1.1 204
 ```
 
 #### 예약 가능 시간
