@@ -5,7 +5,7 @@ import finalmission.domain.vo.LolName;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record RoomResponse(
+public record RoomWithoutParticipantsResponse(
         String name,
         LocalDate startDate,
         LocalTime startTime,
@@ -13,8 +13,8 @@ public record RoomResponse(
         LolName manager
 ) {
 
-    public static RoomResponse from(final Room room) {
-        return new RoomResponse(
+    public static RoomWithoutParticipantsResponse from(final Room room) {
+        return new RoomWithoutParticipantsResponse(
                 room.getName(),
                 room.getStartDate(),
                 room.getStartTime(),

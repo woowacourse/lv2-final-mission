@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +33,7 @@ public class Room {
     private Member manager;
 
     @OneToMany(mappedBy = "room")
-    private List<RoomMember> roomMembers;
+    private List<RoomMember> roomMembers = new ArrayList<>();
 
     public void addRoomMember(final RoomMember roomMember) {
         roomMembers.add(roomMember);
