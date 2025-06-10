@@ -17,3 +17,6 @@
 - [] 사용자는 본인의 예약을 수정할 수 있다.
 - [] 사용자는 본인의 예약을 삭제할 수 있다. 
 - [] 사용자는 본인의 예약의 상세 정보를 확인할 수 있다. 
+
+### ERD
+- https://dbdiagram.io/d/monster-energy-drink-reservation-service-6847b082579a5a75f79ba327
