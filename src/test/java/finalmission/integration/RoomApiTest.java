@@ -1,10 +1,13 @@
 package finalmission.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 import finalmission.controller.dto.RoomCreateRequest;
-import finalmission.domain.vo.LolName;
 import finalmission.domain.Member;
+import finalmission.domain.Room;
+import finalmission.domain.RoomMember;
+import finalmission.domain.vo.LolName;
 import finalmission.repository.MemberRepository;
 import finalmission.repository.RoomMemberRepository;
 import finalmission.repository.RoomRepository;
@@ -27,6 +30,9 @@ public class RoomApiTest {
     private final RoomMemberRepository roomMemberRepository;
     private final MemberRepository memberRepository;
 
+    private Member member1;
+    private Member member2;
+
     @Autowired
     public RoomApiTest(
             final RoomRepository roomRepository,
@@ -40,16 +46,14 @@ public class RoomApiTest {
 
     @BeforeEach
     void setUp() {
-        final Member member1 = new Member(
+        member1 = memberRepository.save(new Member(
                 new LolName("누신누황", "nunu"),
                 "qwe123"
-        );
-        final Member member2 = new Member(
+        ));
+        member2 = memberRepository.save(new Member(
                 new LolName("훌라보노", "KR1"),
                 "qwe123"
-        );
-        memberRepository.save(member1);
-        memberRepository.save(member2);
+        ));
     }
 
     @DisplayName("방을 생성한다.")
@@ -74,5 +78,26 @@ public class RoomApiTest {
 
         assertThat(roomRepository.findAll()).isNotEmpty();
         assertThat(roomMemberRepository.findAll()).isNotEmpty();
+    }
+
+    @DisplayName("모든 방을 조회한다.")
+    @Test
+    void findAll() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        // when & then
+        RestAssured.given().log().all()
+                .when().get("/room")
+                .then().log().all()
+                .statusCode(200)
+                .body("[0].name", response -> equalTo("5대5 내전 구함"));
     }
 }

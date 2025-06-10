@@ -2,9 +2,12 @@ package finalmission.controller;
 
 import finalmission.controller.dto.RoomCreateRequest;
 import finalmission.controller.dto.RoomCreateResponse;
+import finalmission.controller.dto.RoomResponse;
 import finalmission.service.RoomService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,13 @@ public class RoomController {
     @PostMapping
     public ResponseEntity<RoomCreateResponse> create(@RequestBody final RoomCreateRequest request) {
         final RoomCreateResponse response = roomService.create(request);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RoomResponse>> findAll() {
+        final List<RoomResponse> response = roomService.findAll();
 
         return ResponseEntity.ok(response);
     }
