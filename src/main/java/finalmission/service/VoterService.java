@@ -29,7 +29,7 @@ public class VoterService {
     }
 
     @Transactional
-    public Voter validateAndGet(String name, String password) {
+    public Voter authenticateAndGet(String name, String password) {
         if (!voterRepository.existsByNameAndPassword(name, password)) {
             throw new IllegalArgumentException("존재하지 않는 투표자입니다.");
         }

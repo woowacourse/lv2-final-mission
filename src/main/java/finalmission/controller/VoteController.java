@@ -26,7 +26,7 @@ public class VoteController {
             @RequestParam("password") String password,
             @RequestBody VoteRequest request
     ) {
-        Voter voter = voterService.validateAndGet(name, password);
+        Voter voter = voterService.authenticateAndGet(name, password);
         voteService.vote(roomId, voter, request.values());
         URI createdLocation = URI.create("/time/" + roomId + "/my");
         return ResponseEntity.created(createdLocation).build();
@@ -46,7 +46,7 @@ public class VoteController {
             @RequestParam("name") String name,
             @RequestParam("password") String password
     ) {
-        Voter voter = voterService.validateAndGet(name, password);
+        Voter voter = voterService.authenticateAndGet(name, password);
         VoteResponses response = voteService.getMyVotes(roomId, voter);
         return ResponseEntity.ok(response);
     }
@@ -57,7 +57,7 @@ public class VoteController {
             @RequestParam("name") String name,
             @RequestParam("password") String password
     ) {
-        Voter voter = voterService.validateAndGet(name, password);
+        Voter voter = voterService.authenticateAndGet(name, password);
         voteService.dropMyVotes(roomId, voter);
         return ResponseEntity.noContent().build();
     }
