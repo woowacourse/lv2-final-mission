@@ -16,7 +16,7 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("사용자를 저장한다.")
     void save() {
-        var member = new Member("포포");
+        var member = new Member("popo", "password", "포포");
 
         var savedMember = memberRepository.save(member);
 

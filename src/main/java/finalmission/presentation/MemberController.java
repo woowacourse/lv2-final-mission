@@ -20,7 +20,7 @@ public class MemberController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@Valid @RequestBody RegisterMemberRequest request) {
-        memberService.register(request.name());
+        memberService.register(request.id(), request.password(), request.name());
     }
 }
 

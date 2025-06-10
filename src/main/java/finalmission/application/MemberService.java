@@ -11,8 +11,8 @@ public class MemberService {
 
     private final MemberRepository repository;
 
-    public void register(final String name) {
-        var member = new Member(name);
+    public void register(final String id, final String password, final String name) {
+        var member = new Member(id, password, name);
         repository.save(member);
     }
 }

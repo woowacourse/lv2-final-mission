@@ -13,7 +13,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("사용자를 등록한다.")
     void register() {
-        memberService.register("포포");
+        memberService.register("popo", "password", "포포");
         Mockito.verify(memberRepository).save(Mockito.any());
     }
 }

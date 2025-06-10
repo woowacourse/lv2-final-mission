@@ -15,10 +15,12 @@
 
 ## Member
 
-### 사용자 등록
+### 사용자 등록 (회원가입)
 > POST /members
 
 - REQUEST BODY
+  - "id": 사용자 ID
+  - "password": 비밀번호
   - "name": 사용자 이름 (2자 이상 5자 이하)
 
 - RESPONSE

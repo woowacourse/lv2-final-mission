@@ -13,7 +13,7 @@ class MemberTest {
     @Test
     @DisplayName("사용자를 생성한다.")
     void newMember() {
-        var member = new Member("포포");
+        var member = new Member("popo", "password", "포포");
         assertThat(member).isNotNull();
     }
 
@@ -21,7 +21,7 @@ class MemberTest {
     @DisplayName("사용자 이름은 2자 이상 5자 이하여야 한다.")
     @ValueSource(strings = {"", "포", "포포포포포포"})
     void validateName(String name) {
-        assertThatThrownBy(() -> new Member(name))
+        assertThatThrownBy(() -> new Member("popo", "password", name))
             .isInstanceOf(IllegalArgumentException.class);
     }
 }

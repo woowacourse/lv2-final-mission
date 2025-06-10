@@ -19,11 +19,14 @@ public class Member {
     private static final int MAX_NAME_LENGTH = 5;
 
     @Id
-    private final UUID id = UUID.randomUUID();
+    private String id;
+    private String password;
     private String name;
 
-    public Member(final String name) {
+    public Member(final String id, final String password, final String name) {
         validateNameLength(name);
+        this.id = id;
+        this.password = password;
         this.name = name;
     }
 

@@ -28,16 +28,22 @@ class MemberControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {
+                    "id": "popo",
+                    "password": "password",
                     "name": "포포"
                 }
                 """)
         ).andExpect(status().isCreated());
-        Mockito.verify(memberService).register(eq("포포"));
+        Mockito.verify(memberService).register(eq("popo"), eq("password"), eq("포포"));
     }
 
     @ParameterizedTest
     @DisplayName("요청 내용이 비어있으면 BAD REQUEST를 응답한다.")
-    @ValueSource(strings = {"{ \"name\": \"\" }"})
+    @ValueSource(strings = {
+        "{ \"id\": \"\", \"password\": \"password\", \"name\": \"포포\" }",
+        "{ \"id\": \"popo\", \"password\": \"\", \"name\": \"포포\" }",
+        "{ \"id\": \"popo\", \"password\": \"password\", \"name\": \"\" }",
+    })
     void validateBlank(String requestJson) throws Exception {
         mockMvc.perform(post("/members")
             .contentType(MediaType.APPLICATION_JSON)
