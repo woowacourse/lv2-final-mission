@@ -24,10 +24,10 @@ public class MemberService {
                 .orElseThrow(() -> {
                     throw new MemberException("없는 멤버입니다.");
                 });
-        String secret = "hihi";
+        String secret = "since-jjwt-api-0.11-secret-key-must-be-longer-than-32-bytes";
         SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes());
         String jwt = Jwts.builder()
-                .setSubject(member.getName())
+                .setSubject(member.getId().toString())
                 .signWith(secretKey)
                 .compact();
         return jwt;
@@ -38,5 +38,12 @@ public class MemberService {
         Member savedMember = memberRepository.save(member);
 
         return savedMember;
+    }
+
+    public Member findMemberById(Long id) {
+
+        return memberRepository.findById(id).orElseThrow(() -> {
+            throw new MemberException("없는 멤버입니다.");
+        });
     }
 }
