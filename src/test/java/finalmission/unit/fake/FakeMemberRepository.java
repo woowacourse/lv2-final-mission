@@ -26,4 +26,11 @@ public class FakeMemberRepository implements MemberRepository {
                 .filter(member -> member.getEmail().equals(email))
                 .findFirst();
     }
+
+    @Override
+    public Optional<Member> findById(Long memberId) {
+        return members.stream()
+                .filter(member -> member.getId().equals(memberId))
+                .findFirst();
+    }
 }
