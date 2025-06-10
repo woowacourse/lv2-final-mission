@@ -5,7 +5,10 @@ import finalmission.dto.response.RoomCreateResponse;
 import finalmission.dto.response.RoomResponse;
 import finalmission.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,16 +17,19 @@ public class RoomController {
     private final RoomService roomService;
 
     @PostMapping("/room")
-    public RoomCreateResponse createRoom(
+    public ResponseEntity<RoomCreateResponse> createRoom(
             @RequestBody RoomCreateRequest request
     ) {
-        return roomService.createRoom(request.startDate(), request.endDate(), request.startTime(), request.endTime());
+        RoomCreateResponse response = roomService.createRoom(request.startDate(), request.endDate(), request.startTime(), request.endTime());
+        URI createdLocation = URI.create("/room/" + response.roomId());
+        return ResponseEntity.created(createdLocation).build();
     }
 
     @GetMapping("/room/{roomId}")
-    public RoomResponse getRoomInfo(
+    public ResponseEntity<RoomResponse> getRoomInfo(
             @PathVariable("roomId") String roomId
     ) {
-        return roomService.getRoomInfo(roomId);
+        RoomResponse response = roomService.getRoomInfo(roomId);
+        return ResponseEntity.ok(response);
     }
 }

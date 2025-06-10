@@ -7,7 +7,10 @@ import finalmission.dto.response.VoteStaticsResponses;
 import finalmission.service.VoteService;
 import finalmission.service.VoterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,8 +19,8 @@ public class VoteController {
     private final VoterService voterService;
     private final VoteService voteService;
 
-    @PostMapping("/time/{roomId}")
-    public void vote(
+    @PostMapping("/vote/{roomId}")
+    public ResponseEntity<Void> vote(
             @PathVariable("roomId") String roomId,
             @RequestParam("name") String name,
             @RequestParam("password") String password,
@@ -25,32 +28,37 @@ public class VoteController {
     ) {
         Voter voter = voterService.validateAndGet(name, password);
         voteService.vote(roomId, voter, request.values());
+        URI createdLocation = URI.create("/time/{roomId}/my");
+        return ResponseEntity.created(createdLocation).build();
     }
 
-    @GetMapping("/time/{roomId}")
-    public VoteStaticsResponses getVoteStatics(
+    @GetMapping("/vote/{roomId}")
+    public ResponseEntity<VoteStaticsResponses> getVoteStatics(
             @PathVariable("roomId") String roomId
     ) {
-        return voteService.getVoteStatics(roomId);
+        VoteStaticsResponses response = voteService.getVoteStatics(roomId);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/time/{roomId}/my")
-    public VoteResponses getMyVotes(
+    @GetMapping("/vote/{roomId}/my")
+    public ResponseEntity<VoteResponses> getMyVotes(
             @PathVariable("roomId") String roomId,
             @RequestParam("name") String name,
             @RequestParam("password") String password
     ) {
         Voter voter = voterService.validateAndGet(name, password);
-        return voteService.getMyVotes(roomId, voter);
+        VoteResponses response = voteService.getMyVotes(roomId, voter);
+        return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/time/{roomId}")
-    public void dropMyVotes(
+    @DeleteMapping("/vote/{roomId}")
+    public ResponseEntity<Void> dropMyVotes(
             @PathVariable("roomId") String roomId,
             @RequestParam("name") String name,
             @RequestParam("password") String password
     ) {
         Voter voter = voterService.validateAndGet(name, password);
         voteService.dropMyVotes(roomId, voter);
+        return ResponseEntity.noContent().build();
     }
 }
