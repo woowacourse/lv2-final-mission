@@ -34,5 +34,5 @@ security:
 email:
   twilio:
     base-url: https://api.sendgrid.com
-    secret-key: YOUR_API_KEY
+    secret-key: YOUR_API_KEY # TODO: 실제 API 키 입력 필요 
 
