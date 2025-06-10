@@ -1,4 +1,4 @@
-package finalmission.controller;
+package finalmission.room.controller;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
