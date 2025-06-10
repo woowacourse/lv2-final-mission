@@ -12,3 +12,14 @@ CREATE TABLE IF NOT EXISTS member (
     password VARCHAR(255) NOT NULL,
     PRIMARY KEY(id)
 );
+
+CREATE TABLE IF NOT EXISTS reservation (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    room_id BIGINT,
+    member_id BIGINT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(room_id) REFERENCES room(id),
+    FOREIGN KEY(member_id) REFERENCES member(id)
+);

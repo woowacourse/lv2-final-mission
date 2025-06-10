@@ -25,4 +25,9 @@ public class MemberService {
         String token = tokenProvider.createToken(newMember.getId().toString());
         return new Cookie("token", token);
     }
+
+    public Member findMemberByToken(String token) {
+        String payload = tokenProvider.getPayload(token);
+        return memberRepository.findById(Long.parseLong(payload)).orElseThrow();
+    }
 }
