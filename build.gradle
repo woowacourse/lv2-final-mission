@@ -38,6 +38,9 @@ dependencies {
     // h2
     runtimeOnly 'com.h2database:h2'
 
+    // springdoc
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.8'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured:5.3.1'
 }
