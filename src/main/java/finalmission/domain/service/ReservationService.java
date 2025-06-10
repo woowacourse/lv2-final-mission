@@ -32,8 +32,7 @@ public class ReservationService {
     }
 
     public List<TrainerReservationResponse> getTrainersReservations(Long trainerId) {
-        Trainer trainer = trainerRepository.findById(trainerId)
-                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 선생님입니다: " + trainerId));
+        Trainer trainer = getTrainer(trainerId);
         List<Reservation> foundReservations = reservationRepository.findByTrainerAndDateAfterOrderByDateAsc(
                 trainer,
                 timeInject.now().toLocalDate()
@@ -52,10 +51,8 @@ public class ReservationService {
         if (!member.availableLesson()) {
             throw new IllegalArgumentException("[ERROR] PT 수강권이 있어야 수강할 수 있습니다");
         }
-        LessonTime time = lessonTimeRepository.findById(request.lessonTimeId())
-                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 수강 시간입니다: " + request.lessonTimeId()));
-        Trainer trainer = trainerRepository.findById(request.trainerId())
-                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 선생님입니다: " + request.trainerId()));
+        LessonTime time = getLessonTime(request.lessonTimeId());
+        Trainer trainer = getTrainer(request.trainerId());
         if (reservationRepository.existsByDateAndLessonTimeAndTrainer(request.date(), time, trainer)) {
             createLesson(request, time, trainer, member, ReservationStatus.WAITING);
             return;
@@ -73,5 +70,15 @@ public class ReservationService {
     ) {
         Reservation reservation = Reservation.createWithoutId(status, request.date(), member, time, trainer);
         reservationRepository.save(reservation);
+    }
+
+    private Trainer getTrainer(Long request) {
+        return trainerRepository.findById(request)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 선생님입니다: " + request));
+    }
+
+    private LessonTime getLessonTime(Long lessonTimeId) {
+        return lessonTimeRepository.findById(lessonTimeId)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 수강 시간입니다: " + lessonTimeId));
     }
 }
