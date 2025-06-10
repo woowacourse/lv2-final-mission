@@ -9,6 +9,8 @@ import finalmission.exception.MemberNotFoundException;
 import finalmission.infrastructure.MemberRepository;
 import finalmission.infrastructure.ReservationRepository;
 import finalmission.infrastructure.ToiletRepository;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,5 +35,12 @@ public class ReservationService {
         Reservation reservation = new Reservation(request.date(), request.startAt(), request.endAt(), member, toilet);
         Reservation savedReservation = reservationRepository.save(reservation);
         return ReservationResponse.from(savedReservation);
+    }
+
+    public List<ReservationResponse> findReservationByToiletIdAndDate(Long toiletId, LocalDate date) {
+        return reservationRepository.findByToiletIdAndDate(toiletId, date)
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
     }
 }
