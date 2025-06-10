@@ -25,4 +25,8 @@ public class AlbumService {
 
         return AlbumResponse.from(album);
     }
+
+    public void delete(final Long id) {
+        albumRepository.deleteById(id);
+    }
 }
