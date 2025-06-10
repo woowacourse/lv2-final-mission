@@ -3,12 +3,14 @@ package finalmission.api.v1.reservation.controller;
 import finalmission.api.v1.reservation.dto.ReservationDeleteRequest;
 import finalmission.api.v1.reservation.dto.ReservationDetailGetRequest;
 import finalmission.api.v1.reservation.dto.ReservationDetailResponse;
+import finalmission.api.v1.reservation.dto.ReservationForAllUserResponse;
 import finalmission.api.v1.reservation.dto.ReservationModifyRequest;
 import finalmission.api.v1.reservation.dto.ReservationRequest;
 import finalmission.api.v1.reservation.dto.ReservationResponse;
 import finalmission.api.v1.reservation.service.ReservationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +31,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservationController {
 
     private final ReservationService reservationService;
+
+    @GetMapping
+    public List<ReservationForAllUserResponse> getAllReservation() {
+        return reservationService.getAllReservation();
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -60,5 +67,4 @@ public class ReservationController {
     ) {
         reservationService.deleteReservation(id, request);
     }
-
 }
