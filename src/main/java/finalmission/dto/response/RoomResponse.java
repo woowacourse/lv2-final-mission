@@ -1,7 +1,7 @@
 package finalmission.dto.response;
 
 import finalmission.domain.Room;
-import finalmission.domain.Time;
+import finalmission.domain.Vote;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,7 +13,7 @@ public record RoomResponse(
         LocalDate endDate,
         LocalTime startTime,
         LocalTime endTime,
-        Set<String> voters
+        Set<String> voterNames
 ) {
     public static RoomResponse from(Room room) {
         return new RoomResponse(
@@ -21,8 +21,8 @@ public record RoomResponse(
                 room.getEndDate(),
                 room.getStartTime(),
                 room.getEndTime(),
-                room.getTimes().stream()
-                        .map(Time::getVoterName)
+                room.getVotes().stream()
+                        .map(Vote::getVoterName)
                         .collect(Collectors.toSet())
         );
     }

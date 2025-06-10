@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-public class Time {
+public class Vote {
 
     @EmbeddedId
     private final Id id = Id.random();
@@ -26,21 +26,21 @@ public class Time {
     @ManyToOne
     private final Room room;
 
-    public Time(LocalDateTime dateTime, Room room, Voter voter) {
+    public Vote(LocalDateTime dateTime, Room room, Voter voter) {
         this.dateTime = dateTime;
         this.voter = voter;
         this.room = room;
     }
 
-    public static List<TimeStatics> calculateStatics(List<Time> times) {
-        List<LocalDateTime> dateTimes = times.stream().map(Time::getDateTime).toList();
+    public static List<VoteStatics> calculateStatics(List<Vote> votes) {
+        List<LocalDateTime> dateTimes = votes.stream().map(Vote::getDateTime).toList();
 
         return dateTimes.stream()
-                .map(dateTime -> new TimeStatics(
+                .map(dateTime -> new VoteStatics(
                         dateTime,
-                        times.stream()
+                        votes.stream()
                                 .filter(time -> time.isDateTimeOf(dateTime))
-                                .map(Time::getVoterName)
+                                .map(Vote::getVoterName)
                                 .toList()
                 ))
                 .toList();

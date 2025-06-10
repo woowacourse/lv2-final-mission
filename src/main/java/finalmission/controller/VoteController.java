@@ -1,47 +1,47 @@
 package finalmission.controller;
 
 import finalmission.domain.Voter;
-import finalmission.dto.request.TimeAddRequest;
-import finalmission.dto.response.TimeResponses;
-import finalmission.dto.response.TimeStaticsResponses;
-import finalmission.service.TimeService;
+import finalmission.dto.request.VoteRequest;
+import finalmission.dto.response.VoteResponses;
+import finalmission.dto.response.VoteStaticsResponses;
+import finalmission.service.VoteService;
 import finalmission.service.VoterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-public class TimeController {
+public class VoteController {
 
     private final VoterService voterService;
-    private final TimeService timeService;
+    private final VoteService voteService;
 
     @PostMapping("/time/{roomId}")
     public void addTime(
             @PathVariable("roomId") String roomId,
             @RequestParam("name") String name,
             @RequestParam("password") String password,
-            @RequestBody TimeAddRequest request
+            @RequestBody VoteRequest request
     ) {
         Voter voter = voterService.validateAndGet(name, password);
-        timeService.addTime(roomId, voter, request.values());
+        voteService.vote(roomId, voter, request.values());
     }
 
     @GetMapping("/time/{roomId}")
-    public TimeStaticsResponses getTimeStatics(
+    public VoteStaticsResponses getTimeStatics(
             @PathVariable("roomId") String roomId
     ) {
-        return timeService.getTimeStatics(roomId);
+        return voteService.getVoteStatics(roomId);
     }
 
     @GetMapping("/time/{roomId}/my")
-    public TimeResponses getMyTimes(
+    public VoteResponses getMyTimes(
             @PathVariable("roomId") String roomId,
             @RequestParam("name") String name,
             @RequestParam("password") String password
     ) {
         Voter voter = voterService.validateAndGet(name, password);
-        return timeService.getMyTimes(roomId, voter);
+        return voteService.getMyVotes(roomId, voter);
     }
 
     @DeleteMapping("/time/{roomId}")
@@ -51,6 +51,6 @@ public class TimeController {
             @RequestParam("password") String password
     ) {
         Voter voter = voterService.validateAndGet(name, password);
-        timeService.dropMyTimes(roomId, voter);
+        voteService.dropMyVotes(roomId, voter);
     }
 }

@@ -25,7 +25,7 @@ public class Room {
     private final LocalTime startTime;
     private final LocalTime endTime;
     @OneToMany(mappedBy = "room")
-    private final List<Time> times = new ArrayList<>();
+    private final List<Vote> votes = new ArrayList<>();
     @OneToMany(mappedBy = "room")
     private final List<Voter> voters = new ArrayList<>();
 
@@ -36,11 +36,11 @@ public class Room {
         this.endTime = endTime;
     }
 
-    public Time createTime(Voter voter, LocalDateTime dateTime) {
+    public Vote createVote(Voter voter, LocalDateTime dateTime) {
         validateDateTimeIsInBoundary(dateTime);
-        Time newTime = new Time(dateTime, this, voter);
-        this.times.add(newTime);
-        return newTime;
+        Vote newVote = new Vote(dateTime, this, voter);
+        this.votes.add(newVote);
+        return newVote;
     }
 
     public void addMember(Voter voter) {
@@ -58,8 +58,8 @@ public class Room {
         }
     }
 
-    public List<Time> getTimesOf(Voter voter) {
-        return times.stream()
+    public List<Vote> getTimesOf(Voter voter) {
+        return votes.stream()
                 .filter(time -> time.createdBy(voter))
                 .toList();
     }
