@@ -9,12 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ApplyCreator {
+public class ApplyDeleter {
 
     private final ApplyRepository applyRepository;
 
-    public Long execute(final Long partyId, final Long playerId) {
-        final Apply apply = applyRepository.save(Apply.of(partyId, playerId));
-        return apply.getId();
+    public void execute(final Apply apply) {
+        applyRepository.delete(apply);
+    }
+
+    public void execute(final Long id) {
+        applyRepository.deleteById(id);
     }
 }

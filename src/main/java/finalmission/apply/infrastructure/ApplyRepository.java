@@ -8,4 +8,8 @@ import java.util.List;
 public interface ApplyRepository extends JpaRepository<Apply, Long> {
 
     List<Apply> findAllByPartyId(Long partyId);
+
+    List<Apply> findAllByPlayerId(Long playerId);
+
+    Apply findTop1ByPlayerIdOrderByCreatedAtAsc(Long playerId);
 }

@@ -17,4 +17,11 @@ public class ApplyFinder {
         return applyRepository.findAllByPartyId(partyId);
     }
 
+    public List<Apply> getAllByPlayerId(final Long playerId) {
+        return applyRepository.findAllByPlayerId(playerId);
+    }
+
+    public Apply getNewestByPlayerId(final Long playerId) {
+        return applyRepository.findTop1ByPlayerIdOrderByCreatedAtAsc(playerId);
+    }
 }
