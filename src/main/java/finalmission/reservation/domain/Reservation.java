@@ -61,4 +61,16 @@ public class Reservation {
     public LocalTime getEndAt() {
         return endAt.getValue();
     }
+
+    public void updateDate(ReservationDate date) {
+        this.date = date;
+    }
+
+    public void updateStartAt(StartAt startAt) {
+        this.startAt = startAt;
+    }
+
+    public void updateEndAt(EndAt endAt) {
+        this.endAt = endAt;
+    }
 }
