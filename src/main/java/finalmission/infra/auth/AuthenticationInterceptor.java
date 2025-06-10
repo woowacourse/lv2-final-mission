@@ -1,5 +1,6 @@
 package finalmission.infra.auth;
 
+import finalmission.infra.jwt.JwtTokenExtractor;
 import finalmission.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +20,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) {
-        return true;
+        try {
+            String token = JwtTokenExtractor.extract(request);
+            authService.findMemberByToken(token);
+            return true;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("[ERROR] 인증되지 않은 사용자입니다.");
+        }
     }
 }

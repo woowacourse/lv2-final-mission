@@ -1,6 +1,8 @@
 package finalmission.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,6 +28,7 @@ public class Member {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
     public Member(String email, String name, String password, MemberRole memberRole) {

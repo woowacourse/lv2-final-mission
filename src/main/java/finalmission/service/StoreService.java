@@ -20,11 +20,11 @@ public class StoreService {
     private final WaitingLineService waitingLineService;
     private final StoreRepository storeRepository;
 
-    public StoreService(final MemberService memberService, final WaitingLineService waitingLineService,
-                        final StoreRepository storeRepository, final StoreRepository storeRepository1) {
+    public StoreService(MemberService memberService, WaitingLineService waitingLineService,
+                        StoreRepository storeRepository) {
         this.memberService = memberService;
         this.waitingLineService = waitingLineService;
-        this.storeRepository = storeRepository1;
+        this.storeRepository = storeRepository;
     }
 
     public StoreCreateResponse save(StoreCreateRequest storeCreateRequest, LoginMember loginMember) {
