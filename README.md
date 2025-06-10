@@ -39,14 +39,8 @@ SS  왼손
 ---
 
 ### API 설계
-+ api 접근 권한은 다음과 같다.
-```
-GUEST
-CREW
-COACH
-```
 #### 크루
-+ [x] 크루 목록 조회(COACH)
++ [x] 크루 목록 조회
 ```
 GET /crews HTTP/1.1
 ```
@@ -60,22 +54,9 @@ Content-Type: application/json
     }
 }
 ```
-+ [ ] 로그인(GUEST)
-```
-POST /members HTTP/1.1
-Content-Type: application/json
-{
-    "nickname": "링크",
-    "password": "qwerty"
-}
-```
-```
-HTTP/1.1 200
-Content-Type: application/json
-```
 
 #### 코치
-+ [ ] 코치 목록 조회(COACH)
++ [ ] 코치 목록 조회
 ```
 GET /coaches HTTP/1.1
 ```
@@ -92,7 +73,7 @@ Content-Type: application/json
 ```
 
 #### 예약 가능 시간
-+ [ ] 코치별 예약 가능 시간 추가(COACH)
++ [ ] 코치별 예약 가능 시간 추가
 ```
 POST /dateTimes HTTP/1.1
 {  
@@ -104,7 +85,7 @@ HTTP/1.1 201
 Content-Type: application/json
 Location: /dateTimes/{id}
 ```
-+ [ ] 예약 가능 시간 목록 조회(CREW)
++ [ ] 예약 가능 시간 목록 조회
 ```
 GET /dateTimes?nickname="포비" HTTP/1.1
 ```
@@ -119,7 +100,7 @@ Content-Type: application/json
 }
 ```
 
-+ [ ] 예약 가능 시간 삭제(COACH)
++ [ ] 예약 가능 시간 삭제
 ```
 DELETE /dateTimes/{id} HTTP/1.1
 ```
@@ -129,7 +110,7 @@ Content-Type: application/json
 ```
 
 #### 예약
-+ [ ] 예약 추가(CREW)
++ [ ] 예약 추가
 ```
 POST /reservations HTTP/1.1
 {  
@@ -142,20 +123,7 @@ HTTP/1.1 201
 Content-Type: application/json
 Location: /reservations/{id}
 ```
-+ [ ] 예약 정보 수정(CREW)
-```
-PUT /reservations HTTP/1.1
-{  
-    "coach": "포비"
-    "dateTime": "2025-08-09 10:00"
-}
-```
-```
-HTTP/1.1 200
-Content-Type: application/json
-Location: /reservations/{id}
-```
-+ [ ] 크루별 예약 조회(CREW)
++ [ ] 크루별 예약 조회
 ```
 GET /reservations HTTP/1.1
 ```
@@ -171,7 +139,7 @@ Content-Type: application/json
 }
 ```
 
-+ [ ] 코치별 예약 조회(COACH)
++ [ ] 코치별 예약 조회
 ```
 GET /reservations HTTP/1.1
 ```
@@ -186,9 +154,28 @@ Content-Type: application/json
     }
 }
 ```
-+ [ ] 예약 삭제(CREW)
++ [ ] 예약 정보 수정
+```
+PUT /reservations HTTP/1.1
+{  
+    "crewId":1,
+    "reservationId": 1,
+    "coach": "포비",
+    "dateTime": "2025-08-09 10:00"
+}
+```
+```
+HTTP/1.1 200
+Content-Type: application/json
+Location: /reservations/{id}
+```
+
++ [ ] 예약 삭제
 ```
 DELETE /reservations/{id} HTTP/1.1
+{  
+    "crewId":1,
+}
 ```
 ```
 HTTP/1.1 204
