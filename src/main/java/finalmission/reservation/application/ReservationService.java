@@ -11,6 +11,7 @@ import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.domain.ReservationDate;
 import finalmission.reservation.domain.StartAt;
 import finalmission.reservation.domain.repository.ReservationRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,4 +37,17 @@ public class ReservationService {
         reservationRepository.save(reservation);
         return ReservationResponse.from(reservation);
     }
+
+    public List<ReservationResponse> getMyReservation(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        List<Reservation> reservations = reservationRepository.findByMember(member);
+        return ReservationResponse.from(reservations);
+    }
+
+    public List<ReservationResponse> getRoomReservation(Long roomId) {
+        List<Reservation> reservations = reservationRepository.findFiltered(roomId);
+        return ReservationResponse.from(reservations);
+    }
+
 }
