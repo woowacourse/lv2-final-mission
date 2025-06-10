@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,13 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private LocalDate date;
+
+    @JoinColumn(name = "restaurant_time_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private ReservationTime reservationTime;
+
     @JoinColumn(name = "restaurant_id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Restaurant restaurant;
@@ -31,9 +39,14 @@ public class Reservation {
     private String phoneNumber;
 
     @Builder
-    public Reservation(final Long id, final Restaurant restaurant, final String phoneNumber) {
+    public Reservation(final Long id, final LocalDate date, final ReservationTime reservationTime,
+                       final Restaurant restaurant,
+                       final String phoneNumber) {
         this.id = id;
+        this.date = date;
+        this.reservationTime = reservationTime;
         this.restaurant = restaurant;
         this.phoneNumber = phoneNumber;
     }
 }
+
