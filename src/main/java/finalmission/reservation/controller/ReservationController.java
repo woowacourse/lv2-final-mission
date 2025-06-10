@@ -40,4 +40,10 @@ public class ReservationController {
         ReservationResponse reservationResponse = reservationService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(reservationResponse);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id, @LoginMember LoginMemberInfo loginMemberInfo) {
+        reservationService.deleteById(id, loginMemberInfo.id());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

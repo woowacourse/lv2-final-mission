@@ -12,6 +12,7 @@ import finalmission.restaurant.domain.RestaurantRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ReservationService {
@@ -48,5 +49,16 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 예약 정보가 없습니다."));
         return ReservationResponse.from(reservation);
+    }
+
+    public void deleteById(final Long reservationId, final Long memberId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 예약 정보가 없습니다."));
+
+        if (!Objects.equals(reservation.getMember().getId(), memberId)) {
+            throw new IllegalArgumentException("멤버 본인의 예약이 아닙니다.");
+        }
+
+        reservationRepository.deleteById(reservationId);
     }
 }
