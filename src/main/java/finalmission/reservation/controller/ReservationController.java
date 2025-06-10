@@ -1,5 +1,7 @@
 package finalmission.reservation.controller;
 
+import finalmission.auth.LoginMember;
+import finalmission.auth.LoginMemberInfo;
 import finalmission.reservation.dto.CreateReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
 import finalmission.reservation.service.ReservationService;
@@ -20,8 +22,10 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationResponse> createReservation(@RequestBody CreateReservationRequest reservationRequest) {
-        ReservationResponse reservationResponse = reservationService.save(reservationRequest);
+    public ResponseEntity<ReservationResponse> createReservation(
+            @RequestBody CreateReservationRequest reservationRequest,
+            @LoginMember LoginMemberInfo loginMemberInfo) {
+        ReservationResponse reservationResponse = reservationService.save(reservationRequest, loginMemberInfo);
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationResponse);
     }
 

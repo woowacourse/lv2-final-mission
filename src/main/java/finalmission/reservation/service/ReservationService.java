@@ -1,5 +1,6 @@
 package finalmission.reservation.service;
 
+import finalmission.auth.LoginMemberInfo;
 import finalmission.member.domain.Member;
 import finalmission.member.domain.MemberRepository;
 import finalmission.reservation.domain.Reservation;
@@ -25,8 +26,8 @@ public class ReservationService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public ReservationResponse save(CreateReservationRequest reservationRequest) {
-        Member member = memberRepository.findById(reservationRequest.memberId())
+    public ReservationResponse save(CreateReservationRequest reservationRequest, LoginMemberInfo loginMemberInfo) {
+        Member member = memberRepository.findById(loginMemberInfo.id())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 멤버 정보가 없습니다."));
         Restaurant restaurant = restaurantRepository.findById(reservationRequest.restaurantId())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 식당 정보가 없습니다."));

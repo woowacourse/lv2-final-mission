@@ -1,5 +1,7 @@
 package finalmission.auth;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -21,5 +23,18 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public Long extractId(String token) {
+        try {
+            Claims payload = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            return Long.valueOf(payload.getSubject());
+        } catch (JwtException e) {
+            throw new IllegalStateException("토큰 오류");
+        }
+    }
 
 }
