@@ -6,7 +6,9 @@ import finalmission.reservation.domain.Reservation;
 import finalmission.time.domain.ReservationTime;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -39,6 +41,29 @@ public class ReservationRepository {
                 """;
 
         return namedParameterJdbcTemplate.query(sql, (resultSet, rowNum) -> createReservation(resultSet));
+    }
+
+    public Reservation add(final Reservation reservation) {
+        Map<String, Object> parameters = new HashMap<>(5);
+        parameters.put("name", reservation.getMember().getName());
+        parameters.put("date", reservation.getDate());
+        parameters.put("time_id", reservation.getTime().getId());
+        parameters.put("member_id", reservation.getMember().getId());
+        Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+
+        return new Reservation(
+                id,
+                reservation.getMember(),
+                reservation.getDate(),
+                reservation.getTime()
+        );
+    }
+
+    public void deleteById(final Long id) {
+        String sql = "DELETE FROM reservation WHERE id = :id";
+        Map<String, Object> parameter = Map.of("id", id);
+
+        namedParameterJdbcTemplate.update(sql, parameter);
     }
 
     private Reservation createReservation(final ResultSet resultSet) throws SQLException {
