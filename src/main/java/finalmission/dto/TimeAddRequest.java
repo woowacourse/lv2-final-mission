@@ -1,9 +1,10 @@
 package finalmission.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record TimeAddRequest(
         String username,
-        List<TimeValues> values
+        List<LocalDateTime> dateTimes
 ) {
 }

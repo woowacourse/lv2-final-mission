@@ -2,6 +2,7 @@ package finalmission.domain;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,18 @@ public class Time {
     private final LocalDate date;
     private final LocalTime time;
 
-    public Time(String username, LocalDate date, LocalTime time) {
+    @ManyToOne
+    private final Room room;
+
+    public Time(String username, LocalDate date, LocalTime time, Room room) {
         this.id = Id.random();
         this.username = username;
         this.date = date;
         this.time = time;
+        this.room = room;
+    }
+
+    public boolean createdBy(String username) {
+        return this.username.equals(username);
     }
 }

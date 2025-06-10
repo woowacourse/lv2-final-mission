@@ -3,12 +3,11 @@ package finalmission;
 import finalmission.domain.*;
 import finalmission.dto.RoomCreateResponse;
 import finalmission.dto.TimeAddRequest;
+import finalmission.dto.TimeResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -31,10 +30,22 @@ public class MyController {
             @RequestBody TimeAddRequest request
     ) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
-        List<Time> createdTimes = request.values().stream()
-                .flatMap(value -> value.times().stream()
-                        .map(time -> room.createTime(request.username(), value.date(), time))
-                ).toList();
+        List<Time> createdTimes = request.dateTimes().stream()
+                .map(dateTime -> room.createTime(request.username(), dateTime.toLocalDate(), dateTime.toLocalTime()))
+                .toList();
         timeRepository.saveAll(createdTimes);
+    }
+
+    @GetMapping("/room/{roomId}/my")
+    public TimeResponses getMyTime(
+            @PathVariable("roomId") String roomId,
+            @RequestParam("username") String username
+    ) {
+        Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
+        List<Time> times = room.getTimesOf(username);
+        List<LocalDateTime> dateTimes = times.stream()
+                .map(time -> LocalDateTime.of(time.getDate(), time.getTime()))
+                .toList();
+        return TimeResponses.from(username, dateTimes);
     }
 }
