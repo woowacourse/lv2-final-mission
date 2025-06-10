@@ -14,6 +14,8 @@ import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReservationService {
 
@@ -34,14 +36,22 @@ public class ReservationService {
         this.memberRepository = memberRepository;
     }
 
-    public ReservationResponse createReservation(CreateReservationRequest request, Long memberId) {
+    public List<ReservationResponse> getAllMyReservations(final Long memberId) {
+        Member member = getMember(memberId);
+        return reservationRepository.findAllByCustomer(member)
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
+    }
+
+    public ReservationResponse createReservation(CreateReservationRequest request, final Long memberId) {
         Member member = getMember(memberId);
         ReservationInformation restaurantInformation = getRestaurantInformation(request.reservationInformationId());
         Reservation saved = reservationRepository.save(new Reservation(restaurantInformation, member));
         return ReservationResponse.from(saved);
     }
 
-    private ReservationInformation getRestaurantInformation(Long id) {
+    private ReservationInformation getRestaurantInformation(final Long id) {
         return reservationInformationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 예약 정보입니다."));
     }

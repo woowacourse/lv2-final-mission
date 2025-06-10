@@ -10,9 +10,12 @@ import finalmission.reservation.service.dto.ReservationResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class ReservationController {
@@ -21,6 +24,12 @@ public class ReservationController {
 
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
+    }
+
+    @GetMapping("/reservation/mine")
+    public ResponseEntity<List<ReservationResponse>> getAllReservations(@MemberSubject Long memberId) {
+        List<ReservationResponse> response = reservationService.getAllMyReservations(memberId);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/reservation-info")
