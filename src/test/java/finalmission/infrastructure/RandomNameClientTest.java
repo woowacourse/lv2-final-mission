@@ -1,6 +1,6 @@
 package finalmission.infrastructure;
 
-import java.time.YearMonth;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,19 +9,14 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @SpringBootTest
-class OpenApiClientTest {
+class RandomNameClientTest {
 
     @Autowired
-    private OpenApiClient openApiClient;
+    private RandomNameClient randomNameClient;
 
     @DisplayName("")
     @Test
     void test() {
-        //given
-        openApiClient.getHolidays(YearMonth.of(2025, 5));
-        //when
-
-        //then
-
+        List<String> fullname = randomNameClient.getRandomNames("fullname", 1);
     }
 }
