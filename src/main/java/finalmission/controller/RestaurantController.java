@@ -1,10 +1,12 @@
 package finalmission.controller;
 
+import finalmission.dto.RestaurantDetailResponse;
 import finalmission.dto.RestaurantSimpleResponse;
 import finalmission.service.RestaurantService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +23,12 @@ public class RestaurantController {
     @GetMapping
     public ResponseEntity<List<RestaurantSimpleResponse>> findAllRestaurants() {
         final List<RestaurantSimpleResponse> response = restaurantService.findAllRestaurant();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RestaurantDetailResponse> findRestaurantById(@PathVariable("id") final long id) {
+        final RestaurantDetailResponse response = restaurantService.findRestaurantById(id);
         return ResponseEntity.ok().body(response);
     }
 }

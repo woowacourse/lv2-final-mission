@@ -1,5 +1,7 @@
 package finalmission.domain.reservation;
 
+import finalmission.domain.reservation.detail.Message;
+import finalmission.domain.reservation.detail.NumberOfGuest;
 import finalmission.domain.reservation.detail.ReservationDetail;
 import finalmission.domain.reservation.owner.Owner;
 import finalmission.domain.schedule.Schedule;
@@ -38,8 +40,12 @@ public class Reservation {
         return owner;
     }
 
-    public ReservationDetail getDetail() {
-        return detail;
+    public NumberOfGuest getNumberOfGuest() {
+        return detail.getNumberOfGuest();
+    }
+
+    public Message getReservatonMessage() {
+        return detail.getReservatonMessage();
     }
 
     @Override
