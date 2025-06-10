@@ -5,4 +5,7 @@ public record MemberResponse(
         String name,
         String email
 ) {
+    public static MemberResponse toResponse(MemberResult result) {
+        return new MemberResponse(result.id(), result.name(), result.email());
+    }
 }
