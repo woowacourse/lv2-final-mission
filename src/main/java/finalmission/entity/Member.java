@@ -1,5 +1,6 @@
 package finalmission.entity;
 
+import finalmission.domain.MemberRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,18 +24,22 @@ public class Member {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private MemberRole role;
+
     protected Member() {
     }
 
-    public Member(final Long id, final String email, final String password, final String name) {
+    public Member(final Long id, final String email, final String password, final String name, final MemberRole role) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.role = role;
     }
 
-    public Member(final String email, final String password, final String name) {
-        this(null, email, password, name);
+    public Member(final String email, final String password, final String name, final MemberRole role) {
+        this(null, email, password, name, role);
     }
 
     public Long getId() {
@@ -51,5 +56,9 @@ public class Member {
 
     public String getName() {
         return name;
+    }
+
+    public MemberRole getRole() {
+        return role;
     }
 }
