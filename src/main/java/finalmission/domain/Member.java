@@ -45,4 +45,8 @@ public class Member {
     public static Member create(Email email, String name, String password, Role role) {
         return new Member(null, email, name, password, role);
     }
+
+    public boolean isPassword(String password) {
+        return this.password.equals(password);
+    }
 }

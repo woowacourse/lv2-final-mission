@@ -17,6 +17,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional
     public CreateMemberResponse create(CreateMemberRequest createMemberRequest) {
         Member member = Member.create(
                 new Email(createMemberRequest.email()),
