@@ -12,6 +12,7 @@ import finalmission.repository.RoomMemberRepository;
 import finalmission.repository.RoomRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -87,5 +88,17 @@ public class RoomService {
         if (alreadyJoin) {
             throw new IllegalStateException("이미 해당 내전방에 참여한 유저입니다.");
         }
+    }
+
+    @Transactional
+    public void leave(final Long roomId, final Long memberId) {
+        final Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new NotFoundException("해당 id의 내전방을 찾을 수 없습니다. id: " + roomId));
+        final Member member = memberService.getById(memberId);
+
+        final RoomMember roomMember = roomMemberRepository.findByRoomIdAndMemberId(room.getId(), member.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 내전방에 참여하지 않은 유저입니다."));
+
+        roomMemberRepository.delete(roomMember);
     }
 }

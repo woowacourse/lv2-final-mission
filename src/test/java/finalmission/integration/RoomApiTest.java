@@ -208,4 +208,51 @@ public class RoomApiTest {
                 .then().log().all()
                 .statusCode(400);
     }
+
+    @DisplayName("내전방 참여 예약을 취소한다.")
+    @Test
+    void leave() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+        roomMemberRepository.save(new RoomMember(room, member2));
+
+        // when & then
+        RestAssured.given().log().all()
+                .param("memberId", 2L)
+                .param("roomId", 1L)
+                .when().get("/room/leave")
+                .then().log().all()
+                .statusCode(204);
+
+        assertThat(roomMemberRepository.findAll()).hasSize(1);
+    }
+
+    @DisplayName("내전방 참가자가 아닌 유저가 내전방 참여 예약을 취소하면 400을 응답한다.")
+    @Test
+    void leaveNotJoinedMember() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        // when & then
+        RestAssured.given().log().all()
+                .param("memberId", 2L)
+                .param("roomId", 1L)
+                .when().get("/room/leave")
+                .then().log().all()
+                .statusCode(400);
+    }
 }

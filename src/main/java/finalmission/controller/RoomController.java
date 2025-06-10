@@ -62,4 +62,14 @@ public class RoomController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/leave")
+    public ResponseEntity<Void> leave(
+            @RequestParam("memberId") final Long memberId,
+            @RequestParam("roomId") final Long roomId
+    ) {
+        roomService.leave(roomId, memberId);
+
+        return ResponseEntity.noContent().build();
+    }
 }
