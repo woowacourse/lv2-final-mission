@@ -1,13 +1,13 @@
-package finalmission;
+package ordering;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FinalMissionApplication {
+public class OrderingApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(FinalMissionApplication.class, args);
+    SpringApplication.run(OrderingApplication.class, args);
   }
 
 }
