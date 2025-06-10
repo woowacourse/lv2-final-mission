@@ -52,8 +52,20 @@ public class Member {
         return this.password.equals(comparedPassword);
     }
 
+    public boolean matchTrainer(Long trainerId) {
+        return this.trainer.getId().equals(trainerId);
+    }
+
+    public boolean availableLesson() {
+        return this.ptNumber > 0;
+    }
+
     public void selectTrainer(Trainer trainer) {
         this.trainer = trainer;
+    }
+
+    public void minusPtNumber() {
+        this.ptNumber--;
     }
 
     public Long getId() {
