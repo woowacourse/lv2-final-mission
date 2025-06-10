@@ -38,6 +38,17 @@ public class WaitingLine {
         return false;
     }
 
+    public int getSequenceByMember(Member member) {
+        int sequence = 1;
+        for (Member currentMember : waiting) {
+            if (currentMember.equals(member)) {
+                return sequence;
+            }
+            sequence++;
+        }
+        return -1;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (o == null || getClass() != o.getClass()) {
