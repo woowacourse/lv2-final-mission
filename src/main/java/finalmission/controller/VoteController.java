@@ -17,7 +17,7 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping("/time/{roomId}")
-    public void addTime(
+    public void vote(
             @PathVariable("roomId") String roomId,
             @RequestParam("name") String name,
             @RequestParam("password") String password,
@@ -28,14 +28,14 @@ public class VoteController {
     }
 
     @GetMapping("/time/{roomId}")
-    public VoteStaticsResponses getTimeStatics(
+    public VoteStaticsResponses getVoteStatics(
             @PathVariable("roomId") String roomId
     ) {
         return voteService.getVoteStatics(roomId);
     }
 
     @GetMapping("/time/{roomId}/my")
-    public VoteResponses getMyTimes(
+    public VoteResponses getMyVotes(
             @PathVariable("roomId") String roomId,
             @RequestParam("name") String name,
             @RequestParam("password") String password
@@ -45,7 +45,7 @@ public class VoteController {
     }
 
     @DeleteMapping("/time/{roomId}")
-    public void deleteAllTimeOf(
+    public void dropMyVotes(
             @PathVariable("roomId") String roomId,
             @RequestParam("name") String name,
             @RequestParam("password") String password
