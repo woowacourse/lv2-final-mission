@@ -1,6 +1,6 @@
 package finalmission.member.application;
 
-import finalmission.member.application.in.SignupMemberIn;
+import finalmission.member.application.in.dto.SignupMember;
 import finalmission.member.application.out.MemberRepository;
 import finalmission.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void signUp(SignupMemberIn command) {
+    public void signUp(SignupMember command) {
         memberRepository.save(
                 Member.create(command.name())
         );

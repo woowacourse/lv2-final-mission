@@ -1,6 +1,7 @@
-package finalmission.shopkeeper.application;
+package finalmission.shopkeeper.application.in;
 
-import finalmission.shopkeeper.dto.CreateShopkeeperIn;
+import finalmission.shopkeeper.application.ShopkeeperService;
+import finalmission.shopkeeper.application.in.dto.CreateShopkeeper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class ShopkeeperController {
     private final ShopkeeperService shopkeeperService;
 
     @PostMapping
-    public ResponseEntity<Void> signUp(@RequestBody CreateShopkeeperIn request) {
+    public ResponseEntity<Void> signUp(@RequestBody CreateShopkeeper request) {
         shopkeeperService.signUp(request);
 
         return ResponseEntity

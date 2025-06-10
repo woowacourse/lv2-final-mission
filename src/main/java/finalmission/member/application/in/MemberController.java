@@ -1,6 +1,7 @@
 package finalmission.member.application.in;
 
 import finalmission.member.application.MemberService;
+import finalmission.member.application.in.dto.SignupMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Void> signUp(@RequestBody SignupMemberIn request) {
+    public ResponseEntity<Void> signUp(@RequestBody SignupMember request) {
         memberService.signUp(request);
 
         return ResponseEntity

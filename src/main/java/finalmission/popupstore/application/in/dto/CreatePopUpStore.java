@@ -1,8 +1,8 @@
-package finalmission.popupstore.dto;
+package finalmission.popupstore.application.in.dto;
 
 import java.time.LocalDateTime;
 
-public record CreatePopUpStoreIn(
+public record CreatePopUpStore(
         String title,
         String content,
         LocalDateTime startAt,

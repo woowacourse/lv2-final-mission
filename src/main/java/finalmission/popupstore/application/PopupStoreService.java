@@ -1,8 +1,9 @@
 package finalmission.popupstore.application;
 
+import finalmission.popupstore.application.in.dto.CreatePopUpStore;
+import finalmission.popupstore.application.out.PopupStoreRepository;
 import finalmission.popupstore.domain.PopupStore;
-import finalmission.popupstore.dto.CreatePopUpStoreIn;
-import finalmission.shopkeeper.application.ShopkeeperRepository;
+import finalmission.shopkeeper.application.out.ShopkeeperRepository;
 import finalmission.shopkeeper.domain.Shopkeeper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class PopupStoreService {
     private final ShopkeeperRepository shopkeeperRepository;
 
     @Transactional
-    public void open(final CreatePopUpStoreIn command) {
+    public void open(final CreatePopUpStore command) {
         Shopkeeper shopkeeper = shopkeeperRepository.findById(command.shopkeeperId())
                 .orElseThrow();
 
