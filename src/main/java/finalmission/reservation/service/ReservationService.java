@@ -1,5 +1,6 @@
 package finalmission.reservation.service;
 
+import finalmission.config.SendGridUtil;
 import finalmission.member.domain.Member;
 import finalmission.member.dto.MemberResponse;
 import finalmission.reservation.domain.Reservation;
@@ -10,15 +11,20 @@ import finalmission.reservation.repository.ReservationRepository;
 import finalmission.room.domain.Room;
 import finalmission.room.dto.RoomResponse;
 import finalmission.room.repository.RoomRepository;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 public class ReservationService {
+
+    @Autowired
+    SendGridUtil sendGridUtil;
 
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
@@ -33,7 +39,13 @@ public class ReservationService {
         Room room = getRoomById(request.roomId());
         Reservation reservation = new Reservation(null, request.date(), request.time(), request.description(), room, member);
         Reservation newReservation = reservationRepository.save(reservation);
-        return new ReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
+        ReservationResponse response = new ReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
+        try {
+            sendGridUtil.sendEmail(member.getEmail(), response);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return response;
     }
 
     private Room getRoomById(Long id) {
