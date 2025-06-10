@@ -5,7 +5,7 @@ import java.util.List;
 public record SendEmailRequest(
         List<Personalization> personalizations,
         EmailFrom from,
-        List<EmailContent> contents
+        List<EmailContent> content
 ) {
 
     private static final String DOMAIN_EMAIL = "threepebbles@naver.com";
