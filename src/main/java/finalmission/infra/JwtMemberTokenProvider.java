@@ -1,7 +1,7 @@
 package finalmission.infra;
 
+import finalmission.domain.AuthInfo;
 import finalmission.domain.AuthenticationException;
-import finalmission.domain.Member;
 import finalmission.domain.MemberTokenProvider;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,9 +13,9 @@ public class JwtMemberTokenProvider implements MemberTokenProvider {
 
     private final SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
 
-    public String generateToken(final Member member) {
+    public String generateToken(final AuthInfo authInfo) {
         return Jwts.builder()
-            .subject(member.getId())
+            .subject(authInfo.id())
             .signWith(SECRET_KEY)
             .compact();
     }

@@ -2,7 +2,7 @@ package finalmission.domain;
 
 public interface MemberTokenProvider {
 
-    String generateToken(Member member);
+    String generateToken(AuthInfo authInfo);
 
     String extractId(String token);
 }

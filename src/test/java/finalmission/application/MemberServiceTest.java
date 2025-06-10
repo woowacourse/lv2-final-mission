@@ -2,10 +2,12 @@ package finalmission.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 
 import finalmission.domain.AuthInfo;
 import finalmission.domain.Member;
 import finalmission.domain.MemberRepository;
+import finalmission.domain.MemberTokenProvider;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,25 +16,29 @@ import org.mockito.Mockito;
 class MemberServiceTest {
 
     private final MemberRepository memberRepository = Mockito.mock(MemberRepository.class);
-    private final MemberService memberService = new MemberService(memberRepository);
+    private final MemberTokenProvider tokenProvider = Mockito.mock(MemberTokenProvider.class);
+    private final MemberService memberService = new MemberService(memberRepository, tokenProvider);
 
     @Test
     @DisplayName("사용자를 등록한다.")
     void register() {
         memberService.register("popo", "password", "포포");
-        Mockito.verify(memberRepository).save(Mockito.any());
+        Mockito.verify(memberRepository).save(any());
     }
 
     @Test
-    @DisplayName("로그인을 한다.")
+    @DisplayName("로그인을 하면 토큰을 반환한다.")
     void login() {
         Mockito
             .doReturn(Optional.of(new Member("popo", "password", "포포")))
             .when(memberRepository).findById("popo");
+        Mockito
+            .doReturn("token")
+            .when(tokenProvider).generateToken(any(AuthInfo.class));
 
-        var authInfo = memberService.login("popo", "password");
+        var token = memberService.login("popo", "password");
 
-        assertThat(authInfo.id()).isEqualTo("popo");
+        assertThat(token).isNotBlank();
     }
 
     @Test
