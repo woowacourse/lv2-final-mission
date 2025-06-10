@@ -1,5 +1,6 @@
 package finalmission.meetingroom.controller;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 
 import java.time.LocalDate;
@@ -118,6 +119,39 @@ class ReservationControllerTest {
                 .then().log().all()
                 .statusCode(200)
                 .body("size()", is(1));
+    }
+
+    @DisplayName("회의실 예약 생성 요청을 보낸다.")
+    @Test
+    void patchMyMeetingRoomReservation() {
+        Map<String, Object> reservationParams = Map.of(
+                "meetingRoomName", "임팩트룸",
+                "reservationDate", LocalDate.now().plusDays(1L),
+                "startAt", "10:00",
+                "endAt", "11:00"
+        );
+
+        String userTokenValue = getUserTokenValue("1111@email.com", "1234");
+        int reservationId = (int) RestAssured.given().log().all()
+                .cookie("token", userTokenValue)
+                .contentType(ContentType.JSON)
+                .body(reservationParams)
+                .when().post("/reservations")
+                .then().extract().path("reservationId");
+
+        Map<String, Object> changeReservationParams = Map.of(
+                "newStartAt", "12:00",
+                "newEndAt", "13:00"
+        );
+        RestAssured.given().log().all()
+                .cookie("token", userTokenValue)
+                .contentType(ContentType.JSON)
+                .body(changeReservationParams)
+                .when().patch("/reservations/" + reservationId)
+                .then().log().all()
+                .statusCode(200)
+                .body("startAt", response -> equalTo("12:00:00"))
+                .body("endAt", response -> equalTo("13:00:00"));
     }
 
     private String getUserTokenValue(final String email, final String password) {

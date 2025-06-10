@@ -68,6 +68,14 @@ public class Reservation {
         this(null, meetingRoom, member, reservationDate, startAt, endAt);
     }
 
+    public void changeReservationTime(
+            final LocalTime newStartAt,
+            final LocalTime newEndAt
+    ) {
+        this.startAt = newStartAt;
+        this.endAt = newEndAt;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

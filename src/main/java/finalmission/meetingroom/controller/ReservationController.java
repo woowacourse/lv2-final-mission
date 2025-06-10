@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import finalmission.meetingroom.service.ReservationService;
 import finalmission.meetingroom.service.request.LoginMember;
 import finalmission.meetingroom.service.request.ReservationCreateRequest;
+import finalmission.meetingroom.service.request.ReservationTimeChangeRequest;
 import finalmission.meetingroom.service.response.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -44,6 +47,17 @@ public class ReservationController {
     ) {
         ReservationResponse response = reservationService.reserveMeetingRoom(request, loginMember);
         return ResponseEntity.created(URI.create("/reservations/" + response.reservationId()))
+                .body(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ReservationResponse> changeMeetingRoomReservation(
+            @PathVariable final Long id,
+            @RequestBody final ReservationTimeChangeRequest request,
+            final LoginMember loginMember
+    ) {
+        ReservationResponse response = reservationService.changeReservationTime(id, request, loginMember);
+        return ResponseEntity.ok()
                 .body(response);
     }
 }

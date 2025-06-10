@@ -3,6 +3,7 @@ package finalmission.meetingroom.repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,6 +31,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             WHERE r.member = :member
             """)
     List<Reservation> findByMember(Member member);
+
+    Optional<Reservation> findByIdAndMember(Long id, Member member);
 
     boolean existsByMeetingRoomAndReservationDateAndStartAtBetween(
             MeetingRoom meetingRoom,

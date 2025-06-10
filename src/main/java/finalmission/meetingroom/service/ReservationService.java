@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import finalmission.meetingroom.common.exception.EntityNotFoundException;
 import finalmission.meetingroom.domain.MeetingRoom;
 import finalmission.meetingroom.domain.Member;
 import finalmission.meetingroom.domain.Reservation;
@@ -15,6 +16,7 @@ import finalmission.meetingroom.repository.MemberRepository;
 import finalmission.meetingroom.repository.ReservationRepository;
 import finalmission.meetingroom.service.request.LoginMember;
 import finalmission.meetingroom.service.request.ReservationCreateRequest;
+import finalmission.meetingroom.service.request.ReservationTimeChangeRequest;
 import finalmission.meetingroom.service.response.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -90,13 +92,27 @@ public class ReservationService {
                 .toList();
     }
 
+    public ReservationResponse changeReservationTime(
+            final Long reservationId,
+            final ReservationTimeChangeRequest request,
+            final LoginMember loginMember
+    ) {
+        Member member = getMember(loginMember);
+        Reservation reservation = reservationRepository.findByIdAndMember(reservationId, member)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의실 예약 입니다."));
+
+        reservation.changeReservationTime(request.newStartAt(), request.newEndAt());
+
+        return ReservationResponse.from(reservation);
+    }
+
     private MeetingRoom getMeetingRoom(final String meetingRoomName) {
         return meetingRoomRepository.findByRoomName(meetingRoomName)
-                .orElseThrow(() -> new IllegalArgumentException(""));
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의실 입니다."));
     }
 
     private Member getMember(final LoginMember loginMember) {
         return memberRepository.findById(loginMember.id())
-                .orElseThrow(() -> new IllegalArgumentException(""));
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
     }
 }
