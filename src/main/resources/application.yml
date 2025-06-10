@@ -18,3 +18,5 @@ auth:
   jwt:
     secret-key: fdjfldksfjslfkldfjkdsfdsfdslffdjkl
     valid-time: 1800000
+password-recommend:
+  secret-key: 9a91fc6afa05428a91a223c297e719b6
