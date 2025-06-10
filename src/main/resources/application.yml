@@ -23,5 +23,10 @@ cookie:
 security:
   jwt:
     token:
-      secret-key: "this-is-secret-key"
+      secret-key: ${JWT_SECRET_KEY}
       expire-length: 900000 # 15분
+
+nickname:
+  api-key: ${NICKNAME_SECRET_KEY}
+  base-url: 'https://randommer.io/api'
+  random-url: '/Name?nameType={nameType}&quantity={quantity}''

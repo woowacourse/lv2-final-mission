@@ -2,6 +2,8 @@ package finalmission.member.service;
 
 import finalmission.common.security.CookieManager;
 import finalmission.common.security.JwtProvider;
+import finalmission.external.NameType;
+import finalmission.external.RandomNicknameGateway;
 import finalmission.member.domain.Member;
 import finalmission.member.domain.MemberRole;
 import finalmission.member.dto.LoginRequest;
@@ -17,12 +19,22 @@ public class MemberService {
     private final JwtProvider jwtProvider;
     private final CookieManager cookieManager;
     private final MemberRepository memberRepository;
+    private final RandomNicknameGateway randomNicknameGateway;
 
     public MemberService(final JwtProvider jwtProvider, final CookieManager cookieManager,
-                         final MemberRepository memberRepository) {
+                         final MemberRepository memberRepository,
+                         final RandomNicknameGateway randomNicknameGateway) {
         this.jwtProvider = jwtProvider;
         this.cookieManager = cookieManager;
         this.memberRepository = memberRepository;
+        this.randomNicknameGateway = randomNicknameGateway;
+    }
+
+    public SignupResponse signUp(final SignupRequest signupRequest) {
+        String nickname = findNickname(signupRequest);
+        Member member = new Member(nickname, signupRequest.email(), signupRequest.password(), MemberRole.REGULAR);
+        Member savedMember = memberRepository.save(member);
+        return new SignupResponse(savedMember.getId(), savedMember.getNickname());
     }
 
     public ResponseCookie login(final LoginRequest loginRequest) {
@@ -33,10 +45,10 @@ public class MemberService {
         return cookieManager.makeCookie("token", jwtToken);
     }
 
-    public SignupResponse signUp(final SignupRequest signupRequest) {
-        Member member = new Member(signupRequest.nickname(), signupRequest.email(), signupRequest.password(),
-                MemberRole.REGULAR);
-        Member savedMember = memberRepository.save(member);
-        return new SignupResponse(savedMember.getId());
+    private String findNickname(final SignupRequest signupRequest) {
+        if (!signupRequest.wantRandomNickname()) {
+            return signupRequest.nickname();
+        }
+        return randomNicknameGateway.findRandomNickname(NameType.FIRSTNAME).names().getFirst();
     }
 }

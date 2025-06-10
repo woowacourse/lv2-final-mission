@@ -1,4 +1,4 @@
 package finalmission.member.dto;
 
-public record SignupRequest(String nickname, String email, String password) {
+public record SignupRequest(boolean wantRandomNickname, String nickname, String email, String password) {
 }

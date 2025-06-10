@@ -18,7 +18,7 @@ public class TestFixture {
 
     public static String loginRegular() {
         RestAssured.given().log().all()
-                .body(new SignupRequest(REGULAR_NAME, REGULAR_EMAIL, PASSWORD))
+                .body(new SignupRequest(false, REGULAR_NAME, REGULAR_EMAIL, PASSWORD))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/member/signup")
                 .then().log().all()
@@ -37,7 +37,8 @@ public class TestFixture {
                 .cookie(TOKEN);
     }
 
-    public static Long makeReservation(final LocalDateTime time, final String description, final Long roomId, final String token) {
+    public static Long makeReservation(final LocalDateTime time, final String description, final Long roomId,
+                                       final String token) {
         ReservationCreateResponse reservationCreateResponse = RestAssured.given().log().all()
                 .cookie(TOKEN, token)
                 .body(new ReservationCreateRequest(time, description, roomId))
