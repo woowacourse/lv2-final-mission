@@ -33,10 +33,10 @@
 
 ### 약속 예약 API
 
-날짜와 시간을 선택하여 약속을 예약한다.
+- [x] 날짜와 시간을 선택하여 약속을 예약한다.
 
-GET /reservations
-request: planDateId, timeSlot
+POST /reservations
+request: planDateId, planTimeStartAt, userId
 response: 예약된 Reservation 정보
 
 ### 사용자 예약 현황 확인 API
@@ -52,7 +52,7 @@ response: Reservation 정보
 사용자는 자신의 특정 예약에 대해 수정할 수 있습니다.
 
 POST /reservations/{reservationId}
-request: 수정할 Reservation 정보 (planDateId, timeSlots)
+request: 수정할 Reservation 정보 (planDateId, planTimeStartAt)
 response: 수정된 Reservation 정보
 
 ### 사용자 예약 삭제 API
@@ -67,4 +67,4 @@ response: no content
 
 사용자는 자신의 예약 기록을 모두 조회할 수 있습니다.
 
-GET /reservations/mine
+GET /reservations/{userId}
