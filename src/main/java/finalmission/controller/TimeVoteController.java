@@ -4,6 +4,7 @@ import finalmission.dto.RoomCreateResponse;
 import finalmission.dto.TimeAddRequest;
 import finalmission.dto.TimeResponses;
 import finalmission.dto.TimeStaticsResponses;
+import finalmission.service.NameGenerator;
 import finalmission.service.TimeVoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TimeVoteController {
 
+    private final NameGenerator nameGenerator;
     private final TimeVoteService service;
 
     @PostMapping("/room")
@@ -24,7 +26,8 @@ public class TimeVoteController {
             @PathVariable("roomId") String roomId,
             @RequestBody TimeAddRequest request
     ) {
-        service.addTime(roomId, request.username(), request.values());
+        String username = request.username() == null ? nameGenerator.generate() : request.username();
+        service.addTime(roomId, username, request.values());
     }
 
     @GetMapping("/room/{roomId}")
