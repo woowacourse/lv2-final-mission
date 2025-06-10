@@ -27,7 +27,7 @@ public class AdminMovieService {
         return new MovieCreateResponse(movie.getId(), movie.getName(), movie.getDescription());
     }
 
-    public MovieSlotCreateResponse createMovieSlot(Long movieId, LocalDate date, LocalTime startAt, Long seats) {
+    public MovieSlotCreateResponse createMovieSlot(Long movieId, LocalDate date, LocalTime startAt, Integer seats) {
         Movie movie = findMovieByIdOrThrow(movieId);
         MovieSlot movieSlot = new MovieSlot(movie, date, startAt, seats);
         movieSlotRepository.save(movieSlot);

@@ -62,7 +62,7 @@ class AdminMovieControllerTest {
                 .response()
                 .jsonPath()
                 .getLong("id");
-        Long seats = 200L;
+        Integer seats = 200;
 
         MovieSlotCreateRequest movieSlotCreateRequest = new MovieSlotCreateRequest(
                 movieId, LocalDate.now(), LocalTime.now(), seats);

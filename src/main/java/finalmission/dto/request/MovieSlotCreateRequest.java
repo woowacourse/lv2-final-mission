@@ -3,6 +3,6 @@ package finalmission.dto.request;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record MovieSlotCreateRequest(Long movieId, LocalDate date, LocalTime startAt, Long seats) {
+public record MovieSlotCreateRequest(Long movieId, LocalDate date, LocalTime startAt, Integer seats) {
 
 }

@@ -26,9 +26,9 @@ public class MovieSlot {
     private LocalTime startAt;
 
     @Column(name = "seats")
-    private Long seats;
+    private Integer seats;
 
-    public MovieSlot(Movie movie, LocalDate date, LocalTime startAt, Long seats) {
+    public MovieSlot(Movie movie, LocalDate date, LocalTime startAt, Integer seats) {
         this.movie = movie;
         this.date = date;
         this.startAt = startAt;
@@ -54,7 +54,7 @@ public class MovieSlot {
         return startAt;
     }
 
-    public Long getSeats() {
+    public Integer getSeats() {
         return seats;
     }
 }
