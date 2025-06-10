@@ -1,5 +1,6 @@
 package finalmission.member.controller;
 
+import finalmission.member.dto.SigninRequest;
 import finalmission.member.dto.SignupRequest;
 import finalmission.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
@@ -21,6 +22,13 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@RequestBody SignupRequest request, HttpServletResponse response) {
         Cookie cookie = memberService.addMember(request);
+        response.addCookie(cookie);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@RequestBody SigninRequest request, HttpServletResponse response) {
+        Cookie cookie = memberService.getMemberByCredentials(request);
         response.addCookie(cookie);
         return ResponseEntity.ok().build();
     }
