@@ -14,5 +14,5 @@ public class WeatherApiProperties {
 
     private final String baseUrl;
 
-    private final String SecretKey;
+    private final String serviceKey;
 }

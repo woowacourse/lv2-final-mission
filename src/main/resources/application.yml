@@ -22,5 +22,5 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
 weather-api:
-  service-key: Evy3WRyOic0TBycRLNRo5HcE2ulCFmPk5OowkpfGhL7FN9uQ80zbnhLLAVG5XrcZa8UErm5yINg%2F4LD8fzkQPg%3D%3D
-  base-url: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst
+  service-key: Evy3WRyOic0TBycRLNRo5HcE2ulCFmPk5OowkpfGhL7FN9uQ80zbnhLLAVG5XrcZa8UErm5yINg/4LD8fzkQPg==
+  base-url: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0

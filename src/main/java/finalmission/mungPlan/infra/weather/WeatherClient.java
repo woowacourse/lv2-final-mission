@@ -5,25 +5,35 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 public class WeatherClient {
 
     private final RestClient restClient;
-    private final String secretKey;
+    private final String serviceKey;
 
-    public WeatherClient(final RestClient restClient, final WeatherApiProperties weatherApiProperties) {
+    public WeatherClient(final RestClient restClient, final String serviceKey) {
         this.restClient = restClient;
-        this.secretKey = weatherApiProperties.getSecretKey();
+        this.serviceKey = serviceKey;
     }
 
-    public WeatherResponse getWeatherInfos() {
+    public WeatherResponse getWeatherData(int pageNo, int numOfRows) {
         try {
-            return restClient.post()
-                    .uri("/getVilageFcst/{dataType}{pageNo}{base_date}{time}{nx}{ny}",
-                            "JSON", 1, "20250610", "0500", "55", "127")
-                    .header("Authorization", secretKey)
-                    .contentType(MediaType.APPLICATION_JSON)
+            UriComponents uriComponents = UriComponentsBuilder.fromUriString("/getVilageFcst")
+                    .queryParam("serviceKey", serviceKey)
+                    .queryParam("dataType", "JSON")
+                    .queryParam("pageNo", pageNo)
+                    .queryParam("numOfRows", numOfRows)
+                    .queryParam("base_date", "20250610")
+                    .queryParam("base_time", "0500")
+                    .queryParam("nx", 55)
+                    .queryParam("ny", 127)
+                    .build();
+
+            return restClient.get()
+                    .uri(uriComponents.toUriString())
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .body(WeatherResponse.class);

@@ -11,14 +11,12 @@ import org.springframework.web.client.RestClient;
 @EnableConfigurationProperties(WeatherApiProperties.class)
 public class WeatherClientConfig {
 
-    private final WeatherApiProperties weatherApiProperties;
-
     @Bean
     public WeatherClient tossRestClient(final WeatherApiProperties weatherApiProperties) {
         RestClient restClient = RestClient.builder()
                 .baseUrl(weatherApiProperties.getBaseUrl())
                 .build();
 
-        return new WeatherClient(restClient, weatherApiProperties);
+        return new WeatherClient(restClient, weatherApiProperties.getServiceKey());
     }
 }
