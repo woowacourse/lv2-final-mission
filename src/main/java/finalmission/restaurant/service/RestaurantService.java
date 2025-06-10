@@ -19,4 +19,10 @@ public class RestaurantService {
         Restaurant savedRestaurant = restaurantRepository.save(restaurantRequest.toRestaurantEntity());
         return RestaurantResponse.from(savedRestaurant);
     }
+
+    public RestaurantResponse findById(final Long id) {
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 정보의 식당이 없습니다."));
+        return RestaurantResponse.from(restaurant);
+    }
 }
