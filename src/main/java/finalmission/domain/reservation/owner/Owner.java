@@ -19,6 +19,16 @@ public class Owner {
     public Owner() {
     }
 
+    public Owner(final Nickname nickname, final Email email, final Password password) {
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Owner(final String nickname, final String email, final String password) {
+        new Owner(new Nickname(nickname), new Email(email), new Password(password));
+    }
+
     public Nickname getNickname() {
         return nickname;
     }

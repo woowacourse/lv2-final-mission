@@ -13,6 +13,15 @@ public class ReservationDetail {
     @Embedded
     private Message reservatonMessage;
 
+    public ReservationDetail(final int numberOfGuest, final String message) {
+        new ReservationDetail(new NumberOfGuest(numberOfGuest), new Message(message));
+    }
+
+    public ReservationDetail(final NumberOfGuest numberOfGuest, final Message reservatonMessage) {
+        this.numberOfGuest = numberOfGuest;
+        this.reservatonMessage = reservatonMessage;
+    }
+
     protected ReservationDetail() {
     }
 
