@@ -15,16 +15,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationServiceTest {
 
     @Autowired
@@ -35,8 +33,16 @@ public class ReservationServiceTest {
 
     @Autowired
     MemberRepository memberRepository;
+
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @BeforeEach
+    void setUp() {
+        reservationRepository.deleteAll();
+        seatRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("예약이 정상적으로 저장된다")
@@ -83,6 +89,28 @@ public class ReservationServiceTest {
                 new LoginMember(member.getId())))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    @DisplayName("나의 예약이 아닌데 예약 수정을 시도하는 경우 예외를 던진다")
+    void test3() {
+        // given
+        Member member = saveMember("example@gmail.com");
+        Member anotherMember = saveMember("new@gmail.com");
+        Seat seat = saveSeat();
+        Reservation reservation = reservationRepository.save(new Reservation(
+                anotherMember,
+                seat,
+                LocalDate.now().plusDays(1),
+                LocalTime.of(12, 30),
+                LocalTime.of(13, 30)
+        ));
+
+        // when & then
+        assertThatThrownBy(() -> reservationService.updateReservation(reservation.getId(), null,
+                new LoginMember(member.getId())))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
 
     private Seat saveSeat() {
         return seatRepository.save(new Seat("백스윙", 1));

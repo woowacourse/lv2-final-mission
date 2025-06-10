@@ -37,6 +37,13 @@ public class Reservation {
         return member.getId().equals(this.member.getId());
     }
 
+    public void update(Reservation updatedReservation) {
+        this.registeredAt = updatedReservation.getRegisteredAt();
+        this.reservationDate = updatedReservation.getReservationDate();
+        this.startAt = updatedReservation.getStartAt();
+        this.endAt = updatedReservation.getEndAt();
+    }
+
     public Reservation(Member member, Seat seat, LocalDate reservationDate, LocalTime startAt, LocalTime endAt) {
         LocalDateTime now = LocalDateTime.now();
 

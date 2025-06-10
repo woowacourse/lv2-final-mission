@@ -96,8 +96,40 @@ public class ReservationAcceptanceTest {
     }
 
     @Test
-    @DisplayName("나의 상세 예약 내역을 조회한다")
+    @DisplayName("나의 예약을 수정한다")
     void test3() {
+        // given
+        Member member = saveMember();
+        Seat seat = saveSeat();
+        LocalDate date = LocalDate.now().plusDays(1);
+        Reservation reservation = saveReservation(member, seat, date);
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("seatId", seat.getId());
+        params.put("reservationDate", String.valueOf(LocalDate.now().plusDays(2)));
+        params.put("startAt", String.valueOf(LocalTime.of(13, 30)));
+        params.put("endAt", String.valueOf(LocalTime.of(14, 30)));
+
+        // when
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", jwtTokenProvider.createToken(String.valueOf(member.getId())))
+                .body(params)
+                .when().put("/reservation/" + reservation.getId())
+                .then().log().all();
+
+        // then
+        Reservation foundReservation = reservationRepository.findById(reservation.getId()).get();
+        assertAll(
+                () -> assertThat(foundReservation.getReservationDate()).isEqualTo(LocalDate.now().plusDays(2)),
+                () -> assertThat(foundReservation.getStartAt()).isEqualTo(LocalTime.of(13, 30)),
+                () -> assertThat(foundReservation.getEndAt()).isEqualTo(LocalTime.of(14, 30))
+        );
+    }
+
+    @Test
+    @DisplayName("나의 상세 예약 내역을 조회한다")
+    void test4() {
         // given
         Member member = saveMember();
         Seat seat = saveSeat();

@@ -4,6 +4,7 @@ import finalmission.dto.LoginMember;
 import finalmission.dto.ReservationDetailResponseDto;
 import finalmission.dto.ReservationRegisterDto;
 import finalmission.dto.ReservationResponseDto;
+import finalmission.dto.ReservationUpdateDto;
 import finalmission.model.Member;
 import finalmission.model.Reservation;
 import finalmission.model.Seat;
@@ -29,7 +30,7 @@ public class ReservationService {
     @Transactional
     public void registerReservation(ReservationRegisterDto reservationRegisterDto, LoginMember loginMember) {
         Member member = findMember(loginMember);
-        Seat seat = findSeat(reservationRegisterDto);
+        Seat seat = findSeat(reservationRegisterDto.seatId());
 
         Reservation reservation = reservationRegisterDto.toReservation(member, seat);
         reservationRepository.save(reservation);
@@ -57,12 +58,9 @@ public class ReservationService {
 
     public ReservationDetailResponseDto getReservation(Long reservationId, LoginMember loginMember) {
         Member member = findMember(loginMember);
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약 내역입니다."));
+        Reservation reservation = findReservation(reservationId);
 
-        if (!reservation.isOwnedBy(member)) {
-            throw new IllegalArgumentException("해당 예약 내역에 접근할 권한이 없습니다.");
-        }
+        checkAuthorityOfReservation(reservation, member);
 
         Seat seat = reservation.getSeat();
         return new ReservationDetailResponseDto(
@@ -76,8 +74,31 @@ public class ReservationService {
         );
     }
 
-    private Seat findSeat(ReservationRegisterDto reservationRegisterDto) {
-        return seatRepository.findById(reservationRegisterDto.seatId())
+    @Transactional
+    public void updateReservation(Long reservationId, ReservationUpdateDto reservationUpdateDto,
+                                  LoginMember loginMember) {
+        Member member = findMember(loginMember);
+        Reservation reservation = findReservation(reservationId);
+        checkAuthorityOfReservation(reservation, member);
+
+        Seat newSeat = findSeat(reservationUpdateDto.seatId());
+        Reservation newReservation = reservationUpdateDto.toReservation(newSeat, member);
+        reservation.update(newReservation);
+    }
+
+    private static void checkAuthorityOfReservation(Reservation reservation, Member member) {
+        if (!reservation.isOwnedBy(member)) {
+            throw new IllegalArgumentException("해당 예약 내역에 접근할 권한이 없습니다.");
+        }
+    }
+
+    private Reservation findReservation(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약 내역입니다."));
+    }
+
+    private Seat findSeat(Long id) {
+        return seatRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 좌석입니다."));
     }
 
