@@ -1,13 +1,13 @@
-package finalmission.user.service;
+package finalmission.member.service;
 
 import finalmission.auth.JwtTokenHandler;
-import finalmission.user.domain.Member;
-import finalmission.user.domain.vo.Email;
-import finalmission.user.domain.vo.Password;
-import finalmission.user.repository.MemberRepository;
-import finalmission.user.service.dto.CreateMemberRequest;
-import finalmission.user.service.dto.LoginRequest;
-import finalmission.user.service.dto.LoginResponse;
+import finalmission.member.domain.Member;
+import finalmission.member.domain.vo.Email;
+import finalmission.member.domain.vo.Password;
+import finalmission.member.repository.MemberRepository;
+import finalmission.member.service.dto.CreateMemberRequest;
+import finalmission.member.service.dto.LoginRequest;
+import finalmission.member.service.dto.LoginResponse;
 import org.springframework.stereotype.Service;
 
 @Service

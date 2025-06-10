@@ -1,6 +1,6 @@
 package finalmission.restaurant.domain;
 
-import finalmission.user.domain.Member;
+import finalmission.member.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

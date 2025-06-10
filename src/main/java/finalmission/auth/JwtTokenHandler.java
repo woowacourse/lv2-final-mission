@@ -1,7 +1,7 @@
 package finalmission.auth;
 
-import finalmission.user.domain.Member;
-import finalmission.user.domain.vo.Role;
+import finalmission.member.domain.Member;
+import finalmission.member.domain.vo.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;

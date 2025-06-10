@@ -1,4 +1,4 @@
-package finalmission.user.service.dto;
+package finalmission.member.service.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

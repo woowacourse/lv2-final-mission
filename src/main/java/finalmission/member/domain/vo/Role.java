@@ -1,4 +1,4 @@
-package finalmission.user.domain.vo;
+package finalmission.member.domain.vo;
 
 import java.util.Arrays;
 

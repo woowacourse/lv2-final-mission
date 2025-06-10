@@ -1,7 +1,7 @@
-package finalmission.user.service.dto;
+package finalmission.member.service.dto;
 
-import finalmission.user.domain.Member;
-import finalmission.user.domain.vo.Role;
+import finalmission.member.domain.Member;
+import finalmission.member.domain.vo.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 

@@ -1,9 +1,9 @@
-package finalmission.user.domain;
+package finalmission.member.domain;
 
-import finalmission.user.domain.vo.Email;
-import finalmission.user.domain.vo.Name;
-import finalmission.user.domain.vo.Password;
-import finalmission.user.domain.vo.Role;
+import finalmission.member.domain.vo.Email;
+import finalmission.member.domain.vo.Name;
+import finalmission.member.domain.vo.Password;
+import finalmission.member.domain.vo.Role;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;

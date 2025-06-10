@@ -1,8 +1,8 @@
-package finalmission.user.repository;
+package finalmission.member.repository;
 
-import finalmission.user.domain.Member;
-import finalmission.user.domain.vo.Email;
-import finalmission.user.domain.vo.Password;
+import finalmission.member.domain.Member;
+import finalmission.member.domain.vo.Email;
+import finalmission.member.domain.vo.Password;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

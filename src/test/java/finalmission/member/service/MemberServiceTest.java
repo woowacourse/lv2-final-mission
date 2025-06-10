@@ -1,9 +1,9 @@
-package finalmission.user.service;
+package finalmission.member.service;
 
 import finalmission.auth.JwtTokenHandler;
-import finalmission.user.domain.Member;
-import finalmission.user.domain.vo.Role;
-import finalmission.user.service.dto.CreateMemberRequest;
+import finalmission.member.domain.Member;
+import finalmission.member.domain.vo.Role;
+import finalmission.member.service.dto.CreateMemberRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;

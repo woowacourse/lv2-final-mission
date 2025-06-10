@@ -1,4 +1,4 @@
-package finalmission.user.service.dto;
+package finalmission.member.service.dto;
 
 public record LoginResponse(
         String token
