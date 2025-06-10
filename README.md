@@ -46,7 +46,7 @@ CREW
 COACH
 ```
 #### 크루
-+ 크루 목록 조회(COACH)
++ [x] 크루 목록 조회(COACH)
 ```
 GET /crews HTTP/1.1
 ```
@@ -60,7 +60,7 @@ Content-Type: application/json
     }
 }
 ```
-+ 로그인(GUEST)
++ [ ] 로그인(GUEST)
 ```
 POST /members HTTP/1.1
 Content-Type: application/json
@@ -75,7 +75,7 @@ Content-Type: application/json
 ```
 
 #### 코치
-+ 코치 목록 조회(COACH)
++ [ ] 코치 목록 조회(COACH)
 ```
 GET /coaches HTTP/1.1
 ```
@@ -92,7 +92,7 @@ Content-Type: application/json
 ```
 
 #### 예약 가능 시간
-+ 코치별 예약 가능 시간 추가(COACH)
++ [ ] 코치별 예약 가능 시간 추가(COACH)
 ```
 POST /dateTimes HTTP/1.1
 {  
@@ -104,7 +104,7 @@ HTTP/1.1 201
 Content-Type: application/json
 Location: /dateTimes/{id}
 ```
-+ 예약 가능 시간 목록 조회(CREW)
++ [ ] 예약 가능 시간 목록 조회(CREW)
 ```
 GET /dateTimes?nickname="포비" HTTP/1.1
 ```
@@ -119,7 +119,7 @@ Content-Type: application/json
 }
 ```
 
-+ 예약 가능 시간 삭제(COACH)
++ [ ] 예약 가능 시간 삭제(COACH)
 ```
 DELETE /dateTimes/{id} HTTP/1.1
 ```
@@ -129,7 +129,7 @@ Content-Type: application/json
 ```
 
 #### 예약
-+ 예약 추가(CREW)
++ [ ] 예약 추가(CREW)
 ```
 POST /reservations HTTP/1.1
 {  
@@ -142,7 +142,7 @@ HTTP/1.1 201
 Content-Type: application/json
 Location: /reservations/{id}
 ```
-+ 예약 정보 수정(CREW)
++ [ ] 예약 정보 수정(CREW)
 ```
 PUT /reservations HTTP/1.1
 {  
@@ -155,7 +155,7 @@ HTTP/1.1 200
 Content-Type: application/json
 Location: /reservations/{id}
 ```
-+ 크루별 예약 조회(CREW)
++ [ ] 크루별 예약 조회(CREW)
 ```
 GET /reservations HTTP/1.1
 ```
@@ -171,7 +171,7 @@ Content-Type: application/json
 }
 ```
 
-+ 코치별 예약 조회(COACH)
++ [ ] 코치별 예약 조회(COACH)
 ```
 GET /reservations HTTP/1.1
 ```
@@ -186,7 +186,7 @@ Content-Type: application/json
     }
 }
 ```
-+ 예약 삭제(CREW)
++ [ ] 예약 삭제(CREW)
 ```
 DELETE /reservations/{id} HTTP/1.1
 ```
