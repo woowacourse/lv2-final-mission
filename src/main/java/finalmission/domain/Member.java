@@ -30,6 +30,10 @@ public class Member {
         this.name = name;
     }
 
+    public boolean isSamePassword(final String password) {
+        return this.password.equals(password);
+    }
+
     private void validateNameLength(final String name) {
         if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
             var message = String.format("사용자 이름은 %d자 이상 %d자 이하여야 합니다.", MIN_NAME_LENGTH, MAX_NAME_LENGTH);
