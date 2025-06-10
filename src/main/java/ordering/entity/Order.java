@@ -49,15 +49,19 @@ public class Order {
     }
 
     public Order(User user, Category category, Product product, Long count, String detail,
-        Double amount, LocalDateTime createdAt, EmailStatus emailStatus) {
+        LocalDateTime createdAt, EmailStatus emailStatus) {
         this.user = user;
         this.category = category;
         this.product = product;
         this.count = count;
         this.detail = detail;
-        this.amount = amount;
+        this.amount = calculateAmount(product, count);
         this.createdAt = createdAt;
         this.emailStatus = emailStatus;
+    }
+
+    private double calculateAmount(Product product, Long count) {
+        return product.getPrice() * count;
     }
 
     public Long getId() {
