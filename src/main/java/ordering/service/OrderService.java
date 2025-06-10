@@ -1,11 +1,13 @@
 package ordering.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import ordering.dto.request.OrderRegister;
 import ordering.dto.response.OrderResponse;
 import ordering.entity.Category;
 import ordering.entity.EmailStatus;
 import ordering.entity.Order;
+import ordering.entity.OrderStatus;
 import ordering.entity.Product;
 import ordering.entity.User;
 import ordering.repository.CategoryJpaRepository;
@@ -30,19 +32,25 @@ public class OrderService {
         this.productJpaRepository = productJpaRepository;
     }
 
+    public List<OrderResponse> findByUser(Long userId) {
+        return orderJpaRepository.findByUserId(userId).stream()
+            .map(OrderResponse::from)
+            .toList();
+    }
+
     public OrderResponse registerOrder(OrderRegister request) {
         return OrderResponse.from(orderJpaRepository.save(createOrder(request)));
     }
 
     private Order createOrder(OrderRegister request) {
         User user = userJpaRepository.findByName(request.username())
-            .orElseThrow(IllegalArgumentException::new);
+            .orElse(new User(request.username())); // 없는 사용자라면 새로 생성
         Category category = categoryJpaRepository.findById(request.categoryId())
             .orElseThrow(IllegalArgumentException::new);
         Product product = productJpaRepository.findById(request.productId())
             .orElseThrow(IllegalArgumentException::new);
 
         return new Order(user, category, product, request.count(), request.detail(),
-            LocalDateTime.now(), EmailStatus.DONE);
+            LocalDateTime.now(), EmailStatus.DONE, OrderStatus.PROCESSING);
     }
 }

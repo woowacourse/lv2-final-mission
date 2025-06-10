@@ -45,11 +45,14 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private EmailStatus emailStatus;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
     public Order() {
     }
 
     public Order(User user, Category category, Product product, Long count, String detail,
-        LocalDateTime createdAt, EmailStatus emailStatus) {
+        LocalDateTime createdAt, EmailStatus emailStatus, OrderStatus orderStatus) {
         this.user = user;
         this.category = category;
         this.product = product;
@@ -58,6 +61,7 @@ public class Order {
         this.amount = calculateAmount(product, count);
         this.createdAt = createdAt;
         this.emailStatus = emailStatus;
+        this.orderStatus = orderStatus;
     }
 
     private double calculateAmount(Product product, Long count) {

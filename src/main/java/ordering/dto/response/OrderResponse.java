@@ -1,23 +1,27 @@
 package ordering.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 import ordering.entity.Order;
 
 public record OrderResponse(
     Long id,
     String username,
-    Long categoryId,
-    Long productId,
+    String category,
+    String product,
     Long count,
-    String emailStatus) {
+    String emailStatus,
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")LocalDateTime createdAt) {
 
     public static OrderResponse from(Order order) {
         return new OrderResponse(
             order.getId(),
             order.getUser().getName(),
-            order.getCategory().getId(),
-            order.getProduct().getId(),
+            order.getCategory().getName(),
+            order.getProduct().getName(),
             order.getCount(),
-            order.getEmailStatus().getText()
+            order.getEmailStatus().getText(),
+            order.getCreatedAt()
         );
     }
 }
