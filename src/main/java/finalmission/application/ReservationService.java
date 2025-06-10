@@ -69,6 +69,7 @@ public class ReservationService {
         reservation.updateQuantity(updateReservationRequest.quantity());
     }
 
+    @Transactional
     public void delete(Long memberId, Long reservationId) {
         Reservation reservation = getReservation(reservationId);
         if (!reservation.isMemberId(memberId)) {

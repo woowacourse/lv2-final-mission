@@ -2,6 +2,7 @@ package finalmission.presentation;
 
 import finalmission.application.support.exception.AuthException;
 import finalmission.application.support.exception.BusinessRuleViolationException;
+import finalmission.application.support.exception.ExternalApiException;
 import finalmission.application.support.exception.NotFoundEntityException;
 import finalmission.presentation.dto.ApiFailResponse;
 import java.util.stream.Collectors;
@@ -51,6 +52,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiFailResponse> handleAuthException(AuthException e) {
         log.info("Auth exception", e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiFailResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler(ExternalApiException.class)
+    public ResponseEntity<ApiFailResponse> handleExternalApiException(ExternalApiException e) {
+        log.warn("External api exception", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiFailResponse(e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
