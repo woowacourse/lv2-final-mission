@@ -10,4 +10,8 @@ public record MemberRegisterDto(
     public Member toMember() {
         return new Member(name, email, password);
     }
+
+    public Member toMember(String newName) {
+        return new Member(newName, email, password);
+    }
 }
