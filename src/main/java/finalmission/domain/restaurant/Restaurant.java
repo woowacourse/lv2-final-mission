@@ -24,6 +24,10 @@ public class Restaurant {
     protected Restaurant() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Name getName() {
         return detail.getName();
     }
