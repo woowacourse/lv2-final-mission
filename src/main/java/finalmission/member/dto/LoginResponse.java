@@ -1,4 +1,4 @@
 package finalmission.member.dto;
 
-public record LoginResponse(Long memberId) {
+public record LoginResponse(String token) {
 }
