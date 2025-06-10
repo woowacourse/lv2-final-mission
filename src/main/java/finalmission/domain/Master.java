@@ -26,6 +26,10 @@ public class Master {
 
     private String password;
 
+    public Master(String email, String name, String password) {
+        this(null, email, name, password);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (o == null || getClass() != o.getClass()) {
