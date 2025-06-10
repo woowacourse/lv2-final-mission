@@ -20,7 +20,7 @@ public class RoomController {
     public ResponseEntity<RoomCreateResponse> createRoom(
             @RequestBody RoomCreateRequest request
     ) {
-        RoomCreateResponse response = roomService.createRoom(request.startDate(), request.endDate(), request.startTime(), request.endTime());
+        RoomCreateResponse response = roomService.createRoom(request.startDate(), request.endDate(), request.startTime(), request.endTime(), request.isAnonymousRoom());
         URI createdLocation = URI.create("/room/" + response.roomId());
         return ResponseEntity.created(createdLocation).build();
     }

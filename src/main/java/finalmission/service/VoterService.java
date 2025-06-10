@@ -20,8 +20,10 @@ public class VoterService {
         if (room.containsNameOf(name)) {
             throw new IllegalArgumentException("이미 해당 이름으로 등록된 투표자가 존재합니다.");
         }
-        String newName = name == null ? nameGenerator.generate() : name;
-        Voter voter = new Voter(newName, password, room);
+        if (room.isAnonymous() || name == null) {
+            name = nameGenerator.generate();
+        }
+        Voter voter = new Voter(name, password, room);
         voterRepository.save(voter);
         return new RegisterResponse(voter.getName());
     }

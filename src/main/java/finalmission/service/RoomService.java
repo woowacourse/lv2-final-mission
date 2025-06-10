@@ -19,8 +19,8 @@ public class RoomService {
     private final RoomRepository roomRepository;
 
     @Transactional
-    public RoomCreateResponse createRoom(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
-        Room room = new Room(startDate, endDate, startTime, endTime);
+    public RoomCreateResponse createRoom(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, boolean anonymousRoom) {
+        Room room = new Room(startDate, endDate, startTime, endTime, anonymousRoom);
         roomRepository.save(room);
         return RoomCreateResponse.from(room);
     }

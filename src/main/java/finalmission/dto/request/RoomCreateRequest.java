@@ -7,6 +7,7 @@ public record RoomCreateRequest(
         LocalDate startDate,
         LocalDate endDate,
         LocalTime startTime,
-        LocalTime endTime
+        LocalTime endTime,
+        boolean isAnonymousRoom
 ) {
 }

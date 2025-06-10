@@ -6,7 +6,8 @@ Content-Type: application/json
   "startDate": "2025-05-20",
   "endDate": "2025-05-30",
   "startTime": "08:00",
-  "endTime": "22:00"
+  "endTime": "22:00",
+  "isAnonymousRoom": true
 }
 
 ### 방 정보 확인

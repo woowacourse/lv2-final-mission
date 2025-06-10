@@ -23,16 +23,18 @@ public class Room {
     private final LocalDate endDate;
     private final LocalTime startTime;
     private final LocalTime endTime;
+    private final boolean isAnonymous;
     @OneToMany(mappedBy = "room")
     private final List<Vote> votes = new ArrayList<>();
     @OneToMany(mappedBy = "room")
     private final List<Voter> voters = new ArrayList<>();
 
-    public Room(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+    public Room(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, boolean isAnonymous) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.isAnonymous = isAnonymous;
     }
 
     public void addMember(Voter voter) {
