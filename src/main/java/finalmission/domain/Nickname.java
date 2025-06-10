@@ -1,16 +1,42 @@
 package finalmission.domain;
 
-public class Nickname {
-    private final String nickname;
+import jakarta.persistence.Embeddable;
+import java.util.Objects;
 
-    public Nickname(String nickname) {
-        validateLength(nickname);
-        this.nickname = nickname;
+@Embeddable
+public class Nickname {
+
+    private String name;
+
+    public Nickname() {
     }
 
-    private void validateLength(String nickname) {
-        if (nickname.length() < 2 || nickname.length() > 4) {
+    public Nickname(String name) {
+        validateLength(name);
+        this.name = name;
+    }
+
+    private void validateLength(String name) {
+        if (name.length() < 2 || name.length() > 4) {
             throw new IllegalArgumentException("크루 닉네임은 최소 2글자, 최대 4글자여야합니다.");
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        Nickname nickname = (Nickname) object;
+        return Objects.equals(name, nickname.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 }
