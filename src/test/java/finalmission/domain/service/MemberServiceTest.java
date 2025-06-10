@@ -10,6 +10,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class MemberServiceTest extends AbstractServiceTest {
 
@@ -22,6 +23,7 @@ class MemberServiceTest extends AbstractServiceTest {
 
     @DisplayName("담당 선생님이 없다면 담당 선생님을 등록한다")
     @Test
+    @Transactional
     void selectTrainer() {
         // given
         Member member = Member.createWithoutId("user", "user@email.com", "1234", 2);

@@ -53,7 +53,7 @@ public class Member {
     }
 
     public boolean matchTrainer(Long trainerId) {
-        return this.trainer.getId().equals(trainerId);
+        return this.trainer != null && this.trainer.getId().equals(trainerId);
     }
 
     public boolean availableLesson() {
@@ -65,7 +65,9 @@ public class Member {
     }
 
     public void minusPtNumber() {
-        this.ptNumber--;
+        if (this.ptNumber > 0) {
+            this.ptNumber--;
+        }
     }
 
     public Long getId() {

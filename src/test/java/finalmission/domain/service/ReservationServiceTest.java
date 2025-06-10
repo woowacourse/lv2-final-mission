@@ -6,12 +6,14 @@ import finalmission.domain.entity.Member;
 import finalmission.domain.entity.Reservation;
 import finalmission.domain.entity.ReservationStatus;
 import finalmission.domain.entity.Trainer;
+import finalmission.domain.service.dto.ReservationLessonRequest;
 import finalmission.domain.service.dto.TrainerReservationResponse;
 import finalmission.repository.LessonTimeRepository;
 import finalmission.repository.MemberRepository;
 import finalmission.repository.ReservationRepository;
 import finalmission.repository.TrainerRepository;
 import finalmission.util.AbstractServiceTest;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 class ReservationServiceTest extends AbstractServiceTest {
 
     @Autowired
@@ -33,28 +36,17 @@ class ReservationServiceTest extends AbstractServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private ReservationService reservationService;
+    @Autowired
+    private EntityManager em;
 
     @DisplayName("담당선생님의 예약 현황을 확인한다")
     @Test
-    @Transactional
     void getReservationsByTrainer() {
         // given
-        Trainer trainer = Trainer.createWithoutId("상희", Gender.WOMAN);
-        Trainer savedTrainer = trainerRepository.save(trainer);
-
-        Member member = Member.createWithoutId("user", "user@email.com", "1234", 2);
-        Member saveedMember = memberRepository.save(member);
-
-        LessonTime lessonTime = LessonTime.createWithoutId(LocalTime.of(11, 0));
-        LessonTime savedLessonTime = lessonTimeRepository.save(lessonTime);
-
-        Reservation reservation = Reservation.createWithoutId(
-                ReservationStatus.RESERVED,
-                LocalDate.now().plusDays(1),
-                saveedMember,
-                savedLessonTime,
-                savedTrainer
-        );
+        Trainer savedTrainer = getTrainer();
+        Member saveedMember = getMember();
+        LessonTime savedLessonTime = getLessonTime();
+        Reservation reservation = getReservation(saveedMember, savedLessonTime, savedTrainer);
         reservationRepository.save(reservation);
 
         // when
@@ -64,5 +56,120 @@ class ReservationServiceTest extends AbstractServiceTest {
         // then
         Assertions.assertThat(reservations).hasSize(1);
         Assertions.assertThat(reservations.getFirst().date()).isAfter(LocalDate.now());
+    }
+
+    @DisplayName("내 담당 선생님이 아니면 수업을 예약할 수 없다")
+    @Test
+    void myTrainerReservationException() {
+        // given
+        Trainer savedTrainer = getTrainer();
+        LessonTime savedLessonTime = getLessonTime();
+        Member savedMember = getMember();
+
+        ReservationLessonRequest request = new ReservationLessonRequest(
+                savedTrainer.getId(),
+                savedLessonTime.getId(),
+                LocalDate.now()
+        );
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(() -> reservationService.reserveLesson(savedMember, request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("[ERROR] 담당 선생님의 수업만 수강할 수 있습니다");
+    }
+
+    @DisplayName("수강권이 없는 회원은 수업을 예약할 수 없다")
+    @Test
+    void ptNumberReservationException() {
+        // given
+        Trainer savedTrainer = getTrainer();
+        LessonTime savedLessonTime = getLessonTime();
+        Member savedMember = getMember();
+        savedMember.selectTrainer(savedTrainer);
+        savedMember.minusPtNumber();
+        savedMember.minusPtNumber();
+        ReservationLessonRequest request = new ReservationLessonRequest(
+                savedTrainer.getId(),
+                savedLessonTime.getId(),
+                LocalDate.now()
+        );
+        em.flush();
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(() -> reservationService.reserveLesson(savedMember, request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("[ERROR] PT 수강권이 있어야 수강할 수 있습니다");
+    }
+
+    @DisplayName("이미 예약이 존재하면 대기 상태로 예약된다")
+    @Test
+    void waitingReservation() {
+        Trainer savedTrainer = getTrainer();
+        LessonTime savedLessonTime = getLessonTime();
+        Member savedMember = getMember();
+        savedMember.selectTrainer(savedTrainer);
+
+        ReservationLessonRequest request = new ReservationLessonRequest(
+                savedTrainer.getId(),
+                savedLessonTime.getId(),
+                LocalDate.now()
+        );
+        em.flush();
+
+        // when
+        reservationService.reserveLesson(savedMember, request);
+
+        // then
+        Assertions.assertThatCode(() -> reservationService.reserveLesson(savedMember, request))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("정상적으로 예약되면 수강권이 1회 차감된다")
+    @Test
+    void reservationMinusPtNumber() {
+        Trainer savedTrainer = getTrainer();
+        LessonTime savedLessonTime = getLessonTime();
+        Member savedMember = getMember();
+        savedMember.selectTrainer(savedTrainer);
+        ReservationLessonRequest request = new ReservationLessonRequest(
+                savedTrainer.getId(),
+                savedLessonTime.getId(),
+                LocalDate.now()
+        );
+        em.flush();
+        int ptNumber = savedMember.getPtNumber();
+
+        // when
+        // then
+        Assertions.assertThatCode(() -> reservationService.reserveLesson(savedMember, request))
+                .doesNotThrowAnyException();
+        Assertions.assertThat(savedMember.getPtNumber()).isLessThan(ptNumber);
+    }
+
+    private Member getMember() {
+        Member member = Member.createWithoutId("user", "user@email.com", "1234", 2);
+        return memberRepository.save(member);
+    }
+
+    private LessonTime getLessonTime() {
+        LessonTime lessonTime = LessonTime.createWithoutId(LocalTime.of(11, 0));
+        return lessonTimeRepository.save(lessonTime);
+    }
+
+    private Trainer getTrainer() {
+        Trainer trainer = Trainer.createWithoutId("상희", Gender.WOMAN);
+        return trainerRepository.save(trainer);
+    }
+
+    private Reservation getReservation(Member saveedMember, LessonTime savedLessonTime, Trainer savedTrainer) {
+        return Reservation.createWithoutId(
+                ReservationStatus.RESERVED,
+                LocalDate.now().plusDays(1),
+                saveedMember,
+                savedLessonTime,
+                savedTrainer
+        );
     }
 }
