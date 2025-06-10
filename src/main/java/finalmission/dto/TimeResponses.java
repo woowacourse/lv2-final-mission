@@ -5,12 +5,9 @@ import java.util.List;
 
 public record TimeResponses(
         String username,
-        List<TimeResponse> values
+        List<LocalDateTime> values
 ) {
     public static TimeResponses from(String username, List<LocalDateTime> dateTimes) {
-        List<TimeResponse> timeResponses = dateTimes.stream()
-                .map(dateTime -> new TimeResponse(dateTime.toLocalDate(), dateTime.toLocalTime()))
-                .toList();
-        return new TimeResponses(username, timeResponses);
+        return new TimeResponses(username, dateTimes);
     }
 }

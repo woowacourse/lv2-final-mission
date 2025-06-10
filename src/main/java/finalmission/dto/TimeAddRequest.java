@@ -5,6 +5,6 @@ import java.util.List;
 
 public record TimeAddRequest(
         String username,
-        List<LocalDateTime> dateTimes
+        List<LocalDateTime> values
 ) {
 }

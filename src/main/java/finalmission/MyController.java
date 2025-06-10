@@ -31,7 +31,7 @@ public class MyController {
             @RequestBody TimeAddRequest request
     ) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
-        List<Time> createdTimes = request.dateTimes().stream()
+        List<Time> createdTimes = request.values().stream()
                 .map(dateTime -> room.createTime(request.username(), dateTime.toLocalDate(), dateTime.toLocalTime()))
                 .toList();
         timeRepository.saveAll(createdTimes);
