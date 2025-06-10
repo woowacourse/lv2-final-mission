@@ -1,4 +1,4 @@
-package finalmission.meetingroom.controller;
+package finalmission.meetingroom.common;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import finalmission.meetingroom.service.AuthService;
-import finalmission.meetingroom.service.JwtTokenHandler;
 import finalmission.meetingroom.service.request.LoginMember;
 import jakarta.servlet.http.HttpServletRequest;
 

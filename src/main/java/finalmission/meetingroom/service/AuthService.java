@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import finalmission.meetingroom.common.exception.LoginFailException;
+import finalmission.meetingroom.common.JwtTokenHandler;
 import finalmission.meetingroom.domain.Member;
 import finalmission.meetingroom.repository.MemberRepository;
 import finalmission.meetingroom.service.request.LoginMember;

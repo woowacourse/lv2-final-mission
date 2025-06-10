@@ -1,4 +1,4 @@
-package finalmission.meetingroom.service;
+package finalmission.meetingroom.common;
 
 import java.util.Arrays;
 import java.util.Date;
