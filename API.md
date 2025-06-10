@@ -25,3 +25,15 @@
 
 - RESPONSE
   - 201 CREATED
+
+### 사용자 로그인
+> POST /members/login
+
+- REQUEST BODY
+  - "id": 사용자 ID
+  - "password": 비밀번호
+
+- RESPONSE
+  - 200 CREATED
+  - **헤더** 
+    - Set-Cookie: "token={발급한 인증 토큰}"

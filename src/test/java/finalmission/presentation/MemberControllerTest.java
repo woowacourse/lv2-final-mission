@@ -2,6 +2,7 @@ package finalmission.presentation;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import finalmission.application.MemberService;
@@ -49,5 +50,26 @@ class MemberControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestJson)
         ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("로그인을 하면 Set-Cookie 헤더로 토큰을 응답한다.")
+    void login() throws Exception {
+        Mockito
+            .doReturn("token")
+            .when(memberService).login(eq("popo"), eq("password"));
+
+        mockMvc.perform(post("/members/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                        "id": "popo",
+                        "password": "password"
+                    }
+                    """)
+            )
+            .andExpect(status().isOk())
+            .andExpect(cookie().exists("token"))
+            .andExpect(result -> result.getResponse().containsHeader("Set-Cookie"));
     }
 }
