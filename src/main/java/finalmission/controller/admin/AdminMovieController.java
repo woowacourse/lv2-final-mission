@@ -1,6 +1,9 @@
 package finalmission.controller.admin;
 
 import finalmission.dto.request.MovieCreateRequest;
+import finalmission.dto.request.MovieSlotCreateRequest;
+import finalmission.dto.response.MovieCreateResponse;
+import finalmission.dto.response.MovieSlotCreateResponse;
 import finalmission.service.admin.AdminMovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +22,24 @@ public class AdminMovieController {
         this.adminMovieService = adminMovieService;
     }
 
-    // 영화 추가
     @PostMapping("/movies")
-    public ResponseEntity<Void> createMovie(@RequestBody MovieCreateRequest movieCreateRequest) {
-        adminMovieService.createMovie(movieCreateRequest.name(), movieCreateRequest.description());
+    public ResponseEntity<MovieCreateResponse> createMovie(@RequestBody MovieCreateRequest movieCreateRequest) {
+        MovieCreateResponse movieCreateResponse = adminMovieService.createMovie(
+                movieCreateRequest.name(), movieCreateRequest.description());
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieCreateResponse);
+    }
+
+    @PostMapping("/movie-slots")
+    public ResponseEntity<MovieSlotCreateResponse> createMovieSlot(
+            @RequestBody MovieSlotCreateRequest movieSlotCreateRequest) {
+        MovieSlotCreateResponse movieSlotCreateResponse = adminMovieService.createMovieSlot(
+                movieSlotCreateRequest.movieId(),
+                movieSlotCreateRequest.date(),
+                movieSlotCreateRequest.startAt(),
+                movieSlotCreateRequest.seats()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieSlotCreateResponse);
     }
 }
