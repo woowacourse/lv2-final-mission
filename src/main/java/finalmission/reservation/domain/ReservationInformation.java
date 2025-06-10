@@ -37,4 +37,11 @@ public class ReservationInformation {
     private LocalTime startAt;
 
     private Integer maxCount; // 예약 가능한 최대 건수
+
+    public ReservationInformation(Restaurant restaurant, LocalDate date, LocalTime startAt, Integer maxCount) {
+        this.restaurant = restaurant;
+        this.date = date;
+        this.startAt = startAt;
+        this.maxCount = maxCount;
+    }
 }

@@ -27,4 +27,14 @@ public class Restaurant {
     private Member owner;
 
     // TODO: 위치 정보 넣기 (지도 API에서 어떻게 다뤄지는지에 따라 결정하기?)
+
+
+    public Restaurant(String name, Member owner) {
+        this.name = name;
+        this.owner = owner;
+    }
+
+    public boolean isOwnedBy(Member member) {
+        return owner.getId().equals(member.getId());
+    }
 }
