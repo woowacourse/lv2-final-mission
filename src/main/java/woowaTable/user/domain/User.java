@@ -6,5 +6,5 @@ public interface User {
 
     Role getRole();
 
-    String getUserName();
+    UserName getUserName();
 }

@@ -14,7 +14,7 @@ public class RestaurantQueryService {
     private final RestaurantRepository restaurantRepository;
 
     public List<Restaurant> findByOption(final Long region) {
-        return restaurantRepository.findAllBy(region);
+        return restaurantRepository.findAllById(region);
     }
 
     public Restaurant findById(final Long id) {

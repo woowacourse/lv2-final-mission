@@ -25,7 +25,7 @@ public class Restaurant {
     private Long id;
 
     @Embedded
-    private RestaurantName restaurantName;
+    private RestaurantName name;
 
     @OneToMany
     private List<Menu> menus;

@@ -9,7 +9,7 @@ public record RestaurantResponse(
 
     public static RestaurantResponse from(Restaurant restaurant) {
         return new RestaurantResponse(
-                restaurant.getRestaurantName().getValue(),
+                restaurant.getName().getValue(),
                 restaurant.getRegion().name()
         );
     }

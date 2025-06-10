@@ -6,6 +6,6 @@ public record LoginCheckResponse(
         String name
 ) {
     public static LoginCheckResponse from(final User user) {
-        return new LoginCheckResponse(user.getUserName());
+        return new LoginCheckResponse(user.getUserName().getValue());
     }
 }

@@ -3,16 +3,11 @@ spring:
     console:
       enabled: true
       path: /h2-console
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:database
-    username: sa
-    password:
 
   sql:
     init:
       mode: always
-      data-locations: classpath:data.sql
+      data-locations: classpath:test.sql
 
   jpa:
     show-sql: false
@@ -28,9 +23,4 @@ security:
     token:
       secret-key: s8RkQz3nZ!L5pT7c@J#xM9vB1&uD6hE
       access:
-        expire-length: 600000 # 10 ?
-
-email:
-  twilio:
-    base-url: https://api.sendgrid.com
-    secret-key:
+        expire-length: 600000 # 10 분

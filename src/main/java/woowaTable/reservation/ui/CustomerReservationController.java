@@ -18,7 +18,7 @@ public class CustomerReservationController {
 
     private final ReservationService reservationService;
 
-    @PostMapping("/restaurants")
+    @PostMapping("/reservations")
     public ResponseEntity<ReservationResponse> reserve(
             final LoginCheckRequest loginCheckRequest,
             @Valid @RequestBody final ReservationRequest request

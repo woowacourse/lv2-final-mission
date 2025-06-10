@@ -6,5 +6,5 @@ import woowaTable.restaurant.domain.Restaurant;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-    List<Restaurant> findAllBy(Long region);
+    List<Restaurant> findAllById(Long id);
 }

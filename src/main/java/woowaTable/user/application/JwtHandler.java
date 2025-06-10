@@ -7,6 +7,9 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,12 +33,15 @@ public class JwtHandler {
         final Date date = new Date();
         final Date accessTokenExpiredAt = new Date(date.getTime() + accessTokenExpireTime);
 
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
         final String accessToken = Jwts.builder()
                 .claim(CLAIM_ID_KEY, user.getId())
                 .claim(CLAIM_ROLE_KEY, user.getRole().toString())
                 .setIssuedAt(date)
                 .setExpiration(accessTokenExpiredAt)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         return new Token(accessToken);
@@ -58,10 +64,15 @@ public class JwtHandler {
 
     private Claims parseJwt(final String token) {
         try {
-            return Jwts.parser()
-                    .setSigningKey(secretKey)
+            byte[] keyBytes = Decoders.BASE64.decode(secretKey); // base64 인코딩된 키여야 함
+            Key key = Keys.hmacShaKeyFor(keyBytes);
+
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
+
         } catch (final ExpiredJwtException e) {
             throw new UnauthorizedException("로그인 정보가 만료되었습니다.");
         } catch (final UnsupportedJwtException | MalformedJwtException | SignatureException e) {
