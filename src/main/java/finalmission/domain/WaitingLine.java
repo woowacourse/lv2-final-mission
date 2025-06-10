@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.AccessLevel;
@@ -24,6 +25,10 @@ public class WaitingLine {
 
     @OneToMany
     private List<Member> waiting;
+
+    public static WaitingLine makeNewWaiting() {
+        return new WaitingLine(null, new ArrayList<>());
+    }
 
     public void addMember(Member member) {
         waiting.add(member);

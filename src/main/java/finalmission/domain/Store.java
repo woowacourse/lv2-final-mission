@@ -30,10 +30,15 @@ public class Store {
     private Double starRating;
 
     @OneToOne
-    private Master master;
+    private Member member;
 
     @OneToOne
     private WaitingLine waitingLine;
+
+    public Store(String storeName, StoreStatus storeStatus, String description, Double starRating, Member member,
+                 WaitingLine waitingLine) {
+        this(null, storeName, storeStatus, description, starRating, member, waitingLine);
+    }
 
     @Override
     public boolean equals(final Object o) {
