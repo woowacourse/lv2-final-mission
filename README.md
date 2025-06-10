@@ -14,7 +14,7 @@
     - content: 팝업 설명
     - startAt: 시작일
     - endAt: 종료일
-    - maxEnteredMemberCount: 최대 수용 인원
+    - maxEnteredMemberCount: 최대 실시간 수용 인원
     - shopkeeper: 상점주
 
 ### 예약 기능
