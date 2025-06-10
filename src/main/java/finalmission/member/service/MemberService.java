@@ -3,7 +3,7 @@ package finalmission.member.service;
 import finalmission.member.domain.Member;
 import finalmission.member.dto.MemberRegistrationRequest;
 import finalmission.member.dto.MemberResponse;
-import finalmission.member.infrastructure.JpaMemberRepository;
+import finalmission.member.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final JpaMemberRepository jpaMemberRepository;
+    private final MemberRepository jpaMemberRepository;
 
     public MemberResponse registerMember(final MemberRegistrationRequest registrationDto) {
         Member memberWithoutId = Member.createMemberWithoutId(registrationDto.name(), registrationDto.email(), registrationDto.password(), registrationDto.phoneNumber());

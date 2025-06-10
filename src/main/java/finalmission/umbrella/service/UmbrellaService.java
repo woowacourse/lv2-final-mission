@@ -3,7 +3,7 @@ package finalmission.umbrella.service;
 import finalmission.umbrella.domain.Umbrella;
 import finalmission.umbrella.domain.UmbrellaType;
 import finalmission.umbrella.dto.UmbrellaResponse;
-import finalmission.umbrella.infrastructure.JpaUmbrellaRepository;
+import finalmission.umbrella.infrastructure.UmbrellaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UmbrellaService {
 
-    private final JpaUmbrellaRepository jpaUmbrellaRepository;
+    private final UmbrellaRepository jpaUmbrellaRepository;
 
     public List<UmbrellaResponse> findAllUmbrella(){
         List<Umbrella> allUmbrellas = jpaUmbrellaRepository.findAll();
