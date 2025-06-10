@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,5 +60,15 @@ public class ReservationController {
         ReservationResponse response = reservationService.changeReservationTime(id, request, loginMember);
         return ResponseEntity.ok()
                 .body(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMeetingRoomReservation(
+            @PathVariable final Long id,
+            final LoginMember loginMember
+    ) {
+        reservationService.cancel(id, loginMember);
+        return ResponseEntity.noContent()
+                .build();
     }
 }

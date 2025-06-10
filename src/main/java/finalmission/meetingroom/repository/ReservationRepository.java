@@ -47,4 +47,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             LocalTime startTime,
             LocalTime endTime
     );
+
+    boolean existsByIdAndMember(Long id, Member member);
+
+    void deleteByIdAndMember(Long id, Member member);
 }

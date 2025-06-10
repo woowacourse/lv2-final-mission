@@ -92,6 +92,7 @@ public class ReservationService {
                 .toList();
     }
 
+    @Transactional
     public ReservationResponse changeReservationTime(
             final Long reservationId,
             final ReservationTimeChangeRequest request,
@@ -104,6 +105,17 @@ public class ReservationService {
         reservation.changeReservationTime(request.newStartAt(), request.newEndAt());
 
         return ReservationResponse.from(reservation);
+    }
+
+    @Transactional
+    public void cancel(final Long reservationId, final LoginMember loginMember) {
+        Member member = getMember(loginMember);
+
+        if (!reservationRepository.existsByIdAndMember(reservationId, member)) {
+            throw new EntityNotFoundException("존재하지 않는 예약 입니다.");
+        }
+
+        reservationRepository.deleteByIdAndMember(reservationId, member);
     }
 
     private MeetingRoom getMeetingRoom(final String meetingRoomName) {
