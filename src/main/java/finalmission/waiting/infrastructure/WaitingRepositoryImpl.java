@@ -47,6 +47,11 @@ public class WaitingRepositoryImpl implements WaitingRepository {
     }
 
     @Override
+    public List<Waiting> findAllWaitingByMemberId(final Long memberId) {
+        return jpaWaitingRepository.findAllWaitingByMemberId(memberId);
+    }
+
+    @Override
     public List<Waiting> findAll() {
         return jpaWaitingRepository.findAll();
     }
