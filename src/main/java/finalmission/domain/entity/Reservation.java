@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,13 +27,21 @@ public class Reservation {
     @Column(nullable = false)
     private ReservationStatus status;
 
+    @Column(nullable = false)
+    private LocalDate date;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lesson_id")
-    private Lesson lesson;
+    @JoinColumn(name = "lesson_time_id")
+    private LessonTime lessonTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainer_id")
+    private Trainer trainer;
+
 
     protected Reservation() {
     }
@@ -53,7 +62,11 @@ public class Reservation {
         return member;
     }
 
-    public Lesson getLesson() {
-        return lesson;
+    public LessonTime getLessonTime() {
+        return lessonTime;
+    }
+
+    public Trainer getTrainer() {
+        return trainer;
     }
 }
