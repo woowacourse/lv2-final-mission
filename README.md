@@ -95,7 +95,7 @@ Set-Cookie: token=~~
 POST /coaches HTTP/1.1
 {  
     "nickname": "링크",
-    "교육분야": "BE"
+    "education": "BE"
 }
 ```
 ```
