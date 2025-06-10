@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class MemberServiceTest {
@@ -19,6 +20,7 @@ class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @Test
+    @Transactional
     void 회원가입을_할_수_있다() {
         MemberRequest request = new MemberRequest("test");
 
@@ -29,6 +31,7 @@ class MemberServiceTest {
     }
 
     @Test
+    @Transactional
     void 중복된_이름으로_회원가입을_할_수_없다() {
         MemberRequest request1 = new MemberRequest("test");
         MemberRequest request2 = new MemberRequest("test");
