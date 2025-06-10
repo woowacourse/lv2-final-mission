@@ -1,0 +1,1 @@
+INSERT INTO RESTAURANT(address, name, menus) VALUES ('address', 'matzip', 'menu')
