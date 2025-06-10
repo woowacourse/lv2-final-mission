@@ -9,10 +9,12 @@ import finalmission.reservation.repository.ReservationRepository;
 import finalmission.room.domain.Room;
 import finalmission.room.dto.RoomResponse;
 import finalmission.room.repository.RoomRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -33,5 +35,11 @@ public class ReservationService {
 
     private Room getRoomById(Long id) {
         return roomRepository.findById(id).orElseThrow();
+    }
+
+    public List<ReservationResponse> getAll() {
+        return reservationRepository.findAll().stream()
+                .map(reservation -> new ReservationResponse(new MemberResponse(reservation.getMember().getName()), new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime()))
+                .toList();
     }
 }
