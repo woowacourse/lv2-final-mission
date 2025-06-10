@@ -26,6 +26,20 @@ public class Member {
 
     private String password;
 
+    private MemberRole memberRole;
+
+    public Member(String email, String name, String password, MemberRole memberRole) {
+        this(null, email, name, password, memberRole);
+    }
+
+    public Member(Long id, String email, String name, MemberRole memberRole) {
+        this(id, email, name, null, memberRole);
+    }
+
+    public boolean isSamePassword(String password) {
+        return this.password.equals(password);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (o == null || getClass() != o.getClass()) {

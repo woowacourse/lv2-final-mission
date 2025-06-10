@@ -14,7 +14,7 @@ class WaitingLineTest {
         WaitingLine waitingLine = new WaitingLine(1L, new ArrayList<>());
 
         // when
-        waitingLine.addMember(new Member(1L, "email", "name", "password"));
+        waitingLine.addMember(new Member(1L, "email", "name", "password", MemberRole.USER));
 
         // then
         assertThat(waitingLine.getWaiting().size()).isEqualTo(1);
@@ -25,7 +25,7 @@ class WaitingLineTest {
 
         // given
         WaitingLine waitingLine = new WaitingLine(1L, new ArrayList<>());
-        Member member = new Member(1L, "email", "name", "password");
+        Member member = new Member(1L, "email", "name", "password", MemberRole.USER);
 
         // when
         waitingLine.addMember(member);
@@ -39,8 +39,8 @@ class WaitingLineTest {
 
         // given
         WaitingLine waitingLine = new WaitingLine(1L, new ArrayList<>());
-        Member member = new Member(1L, "email", "name", "password");
-        Member anotherMember = new Member(2L, "email", "name", "password");
+        Member member = new Member(1L, "email", "name", "password", MemberRole.USER);
+        Member anotherMember = new Member(2L, "email", "name", "password", MemberRole.USER);
 
         // when
         waitingLine.addMember(member);
@@ -53,11 +53,11 @@ class WaitingLineTest {
     void 특정멤버의_대기_순서를_찾는다() {
 
         // given
-        Member member1 = new Member(1L, "email", "name", "password");
-        Member member2 = new Member(2L, "email", "name", "password");
-        Member member3 = new Member(3L, "email", "name", "password");
-        Member member4 = new Member(4L, "email", "name", "password");
-        Member member5 = new Member(5L, "email", "name", "password");
+        Member member1 = new Member(1L, "email", "name", "password", MemberRole.USER);
+        Member member2 = new Member(2L, "email", "name", "password", MemberRole.USER);
+        Member member3 = new Member(3L, "email", "name", "password", MemberRole.USER);
+        Member member4 = new Member(4L, "email", "name", "password", MemberRole.USER);
+        Member member5 = new Member(5L, "email", "name", "password", MemberRole.USER);
 
         WaitingLine waitingLine = new WaitingLine(1L, new ArrayList<>());
 
@@ -66,6 +66,7 @@ class WaitingLineTest {
         waitingLine.addMember(member3);
         waitingLine.addMember(member4);
         waitingLine.addMember(member5);
+        
         // when
         int sequence = waitingLine.getSequenceByMember(member5);
 

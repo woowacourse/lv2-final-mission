@@ -1,7 +1,6 @@
 package finalmission.dto.request;
 
-public record MasterCreateRequest(
-        String name,
+public record LoginRequest(
         String email,
         String password
 ) {
