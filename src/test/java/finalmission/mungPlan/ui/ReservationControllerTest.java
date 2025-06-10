@@ -99,6 +99,29 @@ class ReservationControllerTest {
                 .statusCode(200);
     }
 
+    @DisplayName("유저ID로 해당 유저의 모든 예약 조회")
+    @Test
+    void getAllReservationsByUserId() {
+        // given
+        TimeSlot timeSlot1 = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11 ,0));
+        TimeSlot timeSlot2 = new TimeSlot(LocalTime.of(11, 0), LocalTime.of(11 ,0));
+        TimeSlots timeSlots = new TimeSlots(List.of(timeSlot1, timeSlot2));
+
+        PlanDate planDate = planDateRepository.save(PlanDate.createNew(DEFAULT_DATE, timeSlots));
+
+        User user = userRepository.save(createSampleUser());
+
+        reservationRepository.save(Reservation.createNew(planDate, timeSlot1, user));
+        reservationRepository.save(Reservation.createNew(planDate, timeSlot2, user));
+
+        // when & then
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .when().get("/reservations/mine/" + user.getId())
+                .then().log().all()
+                .statusCode(200);
+    }
+
     @DisplayName("예약ID로 특정 예약 삭제 - 본인의 예약일 경우에만")
     @Test
     void getReservationById_whenMyReservation() {
@@ -139,4 +162,6 @@ class ReservationControllerTest {
                 .then().log().all()
                 .statusCode(403);
     }
+
+
 }

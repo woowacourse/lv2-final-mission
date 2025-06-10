@@ -3,6 +3,7 @@ package finalmission.mungPlan.ui;
 import finalmission.mungPlan.application.ReservationService;
 import finalmission.mungPlan.ui.dto.CreateReservationRequest;
 import finalmission.mungPlan.ui.dto.ReservationResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("reservations")
+@RequestMapping("/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
 
@@ -27,9 +28,14 @@ public class ReservationController {
         return reservationService.createReservation(request);
     }
 
-    @GetMapping("{reservationId}")
+    @GetMapping("/{reservationId}")
     public ReservationResponse getReservation(@PathVariable Long reservationId) {
         return reservationService.getById(reservationId);
+    }
+
+    @GetMapping("/mine/{userId}")
+    public List<ReservationResponse> getAllReservationsByUserId(@PathVariable String userId) {
+        return reservationService.getAllByUserId(userId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

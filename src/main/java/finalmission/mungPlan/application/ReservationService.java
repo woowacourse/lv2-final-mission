@@ -12,6 +12,7 @@ import finalmission.mungPlan.infra.ReservationRepository;
 import finalmission.mungPlan.infra.UserRepository;
 import finalmission.mungPlan.ui.dto.CreateReservationRequest;
 import finalmission.mungPlan.ui.dto.ReservationResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +58,12 @@ public class ReservationService {
     private Reservation getReservationById(Long reservationId) {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NotFoundException("reservation", reservationId));
+    }
+
+    public List<ReservationResponse> getAllByUserId(String userId) {
+        List<Reservation> reservations = reservationRepository.findByUserId(userId);
+        return reservations.stream()
+                .map(ReservationResponse::new)
+                .toList();
     }
 }
