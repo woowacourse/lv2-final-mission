@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:database;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+
+cookie:
+  max-age: 3600
+
+security:
+  jwt:
+    token:
+      secret-key: ${JWT_SECRET_KEY}
+      expire-length: 900000 # 15분
+
+nickname:
+  api-key: ${NICKNAME_SECRET_KEY}
+  base-url: 'https://randommer.io/api'
+  random-url: '/Name?nameType={nameType}&quantity={quantity}'
