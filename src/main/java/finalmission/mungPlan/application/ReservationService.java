@@ -38,4 +38,11 @@ public class ReservationService {
         Reservation saved = reservationRepository.save(Reservation.createNew(planDate, timeSlot, user));
         return new ReservationResponse(saved);
     }
+
+    public ReservationResponse getReservationById(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundException("reservation", reservationId));
+
+        return new ReservationResponse(reservation);
+    }
 }
