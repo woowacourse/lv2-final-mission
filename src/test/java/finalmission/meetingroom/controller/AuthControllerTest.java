@@ -23,7 +23,7 @@ class AuthControllerTest {
     @DisplayName("로그인 요청을 보내면 쿠키를 만들어 반환한다.")
     @Test
     void login() {
-        Map<String, String> loginParams = Map.of("email", "user1@email.com", "password", "1234");
+        Map<String, String> loginParams = Map.of("email", "1111@email.com", "password", "1234");
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

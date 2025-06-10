@@ -75,6 +75,21 @@ public class ReservationService {
                        meetingRoom, request.reservationDate(), startTime, endTime);
     }
 
+    public List<ReservationResponse> getReservations() {
+        return reservationRepository.findAll()
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
+    }
+
+    public List<ReservationResponse> getMyReservations(final LoginMember loginMember) {
+        Member member = getMember(loginMember);
+        return reservationRepository.findByMember(member)
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
+    }
+
     private MeetingRoom getMeetingRoom(final String meetingRoomName) {
         return meetingRoomRepository.findByRoomName(meetingRoomName)
                 .orElseThrow(() -> new IllegalArgumentException(""));
@@ -83,12 +98,5 @@ public class ReservationService {
     private Member getMember(final LoginMember loginMember) {
         return memberRepository.findById(loginMember.id())
                 .orElseThrow(() -> new IllegalArgumentException(""));
-    }
-
-    public List<ReservationResponse> getReservations() {
-        return reservationRepository.findAll()
-                .stream()
-                .map(ReservationResponse::from)
-                .toList();
     }
 }

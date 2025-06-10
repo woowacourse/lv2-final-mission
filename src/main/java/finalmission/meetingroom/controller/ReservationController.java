@@ -30,6 +30,13 @@ public class ReservationController {
                 .body(responses);
     }
 
+    @GetMapping("/my")
+    public ResponseEntity<List<ReservationResponse>> getMyMeetingRoomReservations(final LoginMember loginMember) {
+        List<ReservationResponse> responses = reservationService.getMyReservations(loginMember);
+        return ResponseEntity.ok()
+                .body(responses);
+    }
+
     @PostMapping
     public ResponseEntity<ReservationResponse> createMeetingRoomReservation(
             @RequestBody final ReservationCreateRequest request,

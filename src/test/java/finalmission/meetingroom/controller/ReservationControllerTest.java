@@ -23,7 +23,6 @@ class ReservationControllerTest {
     @DisplayName("회의실 예약 생성 요청을 보낸다.")
     @Test
     void postMeetingRoomReservation() {
-        String tokenValue = getUserTokenValue();
         Map<String, Object> reservationParams = Map.of(
                 "meetingRoomName", "임팩트룸",
                 "reservationDate", LocalDate.now().plusDays(1L),
@@ -32,7 +31,7 @@ class ReservationControllerTest {
         );
 
         RestAssured.given().log().all()
-                .cookie("token", tokenValue)
+                .cookie("token", getUserTokenValue("1111@email.com", "1234"))
                 .contentType(ContentType.JSON)
                 .body(reservationParams)
                 .when().post("/reservations")
@@ -43,34 +42,86 @@ class ReservationControllerTest {
     @DisplayName("모든 회의실 예약 현황을 조회한다.")
     @Test
     void getMeetingRoomReservations() {
-        String tokenValue = getUserTokenValue();
+        String userTokenValue = getUserTokenValue("1111@email.com", "1234");
         Map<String, Object> reservationParams = Map.of(
                 "meetingRoomName", "임팩트룸",
                 "reservationDate", LocalDate.now().plusDays(1L),
                 "startAt", "10:00",
                 "endAt", "11:00"
         );
+        Map<String, Object> reservationParams2 = Map.of(
+                "meetingRoomName", "임팩트룸",
+                "reservationDate", LocalDate.now().plusDays(1L),
+                "startAt", "11:01",
+                "endAt", "12:00"
+        );
 
         RestAssured.given().log().all()
-                .cookie("token", tokenValue)
+                .cookie("token", userTokenValue)
                 .contentType(ContentType.JSON)
                 .body(reservationParams)
                 .when().post("/reservations")
-                .then().log().all()
-                .statusCode(201);
+                .then();
 
         RestAssured.given().log().all()
-                .cookie("token", tokenValue)
+                .cookie("token", userTokenValue)
+                .contentType(ContentType.JSON)
+                .body(reservationParams2)
+                .when().post("/reservations")
+                .then();
+
+        RestAssured.given().log().all()
+                .cookie("token", userTokenValue)
                 .contentType(ContentType.JSON)
                 .body(reservationParams)
                 .when().get("/reservations")
                 .then().log().all()
                 .statusCode(200)
+                .body("size()", is(2));
+    }
+
+    @DisplayName("나의 회의실 예약 현황을 조회한다.")
+    @Test
+    void getMyMeetingRoomReservations() {
+        Map<String, Object> reservationParams = Map.of(
+                "meetingRoomName", "임팩트룸",
+                "reservationDate", LocalDate.now().plusDays(1L),
+                "startAt", "10:00",
+                "endAt", "11:00"
+        );
+        Map<String, Object> reservationParams2 = Map.of(
+                "meetingRoomName", "임팩트룸",
+                "reservationDate", LocalDate.now().plusDays(1L),
+                "startAt", "12:00",
+                "endAt", "13:00"
+        );
+
+        String myToken = getUserTokenValue("1111@email.com", "1234");
+        RestAssured.given().log().all()
+                .cookie("token", myToken)
+                .contentType(ContentType.JSON)
+                .body(reservationParams)
+                .when().post("/reservations")
+                .then();
+        RestAssured.given().log().all()
+                .cookie("token", getUserTokenValue("2222@email.com", "1234"))
+                .contentType(ContentType.JSON)
+                .body(reservationParams2)
+                .when().post("/reservations")
+                .then();
+
+        RestAssured.given().log().all()
+                .cookie("token", myToken)
+                .contentType(ContentType.JSON)
+                .body(reservationParams)
+                .when().get("/reservations/my")
+                .then().log().all()
+                .statusCode(200)
                 .body("size()", is(1));
     }
 
-    private String getUserTokenValue() {
-        Map<String, String> loginParams = Map.of("email", "user1@email.com", "password", "1234");
+    private String getUserTokenValue(final String email, final String password) {
+        Map<String, String> loginParams = Map.of("email", email, "password", password);
 
         return RestAssured.given()
                 .contentType(ContentType.JSON)

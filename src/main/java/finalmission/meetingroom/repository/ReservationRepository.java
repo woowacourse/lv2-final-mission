@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import finalmission.meetingroom.domain.MeetingRoom;
+import finalmission.meetingroom.domain.Member;
 import finalmission.meetingroom.domain.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -20,6 +21,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             JOIN FETCH r.member
             """)
     List<Reservation> findAll();
+
+    @Query("""
+            SELECT r
+            FROM Reservation r
+            JOIN FETCH r.meetingRoom
+            JOIN FETCH r.member
+            WHERE r.member = :member
+            """)
+    List<Reservation> findByMember(Member member);
 
     boolean existsByMeetingRoomAndReservationDateAndStartAtBetween(
             MeetingRoom meetingRoom,
