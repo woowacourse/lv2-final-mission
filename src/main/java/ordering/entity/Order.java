@@ -48,6 +48,18 @@ public class Order {
     public Order() {
     }
 
+    public Order(User user, Category category, Product product, Long count, String detail,
+        Double amount, LocalDateTime createdAt, EmailStatus emailStatus) {
+        this.user = user;
+        this.category = category;
+        this.product = product;
+        this.count = count;
+        this.detail = detail;
+        this.amount = amount;
+        this.createdAt = createdAt;
+        this.emailStatus = emailStatus;
+    }
+
     public Long getId() {
         return id;
     }
