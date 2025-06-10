@@ -1,7 +1,6 @@
 package finalmission.fake;
 
 import finalmission.domain.Member;
-import finalmission.domain.NicknameReservation;
 import finalmission.repository.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,14 @@ public class FakeMemberRepository implements MemberRepository {
         ReflectionTestUtils.setField(member, "id", ++index);
         members.add(member);
         return member;
+    }
+
+    @Override
+    public Optional<Member> findByEmailAndPassword(String email, String password) {
+        return members.stream()
+                .filter(member -> member.getEmail().equals(email))
+                .filter(member -> member.getPassword().equals(password))
+                .findAny();
     }
 
     @Override

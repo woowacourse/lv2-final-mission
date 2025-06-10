@@ -51,11 +51,6 @@ public class NicknameReservationService {
         }
     }
 
-    private Member getMember(long memberId) {
-        return memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
-    }
-
     /**
      * TODO
      * 리팩터링
@@ -71,5 +66,19 @@ public class NicknameReservationService {
     private NicknameReservation getReservation(long reservationId) {
         return nicknameReservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
+    }
+
+    public List<NicknameReservation> findAll() {
+        return nicknameReservationRepository.findAll();
+    }
+
+    public List<NicknameReservation> findMine(long memberId) {
+        Member member = getMember(memberId);
+        return nicknameReservationRepository.findAllByMember(member);
+    }
+
+    private Member getMember(long memberId) {
+        return memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
     }
 }
