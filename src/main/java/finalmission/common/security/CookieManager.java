@@ -1,4 +1,4 @@
-package finalmission.member.service;
+package finalmission.common.security;
 
 import finalmission.common.config.CookieProperties;
 import jakarta.servlet.http.HttpServletResponse;

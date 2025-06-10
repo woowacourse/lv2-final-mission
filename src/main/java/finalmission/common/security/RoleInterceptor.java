@@ -1,7 +1,6 @@
 package finalmission.common.security;
 
 import finalmission.member.domain.MemberRole;
-import finalmission.member.service.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
@@ -49,6 +48,7 @@ public class RoleInterceptor implements HandlerInterceptor {
         if (token == null) {
             throw new IllegalArgumentException("토큰이 존재하지 않습니다.");
         }
+        jwtProvider.validateJwtToken(token);
         MemberRole actualRole = MemberRole.from(jwtProvider.getClaim(token, "role"));
         if (memberRole == MemberRole.ADMIN && actualRole == MemberRole.REGULAR) {
             throw new IllegalArgumentException("접근할 수 없습니다.");

@@ -3,7 +3,7 @@ package finalmission.common.config;
 import finalmission.common.security.AuthorizationExtractor;
 import finalmission.common.security.MemberInfoArgumentResolver;
 import finalmission.common.security.RoleInterceptor;
-import finalmission.member.service.JwtProvider;
+import finalmission.common.security.JwtProvider;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
