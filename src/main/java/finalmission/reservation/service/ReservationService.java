@@ -2,10 +2,14 @@ package finalmission.reservation.service;
 
 import finalmission.member.domain.Member;
 import finalmission.member.repository.MemberRepository;
+import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.domain.ReservationInformation;
 import finalmission.reservation.repository.ReservationInformationRepository;
+import finalmission.reservation.repository.ReservationRepository;
 import finalmission.reservation.service.dto.CreateReservationInformationRequest;
-import finalmission.reservation.service.dto.CreateReservationInformationResponse;
+import finalmission.reservation.service.dto.ReservationInformationResponse;
+import finalmission.reservation.service.dto.CreateReservationRequest;
+import finalmission.reservation.service.dto.ReservationResponse;
 import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
@@ -13,21 +17,36 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReservationService {
 
+    private final ReservationRepository reservationRepository;
     private final ReservationInformationRepository reservationInformationRepository;
     private final RestaurantRepository restaurantRepository;
     private final MemberRepository memberRepository;
 
     public ReservationService(
+            final ReservationRepository reservationRepository,
             final ReservationInformationRepository reservationInformationRepository,
             final RestaurantRepository restaurantRepository,
             final MemberRepository memberRepository
     ) {
+        this.reservationRepository = reservationRepository;
         this.reservationInformationRepository = reservationInformationRepository;
         this.restaurantRepository = restaurantRepository;
         this.memberRepository = memberRepository;
     }
 
-    public CreateReservationInformationResponse createReservationInformation(
+    public ReservationResponse createReservation(CreateReservationRequest request, Long memberId) {
+        Member member = getMember(memberId);
+        ReservationInformation restaurantInformation = getRestaurantInformation(request.reservationInformationId());
+        Reservation saved = reservationRepository.save(new Reservation(restaurantInformation, member));
+        return ReservationResponse.from(saved);
+    }
+
+    private ReservationInformation getRestaurantInformation(Long id) {
+        return reservationInformationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 예약 정보입니다."));
+    }
+
+    public ReservationInformationResponse createReservationInformation(
             CreateReservationInformationRequest request,
             Long memberId
     ) {
@@ -37,7 +56,7 @@ public class ReservationService {
         validateOwner(restaurant, member);
 
         ReservationInformation saved = reservationInformationRepository.save(request.toEntity(restaurant));
-        return CreateReservationInformationResponse.from(saved);
+        return ReservationInformationResponse.from(saved);
     }
 
     private Restaurant getRestaurant(final Long id) {

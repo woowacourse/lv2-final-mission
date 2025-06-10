@@ -4,7 +4,9 @@ import finalmission.auth.MemberSubject;
 import finalmission.auth.RequiredOwner;
 import finalmission.reservation.service.ReservationService;
 import finalmission.reservation.service.dto.CreateReservationInformationRequest;
-import finalmission.reservation.service.dto.CreateReservationInformationResponse;
+import finalmission.reservation.service.dto.ReservationInformationResponse;
+import finalmission.reservation.service.dto.CreateReservationRequest;
+import finalmission.reservation.service.dto.ReservationResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +25,20 @@ public class ReservationController {
 
     @PostMapping("/reservation-info")
     @RequiredOwner
-    public ResponseEntity<CreateReservationInformationResponse> uploadReservationInfo(
+    public ResponseEntity<ReservationInformationResponse> uploadReservationInfo(
             @MemberSubject Long memberId,
             @RequestBody @Valid CreateReservationInformationRequest request
     ) {
-        CreateReservationInformationResponse response = reservationService.createReservationInformation(request, memberId);
+        ReservationInformationResponse response = reservationService.createReservationInformation(request, memberId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/reservation")
+    public ResponseEntity<ReservationResponse> createReservation(
+            @MemberSubject Long memberId,
+            @RequestBody @Valid CreateReservationRequest request
+    ) {
+        ReservationResponse response = reservationService.createReservation(request, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

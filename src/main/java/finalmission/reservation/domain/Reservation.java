@@ -27,4 +27,9 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Member customer;
+
+    public Reservation(ReservationInformation reservationInformation, Member customer) {
+        this.reservationInformation = reservationInformation;
+        this.customer = customer;
+    }
 }

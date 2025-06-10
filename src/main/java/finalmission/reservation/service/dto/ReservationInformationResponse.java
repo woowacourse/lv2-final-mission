@@ -6,15 +6,15 @@ import finalmission.restaurant.service.RestaurantResponse;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record CreateReservationInformationResponse(
+public record ReservationInformationResponse(
         Long id,
         RestaurantResponse restaurantResponse,
         LocalDate date,
         LocalTime startAt,
         Integer maxCount
 ) {
-    public static CreateReservationInformationResponse from(ReservationInformation information) {
-        return new CreateReservationInformationResponse(
+    public static ReservationInformationResponse from(ReservationInformation information) {
+        return new ReservationInformationResponse(
                 information.getId(),
                 RestaurantResponse.from(information.getRestaurant()),
                 information.getDate(),
