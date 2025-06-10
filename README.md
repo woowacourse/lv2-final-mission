@@ -77,6 +77,7 @@ Content-Type: application/json
 ```
 POST /dateTimes HTTP/1.1
 {  
+    "coachId": 1,
     "dateTime": "2025-08-09 10:00"
 }
 ```
@@ -103,6 +104,9 @@ Content-Type: application/json
 + [ ] 예약 가능 시간 삭제
 ```
 DELETE /dateTimes/{id} HTTP/1.1
+{  
+    "coachId": 1,
+}
 ```
 ```
 HTTP/1.1 204
@@ -114,6 +118,7 @@ Content-Type: application/json
 ```
 POST /reservations HTTP/1.1
 {  
+    "crewId":1,
     "coach": "포비"
     "dateTime": "2025-08-09 10:00"
 }
@@ -125,7 +130,7 @@ Location: /reservations/{id}
 ```
 + [ ] 크루별 예약 조회
 ```
-GET /reservations HTTP/1.1
+GET /reservations?crew="링크" HTTP/1.1
 ```
 ```
 HTTP/1.1 201
