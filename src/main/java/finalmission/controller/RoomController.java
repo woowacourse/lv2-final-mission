@@ -3,6 +3,7 @@ package finalmission.controller;
 import finalmission.controller.dto.RoomCreateRequest;
 import finalmission.controller.dto.RoomCreateResponse;
 import finalmission.controller.dto.RoomResponse;
+import finalmission.controller.dto.RoomWithoutParticipantsResponse;
 import finalmission.service.RoomService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -28,8 +30,15 @@ public class RoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RoomResponse>> findAll() {
-        final List<RoomResponse> response = roomService.findAll();
+    public ResponseEntity<RoomResponse> findById(@RequestParam("id") final Long id) {
+        final RoomResponse response = roomService.getById(id);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<RoomWithoutParticipantsResponse>> findAll() {
+        final List<RoomWithoutParticipantsResponse> response = roomService.findAll();
 
         return ResponseEntity.ok(response);
     }

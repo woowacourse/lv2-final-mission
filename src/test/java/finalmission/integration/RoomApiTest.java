@@ -80,6 +80,28 @@ public class RoomApiTest {
         assertThat(roomMemberRepository.findAll()).isNotEmpty();
     }
 
+    @DisplayName("방 정보와 참여 인원들을 조회한다.")
+    @Test
+    void findById() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        // when & then
+        RestAssured.given().log().all()
+                .param("id", room.getId())
+                .when().get("/room")
+                .then().log().all()
+                .statusCode(200)
+                .body("name", response -> equalTo("5대5 내전 구함"));
+    }
+
     @DisplayName("모든 방을 조회한다.")
     @Test
     void findAll() {
@@ -95,7 +117,7 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .when().get("/room")
+                .when().get("/room/all")
                 .then().log().all()
                 .statusCode(200)
                 .body("[0].name", response -> equalTo("5대5 내전 구함"));

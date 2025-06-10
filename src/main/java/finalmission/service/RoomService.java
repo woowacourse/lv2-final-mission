@@ -2,10 +2,12 @@ package finalmission.service;
 
 import finalmission.controller.dto.RoomCreateRequest;
 import finalmission.controller.dto.RoomCreateResponse;
+import finalmission.controller.dto.RoomResponse;
 import finalmission.controller.dto.RoomWithoutParticipantsResponse;
 import finalmission.domain.Member;
 import finalmission.domain.Room;
 import finalmission.domain.RoomMember;
+import finalmission.exception.NotFoundException;
 import finalmission.repository.RoomMemberRepository;
 import finalmission.repository.RoomRepository;
 import jakarta.transaction.Transactional;
@@ -30,6 +32,13 @@ public class RoomService {
         room.addRoomMember(roomMember);
 
         return RoomCreateResponse.from(room);
+    }
+
+    public RoomResponse getById(final Long id) {
+        final Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당 id의 내전방을 찾을 수 없습니다. id: " + id));
+
+        return RoomResponse.from(room);
     }
 
     public List<RoomWithoutParticipantsResponse> findAll() {
