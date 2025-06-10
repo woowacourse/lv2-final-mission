@@ -20,19 +20,17 @@ public class Member {
     }
 
     public Member(Long id, String name, String email, String password) {
-        validate(id, name, email, password);
+        validate(name, email, password);
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    private void validate(Long id, String name, String email, String password) {
-        validateID(id);
+    private void validate(String name, String email, String password) {
         validateName(name);
         validateEmail(email);
         validatePassword(password);
-
     }
 
     private void validatePassword(String password) {
@@ -50,12 +48,6 @@ public class Member {
     private void validateName(String name) {
         if (name.isBlank()) {
             throw new MemberException("이름 없이는 멤버를 생성할 수 없습니다.");
-        }
-    }
-
-    private void validateID(Long id) {
-        if (id == null) {
-            throw new MemberException("잘못된 ID입니다.");
         }
     }
 

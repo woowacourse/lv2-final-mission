@@ -1,7 +1,8 @@
 package finalmission.service;
 
-import finalmission.domain.LoginInfo;
 import finalmission.domain.Member;
+import finalmission.dto.LoginInfo;
+import finalmission.dto.SignUpInfo;
 import finalmission.exception.MemberException;
 import finalmission.repository.MemberRepository;
 import io.jsonwebtoken.Jwts;
@@ -30,5 +31,12 @@ public class MemberService {
                 .signWith(secretKey)
                 .compact();
         return jwt;
+    }
+
+    public Member createMember(SignUpInfo signUpInfo) {
+        Member member = new Member(null, signUpInfo.name(), signUpInfo.email(), signUpInfo.password());
+        Member savedMember = memberRepository.save(member);
+
+        return savedMember;
     }
 }

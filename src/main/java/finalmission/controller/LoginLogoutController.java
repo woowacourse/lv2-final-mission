@@ -1,6 +1,6 @@
 package finalmission.controller;
 
-import finalmission.domain.LoginInfo;
+import finalmission.dto.LoginInfo;
 import finalmission.exception.MemberException;
 import finalmission.service.MemberService;
 import jakarta.servlet.http.Cookie;
