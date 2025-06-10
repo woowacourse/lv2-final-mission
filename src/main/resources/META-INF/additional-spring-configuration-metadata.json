@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "randommer.api-key",
+      "type": "java.lang.String",
+      "description": "Description for randommer.api-key."
+    },
+    {
+      "name": "randommer.uri",
+      "type": "java.lang.String",
+      "description": "Description for randommer.uri."
+    }
+  ]
+}
