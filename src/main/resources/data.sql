@@ -1,7 +1,7 @@
 -- 사용자 등록
-INSERT INTO users (email, username, password)
-VALUES ('example@gmail.com', '지메일', 'password'),
-       ('example@naver.com', '네이버', 'password');
+INSERT INTO users (username)
+VALUES ('사용자1'),
+       ('사용자2');
 
 -- 상품 카테고리 등록
 INSERT INTO category (id, name)
