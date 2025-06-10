@@ -37,3 +37,19 @@
   - 200 CREATED
   - **헤더** 
     - Set-Cookie: "token={발급한 인증 토큰}"
+
+## BOOKING
+
+### 일일권 예약
+> POST /bookings
+
+- REQUEST HEADER
+  - COOKIE
+    - "token": 로그인을 통해 발급받은 JWT 토큰
+
+- REQUEST BODY
+  - "gymId": 헬스장 ID
+  - "date": 예약할 날짜
+
+- RESPONSE
+  - 201 CREATED
