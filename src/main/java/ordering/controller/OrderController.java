@@ -8,6 +8,7 @@ import ordering.service.coordinator.OrderMailCoordinator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,5 +32,11 @@ public class OrderController {
     @PostMapping
     public OrderResponse createOrder(OrderRegister request) {
         return orderMailCoordinator.sendOrder(request);
+    }
+
+    @PutMapping
+    public OrderResponse modifyOrder(OrderRegister request) {
+        // TODO: 발주 내역 수정
+        return null;
     }
 }
