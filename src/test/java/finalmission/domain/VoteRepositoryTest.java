@@ -35,7 +35,8 @@ class VoteRepositoryTest {
                 LocalDate.of(2025, 5, 17),
                 LocalDate.of(2025, 5, 20),
                 LocalTime.of(8, 0),
-                LocalTime.of(22, 0)
+                LocalTime.of(22, 0),
+                true
         );
         roomRepository.save(room);
         Voter voter = new Voter("dompoo", "1234", room);
