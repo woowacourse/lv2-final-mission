@@ -4,14 +4,14 @@ import finalmission.ballparkreservation.auth.MemberAuthentication;
 import finalmission.ballparkreservation.auth.dto.LoginMember;
 import finalmission.ballparkreservation.reservation.dto.ReservationCreateRequest;
 import finalmission.ballparkreservation.reservation.dto.ReservationCreateResponse;
+import finalmission.ballparkreservation.reservation.dto.ReservationResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
@@ -20,12 +20,28 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+//    @PostMapping
+//    public ResponseEntity<ReservationCreateResponse> create(
+//            @Valid @RequestBody ReservationCreateRequest request,
+//            @MemberAuthentication LoginMember member
+//    ) {
+//        ReservationCreateResponse response = reservationService.create(request, member);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+//    }
+
     @PostMapping
     public ResponseEntity<ReservationCreateResponse> create(
-            @Valid @RequestBody ReservationCreateRequest request,
+            @Valid @RequestBody ReservationCreateRequest request
+    ) {
+        ReservationCreateResponse response = reservationService.createV2(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReservationResponse>> getAll(
             @MemberAuthentication LoginMember member
     ) {
-        ReservationCreateResponse response = reservationService.create(request, member);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        List<ReservationResponse> reservations = reservationService.getAll();
+        return ResponseEntity.ok(reservations);
     }
 }

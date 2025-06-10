@@ -26,4 +26,16 @@ public class Reservation {
         this.member = member;
         this.schedule = schedule;
     }
+
+    public int getAmount(final boolean isHoliday) {
+        int amount = schedule.getWeekdayAmount();
+        if (isHoliday || schedule.isWeekend()) {
+            amount = schedule.getHolidayAmount();
+        }
+
+        if (member.isDiscountApply()) {
+            return (int) (amount * 0.7);
+        }
+        return amount;
+    }
 }
