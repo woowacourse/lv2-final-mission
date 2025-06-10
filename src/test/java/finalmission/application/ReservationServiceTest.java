@@ -3,6 +3,7 @@ package finalmission.application;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import finalmission.application.dto.request.CreateReservationRequest;
+import finalmission.application.dto.request.UpdateReservationRequest;
 import finalmission.application.dto.response.CreateReservationResponse;
 import finalmission.domain.Email;
 import finalmission.domain.Member;
@@ -12,6 +13,7 @@ import finalmission.domain.MonsterEnergyStock;
 import finalmission.domain.MonsterEnergyStockRepository;
 import finalmission.domain.Refrigerator;
 import finalmission.domain.RefrigeratorRepository;
+import finalmission.domain.Reservation;
 import finalmission.domain.ReservationRepository;
 import finalmission.domain.Role;
 import jakarta.persistence.EntityManager;
@@ -68,5 +70,25 @@ class ReservationServiceTest extends AbstractServiceIntegrationTest {
                 .isPresent().get()
                 .extracting("stock")
                 .isEqualTo(2);
+    }
+
+    @Test
+    void 사용자는_예약의_재고를_변경할_수_있다() {
+        //given
+        Member member = memberRepository.save(Member.create(new Email("user@gmail.com"), "서프", "password", Role.USER));
+        Refrigerator refrigerator = refrigeratorRepository.save(new Refrigerator("우테코"));
+        monsterEnergyStockRepository.save(new MonsterEnergyStock(MonsterEnergy.ULTRA, 10, refrigerator));
+        Reservation reservation = reservationRepository.save(
+                Reservation.create(MonsterEnergy.ULTRA, 8, LocalDateTime.now().plusDays(3), refrigerator, member,
+                        LocalDateTime.now()));
+        //when
+        reservationService.update(member.getId(), reservation.getId(), new UpdateReservationRequest(9));
+
+        //then
+        assertThat(reservationRepository.findById(reservation.getId()))
+                .isPresent()
+                .get()
+                .extracting("monsterEnergy", "quantity")
+                .containsExactly(MonsterEnergy.ULTRA, 9);
     }
 }

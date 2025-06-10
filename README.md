@@ -7,9 +7,7 @@
     - 몬스터 에너지 울트라 시트라 (Monster Energy Ultra Citra)
     - 몬스터 에너지 망고 로코 (Monster Energy Mango Loco)
     - 몬스터 에너지 제로 슈거 (Monster Energy Zero Sugar)
-
 - 우테코 냉장고에 예약하려는 몬스터 에너지 드링크의 재고가 부족하다면 예약할 수 없습니다.
-- 공휴일은 우테코 냉장고가 쉬는 날이므로 예약할 수 없습니다.
 
 ### 기능 요구 사항
 
