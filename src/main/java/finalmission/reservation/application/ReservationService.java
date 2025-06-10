@@ -35,7 +35,10 @@ public class ReservationService {
         StartAt startAt = new StartAt(request.startAt());
         EndAt endAt = new EndAt(request.endAt());
 
+        meetingRoom.checkAvailableTime(startAt.getValue(), endAt.getValue());
+
         Reservation reservation = new Reservation(member, meetingRoom, date, startAt, endAt);
+        reservation.checkValidTime();
         reservationRepository.save(reservation);
         return ReservationResponse.from(reservation);
     }
@@ -71,20 +74,27 @@ public class ReservationService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
         validateIsOwner(reservation, memberId);
 
+        ReservationDate date;
+        StartAt startAt;
+        EndAt endAt;
+
         if (request.date() != null) {
-            ReservationDate date = new ReservationDate(request.date());
+            date = new ReservationDate(request.date());
             reservation.updateDate(date);
         }
 
         if (request.startAt() != null) {
-            StartAt startAt = new StartAt(request.startAt());
+            startAt = new StartAt(request.startAt());
             reservation.updateStartAt(startAt);
         }
 
         if (request.endAt() != null) {
-            EndAt endAt = new EndAt(request.endAt());
+            endAt = new EndAt(request.endAt());
             reservation.updateEndAt(endAt);
         }
+
+        reservation.checkValidTime();
+        reservation.getMeetingRoom().checkAvailableTime(reservation.getStartAt(), reservation.getEndAt());
 
         return ReservationResponse.from(reservation);
     }

@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -72,5 +73,15 @@ public class Reservation {
 
     public void updateEndAt(EndAt endAt) {
         this.endAt = endAt;
+    }
+
+    public void checkValidTime() {
+        if (startAt.getValue().isAfter(endAt.getValue())) {
+            throw new IllegalArgumentException("시간시간이 끝 시간보다 더 뒤에 있습니다.");
+        }
+
+        if (LocalDateTime.of(date.getValue(), startAt.getValue()).isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("과거 시간에는 예약할 수 없습니다.");
+        }
     }
 }
