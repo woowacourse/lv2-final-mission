@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,5 +64,22 @@ public class Rent {
     private Long calculateFee(Long feePerMinute, LocalTime startTime, LocalTime returnTime) {
         long minutes = Duration.between(startTime, returnTime).toMinutes();
         return feePerMinute * minutes;
+    }
+
+    public boolean canBeCanceledBy(Member member) {
+        return this.member.equals(member);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Rent rent)) {
+            return false;
+        }
+        return Objects.equals(id, rent.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

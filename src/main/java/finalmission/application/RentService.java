@@ -71,4 +71,15 @@ public class RentService {
                 .map(ResponseRentDetail::from)
                 .toList();
     }
+
+    @Transactional
+    public void cancelById(Member member, Long rentId) {
+        Rent rent = rentRepository.findByIdWithCarAndMember(rentId)
+                .orElseThrow(() -> new IllegalArgumentException("렌트 이력을 찾을 수 없습니다."));
+        boolean cancelable = rent.canBeCanceledBy(member);
+        if (!cancelable) {
+            throw new IllegalArgumentException("본인 예약만 취소할 수 있습니다.");
+        }
+        rentRepository.delete(rent);
+    }
 }
