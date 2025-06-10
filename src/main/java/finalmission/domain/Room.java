@@ -7,8 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +26,8 @@ public class Room {
         this.id = Id.random();
     }
 
-    public Time createTime(String username, LocalDate date, LocalTime time) {
-        Time newTime = new Time(username, date, time, this);
+    public Time createTime(String username, LocalDateTime dateTime) {
+        Time newTime = new Time(username, dateTime, this);
         this.times.add(newTime);
         return newTime;
     }

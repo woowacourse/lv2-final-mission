@@ -32,7 +32,7 @@ public class MyController {
     ) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
         List<Time> createdTimes = request.values().stream()
-                .map(dateTime -> room.createTime(request.username(), dateTime.toLocalDate(), dateTime.toLocalTime()))
+                .map(dateTime -> room.createTime(request.username(), dateTime))
                 .toList();
         timeRepository.saveAll(createdTimes);
     }
@@ -54,7 +54,7 @@ public class MyController {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
         List<Time> times = room.getTimesOf(username);
         List<LocalDateTime> dateTimes = times.stream()
-                .map(time -> LocalDateTime.of(time.getDate(), time.getTime()))
+                .map(Time::getDateTime)
                 .toList();
         return TimeResponses.from(username, dateTimes);
     }
