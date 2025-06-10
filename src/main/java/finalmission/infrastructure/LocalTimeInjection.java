@@ -1,11 +1,11 @@
 package finalmission.infrastructure;
 
-import finalmission.domain.service.TimeInject;
+import finalmission.domain.service.TimeInjection;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LocalTimeInject implements TimeInject {
+public class LocalTimeInjection implements TimeInjection {
 
     @Override
     public LocalDateTime now() {

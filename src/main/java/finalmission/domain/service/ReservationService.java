@@ -20,22 +20,22 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final TrainerRepository trainerRepository;
     private final LessonTimeRepository lessonTimeRepository;
-    private final TimeInject timeInject;
+    private final TimeInjection timeInjection;
 
     public ReservationService(ReservationRepository reservationRepository, TrainerRepository trainerRepository,
                               LessonTimeRepository lessonTimeRepository,
-                              TimeInject timeInject) {
+                              TimeInjection timeInjection) {
         this.reservationRepository = reservationRepository;
         this.trainerRepository = trainerRepository;
         this.lessonTimeRepository = lessonTimeRepository;
-        this.timeInject = timeInject;
+        this.timeInjection = timeInjection;
     }
 
     public List<TrainerReservationResponse> getTrainersReservations(Long trainerId) {
         Trainer trainer = getTrainer(trainerId);
         List<Reservation> foundReservations = reservationRepository.findByTrainerAndDateAfterOrderByDateAsc(
                 trainer,
-                timeInject.now().toLocalDate()
+                timeInjection.now().toLocalDate()
         );
         return foundReservations.stream().map(reservation -> TrainerReservationResponse.from(
                 reservation.getDate(),

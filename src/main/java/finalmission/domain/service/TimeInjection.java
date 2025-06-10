@@ -2,7 +2,7 @@ package finalmission.domain.service;
 
 import java.time.LocalDateTime;
 
-public interface TimeInject {
+public interface TimeInjection {
 
     LocalDateTime now();
 }
