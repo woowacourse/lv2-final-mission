@@ -1,0 +1,28 @@
+package finalmission.music.controller;
+
+import finalmission.music.controller.dto.LoginRequest;
+import finalmission.music.domain.Member;
+import finalmission.music.service.LoginService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class AuthController {
+
+    private final LoginService loginService;
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@RequestBody final LoginRequest loginRequest, final HttpServletRequest request) {
+        Member loginMember = loginService.login(loginRequest);
+
+        HttpSession session = request.getSession();
+        session.setAttribute("loginMember", loginMember);
+        return ResponseEntity.ok().build();
+    }
+}
