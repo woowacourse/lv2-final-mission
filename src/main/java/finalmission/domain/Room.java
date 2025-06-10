@@ -35,9 +35,21 @@ public class Room {
     }
 
     public Time createTime(String username, LocalDateTime dateTime) {
+        validateDateTimeIsInBoundary(dateTime);
         Time newTime = new Time(username, dateTime, this);
         this.times.add(newTime);
         return newTime;
+    }
+
+    private void validateDateTimeIsInBoundary(LocalDateTime dateTime) {
+        LocalDate date = dateTime.toLocalDate();
+        LocalTime time = dateTime.toLocalTime();
+        if (date.isBefore(startDate) || date.isAfter(endDate)) {
+            throw new IllegalArgumentException("시작날짜와 종료날짜 사이어야 합니다.");
+        }
+        if (time.isBefore(startTime) || time.isAfter(endTime)) {
+            throw new IllegalArgumentException("시작시간과 종료시간 사이어야 합니다.");
+        }
     }
 
     public List<Time> getTimesOf(String username) {
