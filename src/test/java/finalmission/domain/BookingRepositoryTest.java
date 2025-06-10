@@ -1,9 +1,12 @@
 package finalmission.domain;
 
+import static finalmission.TestFixtures.anyDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import finalmission.RepositoryTestHelper;
+import finalmission.TestFixtures;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +30,7 @@ class BookingRepositoryTest {
         var booking = new Booking(
             helper.saveAnyMember(),
             helper.saveAnyGym(),
-            BookingDate.of(2025, 6, 17)
+            anyDate()
         );
 
         var savedBooking = bookingRepository.save(booking);
@@ -40,5 +43,19 @@ class BookingRepositoryTest {
     void getById() {
         assertThatThrownBy(() -> bookingRepository.getById(UUID.randomUUID()))
             .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("특정 사용자의 예약을 조회한다.")
+    void findAllByMember() {
+        var member = helper.saveAnyMember();
+
+        bookingRepository.save(new Booking(member, helper.saveAnyGym(), anyDate()));
+        bookingRepository.save(new Booking(member, helper.saveAnyGym(), anyDate()));
+        bookingRepository.save(new Booking(member, helper.saveAnyGym(), anyDate()));
+
+        var bookings = bookingRepository.findAllByMember(member);
+
+        assertThat(bookings).hasSize(3);
     }
 }

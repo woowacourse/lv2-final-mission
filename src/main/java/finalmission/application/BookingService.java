@@ -7,6 +7,7 @@ import finalmission.domain.GymRepository;
 import finalmission.domain.Member;
 import finalmission.domain.MemberRepository;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,10 @@ public class BookingService {
         var gym = gymRepository.getById(gymId);
         var booking = new Booking(member, gym, bookingDate);
         return bookingRepository.save(booking);
+    }
+
+    public List<Booking> getMyBookings(final String memberId) {
+        var member = memberRepository.getById(memberId);
+        return bookingRepository.findAllByMember(member);
     }
 }
