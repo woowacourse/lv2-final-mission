@@ -18,3 +18,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+randommer:
+  url: https://randommer.io/api
+  api-key: f4c3e01ef9104ed495bd258e76eebb00

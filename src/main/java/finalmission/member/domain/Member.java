@@ -19,13 +19,17 @@ public class Member {
 
     private String name;
 
+    private String nickname;
+
     private Member(final Long id,
-                   final String name) {
+                   final String name,
+                   final String nickname) {
         this.id = id;
         this.name = name;
+        this.nickname = nickname;
     }
 
-    public static Member create(final String name) {
-        return new Member(null, name);
+    public static Member create(final String name, final String nickname) {
+        return new Member(null, name, nickname);
     }
 }
