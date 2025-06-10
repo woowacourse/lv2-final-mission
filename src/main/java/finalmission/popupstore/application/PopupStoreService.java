@@ -1,6 +1,6 @@
 package finalmission.popupstore.application;
 
-import finalmission.popupstore.application.in.dto.CreatePopUpStore;
+import finalmission.popupstore.application.in.dto.OpenPopUpStore;
 import finalmission.popupstore.application.out.PopupStoreRepository;
 import finalmission.popupstore.domain.PopupStore;
 import finalmission.shopkeeper.application.out.ShopkeeperRepository;
@@ -18,7 +18,7 @@ public class PopupStoreService {
     private final ShopkeeperRepository shopkeeperRepository;
 
     @Transactional
-    public void open(final CreatePopUpStore command) {
+    public void open(final OpenPopUpStore command) {
         Shopkeeper shopkeeper = shopkeeperRepository.findById(command.shopkeeperId())
                 .orElseThrow();
 

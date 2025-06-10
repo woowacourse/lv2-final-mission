@@ -1,4 +1,4 @@
-package finalmission.reservation.application.in;
+package finalmission.reservation.application.in.dto;
 
 public record Reserve(
         Long reserverId,

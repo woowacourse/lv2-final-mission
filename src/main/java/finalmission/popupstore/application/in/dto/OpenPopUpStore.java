@@ -2,7 +2,7 @@ package finalmission.popupstore.application.in.dto;
 
 import java.time.LocalDateTime;
 
-public record CreatePopUpStore(
+public record OpenPopUpStore(
         String title,
         String content,
         LocalDateTime startAt,

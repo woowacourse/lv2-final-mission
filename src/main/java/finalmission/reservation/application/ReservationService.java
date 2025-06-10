@@ -4,7 +4,7 @@ import finalmission.member.application.out.MemberRepository;
 import finalmission.member.domain.Member;
 import finalmission.popupstore.application.out.PopupStoreRepository;
 import finalmission.popupstore.domain.PopupStore;
-import finalmission.reservation.application.in.Reserve;
+import finalmission.reservation.application.in.dto.Reserve;
 import finalmission.reservation.application.out.ReservationRepository;
 import finalmission.reservation.domain.Reservation;
 import java.time.LocalDateTime;

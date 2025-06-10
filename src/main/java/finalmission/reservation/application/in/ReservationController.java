@@ -1,6 +1,7 @@
 package finalmission.reservation.application.in;
 
 import finalmission.reservation.application.ReservationService;
+import finalmission.reservation.application.in.dto.Reserve;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

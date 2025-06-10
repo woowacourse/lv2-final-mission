@@ -1,7 +1,7 @@
 package finalmission.popupstore.application.in;
 
 import finalmission.popupstore.application.PopupStoreService;
-import finalmission.popupstore.application.in.dto.CreatePopUpStore;
+import finalmission.popupstore.application.in.dto.OpenPopUpStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class PopupStoreController {
     public final PopupStoreService popupStoreService;
 
     @PostMapping
-    public ResponseEntity<Void> open(@RequestBody final CreatePopUpStore request) {
+    public ResponseEntity<Void> open(@RequestBody final OpenPopUpStore request) {
         popupStoreService.open(request);
 
         return ResponseEntity
