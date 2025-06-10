@@ -1,4 +1,4 @@
-package finalmission.dto;
+package finalmission.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;

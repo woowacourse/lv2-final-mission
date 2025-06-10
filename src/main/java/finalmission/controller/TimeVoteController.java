@@ -1,6 +1,11 @@
 package finalmission.controller;
 
-import finalmission.dto.*;
+import finalmission.dto.request.RoomCreateRequest;
+import finalmission.dto.request.TimeAddRequest;
+import finalmission.dto.response.RoomCreateResponse;
+import finalmission.dto.response.RoomResponse;
+import finalmission.dto.response.TimeResponses;
+import finalmission.dto.response.TimeStaticsResponses;
 import finalmission.service.NameGenerator;
 import finalmission.service.TimeVoteService;
 import lombok.RequiredArgsConstructor;

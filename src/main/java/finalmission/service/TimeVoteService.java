@@ -1,10 +1,10 @@
 package finalmission.service;
 
 import finalmission.domain.*;
-import finalmission.dto.RoomCreateResponse;
-import finalmission.dto.RoomResponse;
-import finalmission.dto.TimeResponses;
-import finalmission.dto.TimeStaticsResponses;
+import finalmission.dto.response.RoomCreateResponse;
+import finalmission.dto.response.RoomResponse;
+import finalmission.dto.response.TimeResponses;
+import finalmission.dto.response.TimeStaticsResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
