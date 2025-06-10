@@ -1,6 +1,6 @@
 package finalmission.reservation.domain;
 
-import finalmission.user.domain.Customer;
+import finalmission.user.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,5 +26,5 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    private Member customer;
 }

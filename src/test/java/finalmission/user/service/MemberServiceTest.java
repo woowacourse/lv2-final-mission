@@ -1,7 +1,9 @@
 package finalmission.user.service;
 
-import finalmission.user.domain.Customer;
-import finalmission.user.service.dto.CreateCustomerRequest;
+import finalmission.auth.JwtTokenHandler;
+import finalmission.user.domain.Member;
+import finalmission.user.domain.vo.Role;
+import finalmission.user.service.dto.CreateMemberRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -13,14 +15,14 @@ import org.springframework.context.annotation.Import;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
-@Import({CustomerService.class})
-class CustomerServiceTest {
+@Import({MemberService.class, JwtTokenHandler.class})
+class MemberServiceTest {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    private CustomerService customerService;
+    private MemberService memberService;
 
     @DisplayName("중복되는 이메일의 계정은 생성할 수 없다.")
     @Test
@@ -30,14 +32,14 @@ class CustomerServiceTest {
         String email = "test@test.com";
         String password = "12341234";
 
-        Customer customer = new Customer(name, email, password);
-        entityManager.persist(customer);
+        Member member = new Member(Role.CUSTOMER, name, email, password);
+        entityManager.persist(member);
 
-        CreateCustomerRequest request = new CreateCustomerRequest(name, email, password);
+        CreateMemberRequest request = new CreateMemberRequest(name, email, password, Role.CUSTOMER.name());
 
         // when & then
         assertThatThrownBy(() -> {
-            customerService.create(request);
+            memberService.create(request);
         }).isInstanceOf(IllegalArgumentException.class);
      }
 }
