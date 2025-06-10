@@ -1,9 +1,11 @@
-package finalmission;
+package finalmission.dto;
+
+import finalmission.domain.Room;
 
 public record RoomCreateResponse(
         String roomId
 ) {
     public static RoomCreateResponse from(Room room) {
-        return new RoomCreateResponse(room.getId());
+        return new RoomCreateResponse(room.getId().value());
     }
 }
