@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 public record RoomResponse(
+        Long roomId,
         String name,
         LocalDate startDate,
         LocalTime startTime,
@@ -16,6 +17,7 @@ public record RoomResponse(
 ) {
     public static RoomResponse from(final Room room) {
         return new RoomResponse(
+                room.getId(),
                 room.getName(),
                 room.getStartDate(),
                 room.getStartTime(),

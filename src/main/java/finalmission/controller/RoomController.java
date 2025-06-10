@@ -42,4 +42,7 @@ public class RoomController {
 
         return ResponseEntity.ok(response);
     }
+//
+//    @GetMapping
+//    public ResponseEntity<Void> join()
 }

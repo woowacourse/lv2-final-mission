@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record RoomWithoutParticipantsResponse(
+        Long roomId,
         String name,
         LocalDate startDate,
         LocalTime startTime,
@@ -15,6 +16,7 @@ public record RoomWithoutParticipantsResponse(
 
     public static RoomWithoutParticipantsResponse from(final Room room) {
         return new RoomWithoutParticipantsResponse(
+                room.getId(),
                 room.getName(),
                 room.getStartDate(),
                 room.getStartTime(),
