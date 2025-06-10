@@ -1,4 +1,6 @@
-package finalmission.ballparkreservation.seat;
+package finalmission.ballparkreservation.schedule;
+
+import java.util.Arrays;
 
 public enum SeatRank {
     TABLE(55_000, 88_000),
@@ -11,6 +13,13 @@ public enum SeatRank {
     SeatRank(final int weekdayPrice, final int holidayPrice) {
         this.weekdayPrice = weekdayPrice;
         this.holidayPrice = holidayPrice;
+    }
+
+    public static SeatRank fromName(final String name) {
+        return Arrays.stream(SeatRank.values())
+                .filter(seatRank -> seatRank.name().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 좌석 유형입니다."));
     }
 
     public int getWeekdayPrice() {

@@ -1,15 +1,15 @@
 package finalmission.ballparkreservation.reservation;
 
 import finalmission.ballparkreservation.member.Member;
-import finalmission.ballparkreservation.seat.Seat;
+import finalmission.ballparkreservation.schedule.Schedule;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Reservation {
 
     @Id
@@ -20,13 +20,10 @@ public class Reservation {
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Seat seat;
+    private Schedule schedule;
 
-    private LocalDate date;
-
-    public Reservation(final Member member, final Seat seat, final LocalDate date) {
+    public Reservation(final Member member, final Schedule schedule) {
         this.member = member;
-        this.seat = seat;
-        this.date = date;
+        this.schedule = schedule;
     }
 }

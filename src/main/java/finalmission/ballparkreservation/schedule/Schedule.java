@@ -1,12 +1,16 @@
-package finalmission.ballparkreservation.seat;
+package finalmission.ballparkreservation.schedule;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Seat {
+@Getter
+public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,12 +18,15 @@ public class Seat {
 
     private int number;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private SeatRank rank;
 
-    public Seat(final int number, final SeatRank rank) {
+    private LocalDate date;
+
+    public Schedule(final int number, final SeatRank rank, final LocalDate date) {
         this.number = number;
         this.rank = rank;
+        this.date = date;
     }
 
     public int getWeekdayAmount() {
