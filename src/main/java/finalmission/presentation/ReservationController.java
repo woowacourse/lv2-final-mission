@@ -38,4 +38,9 @@ public class ReservationController {
     ) {
         return reservationService.findReservationByToiletIdAndDate(toiletId, date);
     }
+
+    @GetMapping("/me")
+    public List<ReservationResponse> getMyReservations(@Authenticated Long memberId) {
+        return reservationService.findReservationByMemberId(memberId);
+    }
 }

@@ -43,4 +43,13 @@ public class ReservationService {
                 .map(ReservationResponse::from)
                 .toList();
     }
+
+    public List<ReservationResponse> findReservationByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+        return reservationRepository.findByMember(member)
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
+    }
 }

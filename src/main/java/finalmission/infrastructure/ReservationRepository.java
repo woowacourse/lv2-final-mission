@@ -1,5 +1,6 @@
 package finalmission.infrastructure;
 
+import finalmission.domain.Member;
 import finalmission.domain.Reservation;
 import java.time.LocalDate;
 import java.util.List;
@@ -10,4 +11,6 @@ public interface ReservationRepository extends Repository<Reservation, Long> {
             ;
 
     List<Reservation> findByToiletIdAndDate(Long toiletId, LocalDate date);
+
+    List<Reservation> findByMember(Member member);
 }
