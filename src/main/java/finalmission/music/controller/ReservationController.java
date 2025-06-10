@@ -33,10 +33,19 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.getMemberReservations(memberName));
     }
 
+    @GetMapping("/reservations/{id}")
+    @DeleteMapping("/reservations/{id}")
+    public ResponseEntity<MyReservationResponse> getMyReservation(@PathVariable("id") final Long id,
+                                                                  @LoginMember final String memberName) {
+        MyReservationResponse memberReservation = reservationService.getMemberReservation(id, memberName);
+
+        return ResponseEntity.ok(memberReservation);
+    }
+
     @DeleteMapping("/reservations/{id}")
     public ResponseEntity<Void> deleteMyReservation(@PathVariable("id") final Long id,
                                                     @LoginMember final String memberName) {
-        reservationService.deleteMyReservation(id, memberName);
+        reservationService.deleteMemberReservation(id, memberName);
 
         return ResponseEntity.noContent().build();
     }

@@ -38,7 +38,14 @@ public class ReservationService {
             .toList();
     }
 
-    public void deleteMyReservation(final Long id, final String memberName) {
+    public void deleteMemberReservation(final Long id, final String memberName) {
         reservationRepository.deleteByIdAndMemberName(id, memberName);
+    }
+
+    public MyReservationResponse getMemberReservation(final Long id, final String memberName) {
+        Reservation reservation = reservationRepository.findByIdAndMemberName(id, memberName)
+            .orElseThrow(() -> new IllegalArgumentException("[ERROR] 멤버에 해당 예약이 존재하지 않습니다."));
+
+        return MyReservationResponse.from(reservation);
     }
 }
