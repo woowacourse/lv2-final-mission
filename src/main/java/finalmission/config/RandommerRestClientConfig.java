@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 
 @Configuration
 @RequiredArgsConstructor
-public class RandommerClientConfig {
+public class RandommerRestClientConfig {
 
     @Bean
     public RandommerRestClient nameGeneratorRestClient(RestClient.Builder builder) {
