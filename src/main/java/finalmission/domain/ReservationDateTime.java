@@ -23,6 +23,11 @@ public class ReservationDateTime {
     protected ReservationDateTime() {
     }
 
+    public ReservationDateTime(final LocalDateTime dateTime, final Coach coach) {
+        this.dateTime = dateTime;
+        this.coach = coach;
+    }
+
     public Long getId() {
         return id;
     }

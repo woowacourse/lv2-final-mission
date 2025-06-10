@@ -1,7 +1,32 @@
 package finalmission.application.service;
 
+import finalmission.application.dto.ReservationDateTimeRequest;
+import finalmission.domain.Coach;
+import finalmission.domain.ReservationDateTime;
+import finalmission.domain.repository.CoachRepository;
+import finalmission.domain.repository.ReservationDateTimeRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ReservationDateTimeService {
+    private final ReservationDateTimeRepository reservationDateTimeRepository;
+    private final CoachRepository coachRepository;
+
+    public ReservationDateTimeService(final ReservationDateTimeRepository reservationDateTimeRepository,
+                                      final CoachRepository coachRepository) {
+        this.reservationDateTimeRepository = reservationDateTimeRepository;
+        this.coachRepository = coachRepository;
+    }
+
+    public Long createReservationDateTime(final ReservationDateTimeRequest reservationDateTimeRequest) {
+        Coach coach = coachRepository.findById(reservationDateTimeRequest.getCoachId())
+                .orElseThrow(() -> new IllegalArgumentException("코치가 존재하지 않습니다"));
+
+        final ReservationDateTime reservationDateTime = reservationDateTimeRepository.save(new ReservationDateTime(
+                reservationDateTimeRequest.getDateTime(),
+                coach
+        ));
+
+        return reservationDateTime.getId();
+    }
 }

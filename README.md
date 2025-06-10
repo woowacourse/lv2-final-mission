@@ -73,7 +73,7 @@ Content-Type: application/json
 ```
 
 #### 예약 가능 시간
-+ [ ] 코치별 예약 가능 시간 추가
++ [x] 코치별 예약 가능 시간 추가
 ```
 POST /dateTimes HTTP/1.1
 {  
