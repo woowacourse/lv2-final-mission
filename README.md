@@ -16,4 +16,4 @@
 
 ### 개발 순서도
 1. H2 DB 연결
-2. 
+2. Spring Data JPA 추가 
