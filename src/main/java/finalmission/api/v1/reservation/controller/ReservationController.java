@@ -1,5 +1,7 @@
 package finalmission.api.v1.reservation.controller;
 
+import finalmission.api.v1.reservation.dto.ReservationDeleteRequest;
+import finalmission.api.v1.reservation.dto.ReservationDetailGetRequest;
 import finalmission.api.v1.reservation.dto.ReservationDetailResponse;
 import finalmission.api.v1.reservation.dto.ReservationRequest;
 import finalmission.api.v1.reservation.dto.ReservationResponse;
@@ -9,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +35,20 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ReservationDetailResponse getReservationDetail(@NotNull @PathVariable final Long id) {
-        return reservationService.getReservationDetail(id);
+    public ReservationDetailResponse getReservationDetail(
+            @NotNull @PathVariable final Long id,
+            @Valid @RequestBody final ReservationDetailGetRequest request
+    ) {
+        return reservationService.getReservationDetail(id, request);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteReservation(
+            @NotNull @PathVariable final Long id,
+            @Valid @RequestBody final ReservationDeleteRequest request
+    ) {
+        reservationService.deleteReservation(id, request);
+    }
+
 }

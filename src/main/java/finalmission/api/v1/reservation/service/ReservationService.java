@@ -1,8 +1,11 @@
 package finalmission.api.v1.reservation.service;
 
 import finalmission.api.v1.exception.NotFoundException;
+import finalmission.api.v1.exception.ReservationException;
 import finalmission.api.v1.reservation.domain.Reservation;
 import finalmission.api.v1.reservation.domain.ReservationTime;
+import finalmission.api.v1.reservation.dto.ReservationDeleteRequest;
+import finalmission.api.v1.reservation.dto.ReservationDetailGetRequest;
 import finalmission.api.v1.reservation.dto.ReservationDetailResponse;
 import finalmission.api.v1.reservation.dto.ReservationRequest;
 import finalmission.api.v1.reservation.dto.ReservationResponse;
@@ -40,9 +43,23 @@ public class ReservationService {
         return new ReservationResponse(newReservation, reservation.getDate(), reservationTime.getTime());
     }
 
-    public ReservationDetailResponse getReservationDetail(final Long id) {
+    public ReservationDetailResponse getReservationDetail(final Long id, final ReservationDetailGetRequest request) {
         final Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 예약입니다."));
-        return new ReservationDetailResponse(reservation, reservation.getDate(), reservation.getReservationTime().getTime());
+        if (reservation.isSamePhoneNumber(request.phoneNumber())) {
+            return new ReservationDetailResponse(reservation, reservation.getDate(), reservation.getReservationTime().getTime());
+        }
+        throw new ReservationException("내 예약만 조회가 가능합니다.");
+    }
+
+
+    public void deleteReservation(final Long id, final ReservationDeleteRequest request) {
+        final Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 예약입니다."));
+        if (reservation.isSamePhoneNumber(request.phoneNumber())) {
+            reservationRepository.deleteById(id);
+            return;
+        }
+        throw new ReservationException("내 예약만 삭제할 수 있습니다.");
     }
 }

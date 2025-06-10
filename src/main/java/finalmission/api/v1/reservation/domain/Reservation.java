@@ -48,5 +48,9 @@ public class Reservation {
         this.restaurant = restaurant;
         this.phoneNumber = phoneNumber;
     }
+
+    public boolean isSamePhoneNumber(final String phoneNumber) {
+        return this.phoneNumber.equals(phoneNumber);
+    }
 }
 
