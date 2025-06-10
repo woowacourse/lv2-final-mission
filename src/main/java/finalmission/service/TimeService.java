@@ -14,13 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TimeService {
 
-    private final VoterRepository voterRepository;
     private final RoomRepository roomRepository;
     private final TimeRepository timeRepository;
 
     @Transactional
-    public void addTime(String roomId, String memberId, List<LocalDateTime> values) {
-        Voter voter = voterRepository.findById(new Id(memberId)).orElseThrow();
+    public void addTime(String roomId, Voter voter, List<LocalDateTime> values) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
 
         List<Time> createdTimes = values.stream()
@@ -37,17 +35,17 @@ public class TimeService {
     }
 
     @Transactional(readOnly = true)
-    public TimeResponses getMyTimes(String roomId, String name) {
+    public TimeResponses getMyTimes(String roomId, Voter voter) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
-        List<Time> times = room.getTimesOf(name);
+        List<Time> times = room.getTimesOf(voter);
         List<LocalDateTime> dateTimes = times.stream()
                 .map(Time::getDateTime)
                 .toList();
-        return TimeResponses.from(name, dateTimes);
+        return TimeResponses.from(voter.getName(), dateTimes);
     }
 
     @Transactional
-    public void dropMyTimes(String roomId, String name) {
-        timeRepository.deleteAllByRoom_IdAndMember_Name(new Id(roomId), name);
+    public void dropMyTimes(String roomId, Voter voter) {
+        timeRepository.deleteAllByRoom_IdAndVoter(new Id(roomId), voter);
     }
 }

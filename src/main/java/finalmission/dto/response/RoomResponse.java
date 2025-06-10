@@ -22,7 +22,7 @@ public record RoomResponse(
                 room.getStartTime(),
                 room.getEndTime(),
                 room.getTimes().stream()
-                        .map(Time::getCreatorName)
+                        .map(Time::getVoterName)
                         .collect(Collectors.toSet())
         );
     }

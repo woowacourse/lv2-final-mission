@@ -40,7 +40,7 @@ public class Time {
                         dateTime,
                         times.stream()
                                 .filter(time -> time.isDateTimeOf(dateTime))
-                                .map(Time::getCreatorName)
+                                .map(Time::getVoterName)
                                 .toList()
                 ))
                 .toList();
@@ -50,11 +50,11 @@ public class Time {
         return this.dateTime.equals(dateTime);
     }
 
-    public boolean createdBy(String name) {
-        return this.voter.hasName(name);
+    public boolean createdBy(Voter voter) {
+        return this.voter.equals(voter);
     }
 
-    public String getCreatorName() {
+    public String getVoterName() {
         return this.voter.getName();
     }
 }

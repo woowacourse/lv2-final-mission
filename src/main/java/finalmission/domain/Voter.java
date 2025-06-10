@@ -30,4 +30,10 @@ public class Voter {
     public boolean hasName(String name) {
         return this.name.equals(name);
     }
+
+    public void validatePassword(String password) {
+        if (!this.password.equals(password)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+    }
 }

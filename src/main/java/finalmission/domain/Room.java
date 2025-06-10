@@ -58,9 +58,9 @@ public class Room {
         }
     }
 
-    public List<Time> getTimesOf(String name) {
+    public List<Time> getTimesOf(Voter voter) {
         return times.stream()
-                .filter(time -> time.createdBy(name))
+                .filter(time -> time.createdBy(voter))
                 .toList();
     }
 

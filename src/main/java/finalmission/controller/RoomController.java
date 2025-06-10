@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RoomController {
 
-    private final RoomService service;
+    private final RoomService roomService;
 
     @PostMapping("/room")
     public RoomCreateResponse createRoom(
             @RequestBody RoomCreateRequest request
     ) {
-        return service.createRoom(request.startDate(), request.endDate(), request.startTime(), request.endTime());
+        return roomService.createRoom(request.startDate(), request.endDate(), request.startTime(), request.endTime());
     }
 
     @GetMapping("/room/{roomId}")
     public RoomResponse getRoomInfo(
             @PathVariable("roomId") String roomId
     ) {
-        return service.getRoomInfo(roomId);
+        return roomService.getRoomInfo(roomId);
     }
 }
