@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -67,6 +66,14 @@ public class Reservation {
             Trainer trainer
     ) {
         return new Reservation(null, status, date, member, lessonTime, trainer);
+    }
+
+    public boolean isReserved() {
+        return this.status == ReservationStatus.RESERVED;
+    }
+
+    public boolean availRefund(LocalDate comparedDate) {
+        return this.date.minusDays(1).isAfter(comparedDate);
     }
 
     public LocalTime reservedTime() {

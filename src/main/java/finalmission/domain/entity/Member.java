@@ -64,10 +64,18 @@ public class Member {
         this.trainer = trainer;
     }
 
+    public boolean equalMember(Member member) {
+        return this.getId().equals(member.getId());
+    }
+
     public void minusPtNumber() {
         if (this.ptNumber > 0) {
             this.ptNumber--;
         }
+    }
+
+    public void refundPtNumber() {
+        this.ptNumber++;
     }
 
     public Long getId() {

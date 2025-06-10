@@ -77,6 +77,19 @@ public class ReservationService {
                 .toList();
     }
 
+    @Transactional
+    public void cancelReservation(Member member, Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 예약입니다: " + reservationId));
+        if (!member.equalMember(reservation.getMember())) {
+            throw new IllegalArgumentException("[ERROR] 권한이 없습니다");
+        }
+        if (reservation.isReserved() && reservation.availRefund(timeInjection.now().toLocalDate())) {
+            member.refundPtNumber();
+        }
+        reservationRepository.delete(reservation);
+    }
+
     private void createLesson(
             ReservationLessonRequest request,
             LessonTime time,

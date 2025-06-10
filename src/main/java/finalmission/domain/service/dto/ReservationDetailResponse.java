@@ -9,7 +9,7 @@ public record ReservationDetailResponse(
         LocalTime time
 ) {
 
-
     public static ReservationDetailResponse from(String trainerName, LocalDate date, LocalTime time) {
+        return new ReservationDetailResponse(trainerName, date, time);
     }
 }

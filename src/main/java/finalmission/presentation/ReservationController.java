@@ -8,6 +8,8 @@ import finalmission.domain.service.dto.ReservationLessonRequest;
 import finalmission.domain.service.dto.TrainerReservationResponse;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,16 +42,22 @@ public class ReservationController {
         return reservationService.getTrainersReservations(trainerId);
     }
 
-    // 내 확정 수업 목록 보기
     @GetMapping("/reserved/mine")
     public List<ReservationDetailResponse> getMyReservations(@AuthInfo Member member) {
         return reservationService.getReservationsMemberState(member, ReservationStatus.RESERVED);
     }
 
-    // 내 대기 수업 목록 보기
     @GetMapping("/waiting/mine")
     public List<ReservationDetailResponse> getMyWaitings(@AuthInfo Member member) {
         return reservationService.getReservationsMemberState(member, ReservationStatus.WAITING);
     }
 
+    @DeleteMapping("/{reservationId}")
+    public ResponseEntity<Void> cancelReservation(
+            @AuthInfo Member member,
+            @PathVariable("reservationId") Long reservationId
+    ) {
+        reservationService.cancelReservation(member, reservationId);
+        return ResponseEntity.noContent().build();
+    }
 }
