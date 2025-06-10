@@ -59,4 +59,11 @@ public class Reservation {
         }
         return new Reservation(reserver, popupStore, reservedAt, ReservationStatus.ENTERED);
     }
+
+    public boolean isWaiting() {
+        return reservationStatus == ReservationStatus.WAITING;
+    }
+
+    public boolean isMyReservation(final Long memberId) {
+        return reserver.getId().equals(memberId);
 }
