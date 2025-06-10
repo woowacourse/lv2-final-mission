@@ -1,56 +1,48 @@
-package finalmission;
+package finalmission.service;
 
 import finalmission.domain.*;
 import finalmission.dto.RoomCreateResponse;
-import finalmission.dto.TimeAddRequest;
 import finalmission.dto.TimeResponses;
 import finalmission.dto.TimeStaticsResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@RestController
+@Service
 @RequiredArgsConstructor
-public class MyController {
+public class TimeVoteService {
 
     private final RoomRepository roomRepository;
     private final TimeRepository timeRepository;
 
-    @PostMapping("/room")
+    @Transactional
     public RoomCreateResponse createRoom() {
         Room room = new Room();
         roomRepository.save(room);
         return RoomCreateResponse.from(room);
     }
 
-    @PostMapping("/room/{roomId}")
-    public void addTime(
-            @PathVariable("roomId") String roomId,
-            @RequestBody TimeAddRequest request
-    ) {
+    @Transactional
+    public void addTime(String roomId, String username, List<LocalDateTime> values) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
-        List<Time> createdTimes = request.values().stream()
-                .map(dateTime -> room.createTime(request.username(), dateTime))
+        List<Time> createdTimes = values.stream()
+                .map(dateTime -> room.createTime(username, dateTime))
                 .toList();
         timeRepository.saveAll(createdTimes);
     }
 
-    @GetMapping("/room/{roomId}")
-    public TimeStaticsResponses getTimeStatics(
-            @PathVariable("roomId") String roomId
-    ) {
+    @Transactional(readOnly = true)
+    public TimeStaticsResponses getTimeStatics(String roomId) {
         List<Time> times = timeRepository.getTimesByRoom_Id(new Id(roomId));
         List<TimeStatics> statics = Time.calculateStatics(times);
         return TimeStaticsResponses.from(statics);
     }
 
-    @GetMapping("/room/{roomId}/my")
-    public TimeResponses getMyTimes(
-            @PathVariable("roomId") String roomId,
-            @RequestParam("username") String username
-    ) {
+    @Transactional(readOnly = true)
+    public TimeResponses getMyTimes(String roomId, String username) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
         List<Time> times = room.getTimesOf(username);
         List<LocalDateTime> dateTimes = times.stream()
@@ -59,11 +51,8 @@ public class MyController {
         return TimeResponses.from(username, dateTimes);
     }
 
-    @DeleteMapping("/room/{roomId}")
-    public void deleteAllOf(
-            @PathVariable("roomId") String roomId,
-            @RequestParam("username") String username
-    ) {
+    @Transactional
+    public void dropMyTimes(String roomId, String username) {
         timeRepository.deleteAllByRoom_IdAndUsername(new Id(roomId), username);
     }
 }
