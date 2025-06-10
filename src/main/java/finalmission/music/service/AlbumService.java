@@ -29,4 +29,11 @@ public class AlbumService {
     public void delete(final Long id) {
         albumRepository.deleteById(id);
     }
+
+    public AlbumResponse getAlbum(final Long id) {
+        Album album = albumRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("[ERROR] 앨범이 존재하지 않습니다."));
+
+        return AlbumResponse.from(album);
+    }
 }
