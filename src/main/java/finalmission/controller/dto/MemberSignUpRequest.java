@@ -1,6 +1,6 @@
-package finalmission.controller;
+package finalmission.controller.dto;
 
-import finalmission.domain.LolName;
+import finalmission.domain.vo.LolName;
 import finalmission.domain.Member;
 
 public record MemberSignUpRequest(

@@ -1,5 +1,7 @@
 package finalmission.controller;
 
+import finalmission.controller.dto.RoomCreateRequest;
+import finalmission.controller.dto.RoomCreateResponse;
 import finalmission.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

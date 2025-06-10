@@ -1,6 +1,8 @@
 package finalmission.controller;
 
-import finalmission.domain.LolName;
+import finalmission.controller.dto.MemberLoginResponse;
+import finalmission.controller.dto.MemberSignUpRequest;
+import finalmission.domain.vo.LolName;
 import finalmission.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

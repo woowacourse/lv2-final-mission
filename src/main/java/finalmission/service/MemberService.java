@@ -1,8 +1,8 @@
 package finalmission.service;
 
-import finalmission.controller.MemberLoginResponse;
-import finalmission.controller.MemberSignUpRequest;
-import finalmission.domain.LolName;
+import finalmission.controller.dto.MemberLoginResponse;
+import finalmission.controller.dto.MemberSignUpRequest;
+import finalmission.domain.vo.LolName;
 import finalmission.domain.Member;
 import finalmission.exception.NotFoundException;
 import finalmission.exception.UnauthorizedException;

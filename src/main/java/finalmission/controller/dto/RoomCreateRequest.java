@@ -1,4 +1,4 @@
-package finalmission.controller;
+package finalmission.controller.dto;
 
 import finalmission.domain.Member;
 import finalmission.domain.Room;

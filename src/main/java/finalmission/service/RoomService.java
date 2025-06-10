@@ -1,7 +1,7 @@
 package finalmission.service;
 
-import finalmission.controller.RoomCreateRequest;
-import finalmission.controller.RoomCreateResponse;
+import finalmission.controller.dto.RoomCreateRequest;
+import finalmission.controller.dto.RoomCreateResponse;
 import finalmission.domain.Member;
 import finalmission.domain.Room;
 import finalmission.domain.RoomMember;

@@ -2,8 +2,8 @@ package finalmission.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import finalmission.controller.RoomCreateRequest;
-import finalmission.domain.LolName;
+import finalmission.controller.dto.RoomCreateRequest;
+import finalmission.domain.vo.LolName;
 import finalmission.domain.Member;
 import finalmission.repository.MemberRepository;
 import finalmission.repository.RoomMemberRepository;

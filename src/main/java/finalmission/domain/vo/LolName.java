@@ -1,4 +1,4 @@
-package finalmission.domain;
+package finalmission.domain.vo;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

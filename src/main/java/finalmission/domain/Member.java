@@ -1,5 +1,6 @@
 package finalmission.domain;
 
+import finalmission.domain.vo.LolName;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

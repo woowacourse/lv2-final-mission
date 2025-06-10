@@ -1,7 +1,7 @@
 package finalmission.integration;
 
-import finalmission.controller.MemberSignUpRequest;
-import finalmission.domain.LolName;
+import finalmission.controller.dto.MemberSignUpRequest;
+import finalmission.domain.vo.LolName;
 import finalmission.domain.Member;
 import finalmission.repository.MemberRepository;
 import io.restassured.RestAssured;

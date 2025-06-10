@@ -1,6 +1,6 @@
 package finalmission.repository;
 
-import finalmission.domain.LolName;
+import finalmission.domain.vo.LolName;
 import finalmission.domain.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
