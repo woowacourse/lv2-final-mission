@@ -75,7 +75,7 @@ public class ReservationService {
 
         List<Reservation> targetReservations = reservationRepository.findAllByPopupStoreAndReservationStatusOrderByReservedAtAsc(
                 myReservation.getPopupStore(),
-                ReservationStatus.WAITING
+                ReservationStatus.ENTERED
         );
 
         int i;
