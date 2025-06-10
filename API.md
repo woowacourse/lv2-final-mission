@@ -53,3 +53,21 @@
 
 - RESPONSE
   - 201 CREATED
+
+### 내 예약 조회
+> GET /bookings/mine
+
+- REQUEST HEADER
+  - COOKIE
+    - "token": 로그인을 통해 발급받은 JWT 토큰
+
+- RESPONSE
+  - 200 OK
+  - **바디**
+    - 아래와 같은 각각의 예약들로 이루어진 컬렉션 응답
+    - ```
+      id : 예약 ID
+      member : 예약자
+      gym : 헬스장
+      date : 예약 날짜
+      ```
