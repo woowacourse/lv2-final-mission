@@ -14,12 +14,12 @@ public class MemberRepositoryImpl implements MemberRepository {
     private final MemberJpaRepository memberJpaRepository;
 
     @Override
-    public Optional<Member> findById(long id) {
+    public Optional<Member> findById(final long id) {
         return memberJpaRepository.findById(id);
     }
 
     @Override
-    public Optional<Member> findByEmailAndPassword(String email, String password) {
+    public Optional<Member> findByEmailAndPassword(final String email, final String password) {
         return memberJpaRepository.findByEmailAndPassword(email, password);
     }
 }
