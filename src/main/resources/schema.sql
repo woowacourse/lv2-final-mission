@@ -22,5 +22,6 @@ CREATE TABLE IF NOT EXISTS reservation (
     member_id BIGINT,
     PRIMARY KEY(id),
     FOREIGN KEY(room_id) REFERENCES room(id),
-    FOREIGN KEY(member_id) REFERENCES member(id)
+    FOREIGN KEY(member_id) REFERENCES member(id),
+    UNIQUE (date, time, room_id)
 );

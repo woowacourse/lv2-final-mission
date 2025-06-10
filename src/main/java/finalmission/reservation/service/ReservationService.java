@@ -4,6 +4,7 @@ import finalmission.config.SendGridUtil;
 import finalmission.member.domain.Member;
 import finalmission.member.dto.MemberResponse;
 import finalmission.reservation.domain.Reservation;
+import finalmission.reservation.dto.EditRequest;
 import finalmission.reservation.dto.MyReservationResponse;
 import finalmission.reservation.dto.ReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
@@ -71,6 +72,25 @@ public class ReservationService {
         Reservation reservation = optionalReservation.get();
 
         return new MyReservationResponse(new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime(), reservation.getDescription(), new MemberResponse(reservation.getMember().getName()));
+    }
+
+    @Transactional
+    public MyReservationResponse editReservation(Long id, EditRequest request, Long memberId) {
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+
+        if (reservation.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 예약 id입니다.");
+        }
+        if (!Objects.equals(reservation.get().getMember().getId(), memberId)) {
+            throw new IllegalArgumentException("해당 예약을 수정할 권한이 없습니다.");
+        }
+
+        Reservation oldReservation = reservation.get();
+        Room room = roomRepository.findById(request.roomId()).orElseThrow();
+
+        Reservation newReservation = reservationRepository.save(new Reservation(oldReservation.getId(), request.date(), request.time(), request.description(), room, oldReservation.getMember()));
+
+        return new MyReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime(), newReservation.getDescription(), new MemberResponse(newReservation.getMember().getName()));
     }
 
     @Transactional
