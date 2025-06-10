@@ -1,0 +1,23 @@
+package finalmission.music.controller;
+
+import finalmission.music.controller.dto.AlbumRequest;
+import finalmission.music.controller.dto.AlbumResponse;
+import finalmission.music.service.AlbumService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class AlbumController {
+
+    private final AlbumService albumService;
+
+    @PostMapping("/albums")
+    public ResponseEntity<AlbumResponse> save(@RequestBody final AlbumRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(albumService.save(request));
+    }
+}
