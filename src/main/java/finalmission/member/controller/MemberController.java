@@ -25,10 +25,11 @@ public class MemberController {
     public MemberController(final MemberService memberService) {
         this.memberService = memberService;
     }
-    
+
     @PostMapping
     public ResponseEntity<MemberResponse> create(@RequestBody @Valid MemberRequest request) {
         Member member = memberService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(MemberResponse.from(member));
     }
+
 }
