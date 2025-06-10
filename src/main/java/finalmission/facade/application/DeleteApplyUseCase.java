@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class DeleteApplyPartyUseCase {
+public class DeleteApplyUseCase {
 
     private final PlayerFinder playerFinder;
     private final ApplyFinder applyFinder;

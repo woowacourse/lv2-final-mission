@@ -1,9 +1,9 @@
 package finalmission.apply;
 
 import finalmission.apply.domain.Apply;
-import finalmission.facade.application.CreateApplyPartyUseCase;
-import finalmission.facade.application.DeleteApplyPartyUseCase;
-import finalmission.facade.application.GetApplyPartyUseCase;
+import finalmission.facade.application.CreateApplyUseCase;
+import finalmission.facade.application.DeleteApplyUseCase;
+import finalmission.facade.application.GetApplyUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,29 +21,29 @@ import java.util.List;
 @RequestMapping("/apply")
 public class ApplyController {
 
-    private final GetApplyPartyUseCase getApplyPartyUseCase;
-    private final CreateApplyPartyUseCase createApplyPartyUseCase;
-    private final DeleteApplyPartyUseCase deleteApplyPartyUseCase;
+    private final GetApplyUseCase getApplyUseCase;
+    private final CreateApplyUseCase createApplyUseCase;
+    private final DeleteApplyUseCase deleteApplyUseCase;
 
     // TODO validation Password
 
     @GetMapping
     public ResponseEntity<List<Apply>> get(@RequestBody final ApplyRequest applyRequest) {
-        final List<Apply> result = getApplyPartyUseCase.execute(applyRequest.nickname());
+        final List<Apply> result = getApplyUseCase.execute(applyRequest.nickname());
 
         return ResponseEntity.ok(result);
     }
 
     @PostMapping
     public ResponseEntity<String> create(@RequestBody final ApplyRequest applyRequest) {
-        createApplyPartyUseCase.execute(applyRequest.nickname());
+        createApplyUseCase.execute(applyRequest.nickname());
 
         return ResponseEntity.status(HttpStatus.CREATED).body("신청 성공");
     }
 
     @DeleteMapping
     public ResponseEntity<String> delete(@RequestBody final ApplyRequest applyRequest) {
-        deleteApplyPartyUseCase.execute(applyRequest.nickname());
+        deleteApplyUseCase.execute(applyRequest.nickname());
 
         return ResponseEntity.ok().body("삭제 완료");
     }

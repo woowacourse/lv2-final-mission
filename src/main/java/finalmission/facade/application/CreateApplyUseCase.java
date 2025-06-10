@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CreateApplyPartyUseCase {
+public class CreateApplyUseCase {
 
     private final PlayerFinder playerFinder;
     private final VacancyGetter vacancyGetter;

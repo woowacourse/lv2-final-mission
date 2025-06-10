@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GetApplyPartyUseCase {
+public class GetApplyUseCase {
 
     private final PlayerFinder playerFinder;
     private final ApplyFinder applyFinder;
