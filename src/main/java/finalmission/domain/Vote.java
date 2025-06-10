@@ -19,12 +19,9 @@ public class Vote {
 
     @EmbeddedId
     private final Id id = Id.random();
-
     private final LocalDateTime dateTime;
-
     @ManyToOne
     private final Voter voter;
-
     @ManyToOne
     private final Room room;
 

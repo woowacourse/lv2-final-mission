@@ -16,7 +16,6 @@ public class Voter {
     private final Id id = Id.random();
     private final String name;
     private final String password;
-
     @ManyToOne
     private final Room room;
 
