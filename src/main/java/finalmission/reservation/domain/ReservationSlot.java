@@ -1,5 +1,6 @@
 package finalmission.reservation.domain;
 
+import finalmission.restaurant.domain.Restaurant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
@@ -21,21 +22,22 @@ public class ReservationSlot {
     @ManyToOne
     private ReservationTime time;
 
-    @Column(nullable = false)
-    private String place;
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @ManyToOne
+    private Restaurant restaurant;
 
     public ReservationSlot(
             final LocalDate date,
             final ReservationTime time,
-            final String place
+            final Restaurant restaurant
     ) {
         validateDate(date);
         validateTime(time);
-        validatePlace(place);
+        validateRestaurant(restaurant);
 
         this.date = date;
         this.time = time;
-        this.place = place;
+        this.restaurant = restaurant;
     }
 
     private void validateDate(final LocalDate date) {
@@ -50,9 +52,9 @@ public class ReservationSlot {
         }
     }
 
-    private void validatePlace(final String place) {
-        if (place == null || place.isBlank()) {
-            throw new IllegalArgumentException("장소는 null 이거나 빈 문자열일 수 없습니다.");
+    private void validateRestaurant(final Restaurant restaurant) {
+        if (restaurant == null) {
+            throw new IllegalArgumentException("음식점은 null이면 안됩니다.");
         }
     }
 }
