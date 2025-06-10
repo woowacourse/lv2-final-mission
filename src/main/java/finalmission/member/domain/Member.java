@@ -38,7 +38,7 @@ public class Member {
         this.role = role;
     }
 
-    public static Member createMemberWithoutId(String name, String email, String password, String phone) {
+    public static Member createMemberWithoutId(final String name, final String email, final String password, final String phone) {
         return new Member(null, name, email, password, phone, Role.USER);
     }
 }
