@@ -6,6 +6,8 @@ import finalmission.domain.Rent;
 import finalmission.domain.repository.CarRepository;
 import finalmission.domain.repository.RentRepository;
 import finalmission.dto.RequestRent;
+import finalmission.dto.ResponseRent;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,5 +53,13 @@ public class RentService {
                 .startTime(requestRent.startTime())
                 .returnTime(requestRent.returnTime())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ResponseRent> getAll() {
+        return rentRepository.findAllWithCar()
+                .stream()
+                .map(ResponseRent::from)
+                .toList();
     }
 }

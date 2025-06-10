@@ -3,10 +3,13 @@ package finalmission.presentation;
 import finalmission.application.RentService;
 import finalmission.domain.Member;
 import finalmission.dto.RequestRent;
+import finalmission.dto.ResponseRent;
 import finalmission.infrastructure.resolver.LoginMember;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,5 +28,10 @@ public class RentController {
     public ResponseEntity<Void> rent(@LoginMember Member loginMember, @RequestBody RequestRent requestRent) {
         Long id = rentService.rent(loginMember, requestRent);
         return ResponseEntity.created(URI.create(RENT_URI_FORMAT.formatted(id))).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ResponseRent>> getAllRent() {
+        return ResponseEntity.ok(rentService.getAll());
     }
 }
