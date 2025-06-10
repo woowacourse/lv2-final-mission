@@ -1,9 +1,9 @@
-package woowaTable.restaurant.application;
+package woowaTable.reservation.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import woowaTable.restaurant.domain.Reservation;
-import woowaTable.restaurant.domain.repository.ReservationRepository;
+import woowaTable.reservation.domain.Reservation;
+import woowaTable.reservation.domain.repository.ReservationRepository;
 
 @Service
 @RequiredArgsConstructor

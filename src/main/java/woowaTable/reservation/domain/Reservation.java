@@ -1,4 +1,4 @@
-package woowaTable.restaurant.domain;
+package woowaTable.reservation.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import woowaTable.restaurant.domain.Restaurant;
 import woowaTable.user.domain.Customer;
 
 @Entity

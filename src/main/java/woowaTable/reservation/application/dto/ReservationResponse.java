@@ -1,7 +1,7 @@
-package woowaTable.restaurant.application.dto;
+package woowaTable.reservation.application.dto;
 
 import java.time.LocalDateTime;
-import woowaTable.restaurant.domain.Reservation;
+import woowaTable.reservation.domain.Reservation;
 import woowaTable.restaurant.domain.Restaurant;
 
 public record ReservationResponse(

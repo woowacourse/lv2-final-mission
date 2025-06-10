@@ -29,3 +29,8 @@ security:
       secret-key: sldfjLJLSJenF&DSFjdkjs329!dsf4
       access:
         expire-length: 600000 # 10 ?
+
+email:
+  twilio:
+    base-url: https://api.sendgrid.com
+    secret-key:
