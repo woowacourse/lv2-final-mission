@@ -21,6 +21,8 @@ public class Reservation {
 
     private LocalTime time;
 
+    private String description;
+
     @ManyToOne
     private Room room;
 
@@ -30,10 +32,11 @@ public class Reservation {
     private Reservation() {
     }
 
-    public Reservation(Long id, LocalDate date, LocalTime time, Room room, Member member) {
+    public Reservation(Long id, LocalDate date, LocalTime time, String description, Room room, Member member) {
         this.id = id;
         this.date = date;
         this.time = time;
+        this.description = description;
         this.room = room;
         this.member = member;
     }
@@ -48,6 +51,10 @@ public class Reservation {
 
     public LocalTime getTime() {
         return time;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public Room getRoom() {

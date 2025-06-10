@@ -1,7 +1,6 @@
 package finalmission.reservation.service;
 
 import finalmission.member.domain.Member;
-import finalmission.member.dto.MemberResponse;
 import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.dto.ReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
@@ -30,9 +29,9 @@ public class ReservationService {
     @Transactional
     public ReservationResponse addReservation(ReservationRequest request, Member member) {
         Room room = getRoomById(request.roomId());
-        Reservation reservation = new Reservation(null, request.date(), request.time(), room, member);
+        Reservation reservation = new Reservation(null, request.date(), request.time(), request.description(), room, member);
         Reservation newReservation = reservationRepository.save(reservation);
-        return new ReservationResponse(new MemberResponse(newReservation.getMember().getName()), new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
+        return new ReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime(), newReservation.getDescription());
     }
 
     private Room getRoomById(Long id) {
@@ -41,7 +40,7 @@ public class ReservationService {
 
     public List<ReservationResponse> getAll() {
         return reservationRepository.findAll().stream()
-                .map(reservation -> new ReservationResponse(new MemberResponse(reservation.getMember().getName()), new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime()))
+                .map(reservation -> new ReservationResponse(new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime(), reservation.getDescription()))
                 .toList();
     }
 
