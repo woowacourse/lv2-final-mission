@@ -22,11 +22,5 @@ public class MeetingRoom {
     private String name;
 
     @Column(nullable = false)
-    private int minimumPersonnel;
-
-    @Column(nullable = false)
-    private int maximumPersonnel;
-
-    @Column(nullable = false)
     private int maximumTime;
 }
