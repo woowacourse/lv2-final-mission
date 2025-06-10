@@ -1,6 +1,8 @@
 package finalmission.reservation;
 
 import java.util.List;
+import finalmission.member.MemberRepository;
+import finalmission.member.domain.Member;
 import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.dto.ReservationRequest;
 import finalmission.station.StationRepository;
@@ -17,8 +19,9 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final SubwayRepository subwayRepository;
     private final StationRepository stationRepository;
+    private final MemberRepository memberRepository;
 
-    public Reservation createReservation(ReservationRequest request) {
+    public Reservation createReservation(Member member, ReservationRequest request) {
         /*
         1. 겹치는 예약 없는지 확인
         2. 예약 추가
@@ -28,6 +31,9 @@ public class ReservationService {
         2. 라인이 같다.
         3. 거치는 역이 단 하나라도 겹친다 (알고리즘)
          */
+
+        Member foundMember = memberRepository.findByPhoneNumber(member.getPhoneNumber())
+                .orElseThrow(IllegalArgumentException::new);
 
         Subway subway = subwayRepository.findById(Long.valueOf(request.subway_number()))
                 .orElseThrow(IllegalArgumentException::new);
@@ -40,6 +46,7 @@ public class ReservationService {
 
         Reservation reservation = new Reservation(
                 null,
+                foundMember,
                 request.date(),
                 subway,
                 Seat.valueOf(request.seat()),
@@ -51,7 +58,6 @@ public class ReservationService {
     }
 
     public List<Reservation> readAllReservation() {
-        List<Reservation> reservations = reservationRepository.findAll();
-        return reservations;
+        return reservationRepository.findAll();
     }
 }

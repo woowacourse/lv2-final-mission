@@ -1,6 +1,7 @@
 package finalmission.reservation.domain;
 
 import java.time.LocalDate;
+import finalmission.member.domain.Member;
 import finalmission.reservation.Seat;
 import finalmission.reservation.dto.ReservationRequest;
 import finalmission.station.domain.Station;
@@ -29,6 +30,10 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Member member;
 
     @Column(nullable = false)
     private LocalDate date;

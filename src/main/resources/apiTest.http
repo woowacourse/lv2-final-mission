@@ -1,0 +1,13 @@
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "date": "2023-10-01",
+  "subway_number": 1,
+  "seat": "A",
+  "departStation": "강남",
+  "arriveStation": "잠실새내"
+}
+
+###
+GET http://localhost:8080/reservations

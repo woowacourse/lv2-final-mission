@@ -1,6 +1,8 @@
 package finalmission.reservation;
 
 import java.util.List;
+import finalmission.auth.Auth;
+import finalmission.member.domain.Member;
 import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.dto.ReservationRequest;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +22,8 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody final ReservationRequest request) {
-        Reservation createdReservation = reservationService.createReservation(request);
+    public ResponseEntity<Reservation> createReservation(@Auth Member member, @RequestBody final ReservationRequest request) {
+        Reservation createdReservation = reservationService.createReservation(member, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReservation);
     }
 
