@@ -45,7 +45,7 @@ public class Member {
     @Column(nullable = false)
     private AuthRole role;
 
-    private Member(final String nickname, final String email, final String password, final AuthRole role) {
+    public Member(final String nickname, final String email, final String password, final AuthRole role) {
         validateNickname(nickname);
         validateEmail(email);
         validatePassword(password);
@@ -55,10 +55,6 @@ public class Member {
         this.email = email;
         this.password = password;
         this.role = role;
-    }
-
-    public static Member of(final String name, final String email, final String password, final AuthRole role) {
-        return new Member(name, email, password, role);
     }
 
     public boolean isWrongPassword(final String password) {
