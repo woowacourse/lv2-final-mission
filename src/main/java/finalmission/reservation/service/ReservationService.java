@@ -31,7 +31,7 @@ public class ReservationService {
         Room room = getRoomById(request.roomId());
         Reservation reservation = new Reservation(null, request.date(), request.time(), request.description(), room, member);
         Reservation newReservation = reservationRepository.save(reservation);
-        return new ReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime(), newReservation.getDescription());
+        return new ReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
     }
 
     private Room getRoomById(Long id) {
@@ -40,7 +40,7 @@ public class ReservationService {
 
     public List<ReservationResponse> getAll() {
         return reservationRepository.findAll().stream()
-                .map(reservation -> new ReservationResponse(new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime(), reservation.getDescription()))
+                .map(reservation -> new ReservationResponse(new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime()))
                 .toList();
     }
 
