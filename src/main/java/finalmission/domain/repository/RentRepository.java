@@ -39,4 +39,9 @@ public interface RentRepository extends JpaRepository<Rent, Long> {
             WHERE r.id = :rentId
             """)
     Optional<Rent> findByIdWithCarAndMember(Long rentId);
+
+    boolean existsByMemberAndDateAndStartTimeGreaterThanEqualAndReturnTimeLessThanEqual(Member member,
+                                                                                        LocalDate date,
+                                                                                        LocalTime startTime,
+                                                                                        LocalTime returnTime);
 }

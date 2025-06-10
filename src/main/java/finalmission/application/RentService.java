@@ -24,9 +24,22 @@ public class RentService {
     public Long rent(Member member, RequestRent requestRent) {
         Car car = getCar(requestRent);
         validateExistsTime(car, requestRent);
+        validateExistsRent(member, car, requestRent);
         Rent rent = createRent(member, car, requestRent);
         Rent savedRent = rentRepository.save(rent);
         return savedRent.getId();
+    }
+
+    private void validateExistsRent(Member member, Car car, RequestRent requestRent) {
+        boolean existsRent = rentRepository.existsByMemberAndDateAndStartTimeGreaterThanEqualAndReturnTimeLessThanEqual(
+                member,
+                requestRent.date(),
+                requestRent.startTime(),
+                requestRent.returnTime()
+        );
+        if (existsRent) {
+            throw new IllegalArgumentException("같은 시간대에 2대 이상의 차량을 예약할 수 없습니다.");
+        }
     }
 
     private Car getCar(RequestRent requestRent) {
