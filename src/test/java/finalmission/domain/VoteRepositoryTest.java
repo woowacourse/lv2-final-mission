@@ -91,6 +91,12 @@ class VoteRepositoryTest {
                                 LocalDateTime.of(2025, 5, 19, 12, 0)
                         ),
                         false
+                ),
+                Arguments.of(
+                        List.of(
+                                LocalDateTime.of(2025, 5, 19, 12, 0)
+                        ),
+                        false
                 )
         );
     }
