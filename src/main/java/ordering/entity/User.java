@@ -15,14 +15,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String email;
-
     @Column(name = "username")
     private String name;
-
-    @Column(nullable = false)
-    private String password;
 
     public User() {
     }
@@ -31,15 +25,7 @@ public class User {
         return id;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public String getPassword() {
-        return password;
     }
 }
