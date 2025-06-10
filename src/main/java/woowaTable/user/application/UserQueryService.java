@@ -46,4 +46,9 @@ public class UserQueryService {
     public boolean existsOwnerByEmail(final Email email) {
         return ownerRepository.existsByEmail(email);
     }
+
+    public Customer findCustomerById(final Long id) {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당하는 손님이 없습니다."));
+    }
 }
