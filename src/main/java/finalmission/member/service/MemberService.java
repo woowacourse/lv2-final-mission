@@ -19,12 +19,12 @@ public class MemberService {
     public MemberResponse register(final RegisterMemberRequest registerMemberRequest) {
         Member member = registerMemberRequest.toMemberEntity();
         Member savedMember = memberRepository.save(member);
-        return MemberResponse.toResponse(savedMember);
+        return MemberResponse.from(savedMember);
     }
 
     public MemberResponse login(final LoginMemberRequest loginMemberRequest) {
         Member member = memberRepository.findByEmailAndPassword(loginMemberRequest.email(), loginMemberRequest.password())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 멤버 정보를 찾을 수 없습니다."));
-        return MemberResponse.toResponse(member);
+        return MemberResponse.from(member);
     }
 }
