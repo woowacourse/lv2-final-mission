@@ -4,6 +4,7 @@ import finalmission.music.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -16,6 +17,11 @@ public class MemberAuthInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute("loginMember");
 
-        return member != null;
+        if (member == null) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return false;
+        }
+
+        return true;
     }
 }

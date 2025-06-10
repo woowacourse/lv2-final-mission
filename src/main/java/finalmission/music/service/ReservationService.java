@@ -21,7 +21,7 @@ public class ReservationService {
     private final AlbumRepository albumRepository;
     private final MemberRepository memberRepository;
 
-    public ReservationResponse reserve(ReservationRequest request, String memberName) {
+    public ReservationResponse reserve(final ReservationRequest request, final String memberName) {
         Album album = albumRepository.findById(request.albumId())
             .orElseThrow(() -> new IllegalArgumentException("[ERROR] 잘못된 앨범 id 입니다."));
 
@@ -32,9 +32,13 @@ public class ReservationService {
         return ReservationResponse.from(reservation);
     }
 
-    public List<MyReservationResponse> getMemberReservations(String member) {
+    public List<MyReservationResponse> getMemberReservations(final String member) {
         return reservationRepository.findByMember_Name(member).stream()
             .map(MyReservationResponse::from)
             .toList();
+    }
+
+    public void deleteMyReservation(final Long id, final String memberName) {
+        reservationRepository.deleteByIdAndMemberName(id, memberName);
     }
 }

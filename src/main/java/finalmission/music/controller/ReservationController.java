@@ -9,7 +9,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,12 +24,20 @@ public class ReservationController {
 
     @PostMapping("/reservations")
     public ResponseEntity<ReservationResponse> reserve(@RequestBody final ReservationRequest request,
-                                                       @LoginMember final String member) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.reserve(request, member));
+                                                       @LoginMember final String memberName) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.reserve(request, memberName));
     }
 
     @GetMapping("/reservations/me")
-    public ResponseEntity<List<MyReservationResponse>> getMyReservations(@LoginMember final String member) {
-        return ResponseEntity.ok(reservationService.getMemberReservations(member));
+    public ResponseEntity<List<MyReservationResponse>> getMyReservations(@LoginMember final String memberName) {
+        return ResponseEntity.ok(reservationService.getMemberReservations(memberName));
+    }
+
+    @DeleteMapping("/reservations/{id}")
+    public ResponseEntity<Void> deleteMyReservation(@PathVariable("id") final Long id,
+                                                    @LoginMember final String memberName) {
+        reservationService.deleteMyReservation(id, memberName);
+
+        return ResponseEntity.noContent().build();
     }
 }
