@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,15 @@ public class RoomController {
     @GetMapping
     public ResponseEntity<RoomResponse> findById(@RequestParam("id") final Long id) {
         final RoomResponse response = roomService.getById(id);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<List<RoomWithoutParticipantsResponse>> findByMemberId(
+            @PathVariable("memberId") final Long memberId
+    ) {
+        final List<RoomWithoutParticipantsResponse> response = roomService.findByMemberId(memberId);
 
         return ResponseEntity.ok(response);
     }

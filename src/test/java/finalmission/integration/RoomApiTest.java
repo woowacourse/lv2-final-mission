@@ -16,6 +16,7 @@ import io.restassured.http.ContentType;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -101,6 +102,45 @@ public class RoomApiTest {
                 .then().log().all()
                 .statusCode(200)
                 .body("name", response -> equalTo("5대5 내전 구함"));
+    }
+
+    @DisplayName("유저가 참여중인 내전방을 조회한다.")
+    @Test
+    void findByMemberId() {
+        // given
+        final Room room1 = roomRepository.save(new Room(
+                "5대5 내전 구함1",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        final Room room2 = roomRepository.save(new Room(
+                "5대5 내전 구함2",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member2
+        ));
+        final Room room3 = roomRepository.save(new Room(
+                "5대5 내전 구함3",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member2
+        ));
+
+        roomMemberRepository.save(new RoomMember(room1, member1));
+        roomMemberRepository.save(new RoomMember(room2, member1));
+        roomMemberRepository.save(new RoomMember(room3, member1));
+
+        RestAssured.given().log().all()
+                .when().get("/room/member/{id}", member1.getId())
+                .then().log().all()
+                .statusCode(200)
+                .body("[0].name", response -> equalTo("5대5 내전 구함1"))
+                .body("[1].name", response -> equalTo("5대5 내전 구함2"))
+                .body("[2].name", response -> equalTo("5대5 내전 구함3"));
     }
 
     @DisplayName("모든 방을 조회한다.")
