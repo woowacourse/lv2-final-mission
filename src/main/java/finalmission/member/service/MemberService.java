@@ -3,7 +3,7 @@ package finalmission.member.service;
 import finalmission.member.domain.Member;
 import finalmission.member.domain.MemberRepository;
 import finalmission.member.dto.LoginMemberRequest;
-import finalmission.member.dto.MemberResult;
+import finalmission.member.dto.MemberResponse;
 import finalmission.member.dto.RegisterMemberRequest;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +16,15 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public MemberResult register(final RegisterMemberRequest registerMemberRequest) {
+    public MemberResponse register(final RegisterMemberRequest registerMemberRequest) {
         Member member = registerMemberRequest.toMemberEntity();
         Member savedMember = memberRepository.save(member);
-        return MemberResult.toResult(savedMember);
+        return MemberResponse.toResponse(savedMember);
     }
 
-    public MemberResult login(final LoginMemberRequest loginMemberRequest) {
+    public MemberResponse login(final LoginMemberRequest loginMemberRequest) {
         Member member = memberRepository.findByEmailAndPassword(loginMemberRequest.email(), loginMemberRequest.password())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 멤버 정보를 찾을 수 없습니다."));
-        return MemberResult.toResult(member);
+        return MemberResponse.toResponse(member);
     }
 }

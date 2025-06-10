@@ -3,7 +3,6 @@ package finalmission.member.controller;
 import finalmission.auth.JwtTokenProvider;
 import finalmission.member.dto.LoginMemberRequest;
 import finalmission.member.dto.MemberResponse;
-import finalmission.member.dto.MemberResult;
 import finalmission.member.dto.RegisterMemberRequest;
 import finalmission.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
@@ -27,17 +26,14 @@ public class MemberController {
 
     @PostMapping("/members")
     public ResponseEntity<MemberResponse> register(@RequestBody RegisterMemberRequest memberRequest) {
-        MemberResult result = memberService.register(memberRequest);
-        MemberResponse memberResponse = MemberResponse.toResponse(result);
+        MemberResponse memberResponse = memberService.register(memberRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(memberResponse);
     }
 
     @PostMapping("/login")
     public ResponseEntity<MemberResponse> login(@RequestBody LoginMemberRequest memberRequest, HttpServletResponse response) {
-        MemberResult result = memberService.login(memberRequest);
-        MemberResponse memberResponse = MemberResponse.toResponse(result);
-
-        response.addCookie(new Cookie("token", jwtTokenProvider.createToken(result.id())));
+        MemberResponse memberResponse = memberService.login(memberRequest);
+        response.addCookie(new Cookie("token", jwtTokenProvider.createToken(memberResponse.id())));
         return ResponseEntity.status(HttpStatus.OK).body(memberResponse);
     }
 }
