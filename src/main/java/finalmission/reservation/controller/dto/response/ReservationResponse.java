@@ -1,12 +1,9 @@
 package finalmission.reservation.controller.dto.response;
 
 import finalmission.member.controller.dto.response.MemberResponse;
-import finalmission.member.domain.Member;
 import finalmission.reservation.domain.Reservation;
 import finalmission.reservationTime.controller.dto.response.ReservationTimeResponse;
-import finalmission.reservationTime.domain.ReservationTime;
 import finalmission.restaurant.controller.dto.response.RestaurantResponse;
-import finalmission.restaurant.domain.Restaurant;
 
 import java.time.LocalDate;
 

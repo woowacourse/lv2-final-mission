@@ -12,6 +12,9 @@ import finalmission.reservationTime.repository.JpaReservationTimeRepository;
 import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.repository.JpaRestaurantRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ReservationService {
@@ -52,5 +55,9 @@ public class ReservationService {
                 Status.DONE
         );
         return reservationRepository.save(reservation);
+    }
+
+    public List<Reservation> readAll() {
+        return reservationRepository.findAll();
     }
 }
