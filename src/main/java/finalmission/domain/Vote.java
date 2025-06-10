@@ -7,7 +7,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -27,9 +29,22 @@ public class Vote {
     private final Room room;
 
     public Vote(LocalDateTime dateTime, Room room, Voter voter) {
+        validateCanVoteTo(dateTime, room);
         this.dateTime = dateTime;
         this.voter = voter;
         this.room = room;
+        this.room.addVote(this);
+    }
+
+    private static void validateCanVoteTo(LocalDateTime dateTime, Room room) {
+        LocalDate date = dateTime.toLocalDate();
+        LocalTime time = dateTime.toLocalTime();
+        if (date.isBefore(room.getStartDate()) || date.isAfter(room.getEndDate())) {
+            throw new IllegalArgumentException("시작날짜와 종료날짜 사이어야 합니다.");
+        }
+        if (time.isBefore(room.getStartTime()) || time.isAfter(room.getEndTime())) {
+            throw new IllegalArgumentException("시작시간과 종료시간 사이어야 합니다.");
+        }
     }
 
     public static List<VoteStatics> calculateStatics(List<Vote> votes) {

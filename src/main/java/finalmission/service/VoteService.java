@@ -22,7 +22,7 @@ public class VoteService {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
 
         List<Vote> createdVotes = values.stream()
-                .map(dateTime -> room.createVote(voter, dateTime))
+                .map(dateTime -> new Vote(dateTime, room, voter))
                 .toList();
         voteRepository.saveAll(createdVotes);
     }
