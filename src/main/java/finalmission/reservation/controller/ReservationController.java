@@ -30,4 +30,10 @@ public class ReservationController {
         List<ReservationResponse> reservationResponses = reservationService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(reservationResponses);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservationResponse> findById(@PathVariable Long id) {
+        ReservationResponse reservationResponse = reservationService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(reservationResponse);
+    }
 }

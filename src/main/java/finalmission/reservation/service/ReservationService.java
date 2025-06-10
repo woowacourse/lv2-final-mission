@@ -42,4 +42,10 @@ public class ReservationService {
     public List<ReservationResponse> findAll() {
         return ReservationResponse.from(reservationRepository.findAll());
     }
+
+    public ReservationResponse findById(Long id) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 예약 정보가 없습니다."));
+        return ReservationResponse.from(reservation);
+    }
 }

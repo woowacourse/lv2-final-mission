@@ -5,6 +5,7 @@ import finalmission.reservation.domain.ReservationRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReservationRepositoryImpl implements ReservationRepository {
@@ -24,4 +25,10 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     public List<Reservation> findAll() {
         return jpaReservationRepository.findAll();
     }
+
+    @Override
+    public Optional<Reservation> findById(Long id) {
+        return jpaReservationRepository.findById(id);
+    }
+
 }
