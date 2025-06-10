@@ -46,4 +46,10 @@ public class Customer {
             @AttributeOverride(name = "value", column = @Column(name = "password"))
     )
     private Password password;
+
+    public Customer(String name, String email, String password) {
+        this.name = new Name(name);
+        this.email = new Email(email);
+        this.password = new Password(password);
+    }
 }
