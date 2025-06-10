@@ -14,6 +14,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public MemberResponse save(MemberRequest request) {
+        if (memberRepository.existsById(request.name())) {
+            throw new IllegalArgumentException("[ERROR] 중복된 이름입니다.");
+        }
         Member member = memberRepository.save(new Member(request.name()));
 
         return MemberResponse.from(member);
