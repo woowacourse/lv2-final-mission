@@ -1,7 +1,9 @@
 package finalmission.reservation.service;
 
 import finalmission.member.domain.Member;
+import finalmission.member.dto.MemberResponse;
 import finalmission.reservation.domain.Reservation;
+import finalmission.reservation.dto.MyReservationResponse;
 import finalmission.reservation.dto.ReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
 import finalmission.reservation.repository.ReservationRepository;
@@ -42,6 +44,21 @@ public class ReservationService {
         return reservationRepository.findAll().stream()
                 .map(reservation -> new ReservationResponse(new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime()))
                 .toList();
+    }
+
+    public MyReservationResponse getMemberReservation(Long id, Long memberId) {
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+
+        if (optionalReservation.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 예약 id입니다.");
+        }
+        if (!Objects.equals(optionalReservation.get().getMember().getId(), memberId)) {
+            throw new IllegalArgumentException("내 예약이 아닙니다.");
+        }
+
+        Reservation reservation = optionalReservation.get();
+
+        return new MyReservationResponse(new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime(), reservation.getDescription(), new MemberResponse(reservation.getMember().getName()));
     }
 
     @Transactional

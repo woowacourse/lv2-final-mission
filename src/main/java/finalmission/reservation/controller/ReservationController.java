@@ -1,6 +1,7 @@
 package finalmission.reservation.controller;
 
 import finalmission.member.domain.Member;
+import finalmission.reservation.dto.MyReservationResponse;
 import finalmission.reservation.dto.ReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
 import finalmission.reservation.service.ReservationService;
@@ -32,6 +33,11 @@ public class ReservationController {
     @GetMapping
     private ResponseEntity<List<ReservationResponse>> getReservations() {
         return ResponseEntity.ok(reservationService.getAll());
+    }
+
+    @GetMapping("/{id}")
+    private ResponseEntity<MyReservationResponse> getMemberReservationDetails(@PathVariable Long id, Member member) {
+        return ResponseEntity.ok(reservationService.getMemberReservation(id, member.getId()));
     }
 
     @DeleteMapping("/{id}")
