@@ -17,7 +17,7 @@ class WaitingLineTest {
         waitingLine.addMember(new Member(1L, "email", "name", "password", MemberRole.USER));
 
         // then
-        assertThat(waitingLine.getWaiting().size()).isEqualTo(1);
+        assertThat(waitingLine.getWaitingMembers().size()).isEqualTo(1);
     }
 
     @Test
@@ -66,7 +66,7 @@ class WaitingLineTest {
         waitingLine.addMember(member3);
         waitingLine.addMember(member4);
         waitingLine.addMember(member5);
-        
+
         // when
         int sequence = waitingLine.getSequenceByMember(member5);
 
