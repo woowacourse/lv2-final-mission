@@ -24,4 +24,9 @@ public class MemberRepositoryImpl implements MemberRepository {
     public Optional<Member> findByEmailAndPassword(final String email, final String password) {
         return jpaMemberRepository.findByEmailAndPassword(email, password);
     }
+
+    @Override
+    public Optional<Member> findById(final Long id) {
+        return jpaMemberRepository.findById(id);
+    }
 }

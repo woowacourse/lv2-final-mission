@@ -1,0 +1,20 @@
+package finalmission.reservation.repository;
+
+import finalmission.reservation.domain.Reservation;
+import finalmission.reservation.domain.ReservationRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class ReservationRepositoryImpl implements ReservationRepository {
+
+    private final JpaReservationRepository jpaReservationRepository;
+
+    public ReservationRepositoryImpl(final JpaReservationRepository jpaReservationRepository) {
+        this.jpaReservationRepository = jpaReservationRepository;
+    }
+
+    @Override
+    public Reservation save(Reservation reservation) {
+        return jpaReservationRepository.save(reservation);
+    }
+}
