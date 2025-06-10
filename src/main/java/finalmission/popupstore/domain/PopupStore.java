@@ -2,6 +2,7 @@ package finalmission.popupstore.domain;
 
 import finalmission.shopkeeper.domain.Shopkeeper;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +33,7 @@ public class PopupStore {
     private int maxEnteredMemberCount;
 
     @JoinColumn(name = "shopkeeper_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Shopkeeper shopkeeper;
 
     private PopupStore(final Long id,

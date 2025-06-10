@@ -26,7 +26,7 @@
 - 예약 도메인 모델
     - id: 예약 ID
     - member: 예약자
-    - popupStore: 상점
+    - popupStore: 예약할 상점
     - reservedAt: 예약 시간
 
 ### 멤버 기능
