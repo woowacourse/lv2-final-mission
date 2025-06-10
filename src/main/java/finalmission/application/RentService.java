@@ -7,6 +7,7 @@ import finalmission.domain.repository.CarRepository;
 import finalmission.domain.repository.RentRepository;
 import finalmission.dto.RequestRent;
 import finalmission.dto.ResponseRent;
+import finalmission.dto.ResponseRentDetail;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,14 @@ public class RentService {
         return rentRepository.findAllWithCar()
                 .stream()
                 .map(ResponseRent::from)
+                .toList();
+    }
+
+    @Transactional
+    public List<ResponseRentDetail> getAllByMember(Member member) {
+        return rentRepository.findAllByMember(member)
+                .stream()
+                .map(ResponseRentDetail::from)
                 .toList();
     }
 }

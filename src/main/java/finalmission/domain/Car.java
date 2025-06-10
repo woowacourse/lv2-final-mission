@@ -22,12 +22,12 @@ public class Car {
 
     private String licensePlate;
 
-    private Long feePerHour;
+    private Long feePerMinute;
 
     @Builder
-    public Car(String name, String licensePlate, Long feePerHour) {
+    public Car(String name, String licensePlate, Long feePerMinute) {
         this.name = name;
         this.licensePlate = licensePlate;
-        this.feePerHour = feePerHour;
+        this.feePerMinute = feePerMinute;
     }
 }

@@ -6,7 +6,7 @@ public record ResponseCar(
         Long id,
         String name,
         String licensePlate,
-        Long feePerHour
+        Long feePerMinute
 ) {
 
     public static ResponseCar from(Car car) {
@@ -14,7 +14,7 @@ public record ResponseCar(
                 car.getId(),
                 car.getName(),
                 car.getLicensePlate(),
-                car.getFeePerHour()
+                car.getFeePerMinute()
         );
     }
 }

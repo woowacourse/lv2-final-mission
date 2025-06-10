@@ -1,10 +1,13 @@
 package finalmission.domain.repository;
 
 import finalmission.domain.Car;
+import finalmission.domain.Member;
 import finalmission.domain.Rent;
+import finalmission.dto.ResponseRentDetail;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -22,4 +25,7 @@ public interface RentRepository extends JpaRepository<Rent, Long> {
                 ON r.car.id = c.id
             """)
     List<Rent> findAllWithCar();
+
+    @EntityGraph(attributePaths = {"car", "member"})
+    List<Rent> findAllByMember(Member member);
 }

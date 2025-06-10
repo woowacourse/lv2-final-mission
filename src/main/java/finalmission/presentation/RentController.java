@@ -4,6 +4,7 @@ import finalmission.application.RentService;
 import finalmission.domain.Member;
 import finalmission.dto.RequestRent;
 import finalmission.dto.ResponseRent;
+import finalmission.dto.ResponseRentDetail;
 import finalmission.infrastructure.resolver.LoginMember;
 import java.net.URI;
 import java.util.List;
@@ -33,5 +34,10 @@ public class RentController {
     @GetMapping
     public ResponseEntity<List<ResponseRent>> getAllRent() {
         return ResponseEntity.ok(rentService.getAll());
+    }
+
+    @GetMapping("/mine")
+    public ResponseEntity<List<ResponseRentDetail>> getMine(@LoginMember Member loginMember) {
+        return ResponseEntity.ok(rentService.getAllByMember(loginMember));
     }
 }

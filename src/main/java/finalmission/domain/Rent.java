@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.AccessLevel;
@@ -37,12 +38,30 @@ public class Rent {
 
     private LocalTime returnTime;
 
+    private Long fee;
+
     @Builder
     public Rent(Member member, Car car, LocalDate date, LocalTime startTime, LocalTime returnTime) {
+        validate(member, car, date, startTime, returnTime);
         this.member = member;
         this.car = car;
         this.date = date;
         this.startTime = startTime;
         this.returnTime = returnTime;
+        this.fee = calculateFee(car.getFeePerMinute(), startTime, returnTime);
+    }
+
+    private void validate(Member member, Car car, LocalDate date, LocalTime startTime, LocalTime returnTime) {
+        if (member == null || car == null || date == null || startTime == null || returnTime == null) {
+            throw new IllegalArgumentException("모든 필드는 필수입니다.");
+        }
+        if (startTime.isAfter(returnTime)) {
+            throw new IllegalArgumentException("반납 시간은 시작 시간 이후여야 합니다.");
+        }
+    }
+
+    private Long calculateFee(Long feePerMinute, LocalTime startTime, LocalTime returnTime) {
+        long minutes = Duration.between(startTime, returnTime).toMinutes();
+        return feePerMinute * minutes;
     }
 }

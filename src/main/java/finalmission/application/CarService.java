@@ -20,7 +20,7 @@ public class CarService {
         Car car = Car.builder()
                 .name(requestRegisterCar.name())
                 .licensePlate(requestRegisterCar.licensePlate())
-                .feePerHour(requestRegisterCar.feePerHour())
+                .feePerMinute(requestRegisterCar.feePerMinute())
                 .build();
         Car savedCar = carRepository.save(car);
         return savedCar.getId();
