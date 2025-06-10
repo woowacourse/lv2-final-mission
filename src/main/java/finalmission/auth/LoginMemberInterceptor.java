@@ -20,7 +20,6 @@ public class LoginMemberInterceptor implements HandlerMethodArgumentResolver {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
         return parameter.hasParameterAnnotation(LoginMember.class);
@@ -28,7 +27,7 @@ public class LoginMemberInterceptor implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer, final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) throws Exception {
-        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         Cookie[] cookies = request.getCookies();
         if(cookies == null) {
             return new IllegalArgumentException("쿠키 오류");

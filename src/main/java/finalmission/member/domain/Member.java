@@ -21,7 +21,7 @@ public class Member {
     public Member() {
     }
 
-    protected Member(final Long id, final String name, final String email, final String password) {
+    public Member(final Long id, final String name, final String email, final String password) {
         this.id = id;
         this.name = name;
         this.email = email;
