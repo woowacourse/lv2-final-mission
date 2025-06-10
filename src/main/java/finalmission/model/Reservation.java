@@ -1,7 +1,6 @@
 package finalmission.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,8 +8,10 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @NoArgsConstructor
 public class Reservation {
@@ -18,10 +19,10 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     private Seat seat;
 
     private LocalDateTime registeredAt;
@@ -34,7 +35,6 @@ public class Reservation {
 
     public Reservation(Member member, Seat seat, LocalDate reservationDate, LocalTime startAt, LocalTime endAt) {
         LocalDateTime now = LocalDateTime.now();
-        validateDateAndTime(now);
 
         this.member = member;
         this.seat = seat;
@@ -42,6 +42,8 @@ public class Reservation {
         this.startAt = startAt;
         this.endAt = endAt;
         this.registeredAt = now;
+
+        validateDateAndTime(now);
     }
 
     private void validateDateAndTime(LocalDateTime now) {

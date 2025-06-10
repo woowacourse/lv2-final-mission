@@ -2,6 +2,7 @@ package finalmission.presentation.resolver;
 
 import finalmission.dto.LoginMember;
 import finalmission.support.CookieUtils;
+import finalmission.support.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -16,6 +17,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final CookieUtils cookieUtils;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -29,6 +31,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String token = cookieUtils.getToken(request);
 
-        return new LoginMember(Long.parseLong(token));
+        return new LoginMember(Long.parseLong(jwtTokenProvider.getPayload(token)));
     }
 }

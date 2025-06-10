@@ -5,9 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class Seat {
 
@@ -20,4 +22,9 @@ public class Seat {
 
     @Column(nullable = false)
     private int seatNumber;
+
+    public Seat(String roomName, int seatNumber) {
+        this.roomName = roomName;
+        this.seatNumber = seatNumber;
+    }
 }
