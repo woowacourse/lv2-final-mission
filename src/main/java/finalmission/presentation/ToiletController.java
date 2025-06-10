@@ -1,6 +1,6 @@
 package finalmission.presentation;
 
-import finalmission.dto.ToiletResponse;
+import finalmission.dto.response.ToiletResponse;
 import finalmission.service.ToiletService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;

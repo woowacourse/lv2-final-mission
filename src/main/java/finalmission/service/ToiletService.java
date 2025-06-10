@@ -1,6 +1,6 @@
 package finalmission.service;
 
-import finalmission.dto.ToiletResponse;
+import finalmission.dto.response.ToiletResponse;
 import finalmission.infrastructure.ToiletRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;

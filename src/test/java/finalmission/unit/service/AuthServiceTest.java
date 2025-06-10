@@ -6,9 +6,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import finalmission.domain.Member;
-import finalmission.domain.WrongPasswordException;
 import finalmission.dto.request.LoginRequest;
 import finalmission.exception.EmailNotExistException;
+import finalmission.exception.WrongPasswordException;
 import finalmission.infrastructure.MemberRepository;
 import finalmission.infrastructure.TokenProvider;
 import finalmission.service.AuthService;

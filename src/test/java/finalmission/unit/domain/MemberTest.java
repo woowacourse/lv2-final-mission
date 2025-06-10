@@ -3,7 +3,7 @@ package finalmission.unit.domain;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import finalmission.domain.Member;
-import finalmission.domain.WrongPasswordException;
+import finalmission.exception.WrongPasswordException;
 import org.junit.jupiter.api.Test;
 
 public class MemberTest {

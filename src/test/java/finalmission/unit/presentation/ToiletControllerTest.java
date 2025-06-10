@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import finalmission.dto.ToiletResponse;
+import finalmission.dto.response.ToiletResponse;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;

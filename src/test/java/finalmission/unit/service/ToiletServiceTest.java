@@ -3,7 +3,7 @@ package finalmission.unit.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import finalmission.domain.Toilet;
-import finalmission.dto.ToiletResponse;
+import finalmission.dto.response.ToiletResponse;
 import finalmission.infrastructure.ToiletRepository;
 import finalmission.service.ToiletService;
 import finalmission.unit.fake.FakeToiletRepository;
