@@ -18,17 +18,33 @@ public class SignupService {
 
     @Transactional
     public Long signup(RequestSignup requestSignup) {
-        Member member = Member.builder()
+        validateDuplicateEmail(requestSignup);
+        Member member = createMember(requestSignup);
+        Member savedMember = memberRepository.save(member);
+        MemberCredential memberCredential = createMemberCredential(requestSignup, savedMember);
+        memberCredentialRepository.save(memberCredential);
+        return savedMember.getId();
+    }
+
+    private void validateDuplicateEmail(RequestSignup requestSignup) {
+        boolean existsEmail = memberCredentialRepository.existsByEmail(requestSignup.email());
+        if (existsEmail) {
+            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+        }
+    }
+
+    private Member createMember(RequestSignup requestSignup) {
+        return Member.builder()
                 .name(requestSignup.name())
                 .age(requestSignup.age())
                 .build();
-        Member savedMember = memberRepository.save(member);
-        MemberCredential memberCredential = MemberCredential.builder()
+    }
+
+    private MemberCredential createMemberCredential(RequestSignup requestSignup, Member savedMember) {
+        return MemberCredential.builder()
                 .email(requestSignup.email())
                 .password(requestSignup.password())
                 .member(savedMember)
                 .build();
-        memberCredentialRepository.save(memberCredential);
-        return savedMember.getId();
     }
 }
