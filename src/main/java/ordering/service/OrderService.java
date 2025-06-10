@@ -43,6 +43,6 @@ public class OrderService {
             .orElseThrow(IllegalArgumentException::new);
 
         return new Order(user, category, product, request.count(), request.detail(),
-            request.amount(), LocalDateTime.now(), EmailStatus.DONE);
+            LocalDateTime.now(), EmailStatus.DONE);
     }
 }
