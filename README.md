@@ -56,7 +56,7 @@ Content-Type: application/json
 ```
 
 #### 코치
-+ [ ] 코치 목록 조회
++ [x] 코치 목록 조회
 ```
 GET /coaches HTTP/1.1
 ```

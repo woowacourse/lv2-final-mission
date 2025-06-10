@@ -19,7 +19,7 @@ public class CrewController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CrewResponse>> getReservationTimes(
+    public ResponseEntity<List<CrewResponse>> getCrews(
     ){
         return ResponseEntity.ok().body(
                 crewService.getCrews()
