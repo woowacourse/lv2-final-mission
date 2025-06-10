@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoomService {
 
+    private static final int MAXIMUM_PARTICIPATNS_SIZE = 10;
+
     private final MemberService memberService;
     private final RoomRepository roomRepository;
     private final RoomMemberRepository roomMemberRepository;
@@ -55,10 +57,17 @@ public class RoomService {
                 .orElseThrow(() -> new NotFoundException("해당 id의 내전방을 찾을 수 없습니다. id: " + roomId));
         final Member member = memberService.getById(memberId);
 
+        validateParticipantsSize(room);
         validateAlreadyJoin(room, member);
 
         final RoomMember roomMember = roomMemberRepository.save(new RoomMember(room, member));
         room.addRoomMember(roomMember);
+    }
+
+    private void validateParticipantsSize(final Room room) {
+        if (room.getRoomMembers().size() > MAXIMUM_PARTICIPATNS_SIZE) {
+            throw new IllegalArgumentException("이미 방이 꽉 찼습니다.");
+        }
     }
 
     private void validateAlreadyJoin(final Room room, final Member member) {
