@@ -13,6 +13,7 @@ import finalmission.repository.RoomMemberRepository;
 import finalmission.repository.RoomRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -121,5 +122,51 @@ public class RoomApiTest {
                 .then().log().all()
                 .statusCode(200)
                 .body("[0].name", response -> equalTo("5대5 내전 구함"));
+    }
+
+    @DisplayName("해당 내전방에 참여한다.")
+    @Test
+    void join() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        // when & then
+        RestAssured.given().log().all()
+                .param("memberId", 2L)
+                .param("roomId", 1L)
+                .when().get("/room/join")
+                .then().log().all()
+                .statusCode(204);
+
+        assertThat(roomMemberRepository.findAll()).hasSize(2);
+    }
+
+    @DisplayName("이미 내전방에 참여한 유저가 참여를 요청하면 400을 응답한다.")
+    @Test
+    void joinAlreadyJoinedMember() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        // when & then
+        RestAssured.given().log().all()
+                .param("memberId", 1L)
+                .param("roomId", 1L)
+                .when().get("/room/join")
+                .then().log().all()
+                .statusCode(400);
     }
 }

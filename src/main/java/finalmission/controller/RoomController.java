@@ -42,7 +42,14 @@ public class RoomController {
 
         return ResponseEntity.ok(response);
     }
-//
-//    @GetMapping
-//    public ResponseEntity<Void> join()
+
+    @GetMapping("/join")
+    public ResponseEntity<Void> join(
+            @RequestParam("memberId") final Long memberId,
+            @RequestParam("roomId") final Long roomId
+    ) {
+        roomService.join(roomId, memberId);
+
+        return ResponseEntity.noContent().build();
+    }
 }

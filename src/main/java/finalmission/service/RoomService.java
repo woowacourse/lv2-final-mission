@@ -48,4 +48,25 @@ public class RoomService {
                 .map(RoomWithoutParticipantsResponse::from)
                 .toList();
     }
+
+    @Transactional
+    public void join(final Long roomId, final Long memberId) {
+        final Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new NotFoundException("해당 id의 내전방을 찾을 수 없습니다. id: " + roomId));
+        final Member member = memberService.getById(memberId);
+
+        validateAlreadyJoin(room, member);
+
+        final RoomMember roomMember = roomMemberRepository.save(new RoomMember(room, member));
+        room.addRoomMember(roomMember);
+    }
+
+    private void validateAlreadyJoin(final Room room, final Member member) {
+        boolean alreadyJoin = room.getRoomMembers().stream()
+                .anyMatch(roomMember -> roomMember.getMember().equals(member));
+
+        if (alreadyJoin) {
+            throw new IllegalStateException("이미 해당 내전방에 참여한 유저입니다.");
+        }
+    }
 }
