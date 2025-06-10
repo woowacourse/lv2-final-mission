@@ -1,5 +1,7 @@
 package finalmission.reservation.application;
 
+import finalmission.email.application.EmailService;
+import finalmission.email.infrastructure.twilio.dto.SendEmailRequest;
 import finalmission.exception.auth.AuthorizationException;
 import finalmission.exception.resource.AlreadyExistException;
 import finalmission.member.domain.Member;
@@ -29,6 +31,7 @@ public class ReservationService {
     private final RestaurantRepository restaurantRepository;
     private final MemberRepository memberRepository;
     private final ReservationRepository reservationRepository;
+    private final EmailService emailService;
 
     @Transactional
     public ReservationResponse create(
@@ -42,7 +45,8 @@ public class ReservationService {
         final Reservation reservation = createReservedReservation(
                 request.date(), time, restaurant, member
         );
-
+        emailService.sendEmail(SendEmailRequest.confirmReservation(member.getEmail()));
+        
         return ReservationResponse.from(reservation);
     }
 
@@ -84,6 +88,10 @@ public class ReservationService {
         }
 
         reservationRepository.deleteById(reservationId);
+        List<Member> waitingMembers = memberRepository.findAll();
+        for (final Member waitingMember : waitingMembers) {
+            emailService.sendEmail(SendEmailRequest.waitingAlarm(waitingMember.getEmail()));
+        }
     }
 
     @Transactional(readOnly = true)
