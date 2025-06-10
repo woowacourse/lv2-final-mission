@@ -86,7 +86,7 @@ HTTP/1.1 201
 Content-Type: application/json
 Location: /dateTimes/{id}
 ```
-+ [ ] 예약 가능 시간 목록 조회
++ [x] 예약 가능 시간 목록 조회
 ```
 GET /dateTimes?nickname="포비" HTTP/1.1
 ```

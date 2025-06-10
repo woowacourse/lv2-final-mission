@@ -1,10 +1,12 @@
 package finalmission.application.service;
 
 import finalmission.application.dto.ReservationDateTimeRequest;
+import finalmission.application.dto.ReservationDateTimeResponse;
 import finalmission.domain.Coach;
 import finalmission.domain.ReservationDateTime;
 import finalmission.domain.repository.CoachRepository;
 import finalmission.domain.repository.ReservationDateTimeRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,5 +30,14 @@ public class ReservationDateTimeService {
         ));
 
         return reservationDateTime.getId();
+    }
+
+    public List<ReservationDateTimeResponse> getReservationDateTimes(final String nickname) {
+        Coach coach = coachRepository.findByMemberNickname(nickname)
+                .orElseThrow(() -> new IllegalArgumentException("코치가 존재하지 않습니다"));
+
+        return reservationDateTimeRepository.findByCoach(coach).stream()
+                .map(ReservationDateTimeResponse::new)
+                .toList();
     }
 }
