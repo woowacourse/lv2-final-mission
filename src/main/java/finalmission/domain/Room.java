@@ -34,9 +34,9 @@ public class Room {
         this.endTime = endTime;
     }
 
-    public Time createTime(String username, LocalDateTime dateTime) {
+    public Time createTime(Member member, LocalDateTime dateTime) {
         validateDateTimeIsInBoundary(dateTime);
-        Time newTime = new Time(username, dateTime, this);
+        Time newTime = new Time(dateTime, this, member);
         this.times.add(newTime);
         return newTime;
     }
@@ -52,9 +52,9 @@ public class Room {
         }
     }
 
-    public List<Time> getTimesOf(String username) {
+    public List<Time> getTimesOf(String name) {
         return times.stream()
-                .filter(time -> time.createdBy(username))
+                .filter(time -> time.createdBy(name))
                 .toList();
     }
 }

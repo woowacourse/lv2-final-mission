@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TimeRepository extends JpaRepository<Time, Id> {
-    void deleteAllByRoom_IdAndUsername(Id roomId, String username);
+    void deleteAllByRoom_IdAndMember_Name(Id roomId, String memberName);
 
     List<Time> getTimesByRoom_Id(Id roomId);
 }

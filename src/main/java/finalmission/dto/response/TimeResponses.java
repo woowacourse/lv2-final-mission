@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record TimeResponses(
-        String username,
+        String name,
         List<LocalDateTime> values
 ) {
-    public static TimeResponses from(String username, List<LocalDateTime> dateTimes) {
-        return new TimeResponses(username, dateTimes);
+    public static TimeResponses from(String name, List<LocalDateTime> dateTimes) {
+        return new TimeResponses(name, dateTimes);
     }
 }

@@ -17,15 +17,18 @@ public class Time {
 
     @EmbeddedId
     private final Id id = Id.random();
-    private final String username;
+
     private final LocalDateTime dateTime;
+
+    @ManyToOne
+    private final Member member;
 
     @ManyToOne
     private final Room room;
 
-    public Time(String username, LocalDateTime dateTime, Room room) {
-        this.username = username;
+    public Time(LocalDateTime dateTime, Room room, Member member) {
         this.dateTime = dateTime;
+        this.member = member;
         this.room = room;
     }
 
@@ -37,7 +40,7 @@ public class Time {
                         dateTime,
                         times.stream()
                                 .filter(time -> time.isDateTimeOf(dateTime))
-                                .map(Time::getUsername)
+                                .map(Time::getCreatorName)
                                 .toList()
                 ))
                 .toList();
@@ -47,7 +50,11 @@ public class Time {
         return this.dateTime.equals(dateTime);
     }
 
-    public boolean createdBy(String username) {
-        return this.username.equals(username);
+    public boolean createdBy(String name) {
+        return this.member.hasName(name);
+    }
+
+    public String getCreatorName() {
+        return this.member.getName();
     }
 }

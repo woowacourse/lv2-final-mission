@@ -14,14 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TimeService {
 
+    private final MemberRepository memberRepository;
     private final RoomRepository roomRepository;
     private final TimeRepository timeRepository;
 
     @Transactional
-    public void addTime(String roomId, String username, List<LocalDateTime> values) {
+    public void addTime(String roomId, String memberId, List<LocalDateTime> values) {
+        Member member = memberRepository.findById(new Id(memberId)).orElseThrow();
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
+
         List<Time> createdTimes = values.stream()
-                .map(dateTime -> room.createTime(username, dateTime))
+                .map(dateTime -> room.createTime(member, dateTime))
                 .toList();
         timeRepository.saveAll(createdTimes);
     }
@@ -34,17 +37,17 @@ public class TimeService {
     }
 
     @Transactional(readOnly = true)
-    public TimeResponses getMyTimes(String roomId, String username) {
+    public TimeResponses getMyTimes(String roomId, String name) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
-        List<Time> times = room.getTimesOf(username);
+        List<Time> times = room.getTimesOf(name);
         List<LocalDateTime> dateTimes = times.stream()
                 .map(Time::getDateTime)
                 .toList();
-        return TimeResponses.from(username, dateTimes);
+        return TimeResponses.from(name, dateTimes);
     }
 
     @Transactional
-    public void dropMyTimes(String roomId, String username) {
-        timeRepository.deleteAllByRoom_IdAndUsername(new Id(roomId), username);
+    public void dropMyTimes(String roomId, String name) {
+        timeRepository.deleteAllByRoom_IdAndMember_Name(new Id(roomId), name);
     }
 }

@@ -20,8 +20,8 @@ public class TimeController {
             @PathVariable("roomId") String roomId,
             @RequestBody TimeAddRequest request
     ) {
-        String username = request.username() == null ? nameGenerator.generate() : request.username();
-        service.addTime(roomId, username, request.values());
+        String name = request.name() == null ? nameGenerator.generate() : request.name();
+        service.addTime(roomId, name, request.values());
     }
 
     @GetMapping("/time/{roomId}")
@@ -34,17 +34,16 @@ public class TimeController {
     @GetMapping("/time/{roomId}/my")
     public TimeResponses getMyTimes(
             @PathVariable("roomId") String roomId,
-            @RequestParam("username") String username
+            @RequestParam("name") String name
     ) {
-        return service.getMyTimes(roomId, username);
-
+        return service.getMyTimes(roomId, name);
     }
 
     @DeleteMapping("/time/{roomId}")
     public void deleteAllTimeOf(
             @PathVariable("roomId") String roomId,
-            @RequestParam("username") String username
+            @RequestParam("name") String name
     ) {
-        service.dropMyTimes(roomId, username);
+        service.dropMyTimes(roomId, name);
     }
 }
