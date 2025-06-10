@@ -12,6 +12,8 @@ import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.domain.ReservationDate;
 import finalmission.reservation.domain.StartAt;
 import finalmission.reservation.domain.repository.ReservationRepository;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,10 +39,18 @@ public class ReservationService {
 
         meetingRoom.checkAvailableTime(startAt.getValue(), endAt.getValue());
 
+        validateUsing(request.roomId(), request.date(), request.startAt(), request.endAt());
+
         Reservation reservation = new Reservation(member, meetingRoom, date, startAt, endAt);
         reservation.checkValidTime();
         reservationRepository.save(reservation);
         return ReservationResponse.from(reservation);
+    }
+
+    private void validateUsing(Long roomId, LocalDate date, LocalTime startAt, LocalTime endAt) {
+        if (!reservationRepository.findReservationBy(roomId, date, startAt, endAt).isEmpty()) {
+            throw new IllegalArgumentException("이미 예약 중인 시간입니다.");
+        }
     }
 
     public List<ReservationResponse> getMyReservation(Long memberId) {
@@ -96,6 +106,8 @@ public class ReservationService {
         reservation.checkValidTime();
         reservation.getMeetingRoom().checkAvailableTime(reservation.getStartAt(), reservation.getEndAt());
 
+        validateUsing(reservation.getMeetingRoom().getId(), reservation.getDate(), reservation.getStartAt(),
+                reservation.getEndAt());
         return ReservationResponse.from(reservation);
     }
 

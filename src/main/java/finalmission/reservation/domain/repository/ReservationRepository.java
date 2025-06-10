@@ -2,6 +2,8 @@ package finalmission.reservation.domain.repository;
 
 import finalmission.member.domain.Member;
 import finalmission.reservation.domain.Reservation;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +19,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             WHERE (:roomId IS NULL OR r.meetingRoom.id = :roomId)
             """)
     List<Reservation> findFiltered(@Param("roomId") Long roomId);
+
+    @Query("""
+            SELECT r FROM Reservation r
+            WHERE (r.meetingRoom.id = :roomId)
+            AND (r.date.value = :date)
+            AND ((r.startAt.value between :startAt and :endAt)
+                        OR r.endAt.value between :startAt and :endAt)
+            
+            """)
+    List<Reservation> findReservationBy(Long roomId, LocalDate date, LocalTime startAt, LocalTime endAt);
 }
