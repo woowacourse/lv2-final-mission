@@ -1,0 +1,21 @@
+package finalmission.util;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+@SpringBootTest
+public abstract class AbstractServiceTest {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @BeforeEach
+    void resetAutoIncrement() {
+        jdbcTemplate.update("ALTER TABLE member ALTER COLUMN id RESTART WITH 1;");
+        jdbcTemplate.update("ALTER TABLE reservation ALTER COLUMN id RESTART WITH 1;");
+        jdbcTemplate.update("ALTER TABLE trainer ALTER COLUMN id RESTART WITH 1;");
+        jdbcTemplate.update("ALTER TABLE lesson ALTER COLUMN id RESTART WITH 1;");
+    }
+}
