@@ -22,10 +22,7 @@ public class Reservation {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ReservationStatus status;
 
     @Column(nullable = false)
@@ -46,16 +43,38 @@ public class Reservation {
     protected Reservation() {
     }
 
+    public Reservation(
+            Long id,
+            ReservationStatus status,
+            LocalDate date,
+            Member member,
+            LessonTime lessonTime,
+            Trainer trainer
+    ) {
+        this.id = id;
+        this.status = status;
+        this.date = date;
+        this.member = member;
+        this.lessonTime = lessonTime;
+        this.trainer = trainer;
+    }
+
+    public static Reservation createWithoutId(
+            ReservationStatus status,
+            LocalDate date,
+            Member member,
+            LessonTime lessonTime,
+            Trainer trainer
+    ) {
+        return new Reservation(null, status, date, member, lessonTime, trainer);
+    }
+
     public LocalTime reservedTime() {
         return this.lessonTime.getTime();
     }
 
     public Long getId() {
         return id;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 
     public ReservationStatus getStatus() {

@@ -16,6 +16,6 @@ public abstract class AbstractServiceTest {
         jdbcTemplate.update("ALTER TABLE member ALTER COLUMN id RESTART WITH 1;");
         jdbcTemplate.update("ALTER TABLE reservation ALTER COLUMN id RESTART WITH 1;");
         jdbcTemplate.update("ALTER TABLE trainer ALTER COLUMN id RESTART WITH 1;");
-        jdbcTemplate.update("ALTER TABLE lesson ALTER COLUMN id RESTART WITH 1;");
+        jdbcTemplate.update("ALTER TABLE lesson_time ALTER COLUMN id RESTART WITH 1;");
     }
 }

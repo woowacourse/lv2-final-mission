@@ -17,3 +17,6 @@ INSERT INTO trainer (name, gender)
 VALUES ('민주', 'WOMAN');
 INSERT INTO trainer (name, gender)
 VALUES ('상건', 'MAN');
+
+-- INSERT INTO reservation ()
+-- VALUES ();

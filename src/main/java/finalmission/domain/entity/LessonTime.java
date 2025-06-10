@@ -20,6 +20,15 @@ public class LessonTime {
     protected LessonTime() {
     }
 
+    public LessonTime(Long id, LocalTime time) {
+        this.id = id;
+        this.time = time;
+    }
+
+    public static LessonTime createWithoutId(LocalTime time) {
+        return new LessonTime(null, time);
+    }
+
     public Long getId() {
         return id;
     }
