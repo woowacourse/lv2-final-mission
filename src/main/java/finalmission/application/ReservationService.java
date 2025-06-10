@@ -2,6 +2,7 @@ package finalmission.application;
 
 import finalmission.application.dto.request.CreateReservationRequest;
 import finalmission.application.dto.response.CreateReservationResponse;
+import finalmission.application.dto.response.ReservationDetailResponse;
 import finalmission.application.support.exception.NotFoundEntityException;
 import finalmission.domain.Member;
 import finalmission.domain.MemberRepository;
@@ -11,6 +12,7 @@ import finalmission.domain.Reservation;
 import finalmission.domain.ReservationRepository;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,20 @@ public class ReservationService {
         );
         reservationRepository.save(reservation);
         return new CreateReservationResponse(reservation.getId());
+    }
+
+    public List<ReservationDetailResponse> getReservations(Long memberId, String refrigeratorId) {
+        Member member = getMember(memberId);
+        Refrigerator refrigerator = getRefrigerator(refrigeratorId);
+        List<Reservation> reservations = reservationRepository.findAllByMemberAndRefrigerator(member, refrigerator);
+        return reservations.stream()
+                .map(reservation -> new ReservationDetailResponse(
+                        reservation.getId(),
+                        reservation.getMonsterEnergy(),
+                        reservation.getQuantity(),
+                        reservation.getDateTime()
+                ))
+                .toList();
     }
 
     private Member getMember(Long memberId) {
