@@ -28,7 +28,7 @@ public class VoteController {
     ) {
         Voter voter = voterService.validateAndGet(name, password);
         voteService.vote(roomId, voter, request.values());
-        URI createdLocation = URI.create("/time/{roomId}/my");
+        URI createdLocation = URI.create("/time/" + roomId + "/my");
         return ResponseEntity.created(createdLocation).build();
     }
 

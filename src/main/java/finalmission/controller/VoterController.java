@@ -23,7 +23,7 @@ public class VoterController {
             @RequestBody RegisterRequest request
     ) {
         voterService.register(roomId, request.name(), request.password());
-        URI createdLocation = URI.create("/time/{roomId}/my");
+        URI createdLocation = URI.create("/time/" + roomId + "/my");
         return ResponseEntity.created(createdLocation).build();
     }
 }

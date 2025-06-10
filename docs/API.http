@@ -23,7 +23,7 @@ Content-Type: application/json
 
 ### 투표
 POST http://localhost:8080/vote/{{roomId}}?
-    name={{name2}}&
+    name={{name}}&
     password={{password}}
 Content-Type: application/json
 
