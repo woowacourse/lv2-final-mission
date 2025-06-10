@@ -22,4 +22,18 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
+
+    public boolean hasSamePassword(String password) {
+        return this.password.equals(password);
+    }
+
+    public Member(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }

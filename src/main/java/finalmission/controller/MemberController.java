@@ -1,0 +1,22 @@
+package finalmission.controller;
+
+import finalmission.dto.MemberRegisterDto;
+import finalmission.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/member")
+@RequiredArgsConstructor
+public class MemberController {
+
+    private final MemberService memberService;
+
+    @PostMapping
+    public void signUp(@RequestBody MemberRegisterDto memberRegisterDto) {
+        memberService.signUp(memberRegisterDto);
+    }
+}
