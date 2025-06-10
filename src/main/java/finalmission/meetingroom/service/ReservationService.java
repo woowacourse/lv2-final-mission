@@ -1,5 +1,6 @@
 package finalmission.meetingroom.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import finalmission.meetingroom.common.exception.AlreadyInUseException;
+import finalmission.meetingroom.common.exception.BusinessException;
 import finalmission.meetingroom.common.exception.EntityNotFoundException;
 import finalmission.meetingroom.domain.MeetingRoom;
 import finalmission.meetingroom.domain.Member;
@@ -37,44 +40,64 @@ public class ReservationService {
             final ReservationCreateRequest request,
             final LoginMember loginMember
     ) {
-        if (isPastTime(request)) {
-            throw new IllegalArgumentException("");
-        }
-        if (isAvailableTime(request)) {
-            throw new IllegalArgumentException("");
-        }
+        LocalDate reservationDate = request.reservationDate();
+        LocalTime startAt = request.startAt();
+        LocalTime endAt = request.endAt();
+        validateReservationDateTime(reservationDate, startAt, endAt);
 
         MeetingRoom meetingRoom = getMeetingRoom(request.meetingRoomName());
-        if (isAlreadyReserved(meetingRoom, request)) {
+        if (isAlreadyReserved(meetingRoom, reservationDate, startAt, endAt)) {
             throw new IllegalArgumentException("");
         }
         Member member = getMember(loginMember);
 
         Reservation reservation = new Reservation(
-                meetingRoom, member, request.reservationDate(), request.startAt(), request.endAt()
+                meetingRoom, member, reservationDate, startAt, endAt
         );
         reservationRepository.save(reservation);
 
         return ReservationResponse.from(reservation);
     }
 
-    private boolean isPastTime(final ReservationCreateRequest request) {
-        LocalDateTime reservationStartDateTime = LocalDateTime.of(request.reservationDate(), request.startAt());
+    private void validateReservationDateTime(
+            final LocalDate reservationDate,
+            final LocalTime startAt,
+            final LocalTime endAt
+    ) {
+        if (isPastTime(reservationDate, startAt)) {
+            throw new BusinessException("과거의 시간에 예약할 수 없습니다.");
+        }
+        if (isAvailableTime(startAt) && isAvailableTime(endAt)) {
+            throw new BusinessException("예약 불가능한 시간입니다.");
+        }
+        if (isEndAtBeforeStartAt(startAt, endAt)) {
+            throw new BusinessException("예약 종료 시간이 시작 시간보다 빠를 수 없습니다.");
+        }
+    }
+
+    private boolean isPastTime(final LocalDate reservationDate, final LocalTime startAt) {
+        LocalDateTime reservationStartDateTime = LocalDateTime.of(reservationDate, startAt);
         return LocalDateTime.now().isAfter(reservationStartDateTime);
     }
 
-    private boolean isAvailableTime(final ReservationCreateRequest request) {
-        LocalTime reservationStartTime = request.startAt();
-        return START_TIME.isAfter(reservationStartTime) || END_TIME.isBefore(reservationStartTime);
+    private boolean isAvailableTime(final LocalTime reservationTIme) {
+        return START_TIME.isAfter(reservationTIme) || END_TIME.isBefore(reservationTIme);
     }
 
-    private boolean isAlreadyReserved(final MeetingRoom meetingRoom, final ReservationCreateRequest request) {
-        LocalTime startTime = request.startAt();
-        LocalTime endTime = request.endAt();
+    private boolean isAlreadyReserved(
+            final MeetingRoom meetingRoom,
+            final LocalDate reservationDate,
+            final LocalTime startAt,
+            final LocalTime endAt
+    ) {
         return !reservationRepository.existsByMeetingRoomAndReservationDateAndStartAtBetween(
-                meetingRoom, request.reservationDate(), startTime, endTime) &&
+                meetingRoom, reservationDate, startAt, endAt) &&
                reservationRepository.existsByMeetingRoomAndReservationDateAndEndAtBetween(
-                       meetingRoom, request.reservationDate(), startTime, endTime);
+                       meetingRoom, reservationDate, startAt, endAt);
+    }
+
+    private boolean isEndAtBeforeStartAt(final LocalTime startAt, final LocalTime endAt) {
+        return endAt.isBefore(startAt);
     }
 
     public List<ReservationResponse> getReservations() {
@@ -102,7 +125,15 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findByIdAndMember(reservationId, member)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회의실 예약 입니다."));
 
-        reservation.changeReservationTime(request.newStartAt(), request.newEndAt());
+        LocalDate reservationDate = reservation.getReservationDate();
+        LocalTime newStartAt = request.newStartAt();
+        LocalTime newEndAt = request.newEndAt();
+        validateReservationDateTime(reservationDate, newStartAt, newEndAt);
+
+        if (isAlreadyReserved(reservation.getMeetingRoom(), reservationDate, newStartAt, newEndAt)) {
+            throw new AlreadyInUseException("해당 시간에 예약이 이미 존재합니다.");
+        }
+        reservation.changeReservationTime(newStartAt, newEndAt);
 
         return ReservationResponse.from(reservation);
     }
