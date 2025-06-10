@@ -21,6 +21,9 @@ public class VoteService {
     public void vote(String roomId, Voter voter, List<LocalDateTime> values) {
         Room room = roomRepository.findById(new Id(roomId)).orElseThrow();
 
+        if (!voteRepository.hasDuplicatedVote(roomId, voter, values)) {
+            throw new IllegalArgumentException("중복 투표는 불가능합니다.");
+        }
         List<Vote> createdVotes = values.stream()
                 .map(dateTime -> new Vote(dateTime, room, voter))
                 .toList();
