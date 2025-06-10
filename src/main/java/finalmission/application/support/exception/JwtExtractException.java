@@ -1,6 +1,6 @@
 package finalmission.application.support.exception;
 
-public class JwtExtractException extends RuntimeException {
+public class JwtExtractException extends AuthException {
     public JwtExtractException(String message) {
         super(message);
     }
