@@ -12,3 +12,14 @@
   
 - RESPONSE
   - 201 CREATED
+
+## Member
+
+### 사용자 등록
+> POST /members
+
+- REQUEST BODY
+  - "name": 사용자 이름 (2자 이상 5자 이하)
+
+- RESPONSE
+  - 201 CREATED
