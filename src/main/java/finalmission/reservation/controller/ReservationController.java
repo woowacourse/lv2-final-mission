@@ -35,4 +35,13 @@ public class ReservationController {
                 .toList();
         return ResponseEntity.ok().body(responses);
     }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<ReservationResponse>> readAll(@RequestParam long id) {
+        List<Reservation> reservations = reservationService.read(id);
+        List<ReservationResponse> responses = reservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
+        return ResponseEntity.ok().body(responses);
+    }
 }
