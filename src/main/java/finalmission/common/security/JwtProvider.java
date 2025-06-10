@@ -1,4 +1,4 @@
-package finalmission.member.service;
+package finalmission.common.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -8,14 +8,12 @@ import com.auth0.jwt.exceptions.IncorrectClaimException;
 import com.auth0.jwt.exceptions.MissingClaimException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import finalmission.common.config.JwtProperties;
 import finalmission.member.domain.Member;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Map;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -59,11 +57,6 @@ public class JwtProvider {
     public String getClaim(final String token, final String name) {
         DecodedJWT decodedJWT = verifyToken(token);
         return decodedJWT.getClaim(name).asString();
-    }
-
-    public Map<String, Claim> getClaims(final String token) {
-        DecodedJWT decodedJWT = verifyToken(token);
-        return decodedJWT.getClaims();
     }
 
     private DecodedJWT verifyToken(final String token) {

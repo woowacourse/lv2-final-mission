@@ -2,7 +2,6 @@ package finalmission.common.security;
 
 import finalmission.member.domain.MemberInfo;
 import finalmission.member.domain.MemberRole;
-import finalmission.member.service.JwtProvider;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -34,7 +33,7 @@ public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver
             throws Exception {
         String token = authorizationExtractor.extract(webRequest);
         long memberId = Long.parseLong(jwtProvider.getSubject(token));
-        MemberRole role = MemberRole.valueOf(jwtProvider.getClaims("role").toString());
+        MemberRole role = MemberRole.valueOf(jwtProvider.getClaim(token, "role"));
         return new MemberInfo(memberId, role);
     }
 }
