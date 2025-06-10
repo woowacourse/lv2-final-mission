@@ -1,8 +1,11 @@
 package finalmission.presentation;
 
+import finalmission.domain.service.dto.ReservationDetailResponse;
 import finalmission.domain.entity.Member;
 import finalmission.domain.service.MemberService;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,11 +29,4 @@ public class MemberController {
         memberService.selectTrainer(member, trainerId);
         return ResponseEntity.noContent().build();
     }
-
-    // 내 확정 수업 목록 보기
-
-    // 내 대기 수업 목록 보기
-
-    // 내 남은 PT 횟수 보기
-
 }

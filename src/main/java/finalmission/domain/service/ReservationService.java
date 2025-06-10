@@ -5,6 +5,7 @@ import finalmission.domain.entity.Member;
 import finalmission.domain.entity.Reservation;
 import finalmission.domain.entity.ReservationStatus;
 import finalmission.domain.entity.Trainer;
+import finalmission.domain.service.dto.ReservationDetailResponse;
 import finalmission.domain.service.dto.ReservationLessonRequest;
 import finalmission.domain.service.dto.TrainerReservationResponse;
 import finalmission.repository.LessonTimeRepository;
@@ -31,18 +32,6 @@ public class ReservationService {
         this.timeInjection = timeInjection;
     }
 
-    public List<TrainerReservationResponse> getTrainersReservations(Long trainerId) {
-        Trainer trainer = getTrainer(trainerId);
-        List<Reservation> foundReservations = reservationRepository.findByTrainerAndDateAfterOrderByDateAsc(
-                trainer,
-                timeInjection.now().toLocalDate()
-        );
-        return foundReservations.stream().map(reservation -> TrainerReservationResponse.from(
-                reservation.getDate(),
-                reservation.reservedTime()
-        )).toList();
-    }
-
     @Transactional
     public void reserveLesson(Member member, ReservationLessonRequest request) {
         if (!member.matchTrainer(request.trainerId())) {
@@ -59,6 +48,33 @@ public class ReservationService {
         }
         createLesson(request, time, trainer, member, ReservationStatus.RESERVED);
         member.minusPtNumber();
+    }
+
+    public List<TrainerReservationResponse> getTrainersReservations(Long trainerId) {
+        Trainer trainer = getTrainer(trainerId);
+        List<Reservation> foundReservations = reservationRepository.findByTrainerAndDateAfterOrderByDateAsc(
+                trainer,
+                timeInjection.now().toLocalDate()
+        );
+        return foundReservations.stream().map(reservation -> TrainerReservationResponse.from(
+                reservation.getDate(),
+                reservation.reservedTime()
+        )).toList();
+    }
+
+    public List<ReservationDetailResponse> getReservationsMemberState(
+            Member member,
+            ReservationStatus reservationStatus
+    ) {
+        List<Reservation> reservations = reservationRepository.findByMemberAndStatus(member, reservationStatus);
+        return reservations.stream().map(reservation ->
+                        ReservationDetailResponse.from(
+                                reservation.getTrainer().getName(),
+                                reservation.getDate(),
+                                reservation.reservedTime()
+                        )
+                )
+                .toList();
     }
 
     private void createLesson(

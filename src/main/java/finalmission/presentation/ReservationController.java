@@ -1,7 +1,9 @@
 package finalmission.presentation;
 
 import finalmission.domain.entity.Member;
+import finalmission.domain.entity.ReservationStatus;
 import finalmission.domain.service.ReservationService;
+import finalmission.domain.service.dto.ReservationDetailResponse;
 import finalmission.domain.service.dto.ReservationLessonRequest;
 import finalmission.domain.service.dto.TrainerReservationResponse;
 import java.util.List;
@@ -24,11 +26,6 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping("/trainers/{trainerId}")
-    public List<TrainerReservationResponse> getTrainersReservations(@PathVariable("trainerId") Long trainerId) {
-        return reservationService.getTrainersReservations(trainerId);
-    }
-
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public void reserveLesson(
@@ -37,4 +34,22 @@ public class ReservationController {
     ) {
         reservationService.reserveLesson(member, request);
     }
+
+    @GetMapping("/trainers/{trainerId}")
+    public List<TrainerReservationResponse> getTrainersReservations(@PathVariable("trainerId") Long trainerId) {
+        return reservationService.getTrainersReservations(trainerId);
+    }
+
+    // 내 확정 수업 목록 보기
+    @GetMapping("/reserved/mine")
+    public List<ReservationDetailResponse> getMyReservations(@AuthInfo Member member) {
+        return reservationService.getReservationsMemberState(member, ReservationStatus.RESERVED);
+    }
+
+    // 내 대기 수업 목록 보기
+    @GetMapping("/waiting/mine")
+    public List<ReservationDetailResponse> getMyWaitings(@AuthInfo Member member) {
+        return reservationService.getReservationsMemberState(member, ReservationStatus.WAITING);
+    }
+
 }
