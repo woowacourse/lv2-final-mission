@@ -20,3 +20,7 @@ spring:
 logging:
   level:
     org.hibernate.orm.jdbc.bind: trace
+
+weather-api:
+  secret-key: Evy3WRyOic0TBycRLNRo5HcE2ulCFmPk5OowkpfGhL7FN9uQ80zbnhLLAVG5XrcZa8UErm5yINg%2F4LD8fzkQPg%3D%3D
+  base-url: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst
