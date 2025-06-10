@@ -148,6 +148,56 @@ class ReservationServiceTest extends AbstractServiceTest {
         Assertions.assertThat(savedMember.getPtNumber()).isLessThan(ptNumber);
     }
 
+    @DisplayName("최소 이틀 전 예약 취소할 경우 수강권을 돌려받을 수 있다")
+    @Test
+    void canCancel() {
+        // given
+        Trainer savedTrainer = getTrainer();
+        LessonTime savedLessonTime = getLessonTime();
+        Member savedMember = getMember();
+        savedMember.selectTrainer(savedTrainer);
+        Reservation reservation = Reservation.createWithoutId(
+                ReservationStatus.RESERVED,
+                LocalDate.now().plusDays(2),
+                savedMember,
+                savedLessonTime,
+                savedTrainer
+        );
+        Reservation savedReservation = reservationRepository.save(reservation);
+        int ptNumber = savedMember.getPtNumber();
+
+        // when
+        reservationService.cancelReservation(savedMember, savedReservation.getId());
+
+        // then
+        Assertions.assertThat(savedMember.getPtNumber()).isEqualTo(ptNumber + 1);
+    }
+
+    @DisplayName("하루 전부터는 예약을 취소해도 수강권을 돌려받을 수 없다")
+    @Test
+    void cannotRefundPtNumberCancel() {
+        // given
+        Trainer savedTrainer = getTrainer();
+        LessonTime savedLessonTime = getLessonTime();
+        Member savedMember = getMember();
+        savedMember.selectTrainer(savedTrainer);
+        Reservation reservation = Reservation.createWithoutId(
+                ReservationStatus.RESERVED,
+                LocalDate.now().plusDays(1),
+                savedMember,
+                savedLessonTime,
+                savedTrainer
+        );
+        Reservation savedReservation = reservationRepository.save(reservation);
+        int ptNumber = savedMember.getPtNumber();
+
+        // when
+        reservationService.cancelReservation(savedMember, savedReservation.getId());
+
+        // then
+        Assertions.assertThat(savedMember.getPtNumber()).isEqualTo(ptNumber);
+    }
+
     private Member getMember() {
         Member member = Member.createWithoutId("user", "user@email.com", "1234", 2);
         return memberRepository.save(member);
