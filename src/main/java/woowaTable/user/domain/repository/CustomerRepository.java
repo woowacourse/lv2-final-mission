@@ -8,4 +8,6 @@ import woowaTable.user.domain.Password;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByEmailAndPassword(final Email email, final Password password);
+
+    boolean existsByEmail(Email email);
 }

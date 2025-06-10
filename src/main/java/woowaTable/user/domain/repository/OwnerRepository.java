@@ -9,4 +9,6 @@ import woowaTable.user.domain.Password;
 public interface OwnerRepository extends JpaRepository<Owner, Long> {
 
     Optional<Owner> findByEmailAndPassword(Email email, Password password);
+
+    boolean existsByEmail(Email email);
 }

@@ -29,9 +29,24 @@ public class Customer implements User {
     @Embedded
     private Password password;
 
-    @Override
-    public Long getId() {
-        return id;
+    private Customer(
+            final Long id,
+            final Name name,
+            final Email email,
+            final Password password
+    ) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Customer(
+            final Name name,
+            final Email email,
+            final Password password
+    ) {
+        this(null, name, email, password);
     }
 
     @Override

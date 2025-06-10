@@ -5,4 +5,6 @@ public interface User {
     Long getId();
 
     Role getRole();
+
+    String getName();
 }
