@@ -48,4 +48,12 @@ public class MyController {
                 .toList();
         return TimeResponses.from(username, dateTimes);
     }
+
+    @DeleteMapping("/room/{roomId}")
+    public void deleteAllOf(
+            @PathVariable("roomId") String roomId,
+            @RequestParam("username") String username
+    ) {
+        timeRepository.deleteAllByRoom_IdAndUsername(new Id(roomId), username);
+    }
 }
