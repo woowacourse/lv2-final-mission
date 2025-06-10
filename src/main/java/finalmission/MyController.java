@@ -4,6 +4,7 @@ import finalmission.domain.*;
 import finalmission.dto.RoomCreateResponse;
 import finalmission.dto.TimeAddRequest;
 import finalmission.dto.TimeResponses;
+import finalmission.dto.TimeStaticsResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,17 @@ public class MyController {
         timeRepository.saveAll(createdTimes);
     }
 
+    @GetMapping("/room/{roomId}")
+    public TimeStaticsResponses getTimeStatics(
+            @PathVariable("roomId") String roomId
+    ) {
+        List<Time> times = timeRepository.getTimesByRoom_Id(new Id(roomId));
+        List<TimeStatics> statics = Time.calculateStatics(times);
+        return TimeStaticsResponses.from(statics);
+    }
+
     @GetMapping("/room/{roomId}/my")
-    public TimeResponses getMyTime(
+    public TimeResponses getMyTimes(
             @PathVariable("roomId") String roomId,
             @RequestParam("username") String username
     ) {
