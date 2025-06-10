@@ -1,13 +1,17 @@
 package finalmission.presentation.controller;
 
+import finalmission.application.dto.ReservationDateTimeIdRequest;
 import finalmission.application.dto.ReservationDateTimeRequest;
 import finalmission.application.dto.ReservationDateTimeResponse;
 import finalmission.application.service.ReservationDateTimeService;
+import finalmission.domain.ReservationDateTime;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +44,15 @@ public class ReservationDateTimeController {
         return ResponseEntity.ok().body(
                 reservationDateTimeService.getReservationDateTimes(nickname)
         );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReservationDateTime(
+            final @PathVariable Long id,
+            final @RequestBody @Valid ReservationDateTimeIdRequest reservationDateTimeIdRequest
+    ) {
+        reservationDateTimeService.deleteReservationDateTime(id, reservationDateTimeIdRequest.getCoachId());
+        return ResponseEntity.noContent().build();
     }
 
     private URI createUri(Long reservationId) {

@@ -40,4 +40,14 @@ public class ReservationDateTimeService {
                 .map(ReservationDateTimeResponse::new)
                 .toList();
     }
+
+    public void deleteReservationDateTime(final Long id, final Long coachId) {
+        coachRepository.findById(coachId)
+                .orElseThrow(() -> new IllegalArgumentException("코치가 존재하지 않습니다"));
+
+        ReservationDateTime reservationDateTime = reservationDateTimeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("시간이 존재하지 않습니다"));
+
+        reservationDateTimeRepository.delete(reservationDateTime);
+    }
 }

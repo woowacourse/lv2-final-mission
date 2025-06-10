@@ -101,7 +101,7 @@ Content-Type: application/json
 }
 ```
 
-+ [ ] 예약 가능 시간 삭제
++ [x] 예약 가능 시간 삭제
 ```
 DELETE /dateTimes/{id} HTTP/1.1
 {  
