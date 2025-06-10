@@ -5,8 +5,8 @@ import finalmission.domain.entity.Trainer;
 import finalmission.domain.service.dto.LoginRequest;
 import finalmission.domain.service.dto.SignUpRequest;
 import finalmission.infrastructure.JwtTokenProvider;
-import finalmission.repository.MemberRepository;
-import finalmission.repository.TrainerRepository;
+import finalmission.domain.repository.MemberRepository;
+import finalmission.domain.repository.TrainerRepository;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,4 +1,4 @@
-package finalmission.repository;
+package finalmission.domain.repository;
 
 import finalmission.domain.entity.LessonTime;
 import org.springframework.data.jpa.repository.JpaRepository;
