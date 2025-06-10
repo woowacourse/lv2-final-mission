@@ -36,4 +36,8 @@ public class Reservation {
     public static Reservation createNew(PlanDate planDate, TimeSlot timeSlot, User user) {
         return new Reservation(null, planDate, timeSlot, user);
     }
+
+    public boolean isOwnedBy(String userId) {
+        return this.user.getId().equals(userId);
+    }
 }

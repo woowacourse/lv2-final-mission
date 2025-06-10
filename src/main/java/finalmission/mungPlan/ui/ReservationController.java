@@ -5,6 +5,7 @@ import finalmission.mungPlan.ui.dto.CreateReservationRequest;
 import finalmission.mungPlan.ui.dto.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,13 @@ public class ReservationController {
 
     @GetMapping("{reservationId}")
     public ReservationResponse getReservation(@PathVariable Long reservationId) {
-        return reservationService.getReservationById(reservationId);
+        return reservationService.getById(reservationId);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{userId}/{reservationId}")
+    public void deleteReservation(@PathVariable String userId,
+                                  @PathVariable Long reservationId) {
+        reservationService.cancelReservation(reservationId, userId);
+    }
 }
