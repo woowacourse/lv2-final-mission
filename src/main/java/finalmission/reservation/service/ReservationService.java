@@ -4,16 +4,20 @@ import finalmission.common.exception.InvalidRequestException;
 import finalmission.member.domain.Member;
 import finalmission.member.infrastructure.MemberRepository;
 import finalmission.reservation.domain.Reservation;
+import finalmission.reservation.dto.AvailableReservationCount;
 import finalmission.reservation.dto.ReservationCreateRequest;
 import finalmission.reservation.dto.ReservationResponse;
 import finalmission.reservation.infrastructure.ReservationRepository;
 import finalmission.umbrella.domain.Umbrella;
+import finalmission.umbrella.domain.UmbrellaType;
 import finalmission.umbrella.infrastructure.UmbrellaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +57,11 @@ public class ReservationService {
         long count = umbrellaRepository.countByUmbrellaType(umbrella.getUmbrellaType());
 
         return count - reservationCount;
+    }
+
+    public List<AvailableReservationCount> findAvailableUmbrellas(){
+        return Arrays.stream(UmbrellaType.values()).map(umbrellaType -> new AvailableReservationCount(
+                umbrellaType, umbrellaRepository.countByUmbrellaType(umbrellaType)
+        )).toList();
     }
 }
