@@ -1,6 +1,7 @@
 package finalmission.controller.member;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 
 import finalmission.dto.request.MovieReservationCreateRequest;
 import finalmission.entity.Movie;
@@ -65,5 +66,41 @@ class MemberMovieControllerTest {
                 .statusCode(HttpStatus.CREATED.value())
                 .body("memberName", equalTo("회원 이름"))
                 .body("movieName", equalTo(movie.getName()));
+    }
+
+    @Test
+    @DisplayName("회원 예약 조회 - 성공")
+    void readMovieReservation() {
+        // given
+        Movie movie = MovieFixture.createDefault();
+        movieRepository.save(movie);
+
+        MovieSlot movieSlot = MovieSlotFixture.create(movie);
+        movieSlotRepository.save(movieSlot);
+
+        Integer selectSeat = 1;
+        MovieReservationCreateRequest request = new MovieReservationCreateRequest(
+                "회원 이름",
+                movieSlot.getId(),
+                selectSeat
+        );
+        RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("movies/reservation");
+
+        // when & then
+        RestAssured
+                .given()
+                .when()
+                .queryParam("memberName", "회원 이름")
+                .get("/movies/reservation")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("$", hasSize(1))
+                .body("[0].movieName", equalTo(movie.getName()))
+                .body("[0].seat", equalTo(selectSeat));
     }
 }
