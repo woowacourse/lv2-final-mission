@@ -2,8 +2,8 @@ package finalmission.service;
 
 import finalmission.controller.dto.MemberLoginResponse;
 import finalmission.controller.dto.MemberSignUpRequest;
-import finalmission.domain.vo.LolName;
 import finalmission.domain.Member;
+import finalmission.domain.vo.LolName;
 import finalmission.exception.NotFoundException;
 import finalmission.exception.UnauthorizedException;
 import finalmission.repository.MemberRepository;
@@ -15,8 +15,12 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final RiotRestClient riotRestClient;
 
     public void create(final MemberSignUpRequest request) {
+        if (!riotRestClient.existsLolName(request.lolName())) {
+            throw new NotFoundException("존재하지 않는 RIOT 이름 및 태그입니다.");
+        }
         final Member member = request.toMember();
 
         memberRepository.save(member);
