@@ -13,12 +13,11 @@ public class Player extends BaseEntity {
 
     private String nickname;
     private String password;
-    private String email;
 
     private PlayerStatus playerStatus;
 
-    public static Player of(final String nickname, final String password, final String email, final PlayerStatus playerStatus) {
-        return new Player(nickname, password, email, playerStatus);
+    public static Player of(final String nickname, final String password, final PlayerStatus playerStatus) {
+        return new Player(nickname, password, playerStatus);
     }
 
     public void go() {
