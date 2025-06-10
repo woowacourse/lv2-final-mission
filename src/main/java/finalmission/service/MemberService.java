@@ -35,4 +35,9 @@ public class MemberService {
 
         return MemberLoginResponse.from(member);
     }
+
+    public Member getById(final Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("해당하는 memberId의 멤버를 찾을 수 없습니다. memberId = " + memberId));
+    }
 }
