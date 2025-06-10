@@ -52,6 +52,10 @@ public class Member {
         return this.password.equals(comparedPassword);
     }
 
+    public void selectTrainer(Trainer trainer) {
+        this.trainer = trainer;
+    }
+
     public Long getId() {
         return id;
     }

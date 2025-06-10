@@ -25,6 +25,16 @@ public class Trainer {
     protected Trainer() {
     }
 
+    public Trainer(Long id, String name, Gender gender) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+    }
+
+    public static Trainer createWithoutId(String name, Gender gender) {
+        return new Trainer(null, name, gender);
+    }
+
     public Long getId() {
         return id;
     }
