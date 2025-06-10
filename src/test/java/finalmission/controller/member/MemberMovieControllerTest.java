@@ -1,0 +1,69 @@
+package finalmission.controller.member;
+
+import static org.hamcrest.Matchers.equalTo;
+
+import finalmission.dto.request.MovieReservationCreateRequest;
+import finalmission.entity.Movie;
+import finalmission.entity.MovieSlot;
+import finalmission.fixture.MovieFixture;
+import finalmission.fixture.MovieSlotFixture;
+import finalmission.repository.MovieRepository;
+import finalmission.repository.MovieSlotRepository;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.DirtiesContext;
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+class MemberMovieControllerTest {
+
+    @LocalServerPort
+    private int port;
+    @Autowired
+    private MovieRepository movieRepository;
+    @Autowired
+    private MovieSlotRepository movieSlotRepository;
+
+    @BeforeEach
+    void setUp() {
+        RestAssured.port = port;
+    }
+
+    @Test
+    @DisplayName("회원 영화 예약 - 성공")
+    void createMovieReservation() {
+        // given
+        Movie movie = MovieFixture.createDefault();
+        movieRepository.save(movie);
+
+        MovieSlot movieSlot = MovieSlotFixture.create(movie);
+        movieSlotRepository.save(movieSlot);
+
+        Integer selectSeat = 1;
+        MovieReservationCreateRequest request = new MovieReservationCreateRequest(
+                "회원 이름",
+                movieSlot.getId(),
+                selectSeat
+        );
+
+        // when & then
+        RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("movies/reservation")
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .body("memberName", equalTo("회원 이름"))
+                .body("movieName", equalTo(movie.getName()));
+    }
+}
