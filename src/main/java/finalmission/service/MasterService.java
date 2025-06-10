@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MasterService {
 
-    private MasterRepository masterRepository;
+    private final MasterRepository masterRepository;
 
     public MasterService(final MasterRepository masterRepository) {
         this.masterRepository = masterRepository;
