@@ -60,10 +60,23 @@ public class Reservation {
         return new Reservation(reserver, popupStore, reservedAt, ReservationStatus.ENTERED);
     }
 
-    public boolean isWaiting() {
-        return reservationStatus == ReservationStatus.WAITING;
-    }
-
     public boolean isMyReservation(final Long memberId) {
         return reserver.getId().equals(memberId);
+    }
+
+    public void leave() {
+        if (reservationStatus == ReservationStatus.ENTERED) {
+            this.reservationStatus = ReservationStatus.LEFT;
+        } else {
+            throw new IllegalStateException("예약 상태가 '입장'이 아닙니다.");
+        }
+    }
+
+    public void enter() {
+        if (reservationStatus == ReservationStatus.WAITING) {
+            this.reservationStatus = ReservationStatus.ENTERED;
+        } else {
+            throw new IllegalStateException("예약 상태가 '대기'가 아닙니다.");
+        }
+    }
 }

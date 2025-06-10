@@ -29,7 +29,7 @@ public class ReservationController {
                 .build();
     }
 
-    @GetMapping("{reservationId}/waiting-count/{memberId}")
+    @GetMapping("/{reservationId}/waiting-count/{memberId}")
     public ResponseEntity<MyReservationWaitingCount> getMyWaitingCount(
             @PathVariable final Long reservationId,
             @PathVariable final Long memberId
@@ -38,6 +38,18 @@ public class ReservationController {
                 reservationId, memberId);
 
         return ResponseEntity.ok(myReservationWaitingCount);
+    }
+
+    @PostMapping("/{reservationId}/leave/{memberId}")
+    public ResponseEntity<Void> leave(
+            @PathVariable final Long reservationId,
+            @PathVariable final Long memberId
+    ) {
+        reservationService.leave(reservationId, memberId);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
 }

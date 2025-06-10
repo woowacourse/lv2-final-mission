@@ -67,4 +67,24 @@ public class ReservationService {
         }
         return new MyReservationWaitingCount(reservationId, 0);
     }
+
+    @Transactional
+    public void leave(final Long reservationId, final Long memberId) {
+        Reservation myReservation = reservationRepository.findById(reservationId)
+                .orElseThrow();
+
+        List<Reservation> targetReservations = reservationRepository.findAllByPopupStoreAndReservationStatusOrderByReservedAtAsc(
+                myReservation.getPopupStore(),
+                ReservationStatus.WAITING
+        );
+
+        int i;
+        for (i = 0; i < targetReservations.size(); i++) {
+            Reservation reservation = targetReservations.get(i);
+            if (reservation.isMyReservation(memberId)) {
+                reservation.leave();
+            }
+        }
+        targetReservations.get(i).enter();
+    }
 }
