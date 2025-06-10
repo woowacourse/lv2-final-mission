@@ -19,6 +19,11 @@ public class MemberService {
         }
     }
 
+    public Member getById(final Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+    }
+
     public Member getByEmail(final String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 회원입니다."));

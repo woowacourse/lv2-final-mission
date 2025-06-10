@@ -37,6 +37,18 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("id에 대한 회원이 존재하지 않는 경우 예외를 발생시킨다")
+    void getById() {
+        // given
+        given(memberRepository.findById(any()))
+                .willReturn(Optional.empty());
+
+        // when & then
+        Assertions.assertThatThrownBy(() -> memberService.getById(any()))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     @DisplayName("이메일에 대한 회원이 존재하지 않는 경우 예외를 발생시킨다")
     void getByEmail() {
         // given
