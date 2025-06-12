@@ -1,8 +1,8 @@
 package finalmission.member.service;
 
 import finalmission.member.domain.Member;
+import finalmission.member.domain.Role;
 import finalmission.member.dto.request.LoginRequest;
-import finalmission.member.dto.response.LoginInfo;
 import finalmission.member.exception.LoginException;
 import finalmission.member.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
@@ -25,14 +25,14 @@ class LoginServiceTest {
     @Test
     void 로그인_할_수_있다() {
         // given
-        memberRepository.save(Member.createWithoutId("member1@email.com", "password"));
+        memberRepository.save(Member.createWithoutId("member1@email.com", "password", Role.USER));
         LoginRequest loginRequest = new LoginRequest("member1@email.com", "password");
 
         // when
-        LoginInfo loginResponse = loginService.login(loginRequest);
+        String token = loginService.login(loginRequest);
 
         // then
-        assertThat(loginResponse.id()).isEqualTo(1L);
+        assertThat(token).isNotEmpty();
     }
 
     @Test

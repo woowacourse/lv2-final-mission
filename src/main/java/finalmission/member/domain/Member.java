@@ -18,16 +18,19 @@ public class Member {
 
     private String password;
 
+    private Role role;
+
     public Member() {
     }
 
-    private Member(Long id, String email, String password) {
+    private Member(Long id, String email, String password, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
-    public static Member createWithoutId(String email, String password) {
-        return new Member(null, email, password);
+    public static Member createWithoutId(String email, String password, Role role) {
+        return new Member(null, email, password, role);
     }
 }
