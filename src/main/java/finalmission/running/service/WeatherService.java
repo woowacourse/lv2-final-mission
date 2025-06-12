@@ -1,6 +1,5 @@
 package finalmission.running.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import finalmission.running.dto.request.ReservationRequest;
 import finalmission.running.weather.WeatherApiClient;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,10 @@ public class WeatherService {
     public boolean checkRunnableWeather(ReservationRequest request){
         String result = weatherApiClient.checkWeather(request.date(), request.startAt(), request.endTime());
 
-        if (result.equals("WB09") || result.equals("WB11") || result.equals("WB13") || result.equals("WB12")) {
+        if (result.contains("WB09")
+            || result.contains("WB11")
+            || result.contains("WB13")
+            || result.contains("WB12")) {
             return false;
         }
         return true;

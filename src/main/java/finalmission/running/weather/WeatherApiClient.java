@@ -23,7 +23,7 @@ public class WeatherApiClient {
     @Value("${weather.api.key}")
     private String weatherApiKey;
 
-    public String checkWeather(LocalDate date, LocalTime startAt, LocalTime endTime) throws JsonProcessingException {
+    public String checkWeather(LocalDate date, LocalTime startAt, LocalTime endTime) {
         String kstFormat = "yyyy-MM-dd HH:mm:ss";
         LocalDateTime start = date.atTime(startAt);
         LocalDateTime end = date.atTime(endTime);
