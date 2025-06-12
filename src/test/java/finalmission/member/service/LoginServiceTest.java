@@ -25,7 +25,7 @@ class LoginServiceTest {
     @Test
     void 로그인_할_수_있다() {
         // given
-        memberRepository.save(Member.createWithoutId("member1@email.com", "password", Role.USER));
+        memberRepository.save(Member.createWithoutId("member", "member1@email.com", "password", Role.USER));
         LoginRequest loginRequest = new LoginRequest("member1@email.com", "password");
 
         // when

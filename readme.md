@@ -7,6 +7,7 @@
 - "/runningSessions/{id}" POST 요청으로 러닝 세션에 참가 할 수 있다.
   - [예외] 로그인 정보가 없는 경우
   - [예외] 존재하지 않는 러닝 세션에 참가요청을 보낸 경우
+- "/runningSessions" GET 요청으로 모든 사용자는 세션 예약 정보를 조회할 수 있다.
 - "/runningSessions/{id}" GET 요청으로 세션 생성자와 참가자는 세션의 상세정보를 조회할 수 있다.
   - [예외] 로그인 정보가 일치하지 않는 경우
 - "/runningSessions/{id}" UPDATE 요청으로 세션 생성자는 세션 정보를 수정 할 수 있다.
