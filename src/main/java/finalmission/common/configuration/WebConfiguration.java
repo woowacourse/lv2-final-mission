@@ -2,7 +2,9 @@ package finalmission.common.configuration;
 
 import finalmission.member.auth.argumentresolver.LoginArgumentResolver;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -17,5 +19,12 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(loginArgumentResolver);
+    }
+
+    @Bean
+    public RestClient addRestClient() {
+        return RestClient.builder()
+            .baseUrl("https://apihub.kma.go.kr")
+            .build();
     }
 }
