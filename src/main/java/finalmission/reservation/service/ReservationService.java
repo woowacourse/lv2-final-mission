@@ -1,7 +1,6 @@
 package finalmission.reservation.service;
 
 import finalmission.auth.LoginMemberInfo;
-import finalmission.client.HolidayClient;
 import finalmission.member.domain.Member;
 import finalmission.member.domain.MemberRepository;
 import finalmission.reservation.domain.Reservation;
@@ -21,21 +20,18 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
-    private final HolidayClient holidayClient;
 
-    public ReservationService(final ReservationRepository reservationRepository, final MemberRepository memberRepository, final RestaurantRepository restaurantRepository, final HolidayClient holidayClient) {
+    public ReservationService(final ReservationRepository reservationRepository, final MemberRepository memberRepository, final RestaurantRepository restaurantRepository) {
         this.reservationRepository = reservationRepository;
         this.memberRepository = memberRepository;
         this.restaurantRepository = restaurantRepository;
-        this.holidayClient = holidayClient;
     }
 
     public ReservationResponse save(CreateReservationRequest reservationRequest, LoginMemberInfo loginMemberInfo) {
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(loginMemberInfo.id())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 멤버 정보가 없습니다."));
         Restaurant restaurant = restaurantRepository.findById(reservationRequest.restaurantId())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 식당 정보가 없습니다."));
-        Object holiday = holidayClient.getHoliday();
         Reservation reservation = new Reservation(null,
                 reservationRequest.reservationDateTime(),
                 member,

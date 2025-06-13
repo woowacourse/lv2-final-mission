@@ -11,30 +11,37 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    String secretKey = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
+    private static final String secretKey = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
+    private static final int validityInMilliseconds = 3600000;
 
     public String createToken(final Long id) {
-        Date expirationDate = new Date(System.currentTimeMillis() + 3600000);
+        Date expirationDate = new Date(System.currentTimeMillis() + validityInMilliseconds);
 
         return Jwts.builder()
-                .setSubject(id.toString())
-                .setExpiration(expirationDate)
+                .subject(id.toString())
+                .expiration(expirationDate)
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .compact();
     }
 
     public Long extractId(String token) {
+        if (token == null || token.isBlank()) {
+            throw new IllegalArgumentException("토큰이 유효하지 않습니다.");
+        }
+
+        Claims claims = extractAllClaimsFromToken(token);
+        return Long.valueOf(claims.getSubject());
+    }
+
+    private Claims extractAllClaimsFromToken(final String token) {
         try {
-            Claims payload = Jwts.parser()
+            return Jwts.parser()
                     .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-
-            return Long.valueOf(payload.getSubject());
         } catch (JwtException e) {
-            throw new IllegalStateException("토큰 오류");
+            throw new IllegalArgumentException("토큰을 추출하는데 오류가 발생했습니다.");
         }
     }
-
 }
