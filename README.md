@@ -1,13 +1,3 @@
-### 필수 기능
-- 사용자 본인은 자신이 한 예약의 상세 정보까지 확인할 수 있습니다.
-  - 멤버 id로 찾기
-- 사용자는 본인의 예약만 수정하고 삭제할 수 있습니다.
-  - 로그인 기능
-
-- 데이터베이스는 H2 사용
-
-
----
 ### 기능 구현
 
 - 멤버
@@ -16,6 +6,8 @@
     - jwt + 쿠키
       - [x] 생성
       - [x] 추출
+  - ArgumentResolver로 쿠키를 통해 멤버 정보를 가져옴
+  
 - 식당
   - [x] 식당 생성
   - [x] 식당 id로 조회
@@ -25,25 +17,30 @@
   - [x] 예약 조회
     - [x] 예약 단건 조회
     - [x] 예약 전체 조회
-    - [x] 예약 삭제
-    - [ ] 예약 수정
-
+    - [x] 멤버 본인의 예약 전체 조회
+  - [x] 예약 삭제
+  - [x] 예약 수정
+    - 예약 날짜, 인원 수정
+      예약 삭제와 수정은 멤버 본인의 예약이 아니면 예외를 던짐
+    
 - 외부 API: 특일
-  - [ ] 예약 생성 시 공휴일 알림
+  - [x] 예약 생성/수정 시 예약 날짜가 공휴일이면 예외
 
 ---
 ## 구현한 API
-- **MemberController**
-  - [POST] /members : 회원가입
-  - [POST] /login : 로그인
+### MemberController
+  - **[POST] /members** : 회원가입
+  - **[POST] /login** : 로그인
+
+### RestaurantController
+  - **[POST] /restaurants** : 식당 생성
+  - **[GET] /restaurants/{id}** : 식당 단건 조회
   
-- **RestaurantController**
-  - [POST] /restaurants : 식당 생성
-  - [GET] /restaurants/{id} : 식당 단건 조회
-  
-- **ReservationController**
-  - [POST] /reservations : 예약 생성
-  - [GET] /reservations : 예약 전체 조회
-  - [GET] /reservations/{id} : 예약 단건 조회
-  - [DELETE] /reservations/{id} : 예약 단건 삭제
+### ReservationController
+  - **[POST] /reservations** : 예약 생성
+  - **[GET] /reservations** : 예약 전체 조회
+  - **[GET] /reservations/{id}** : 예약 단건 조회
+  - **[DELETE] /reservations/{id}** : 예약 단건 삭제
+  - **[PUT] /reservation/{id}** : 예약 수정
+  - **[GET] /reservation/member** : 멤버의 예약 조회
 
