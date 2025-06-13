@@ -2,10 +2,10 @@ package finalmission.reservation.controller;
 
 import finalmission.auth.LoginMember;
 import finalmission.auth.LoginMemberInfo;
-import finalmission.member.service.HolidayService;
 import finalmission.reservation.dto.CreateReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
 import finalmission.reservation.dto.UpdateReservationResponse;
+import finalmission.reservation.service.HolidayService;
 import finalmission.reservation.service.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

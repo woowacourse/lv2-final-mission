@@ -1,4 +1,4 @@
-package finalmission.member.service;
+package finalmission.reservation.service;
 
 import finalmission.client.HolidayClient;
 import org.springframework.stereotype.Service;
