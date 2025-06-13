@@ -2,6 +2,7 @@ package finalmission.reservation.controller;
 
 import finalmission.auth.LoginMember;
 import finalmission.auth.LoginMemberInfo;
+import finalmission.member.service.HolidayService;
 import finalmission.reservation.dto.CreateReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
 import finalmission.reservation.service.ReservationService;
@@ -16,15 +17,18 @@ import java.util.List;
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final HolidayService holidayService;
 
-    public ReservationController(final ReservationService reservationService) {
+    public ReservationController(final ReservationService reservationService, final HolidayService holidayService) {
         this.reservationService = reservationService;
+        this.holidayService = holidayService;
     }
 
     @PostMapping
     public ResponseEntity<ReservationResponse> createReservation(
             @RequestBody CreateReservationRequest reservationRequest,
             @LoginMember LoginMemberInfo loginMemberInfo) {
+        holidayService.validateHoliday(reservationRequest.reservationDateTime());
         ReservationResponse reservationResponse = reservationService.save(reservationRequest, loginMemberInfo);
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationResponse);
     }
