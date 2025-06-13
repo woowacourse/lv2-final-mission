@@ -36,4 +36,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
         jpaReservationRepository.deleteById(reservationId);
     }
 
+    @Override
+    public List<Reservation> findByMemberId(Long memberId) {
+        return jpaReservationRepository.findByMemberId(memberId);
+    }
 }

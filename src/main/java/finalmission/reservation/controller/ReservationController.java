@@ -62,4 +62,9 @@ public class ReservationController {
         return ResponseEntity.status(HttpStatus.OK).body(reservationResponse);
     }
 
+    @GetMapping("/member")
+    public ResponseEntity<List<ReservationResponse>> getMemberReservation(@LoginMember LoginMemberInfo loginMemberInfo) {
+        List<ReservationResponse> reservationResponses = reservationService.findByMemberId(loginMemberInfo);
+        return ResponseEntity.status(HttpStatus.OK).body(reservationResponses);
+    }
 }

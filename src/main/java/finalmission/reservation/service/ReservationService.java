@@ -84,4 +84,9 @@ public class ReservationService {
             throw new IllegalArgumentException("멤버 본인의 예약이 아닙니다.");
         }
     }
+
+    public List<ReservationResponse> findByMemberId(final LoginMemberInfo loginMemberInfo) {
+        List<Reservation> reservations = reservationRepository.findByMemberId(loginMemberInfo.id());
+        return ReservationResponse.from(reservations);
+    }
 }
