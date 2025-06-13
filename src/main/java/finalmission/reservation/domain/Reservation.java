@@ -34,6 +34,11 @@ public class Reservation {
         this.personnel = personnel;
     }
 
+    public void updateReservation(LocalDateTime reservationDateTime, int personnel) {
+        this.reservationDateTime = reservationDateTime;
+        this.personnel = personnel;
+    }
+
     public Long getId() {
         return id;
     }
