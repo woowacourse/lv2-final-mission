@@ -75,6 +75,15 @@ public class ReservationService {
         return ReservationResponse.from(reservation);
     }
 
+    public List<ReservationResponse> findByMemberId(final LoginMemberInfo loginMemberInfo) {
+        Long memberId = loginMemberInfo.id();
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 멤버 정보가 없습니다."));
+
+        List<Reservation> reservations = reservationRepository.findByMemberId(memberId);
+        return ReservationResponse.from(reservations);
+    }
+
     private void validateMemberOwnReservation(final LoginMemberInfo loginMemberInfo, final Reservation reservation) {
         Long memberId = loginMemberInfo.id();
         memberRepository.findById(memberId)
@@ -83,10 +92,5 @@ public class ReservationService {
         if (!Objects.equals(reservation.getMember().getId(), memberId)) {
             throw new IllegalArgumentException("멤버 본인의 예약이 아닙니다.");
         }
-    }
-
-    public List<ReservationResponse> findByMemberId(final LoginMemberInfo loginMemberInfo) {
-        List<Reservation> reservations = reservationRepository.findByMemberId(loginMemberInfo.id());
-        return ReservationResponse.from(reservations);
     }
 }
