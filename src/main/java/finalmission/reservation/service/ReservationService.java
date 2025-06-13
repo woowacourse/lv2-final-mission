@@ -50,9 +50,12 @@ public class ReservationService {
         return ReservationResponse.from(reservation);
     }
 
-    public void deleteById(final Long reservationId, final Long memberId) {
+    public void deleteById(final Long reservationId, final LoginMemberInfo loginMemberInfo) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 예약 정보가 없습니다."));
+        Long memberId = loginMemberInfo.id();
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 멤버 정보가 없습니다."));
 
         if (!Objects.equals(reservation.getMember().getId(), memberId)) {
             throw new IllegalArgumentException("멤버 본인의 예약이 아닙니다.");
