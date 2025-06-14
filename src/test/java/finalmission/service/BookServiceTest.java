@@ -53,11 +53,12 @@ class BookServiceTest {
         BookRequest bookRequest = new BookRequest(name, author, categoryId, stock);
 
         // when
+        bookService.addBook(bookRequest);
         BookResponse bookResponse = bookService.addBook(bookRequest);
 
         // then
         assertThat(bookResponse.name()).isEqualTo(name);
         assertThat(bookResponse.author()).isEqualTo(author);
-        assertThat(bookResponse.stock()).isEqualTo(4);
+        assertThat(bookResponse.stock()).isEqualTo(6);
     }
 }
