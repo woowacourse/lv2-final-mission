@@ -30,7 +30,7 @@ class ReservationServiceTest {
     public static final LocalDateTime RESERVATION_DATE_TIME = LocalDateTime.now();
     public static final Member MEMBER1 = new Member(null, "name1", "email1@example.com", "password");
     public static final Member MEMBER2 = new Member(null, "name2", "email2@example.com", "password");
-    public static final Restaurant RESTAURANT = new Restaurant(null, "name", "address", List.of("menu1"));
+    public static final Restaurant RESTAURANT1 = new Restaurant(null, "name1", "address1", List.of("menu1"));
 
     @Autowired
     private ReservationService reservationService;
@@ -48,7 +48,7 @@ class ReservationServiceTest {
     @DisplayName("예약 생성 시 멤버 정보가 없으면 예외")
     void saveTest1() {
         Member member = memberRepository.save(MEMBER1);
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
         CreateReservationRequest reservationRequest = new CreateReservationRequest(RESERVATION_DATE_TIME, 1L, 2);
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(99L);
@@ -62,7 +62,7 @@ class ReservationServiceTest {
     @DisplayName("예약 생성 시 식당 정보가 없으면 예외")
     void saveTest2() {
         Member member = memberRepository.save(MEMBER1);
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
         CreateReservationRequest reservationRequest = new CreateReservationRequest(RESERVATION_DATE_TIME, 99L, 2);
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(1L);
@@ -76,7 +76,7 @@ class ReservationServiceTest {
     @DisplayName("정상 예약 생성 테스트")
     void saveTest3() {
         Member member = memberRepository.save(MEMBER1);
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
         CreateReservationRequest reservationRequest = new CreateReservationRequest(RESERVATION_DATE_TIME, 1L, 2);
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(member.getId());
@@ -102,7 +102,7 @@ class ReservationServiceTest {
     void deleteByIdTest1() {
         Member member = memberRepository.save(MEMBER1);
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(member.getId());
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
 
         assertThatThrownBy(() -> reservationService.deleteById(99L, loginMemberInfo))
@@ -116,7 +116,7 @@ class ReservationServiceTest {
         Member member1 = memberRepository.save(MEMBER1);
         Member member2 = memberRepository.save(MEMBER2);
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(member2.getId());
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member1, restaurant, 2));
 
         assertThatThrownBy(() -> reservationService.deleteById(1L, loginMemberInfo))
@@ -129,7 +129,7 @@ class ReservationServiceTest {
     void deleteByIdTest3() {
         Member member1 = memberRepository.save(MEMBER1);
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(member1.getId());
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         Reservation reservation = reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member1, restaurant, 2));
 
         reservationService.deleteById(reservation.getId(), loginMemberInfo);
@@ -142,7 +142,7 @@ class ReservationServiceTest {
     void updateReservationTest1() {
         Member member = memberRepository.save(MEMBER1);
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(member.getId());
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         Reservation reservation = reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
 
         UpdateReservationRequest updateReservationRequest = new UpdateReservationRequest(reservation.getReservationDateTime(), reservation.getPersonnel());
@@ -158,7 +158,7 @@ class ReservationServiceTest {
         Member member1 = memberRepository.save(MEMBER1);
         Member member2 = memberRepository.save(MEMBER2);
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(member2.getId());
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         Reservation reservation = reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member1, restaurant, 2));
 
         UpdateReservationRequest updateReservationRequest = new UpdateReservationRequest(reservation.getReservationDateTime(), reservation.getPersonnel());
@@ -173,7 +173,7 @@ class ReservationServiceTest {
     void updateReservationTest3() {
         Member member = memberRepository.save(MEMBER1);
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(member.getId());
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         Reservation reservation = reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
 
         int toUpdatePersonnel = reservation.getPersonnel() + 2;
@@ -184,15 +184,50 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("멤버 예약 조회시 해당하는 멤버 정보가 없으면 예외")
-    void findByMemberId() {
+    @DisplayName("멤버 예약 조회 성공 테스트")
+    void findByMemberId1() {
         Member member = memberRepository.save(MEMBER1);
-        Restaurant restaurant = restaurantRepository.save(RESTAURANT);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
+        reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
+        LoginMemberInfo loginMemberInfo = new LoginMemberInfo(member.getId());
+
+        List<ReservationResponse> responses = reservationService.findByMemberId(loginMemberInfo);
+        assertThat(responses.size()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("멤버 예약 조회시 해당하는 멤버 정보가 없으면 예외")
+    void findByMemberId2() {
+        Member member = memberRepository.save(MEMBER1);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
         reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
         LoginMemberInfo loginMemberInfo = new LoginMemberInfo(99L);
 
         assertThatThrownBy(() -> reservationService.findByMemberId(loginMemberInfo))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당하는 멤버 정보가 없습니다.");
+    }
+
+    @Test
+    @DisplayName("식당 예약 조회 성공 테스트")
+    void findByRestaurantId1() {
+        Member member = memberRepository.save(MEMBER1);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
+        reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
+
+        List<ReservationResponse> responses = reservationService.findByRestaurantId(restaurant.getId());
+        assertThat(responses.size()).isGreaterThan(0);
+    }
+
+    @Test
+    @DisplayName("식당 예약 조회시 해당하는 멤버 정보가 없으면 예외")
+    void findByRestaurantId2() {
+        Member member = memberRepository.save(MEMBER1);
+        Restaurant restaurant = restaurantRepository.save(RESTAURANT1);
+        reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
+
+        assertThatThrownBy(() -> reservationService.findByRestaurantId(99L))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당하는 식당 정보가 없습니다.");
     }
 }
