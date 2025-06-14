@@ -132,7 +132,7 @@ class ReservationServiceTest {
         Restaurant restaurant = restaurantRepository.save(RESTAURANT);
         Reservation reservation = reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member1, restaurant, 2));
 
-        reservationService.deleteById(1L, loginMemberInfo);
+        reservationService.deleteById(reservation.getId(), loginMemberInfo);
 
         assertThat(reservationRepository.findById(reservation.getId()).isEmpty()).isTrue();
     }
