@@ -1,6 +1,6 @@
 package finalmission.dto.request;
 
-import finalmission.Role;
+import finalmission.common.Role;
 
 public record LoginMemberRequest(
         Long id,

@@ -1,4 +1,4 @@
-package finalmission;
+package finalmission.common;
 
 public enum Role {
     USER,

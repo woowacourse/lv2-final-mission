@@ -1,6 +1,6 @@
 package finalmission.service;
 
-import finalmission.Role;
+import finalmission.common.Role;
 import finalmission.dto.request.LoginMemberRequest;
 import finalmission.entity.Member;
 import finalmission.jwt.JwtTokenProvider;
