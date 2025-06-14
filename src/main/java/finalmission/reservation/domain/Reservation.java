@@ -2,6 +2,7 @@ package finalmission.reservation.domain;
 
 import finalmission.member.domain.Member;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +25,7 @@ public class Reservation {
     @JoinColumn(name = "information_id", nullable = false)
     private ReservationInformation reservationInformation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Member customer;
 
