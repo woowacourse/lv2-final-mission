@@ -13,6 +13,7 @@ import finalmission.reservation.service.dto.ReservationResponse;
 import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class ReservationService {
                 .toList();
     }
 
+    @Transactional
     public ReservationResponse createReservation(CreateReservationRequest request, final Long memberId) {
         Member member = getMember(memberId);
         ReservationInformation restaurantInformation = getRestaurantInformation(request.reservationInformationId());
@@ -56,6 +58,7 @@ public class ReservationService {
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 예약 정보입니다."));
     }
 
+    @Transactional
     public ReservationInformationResponse createReservationInformation(
             CreateReservationInformationRequest request,
             Long memberId

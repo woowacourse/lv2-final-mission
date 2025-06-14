@@ -9,6 +9,7 @@ import finalmission.member.service.dto.CreateMemberRequest;
 import finalmission.member.service.dto.LoginRequest;
 import finalmission.member.service.dto.LoginResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberService {
@@ -20,6 +21,7 @@ public class MemberService {
         this.jwtTokenHandler = jwtTokenHandler;
     }
 
+    @Transactional
     public void create(CreateMemberRequest request) {
         Member member = request.toEntity();
 
