@@ -11,16 +11,16 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private static final String secretKey = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
-    private static final int validityInMilliseconds = 3600000;
+    private static final String SECRET_KEY = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
+    private static final int VALIDITY_IN_MILLISECONDS = 3600000;
 
     public String createToken(final Long id) {
-        Date expirationDate = new Date(System.currentTimeMillis() + validityInMilliseconds);
+        Date expirationDate = new Date(System.currentTimeMillis() + VALIDITY_IN_MILLISECONDS);
 
         return Jwts.builder()
                 .subject(id.toString())
                 .expiration(expirationDate)
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
                 .compact();
     }
 
@@ -36,7 +36,7 @@ public class JwtTokenProvider {
     private Claims extractAllClaimsFromToken(final String token) {
         try {
             return Jwts.parser()
-                    .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                    .verifyWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
