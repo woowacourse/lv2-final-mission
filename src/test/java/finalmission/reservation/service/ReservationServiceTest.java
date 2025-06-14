@@ -7,7 +7,7 @@ import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.domain.ReservationRepository;
 import finalmission.reservation.dto.CreateReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
-import finalmission.reservation.dto.UpdateReservationResponse;
+import finalmission.reservation.dto.UpdateReservationRequest;
 import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.domain.RestaurantRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -145,9 +145,9 @@ class ReservationServiceTest {
         Restaurant restaurant = restaurantRepository.save(RESTAURANT);
         Reservation reservation = reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
 
-        UpdateReservationResponse updateReservationResponse = new UpdateReservationResponse(reservation.getReservationDateTime(), reservation.getPersonnel());
+        UpdateReservationRequest updateReservationRequest = new UpdateReservationRequest(reservation.getReservationDateTime(), reservation.getPersonnel());
 
-        assertThatThrownBy(() -> reservationService.updateReservation(99L, updateReservationResponse, loginMemberInfo))
+        assertThatThrownBy(() -> reservationService.updateReservation(99L, updateReservationRequest, loginMemberInfo))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당하는 예약 정보가 없습니다.");
     }
@@ -161,9 +161,9 @@ class ReservationServiceTest {
         Restaurant restaurant = restaurantRepository.save(RESTAURANT);
         Reservation reservation = reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member1, restaurant, 2));
 
-        UpdateReservationResponse updateReservationResponse = new UpdateReservationResponse(reservation.getReservationDateTime(), reservation.getPersonnel());
+        UpdateReservationRequest updateReservationRequest = new UpdateReservationRequest(reservation.getReservationDateTime(), reservation.getPersonnel());
 
-        assertThatThrownBy(() -> reservationService.updateReservation(reservation.getId(), updateReservationResponse, loginMemberInfo))
+        assertThatThrownBy(() -> reservationService.updateReservation(reservation.getId(), updateReservationRequest, loginMemberInfo))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("멤버 본인의 예약이 아닙니다.");
     }
@@ -177,8 +177,8 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(new Reservation(null, RESERVATION_DATE_TIME, member, restaurant, 2));
 
         int toUpdatePersonnel = reservation.getPersonnel() + 2;
-        UpdateReservationResponse updateReservationResponse = new UpdateReservationResponse(reservation.getReservationDateTime(), toUpdatePersonnel);
-        ReservationResponse reservationResponse = reservationService.updateReservation(reservation.getId(), updateReservationResponse, loginMemberInfo);
+        UpdateReservationRequest updateReservationRequest = new UpdateReservationRequest(reservation.getReservationDateTime(), toUpdatePersonnel);
+        ReservationResponse reservationResponse = reservationService.updateReservation(reservation.getId(), updateReservationRequest, loginMemberInfo);
 
         assertThat(reservationResponse.personnel()).isEqualTo(toUpdatePersonnel);
     }

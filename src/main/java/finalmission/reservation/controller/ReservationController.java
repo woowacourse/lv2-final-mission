@@ -4,7 +4,7 @@ import finalmission.auth.LoginMember;
 import finalmission.auth.LoginMemberInfo;
 import finalmission.reservation.dto.CreateReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
-import finalmission.reservation.dto.UpdateReservationResponse;
+import finalmission.reservation.dto.UpdateReservationRequest;
 import finalmission.reservation.service.HolidayService;
 import finalmission.reservation.service.ReservationService;
 import org.springframework.http.HttpStatus;
@@ -55,7 +55,7 @@ public class ReservationController {
     @PutMapping("/{id}")
     public ResponseEntity<ReservationResponse> updateReservation(
             @PathVariable Long id,
-            @RequestBody UpdateReservationResponse reservationRequest,
+            @RequestBody UpdateReservationRequest reservationRequest,
             @LoginMember LoginMemberInfo loginMemberInfo) {
         holidayService.validateHoliday(reservationRequest.reservationDateTime());
         ReservationResponse reservationResponse = reservationService.updateReservation(id, reservationRequest, loginMemberInfo);

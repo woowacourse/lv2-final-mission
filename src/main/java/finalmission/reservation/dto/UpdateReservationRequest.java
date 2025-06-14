@@ -2,7 +2,7 @@ package finalmission.reservation.dto;
 
 import java.time.LocalDateTime;
 
-public record UpdateReservationResponse(
+public record UpdateReservationRequest(
         LocalDateTime reservationDateTime,
         int personnel
 ) {

@@ -7,7 +7,7 @@ import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.domain.ReservationRepository;
 import finalmission.reservation.dto.CreateReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
-import finalmission.reservation.dto.UpdateReservationResponse;
+import finalmission.reservation.dto.UpdateReservationRequest;
 import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.domain.RestaurantRepository;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,7 @@ public class ReservationService {
     @Transactional
     public ReservationResponse updateReservation(
             final Long reservationId,
-            final UpdateReservationResponse reservationRequest,
+            final UpdateReservationRequest reservationRequest,
             final LoginMemberInfo loginMemberInfo) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 예약 정보가 없습니다."));
