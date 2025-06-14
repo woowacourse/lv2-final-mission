@@ -14,4 +14,6 @@ public interface ReservationRepository {
     void deleteById(Long reservationId);
 
     List<Reservation> findByMemberId(Long memberId);
+
+    List<Reservation> findByRestaurantId(Long restaurantId);
 }

@@ -84,6 +84,13 @@ public class ReservationService {
         return ReservationResponse.from(reservations);
     }
 
+    public List<ReservationResponse> findByRestaurantId(final Long restaurantId) {
+        restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 식당 정보가 없습니다."));
+        List<Reservation> reservations = reservationRepository.findByRestaurantId(restaurantId);
+        return ReservationResponse.from(reservations);
+    }
+
     private void validateMemberOwnReservation(final LoginMemberInfo loginMemberInfo, final Reservation reservation) {
         Long memberId = loginMemberInfo.id();
         memberRepository.findById(memberId)

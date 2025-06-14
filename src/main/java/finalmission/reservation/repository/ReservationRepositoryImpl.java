@@ -40,4 +40,10 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     public List<Reservation> findByMemberId(Long memberId) {
         return jpaReservationRepository.findByMemberId(memberId);
     }
+
+    @Override
+    public List<Reservation> findByRestaurantId(Long restaurantId) {
+        return jpaReservationRepository.findByRestaurantId(restaurantId);
+    }
+
 }

@@ -67,4 +67,10 @@ public class ReservationController {
         List<ReservationResponse> reservationResponses = reservationService.findByMemberId(loginMemberInfo);
         return ResponseEntity.status(HttpStatus.OK).body(reservationResponses);
     }
+
+    @GetMapping("/restaurants/{restaurantId}")
+    public ResponseEntity<List<ReservationResponse>> getRestaurantReservation(@PathVariable Long restaurantId) {
+        List<ReservationResponse> reservationResponses = reservationService.findByRestaurantId(restaurantId);
+        return ResponseEntity.status(HttpStatus.OK).body(reservationResponses);
+    }
 }
