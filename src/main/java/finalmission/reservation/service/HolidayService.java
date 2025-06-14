@@ -2,6 +2,8 @@ package finalmission.reservation.service;
 
 import finalmission.client.HolidayClient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ public class HolidayService {
         this.holidayClient = holidayClient;
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void validateHoliday(LocalDateTime reservationDateTime) {
         String monthValue = getMonthValue(reservationDateTime);
         List<LocalDate> holidays = holidayClient.getHoliday(reservationDateTime.getYear(), monthValue);
