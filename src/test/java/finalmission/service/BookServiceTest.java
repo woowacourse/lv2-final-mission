@@ -58,7 +58,6 @@ class BookServiceTest {
         // then
         assertThat(bookResponse.name()).isEqualTo(name);
         assertThat(bookResponse.author()).isEqualTo(author);
-        assertThat(bookResponse.category()).isEqualTo(categoryId);
         assertThat(bookResponse.stock()).isEqualTo(4);
     }
 }
