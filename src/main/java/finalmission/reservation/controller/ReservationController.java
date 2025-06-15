@@ -4,6 +4,7 @@ import finalmission.auth.MemberSubject;
 import finalmission.auth.RequiredOwner;
 import finalmission.reservation.service.ReservationService;
 import finalmission.reservation.service.dto.CreateReservationInformationRequest;
+import finalmission.reservation.service.dto.ReservationDetailResponse;
 import finalmission.reservation.service.dto.ReservationInformationResponse;
 import finalmission.reservation.service.dto.CreateReservationRequest;
 import finalmission.reservation.service.dto.ReservationResponse;
@@ -11,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,15 @@ public class ReservationController {
     @GetMapping("/reservation/mine")
     public ResponseEntity<List<ReservationResponse>> getAllReservations(@MemberSubject Long memberId) {
         List<ReservationResponse> response = reservationService.getAllMyReservations(memberId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/reservation/mine/{id}")
+    public ResponseEntity<ReservationDetailResponse> getReservationDetail(
+            @MemberSubject Long memberId,
+            @PathVariable("id") Long id
+    ) {
+        ReservationDetailResponse response = reservationService.getMyReservationDetail(memberId, id);
         return ResponseEntity.ok(response);
     }
 
