@@ -4,10 +4,12 @@ import finalmission.member.service.MemberService;
 import finalmission.member.service.dto.request.CreateMemberRequest;
 import finalmission.member.service.dto.request.LoginRequest;
 import finalmission.member.service.dto.response.LoginResponse;
+import finalmission.member.service.dto.response.RecommendNameResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,5 +39,11 @@ public class MemberController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .build();
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<RecommendNameResponse> getRandomName() {
+        RecommendNameResponse response = memberService.createRandomName();
+        return ResponseEntity.ok(response);
     }
 }

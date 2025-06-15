@@ -4,21 +4,35 @@ import finalmission.auth.JwtTokenHandler;
 import finalmission.member.domain.Member;
 import finalmission.member.domain.vo.Email;
 import finalmission.member.domain.vo.Password;
+import finalmission.member.infrastructure.RandomNameClient;
 import finalmission.member.repository.MemberRepository;
 import finalmission.member.service.dto.request.CreateMemberRequest;
 import finalmission.member.service.dto.request.LoginRequest;
 import finalmission.member.service.dto.response.LoginResponse;
+import finalmission.member.service.dto.response.RecommendNameResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberService {
+
+    private final RandomNameClient randomNameClient;
     private final MemberRepository memberRepository;
     private final JwtTokenHandler jwtTokenHandler;
 
-    public MemberService(MemberRepository memberRepository, JwtTokenHandler jwtTokenHandler) {
+    public MemberService(
+            RandomNameClient randomNameClient,
+            MemberRepository memberRepository,
+            JwtTokenHandler jwtTokenHandler
+    ) {
+        this.randomNameClient = randomNameClient;
         this.memberRepository = memberRepository;
         this.jwtTokenHandler = jwtTokenHandler;
+    }
+
+    public RecommendNameResponse createRandomName() {
+        String randomName = randomNameClient.getRandomName();
+        return new RecommendNameResponse(randomName);
     }
 
     @Transactional
