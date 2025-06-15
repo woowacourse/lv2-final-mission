@@ -20,20 +20,12 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-//    @PostMapping
-//    public ResponseEntity<ReservationCreateResponse> create(
-//            @Valid @RequestBody ReservationCreateRequest request,
-//            @MemberAuthentication LoginMember member
-//    ) {
-//        ReservationCreateResponse response = reservationService.create(request, member);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-//    }
-
     @PostMapping
     public ResponseEntity<ReservationCreateResponse> create(
-            @Valid @RequestBody ReservationCreateRequest request
+            @Valid @RequestBody ReservationCreateRequest request,
+            @MemberAuthentication LoginMember member
     ) {
-        ReservationCreateResponse response = reservationService.createV2(request);
+        ReservationCreateResponse response = reservationService.create(request, member);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtProvider {
 
-    private static final String SECRET_KEY = "foiehfiowhefoihadskfjnsdkjnkjdcbHpqowedioj";
+    private static final String SECRET_KEY = "foiehfiowhefoihadskfjnsdkjnkjdcbHpqowediojLIehfdxofbkvjuhqpowiehlkcnxvl";
 
     public String createToken(final Member member) {
         return Jwts.builder()
@@ -20,7 +20,9 @@ public class JwtProvider {
 
     public boolean isValidToken(final String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parse(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                    .build().parse(token);
             return true;
         } catch (final JwtException e) {
             return false;

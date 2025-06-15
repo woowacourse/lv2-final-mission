@@ -10,7 +10,6 @@ import finalmission.ballparkreservation.reservation.dto.ReservationResponse;
 import finalmission.ballparkreservation.schedule.Schedule;
 import finalmission.ballparkreservation.schedule.ScheduleService;
 import finalmission.ballparkreservation.schedule.SeatRank;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,21 +58,5 @@ public class ReservationService {
         return reservationRepository.findAll().stream()
                 .map(ReservationResponse::from)
                 .toList();
-    }
-
-    public ReservationCreateResponse createV2(final @Valid ReservationCreateRequest request) {
-        Member member = memberService.getById(1L);
-        int seatNumber = request.seatNumber();
-        SeatRank seatRank = SeatRank.fromName(request.seatRank());
-
-        Schedule schedule = scheduleService.getByRankAndNumberAndDate(seatRank, seatNumber, request.date());
-
-        Reservation reservation = new Reservation(member, schedule);
-        validateReservationIsAbleToCreate(reservation);
-
-        boolean isHoliday = checkHoliday(request.date());
-        int amount = reservation.getAmount(isHoliday);
-
-        return new ReservationCreateResponse(amount);
     }
 }

@@ -33,7 +33,7 @@ public class AuthController {
         final ResponseCookie cookie = ResponseCookie.from("token", token).build();
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, cookie + "; Path=/;")
                 .build();
     }
 }
