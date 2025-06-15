@@ -4,8 +4,11 @@
 
 - [x] 회원가입(/signup POST)
 - [x] 로그인(/login POST)
-- [ ] 좌석 예약(/reservations POST)
-- [ ] 모든 예약 확인(/reservations GET)
+- [x] 좌석 예약(/reservations POST)
+- [x] 모든 예약 확인(/reservations GET)
+- [ ] 회원별 예약 확인(/reservations/my GET)
+- [ ] 예약 수정(/reservations PUT)
+- [ ] 예약 삭제(/reservations DELETE)
 
 ## 기능 요구사항
 
