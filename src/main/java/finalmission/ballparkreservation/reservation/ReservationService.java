@@ -4,6 +4,7 @@ import finalmission.ballparkreservation.auth.dto.LoginMember;
 import finalmission.ballparkreservation.external.HolidayClient;
 import finalmission.ballparkreservation.member.Member;
 import finalmission.ballparkreservation.member.MemberService;
+import finalmission.ballparkreservation.reservation.dto.MemberReservationResponse;
 import finalmission.ballparkreservation.reservation.dto.ReservationCreateRequest;
 import finalmission.ballparkreservation.reservation.dto.ReservationCreateResponse;
 import finalmission.ballparkreservation.reservation.dto.ReservationResponse;
@@ -33,16 +34,13 @@ public class ReservationService {
         SeatRank seatRank = SeatRank.fromName(request.seatRank());
 
         Schedule schedule = scheduleService.getByRankAndNumberAndDate(seatRank, seatNumber, request.date());
-
-        Reservation reservation = new Reservation(member, schedule);
-        validateReservationIsAbleToCreate(reservation);
+        validateReservationIsAbleToCreate(schedule);
 
         boolean isHoliday = checkHoliday(request.date());
-        int amount = reservation.getAmount(isHoliday);
+        Reservation reservation = new Reservation(member, schedule, isHoliday);
 
-        reservationRepository.save(reservation);
-
-        return new ReservationCreateResponse(amount);
+        Reservation savedReservation = reservationRepository.save(reservation);
+        return ReservationCreateResponse.from(savedReservation);
     }
 
     private boolean checkHoliday(final LocalDate date) {
@@ -50,8 +48,8 @@ public class ReservationService {
         return holidaysOfYearAndMonth.contains(date);
     }
 
-    private void validateReservationIsAbleToCreate(final Reservation reservation) {
-        if (reservationRepository.existsBySchedule(reservation.getSchedule())) {
+    private void validateReservationIsAbleToCreate(final Schedule schedule) {
+        if (reservationRepository.existsBySchedule(schedule)) {
             throw new IllegalArgumentException("이미 해당 날짜 좌석에 대한 예약이 존재합니다.");
         }
     }
@@ -59,6 +57,12 @@ public class ReservationService {
     public List<ReservationResponse> getAll() {
         return reservationRepository.findAll().stream()
                 .map(ReservationResponse::from)
+                .toList();
+    }
+
+    public List<MemberReservationResponse> getAllByMember(final LoginMember loginMember) {
+        return reservationRepository.findAllByMember_Id(loginMember.id()).stream()
+                .map(MemberReservationResponse::from)
                 .toList();
     }
 }

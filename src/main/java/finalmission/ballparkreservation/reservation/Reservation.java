@@ -22,12 +22,15 @@ public class Reservation {
     @OneToOne(fetch = FetchType.LAZY)
     private Schedule schedule;
 
-    public Reservation(final Member member, final Schedule schedule) {
+    private int amount;
+
+    public Reservation(final Member member, final Schedule schedule, final boolean isHoliday) {
         this.member = member;
         this.schedule = schedule;
+        this.amount = getAmount(isHoliday);
     }
 
-    public int getAmount(final boolean isHoliday) {
+    private int getAmount(final boolean isHoliday) {
         int amount = schedule.getWeekdayAmount();
         if (isHoliday || schedule.isWeekend()) {
             amount = schedule.getHolidayAmount();

@@ -2,6 +2,7 @@ package finalmission.ballparkreservation.reservation;
 
 import finalmission.ballparkreservation.auth.MemberAuthentication;
 import finalmission.ballparkreservation.auth.dto.LoginMember;
+import finalmission.ballparkreservation.reservation.dto.MemberReservationResponse;
 import finalmission.ballparkreservation.reservation.dto.ReservationCreateRequest;
 import finalmission.ballparkreservation.reservation.dto.ReservationCreateResponse;
 import finalmission.ballparkreservation.reservation.dto.ReservationResponse;
@@ -34,6 +35,14 @@ public class ReservationController {
             @MemberAuthentication LoginMember member
     ) {
         List<ReservationResponse> reservations = reservationService.getAll();
+        return ResponseEntity.ok(reservations);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<MemberReservationResponse>> getAllByMember(
+            @MemberAuthentication LoginMember member
+    ) {
+        List<MemberReservationResponse> reservations = reservationService.getAllByMember(member);
         return ResponseEntity.ok(reservations);
     }
 }

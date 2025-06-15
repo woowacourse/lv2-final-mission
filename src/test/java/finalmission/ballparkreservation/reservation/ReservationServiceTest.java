@@ -65,14 +65,19 @@ class ReservationServiceTest {
         ReservationCreateRequest request = new ReservationCreateRequest("TABLE", 10, date);
         LoginMember loginMember = new LoginMember(1L);
         Member member = TestFactory.memberWithId(1L, new Member("may@gmail.com", "1234", "메이", 24));
+        Schedule schedule = TestFactory.scheduleWithId(1L, new Schedule(10, SeatRank.TABLE, date));
+        Reservation reservation = TestFactory.reservationWithId(1L, new Reservation(member, schedule, false));
+
         given(memberService.getById(1L))
                 .willReturn(member);
         given(scheduleService.getByRankAndNumberAndDate(SeatRank.TABLE, 10, request.date()))
-                .willReturn(TestFactory.scheduleWithId(1L, new Schedule(10, SeatRank.TABLE, date)));
+                .willReturn(schedule);
         given(reservationRepository.existsBySchedule(any()))
                 .willReturn(false);
         given(holidayClient.getHolidaysOfYearAndMonth(date))
                 .willReturn(List.of());
+        given(reservationRepository.save(any()))
+                .willReturn(reservation);
 
         // when
         ReservationCreateResponse response = reservationService.create(request, loginMember);
@@ -90,14 +95,19 @@ class ReservationServiceTest {
         ReservationCreateRequest request = new ReservationCreateRequest("TABLE", 10, date);
         LoginMember loginMember = new LoginMember(1L);
         Member member = TestFactory.memberWithId(1L, new Member("may@gmail.com", "1234", "메이", 24));
+        Schedule schedule = TestFactory.scheduleWithId(1L, new Schedule(10, SeatRank.TABLE, date));
+        Reservation reservation = TestFactory.reservationWithId(1L, new Reservation(member, schedule, true));
+
         given(memberService.getById(1L))
                 .willReturn(member);
         given(scheduleService.getByRankAndNumberAndDate(SeatRank.TABLE, 10, request.date()))
-                .willReturn(TestFactory.scheduleWithId(1L, new Schedule(10, SeatRank.TABLE, date)));
+                .willReturn(schedule);
         given(reservationRepository.existsBySchedule(any()))
                 .willReturn(false);
         given(holidayClient.getHolidaysOfYearAndMonth(date))
                 .willReturn(List.of(date));
+        given(reservationRepository.save(any()))
+                .willReturn(reservation);
 
         // when
         ReservationCreateResponse response = reservationService.create(request, loginMember);

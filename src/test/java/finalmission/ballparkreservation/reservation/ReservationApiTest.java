@@ -70,6 +70,19 @@ public class ReservationApiTest {
                 .body("size()", is(1));
     }
 
+    @DisplayName("/reservations/my GET 회원별 예약 조회 테스트")
+    @Test
+    void getAllByMember1() {
+        Cookie cookie = loginForTest();
+        createReservationForTest(cookie);
+
+        RestAssured.given().port(port).log().all()
+                .cookie(cookie)
+                .when().get("/reservations/my")
+                .then().statusCode(200)
+                .body("size()", is(1));
+    }
+
     private Cookie loginForTest() {
         return RestAssured.given().port(port).log().all()
                 .contentType(ContentType.JSON)

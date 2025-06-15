@@ -6,7 +6,7 @@
 - [x] 로그인(/login POST)
 - [x] 좌석 예약(/reservations POST)
 - [x] 모든 예약 확인(/reservations GET)
-- [ ] 회원별 예약 확인(/reservations/my GET)
+- [x] 회원별 예약 확인(/reservations/my GET)
 - [ ] 예약 수정(/reservations PUT)
 - [ ] 예약 삭제(/reservations DELETE)
 
