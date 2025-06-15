@@ -46,6 +46,10 @@ public class Member {
         return nickname;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Member member)) {
