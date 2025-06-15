@@ -6,7 +6,7 @@ import java.time.LocalTime;
 
 public record ReservationSlotResponse(
         Long id,
-        LocalDate planDate,
+        LocalDate date,
         LocalTime startTime,
         LocalTime endTime
 ) {

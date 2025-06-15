@@ -4,7 +4,7 @@ import static finalmission.planning.auth.constants.AuthConstants.JWT_PAYLOAD;
 
 import finalmission.planning.auth.exception.UnauthorizationException;
 import finalmission.planning.auth.infra.JwtPayload;
-import finalmission.planning.auth.ui.dto.CurrentUserDto;
+import finalmission.planning.auth.ui.dto.CurrentUserInfo;
 import finalmission.planning.domain.User;
 import finalmission.planning.infra.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(CurrentUser.class)
-                && parameter.getParameterType().equals(CurrentUserDto.class);
+                && parameter.getParameterType().equals(CurrentUserInfo.class);
     }
 
     @Override
@@ -43,6 +43,6 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
 
         User user = userRepository.findById(jwtPayload.id())
                 .orElseThrow(() -> new UnauthorizationException("유저를 찾을 수 없습니다, id: " + jwtPayload.id()));
-        return new CurrentUserDto(user.getId(), user.getName());
+        return new CurrentUserInfo(user.getId(), user.getName());
     }
 }

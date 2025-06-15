@@ -39,7 +39,7 @@ class ReservationSlotControllerTest extends IntegrationTest {
 
         // then
         SoftAssertions.assertSoftly(softly -> {
-            assertThat(response.planDate()).isEqualTo(date);
+            assertThat(response.date()).isEqualTo(date);
             assertThat(response.startTime()).isEqualTo(startTime);
             assertThat(response.endTime()).isEqualTo(endTime);
         });
