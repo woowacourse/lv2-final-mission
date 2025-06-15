@@ -10,6 +10,8 @@ import finalmission.reservation.dto.response.ReservationResponse;
 import finalmission.reservation.infrastructure.ReservationRepository;
 import finalmission.toilet.domain.Toilet;
 import finalmission.toilet.infrastructure.ToiletRepository;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,5 +36,13 @@ public class ReservationService {
         Reservation reservation = new Reservation(request.date(), request.startAt(), request.endAt(), member, toilet);
         Reservation savedReservation = reservationRepository.save(reservation);
         return ReservationResponse.from(savedReservation);
+    }
+
+    public List<ReservationResponse> findReservations(Long toiletId, LocalDate date) {
+        return reservationRepository.findByToiletIdAndDate(toiletId,
+                        date)
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
     }
 }
