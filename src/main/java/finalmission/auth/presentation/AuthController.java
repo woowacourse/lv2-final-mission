@@ -2,6 +2,7 @@ package finalmission.auth.presentation;
 
 import finalmission.auth.dto.request.LoginRequest;
 import finalmission.auth.service.AuthService;
+import finalmission.member.infrastructure.MemberRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +20,7 @@ public class AuthController {
 
     public AuthController(
             @Value("${auth.cookie.max-age}") Long cookieMaxAge,
-            AuthService authService
+            AuthService authService, MemberRepository memberRepository
     ) {
         this.cookieMaxAge = cookieMaxAge;
         this.authService = authService;

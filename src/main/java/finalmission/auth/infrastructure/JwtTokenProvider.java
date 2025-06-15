@@ -1,6 +1,11 @@
 package finalmission.auth.infrastructure;
 
+import finalmission.exception.auth.ExpiredTokenException;
+import finalmission.exception.auth.InvalidTokenException;
 import finalmission.member.domain.Member;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
@@ -31,4 +36,29 @@ public class JwtTokenProvider implements TokenProvider {
                 .signWith(secretKey)
                 .compact();
     }
+
+    @Override
+    public String extractMemberId(String token) {
+        validateToken(token);
+        return createTokenParser()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("id", String.class);
+    }
+
+    private void validateToken(String token) {
+        try {
+            createTokenParser().parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredTokenException();
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new InvalidTokenException();
+        }
+    }
+
+    private JwtParser createTokenParser() {
+        return Jwts.parserBuilder().setSigningKey(secretKey).build();
+    }
+
+
 }
