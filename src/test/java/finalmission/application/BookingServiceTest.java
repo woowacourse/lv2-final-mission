@@ -8,6 +8,7 @@ import finalmission.TestFixtures;
 import finalmission.domain.BookingRepository;
 import finalmission.domain.Gym;
 import finalmission.domain.GymRepository;
+import finalmission.domain.HolidayChecker;
 import finalmission.domain.Member;
 import finalmission.domain.MemberRepository;
 import java.time.LocalDate;
@@ -22,7 +23,8 @@ class BookingServiceTest {
     private final MemberRepository memberRepository = Mockito.mock(MemberRepository.class);
     private final GymRepository gymRepository = Mockito.mock(GymRepository.class);
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
-    private final BookingService bookingService = new BookingService(memberRepository, gymRepository, bookingRepository);
+    private final HolidayChecker holidayChecker = Mockito.mock(HolidayChecker.class);
+    private final BookingService bookingService = new BookingService(memberRepository, gymRepository, bookingRepository, holidayChecker);
 
     @Test
     @DisplayName("예약을 한다.")
@@ -54,9 +56,22 @@ class BookingServiceTest {
     void cannotBookPast() {
         var member = anyMemberWithMocking();
         var gym = anyGymWithMocking();
-        var date = LocalDate.of(2020, 1, 1);
+        var date = LocalDate.of(2020, 2, 2);
 
         assertThatThrownBy(() -> bookingService.book(member.getId(), gym.getId(), date))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("공휴일에는 예약할 수 없다.")
+    void cannotBookHoliday() {
+        var member = anyMemberWithMocking();
+        var gym = anyGymWithMocking();
+        var dateHoliday = LocalDate.of(2020, 5, 5);
+
+        Mockito.doReturn(true).when(holidayChecker).isHoliday(dateHoliday);
+
+        assertThatThrownBy(() -> bookingService.book(member.getId(), gym.getId(), dateHoliday))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
