@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record UpdateReservationRequest(
         @NotNull
-        Long reservationId,
-        @NotNull
         Long updatedInformationId
 ) {
 }

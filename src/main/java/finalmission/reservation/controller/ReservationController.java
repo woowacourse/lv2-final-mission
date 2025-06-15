@@ -4,6 +4,7 @@ import finalmission.auth.MemberSubject;
 import finalmission.auth.RequiredOwner;
 import finalmission.reservation.service.ReservationService;
 import finalmission.reservation.service.dto.request.CreateReservationInformationRequest;
+import finalmission.reservation.service.dto.request.UpdateReservationRequest;
 import finalmission.reservation.service.dto.response.ReservationDetailResponse;
 import finalmission.reservation.service.dto.response.ReservationInformationResponse;
 import finalmission.reservation.service.dto.request.CreateReservationRequest;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +53,16 @@ public class ReservationController {
     ) {
         reservationService.deleteReservation(memberId, id);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/reservation/{id}")
+    public ResponseEntity<ReservationResponse> updateReservation(
+            @MemberSubject Long memberId,
+            @PathVariable("id") Long id,
+            @RequestBody @Valid UpdateReservationRequest request
+    ) {
+        ReservationResponse response = reservationService.updateReservation(id, request, memberId);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/reservation-info")

@@ -90,19 +90,23 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationResponse updateReservation(UpdateReservationRequest request, final Long memberId) {
+    public ReservationResponse updateReservation(
+            final Long reservationId,
+            UpdateReservationRequest request,
+            final Long memberId
+    ) {
         Member member = getMember(memberId);
-        validateOwnerOfReservation(request.reservationId(), member);
+        validateOwnerOfReservation(reservationId, member);
 
-        Reservation reservation = getReservation(request);
+        Reservation reservation = getReservation(reservationId);
         ReservationInformation restaurantInformation = getRestaurantInformation(request.updatedInformationId());
 
         reservation.updateReservation(restaurantInformation);
         return ReservationResponse.from(reservation);
     }
 
-    private Reservation getReservation(UpdateReservationRequest request) {
-        return reservationRepository.findById(request.reservationId())
+    private Reservation getReservation(final Long reservationId) {
+        return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
     }
 

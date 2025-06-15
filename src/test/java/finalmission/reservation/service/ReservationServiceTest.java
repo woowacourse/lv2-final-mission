@@ -158,10 +158,10 @@ class ReservationServiceTest {
         entityManager.persist(reservation);
         entityManager.persist(updateInformation);
 
-        UpdateReservationRequest request = new UpdateReservationRequest(reservation.getId(), updateInformation.getId());
+        UpdateReservationRequest request = new UpdateReservationRequest(updateInformation.getId());
 
         // when
-        reservationService.updateReservation(request, ME.getId());
+        reservationService.updateReservation(reservation.getId(), request, ME.getId());
 
         // then
         Reservation updated = entityManager.find(Reservation.class, reservation.getId());
@@ -180,11 +180,11 @@ class ReservationServiceTest {
         entityManager.persist(reservation);
         entityManager.persist(updateInformation);
 
-        UpdateReservationRequest request = new UpdateReservationRequest(reservation.getId(), updateInformation.getId());
+        UpdateReservationRequest request = new UpdateReservationRequest(updateInformation.getId());
 
         // when & then
         assertThatThrownBy(() -> {
-            reservationService.updateReservation(request, other.getId());
+            reservationService.updateReservation(reservation.getId(), request, other.getId());
         }).isInstanceOf(IllegalArgumentException.class);
     }
 }
