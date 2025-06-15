@@ -7,6 +7,7 @@ import finalmission.reservation.domain.ReservationInformation;
 import finalmission.reservation.repository.ReservationInformationRepository;
 import finalmission.reservation.repository.ReservationRepository;
 import finalmission.reservation.service.dto.request.CreateReservationInformationRequest;
+import finalmission.reservation.service.dto.request.UpdateReservationRequest;
 import finalmission.reservation.service.dto.response.ReservationDetailResponse;
 import finalmission.reservation.service.dto.response.ReservationInformationResponse;
 import finalmission.reservation.service.dto.request.CreateReservationRequest;
@@ -86,6 +87,23 @@ public class ReservationService {
     private ReservationInformation getRestaurantInformation(final Long id) {
         return reservationInformationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 예약 정보입니다."));
+    }
+
+    @Transactional
+    public ReservationResponse updateReservation(UpdateReservationRequest request, final Long memberId) {
+        Member member = getMember(memberId);
+        validateOwnerOfReservation(request.reservationId(), member);
+
+        Reservation reservation = getReservation(request);
+        ReservationInformation restaurantInformation = getRestaurantInformation(request.updatedInformationId());
+
+        reservation.updateReservation(restaurantInformation);
+        return ReservationResponse.from(reservation);
+    }
+
+    private Reservation getReservation(UpdateReservationRequest request) {
+        return reservationRepository.findById(request.reservationId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
     }
 
     @Transactional

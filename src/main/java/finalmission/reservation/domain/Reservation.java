@@ -33,4 +33,8 @@ public class Reservation {
         this.reservationInformation = reservationInformation;
         this.customer = customer;
     }
+
+    public void updateReservation(ReservationInformation newInformation) {
+        this.reservationInformation = newInformation;
+    }
 }
