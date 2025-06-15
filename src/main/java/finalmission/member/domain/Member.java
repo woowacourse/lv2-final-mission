@@ -1,0 +1,62 @@
+package finalmission.member.domain;
+
+import finalmission.member.domain.vo.Email;
+import finalmission.member.domain.vo.Name;
+import finalmission.member.domain.vo.Password;
+import finalmission.member.domain.vo.Role;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(uniqueConstraints =
+    @UniqueConstraint(columnNames = {"email"})
+)
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Member {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Embedded
+    @AttributeOverrides(
+            @AttributeOverride(name = "value", column = @Column(name = "name"))
+    )
+    private Name name;
+
+    @Embedded
+    @AttributeOverrides(
+            @AttributeOverride(name = "value", column = @Column(name = "email"))
+    )
+    private Email email;
+
+    @Embedded
+    @AttributeOverrides(
+            @AttributeOverride(name = "value", column = @Column(name = "password"))
+    )
+    private Password password;
+
+    public Member(Role role, String name, String email, String password) {
+        this.role = role;
+        this.name = new Name(name);
+        this.email = new Email(email);
+        this.password = new Password(password);
+    }
+}
