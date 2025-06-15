@@ -40,8 +40,7 @@ public class ReservationService {
     }
 
     public List<ReservationResponse> findReservations(Long toiletId, LocalDate date) {
-        return reservationRepository.findByToiletIdAndDate(toiletId,
-                        date)
+        return reservationRepository.findByToiletIdAndDate(toiletId, date)
                 .stream()
                 .map(ReservationResponse::from)
                 .toList();
