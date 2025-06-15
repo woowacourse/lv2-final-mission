@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +33,11 @@ public class ReservationController {
     @GetMapping
     public List<ReservationResponse> getReservationsByUser(@CurrentUser CurrentUserInfo currentUserInfo) {
         return reservationService.getReservationsByUser(currentUserInfo.id());
+    }
+
+    @GetMapping("/{reservationId}")
+    public ReservationResponse getReservationById(@PathVariable Long reservationId,
+                                                  @CurrentUser CurrentUserInfo currentUserInfo) {
+        return reservationService.getReservationById(reservationId, currentUserInfo);
     }
 }

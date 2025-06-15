@@ -1,8 +1,11 @@
 package finalmission.planning.application;
 
+import finalmission.planning.auth.exception.ForbiddenException;
+import finalmission.planning.auth.ui.dto.CurrentUserInfo;
 import finalmission.planning.domain.Reservation;
 import finalmission.planning.domain.ReservationSlot;
 import finalmission.planning.domain.User;
+import finalmission.planning.domain.UserRole;
 import finalmission.planning.exception.NotFoundException;
 import finalmission.planning.infra.repository.ReservationRepository;
 import finalmission.planning.infra.repository.ReservationSlotRepository;
@@ -11,8 +14,10 @@ import finalmission.planning.ui.dto.request.CreateReservationRequest;
 import finalmission.planning.ui.dto.response.ReservationResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
@@ -35,5 +40,21 @@ public class ReservationService {
     public List<ReservationResponse> getReservationsByUser(Long userId) {
         List<Reservation> reservations = reservationRepository.findByUserId(userId);
         return ReservationResponse.from(reservations);
+    }
+
+    public ReservationResponse getReservationById(Long reservationId, CurrentUserInfo currentUserInfo) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundException("Reservation", reservationId.toString()));
+        validateReadPermission(currentUserInfo, reservation);
+        return ReservationResponse.from(reservation);
+    }
+
+    private void validateReadPermission(CurrentUserInfo currentUserInfo, Reservation reservation) {
+        if(currentUserInfo.role() == UserRole.ADMIN || reservation.isOwnedBy(currentUserInfo.id())) {
+            return;
+        }
+        log.warn("예약 상세 정보 접근 불가 - reservationId={}, userId={}, userRole={}",
+                reservation.getId(), currentUserInfo.id(), currentUserInfo.role());
+        throw new ForbiddenException();
     }
 }

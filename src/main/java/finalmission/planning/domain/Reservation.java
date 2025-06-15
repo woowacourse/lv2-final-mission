@@ -29,4 +29,8 @@ public class Reservation {
         this.user = user;
         this.reservationSlot = reservationSlot;
     }
+
+    public boolean isOwnedBy(Long requestUserId) {
+        return this.user.getId().equals(requestUserId);
+    }
 }

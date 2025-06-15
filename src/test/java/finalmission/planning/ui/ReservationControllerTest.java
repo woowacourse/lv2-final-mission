@@ -11,7 +11,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import finalmission.planning.domain.PlanDate;
 import finalmission.planning.domain.Reservation;
 import finalmission.planning.domain.ReservationSlot;
-import finalmission.planning.domain.TimeSlot;
 import finalmission.planning.domain.User;
 import finalmission.planning.ui.dto.request.CreateReservationRequest;
 import finalmission.planning.ui.dto.response.ReservationResponse;
@@ -32,9 +31,8 @@ class ReservationControllerTest extends IntegrationTest {
         String token = jwtTokenProvider.createToken(user.getId(), user.getRole());
 
         PlanDate planDate = DEFAULT_PLAN_DATE;
-        TimeSlot timeSlot = DEFAULT_TIME_SLOT_1;
         ReservationSlot reservationSlot = dbHelper.insertReservationSlot(
-                new ReservationSlot(planDate, timeSlot));
+                new ReservationSlot(planDate, DEFAULT_TIME_SLOT_1));
 
         CreateReservationRequest createReservationRequest = new CreateReservationRequest(reservationSlot.getId());
 
@@ -85,4 +83,50 @@ class ReservationControllerTest extends IntegrationTest {
         assertThat(responses).hasSize(2);
     }
 
+    @DisplayName("예약 상세 정보 id로 조회")
+    @Test
+    void getReservationById() {
+        // given
+        User user = dbHelper.insertUser(createNormalUserByName("멍구"));
+        User other = dbHelper.insertUser(createNormalUserByName("다른 유저"));
+        String token = jwtTokenProvider.createToken(other.getId(), other.getRole()); // 토큰이 다른 유저임
+
+        ReservationSlot reservationSlot = dbHelper.insertReservationSlot(
+                new ReservationSlot(DEFAULT_PLAN_DATE, DEFAULT_TIME_SLOT_1));
+
+        Reservation reservation = dbHelper.insertReservation(new Reservation(user, reservationSlot));
+
+        // when & then
+        RestAssured.given().log().all()
+                .cookie("token", token)
+                .when().get("/reservations/" + reservation.getId())
+                .then().log().all()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @DisplayName("다른 유저의 예약 상세 정보 조회 시도 시 예외 발생")
+    @Test
+    void forbiddenError_getReservationById() {
+        // given
+        User user = dbHelper.insertUser(createNormalUserByName("멍구"));
+        String token = jwtTokenProvider.createToken(user.getId(), user.getRole());
+
+        PlanDate planDate = DEFAULT_PLAN_DATE;
+        ReservationSlot reservationSlot = dbHelper.insertReservationSlot(
+                new ReservationSlot(planDate, DEFAULT_TIME_SLOT_1));
+
+        Reservation reservation = dbHelper.insertReservation(new Reservation(user, reservationSlot));
+
+        // when
+        ReservationResponse response = RestAssured.given().log().all()
+                .cookie("token", token)
+                .when().get("/reservations/" + reservation.getId())
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .extract().as(ReservationResponse.class);
+
+        // then
+        assertThat(response.ownerName()).isEqualTo(user.getName());
+        assertThat(response.reservationSlot().date()).isEqualTo(planDate.getDate());
+    }
 }
