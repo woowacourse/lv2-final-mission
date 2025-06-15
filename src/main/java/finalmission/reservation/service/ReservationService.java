@@ -7,6 +7,7 @@ import finalmission.reservation.domain.ReservationInformation;
 import finalmission.reservation.repository.ReservationInformationRepository;
 import finalmission.reservation.repository.ReservationRepository;
 import finalmission.reservation.service.dto.CreateReservationInformationRequest;
+import finalmission.reservation.service.dto.ReservationDetailResponse;
 import finalmission.reservation.service.dto.ReservationInformationResponse;
 import finalmission.reservation.service.dto.CreateReservationRequest;
 import finalmission.reservation.service.dto.ReservationResponse;
@@ -42,6 +43,29 @@ public class ReservationService {
                 .stream()
                 .map(ReservationResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public ReservationDetailResponse getMyReservationDetail(final Long memberId, final Long reservationId) {
+        Member member = getMember(memberId);
+        validateOwnerOfReservation(reservationId, member);
+        Reservation reservation = getReservationWithDetails(reservationId);
+        return ReservationDetailResponse.from(reservation);
+    }
+
+    private void validateOwnerOfReservation(Long reservationId, Member member) {
+        if (!isReservationOwner(reservationId, member)) {
+            throw new IllegalStateException("접근 권한이 없습니다.");
+        }
+    }
+
+    private boolean isReservationOwner(Long reservationId, Member member) {
+        return reservationRepository.existsByCustomerAndId(member, reservationId);
+    }
+
+    private Reservation getReservationWithDetails(Long reservationId) {
+        return reservationRepository.findWithDetailsById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다."));
     }
 
     @Transactional
