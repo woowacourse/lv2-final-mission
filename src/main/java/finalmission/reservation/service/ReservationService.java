@@ -45,4 +45,12 @@ public class ReservationService {
                 .map(ReservationResponse::from)
                 .toList();
     }
+
+    public List<ReservationResponse> findReservationsByMemberId(Long memberId) {
+        memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        return reservationRepository.findByMemberId(memberId)
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
+    }
 }
