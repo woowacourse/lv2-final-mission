@@ -16,17 +16,25 @@ public record HolidayResponse(
         }
 
         static class Body {
-            List<Item> items;
+            Items items;
 
-            public List<Item> getItems() {
+            public Items getItems() {
                 return items;
             }
 
-            static class Item {
-                String date;
+            static class Items {
+                List<Item> item;
 
-                public String getDate() {
-                    return date;
+                public List<Item> getItem() {
+                    return item;
+                }
+
+                static class Item {
+                    String locdate;
+
+                    public String getLocdate() {
+                        return locdate;
+                    }
                 }
             }
         }
@@ -35,8 +43,8 @@ public record HolidayResponse(
     public List<LocalDate> getHolidays() {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-        return this.response.getBody().items.stream()
-                .map(item -> LocalDate.parse(item.getDate(), formatter))
+        return this.response.getBody().getItems().getItem().stream()
+                .map(info -> LocalDate.parse(info.getLocdate(), formatter))
                 .toList();
     }
 }
