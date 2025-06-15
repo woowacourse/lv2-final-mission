@@ -55,7 +55,7 @@ public class ReservationService {
 
     private void validateOwnerOfReservation(Long reservationId, Member member) {
         if (!isReservationOwner(reservationId, member)) {
-            throw new IllegalStateException("접근 권한이 없습니다.");
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
     }
 

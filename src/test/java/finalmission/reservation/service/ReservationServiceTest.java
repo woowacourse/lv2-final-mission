@@ -110,6 +110,39 @@ class ReservationServiceTest {
         // when & then
         assertThatThrownBy(() -> {
             reservationService.getMyReservationDetail(other.getId(), reservation.getId());
-        }).isInstanceOf(IllegalStateException.class);
+        }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("예약 생성자는 자신의 예약을 삭제할 수 있다.")
+    @Test
+    void deleteMyReservation() {
+        // given
+        Reservation reservation = new Reservation(RESERVATION_INFORMATION, ME);
+
+        entityManager.persist(reservation);
+
+        final Long reservationId = reservation.getId();
+
+        // when
+        reservationService.deleteReservation(ME.getId(), reservationId);
+
+        // then
+        assertThat(entityManager.find(Reservation.class, reservationId)).isNull();
+    }
+
+    @DisplayName("다른 사람의 예약을 삭제할 수 없다.")
+    @Test
+    void cannotDeleteOtherReservation() {
+        // given
+        Member other = new Member(Role.CUSTOMER, "other", "other@test.com", "12341234");
+        Reservation reservation = new Reservation(RESERVATION_INFORMATION, ME);
+
+        entityManager.persist(other);
+        entityManager.persist(reservation);
+
+        // when & then
+        assertThatThrownBy(() -> {
+            reservationService.deleteReservation(other.getId(), reservation.getId());
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 }
