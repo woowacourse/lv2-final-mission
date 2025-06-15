@@ -1,5 +1,6 @@
 package finalmission.reservation.domain;
 
+import finalmission.exception.reservation.NotMyReservationException;
 import finalmission.member.domain.Member;
 import finalmission.toilet.domain.Toilet;
 import jakarta.persistence.Entity;
@@ -68,5 +69,12 @@ public class Reservation {
 
     public Toilet getToilet() {
         return toilet;
+    }
+
+    public void validateOwner(Member member) {
+        if (this.member.equals(member)) {
+            return;
+        }
+        throw new NotMyReservationException();
     }
 }

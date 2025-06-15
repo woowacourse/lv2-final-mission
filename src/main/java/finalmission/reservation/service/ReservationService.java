@@ -1,6 +1,7 @@
 package finalmission.reservation.service;
 
 import finalmission.exception.member.MemberNotFoundException;
+import finalmission.exception.reservation.ReservationNotFoundException;
 import finalmission.exception.toilet.ToiletNotFoundException;
 import finalmission.member.domain.Member;
 import finalmission.member.infrastructure.MemberRepository;
@@ -52,5 +53,14 @@ public class ReservationService {
                 .stream()
                 .map(ReservationResponse::from)
                 .toList();
+    }
+
+    public void deleteReservationById(Long memberId, Long reservationId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(ReservationNotFoundException::new);
+        reservation.validateOwner(member);
+        reservationRepository.deleteById(reservationId);
     }
 }
