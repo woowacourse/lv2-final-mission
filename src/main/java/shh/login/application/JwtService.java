@@ -56,7 +56,7 @@ public class JwtService {
     public Map<String, String> decode(final String token) {
         final Claims claims = parseToken(token);
         return Map.of(
-                CLAIM_ID_KEY, claims.get(CLAIM_ID_KEY).toString(),
+                CLAIM_ID_KEY, claims.get(CLAIM_ID_KEY).toString().replaceAll("\\.0$", ""),
                 CLAIM_ROLE_KEY, claims.get(CLAIM_ROLE_KEY).toString()
         );
     }
@@ -66,7 +66,7 @@ public class JwtService {
             return Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
-                    .parseClaimsJwt(token)
+                    .parseClaimsJws(token)
                     .getBody();
         } catch (final ExpiredJwtException e) {
             throw new UnauthorizedException("로그인 정보가 만료되었습니다.");
