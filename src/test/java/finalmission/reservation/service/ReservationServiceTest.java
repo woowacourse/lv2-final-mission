@@ -6,7 +6,9 @@ import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.domain.ReservationInformation;
 import finalmission.reservation.service.dto.request.CreateReservationInformationRequest;
 import finalmission.reservation.service.dto.request.CreateReservationRequest;
+import finalmission.reservation.service.dto.request.UpdateReservationRequest;
 import finalmission.reservation.service.dto.response.ReservationDetailResponse;
+import finalmission.reservation.service.dto.response.ReservationResponse;
 import finalmission.restaurant.domain.Restaurant;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -143,6 +145,46 @@ class ReservationServiceTest {
         // when & then
         assertThatThrownBy(() -> {
             reservationService.deleteReservation(other.getId(), reservation.getId());
+        }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("예약 생성자는 자신의 예약 정보를 수정할 수 있다.")
+    @Test
+    void updateMyReservation() {
+        // given
+        Reservation reservation = new Reservation(RESERVATION_INFORMATION, ME);
+        ReservationInformation updateInformation = new ReservationInformation(RESTAURANT, LocalDate.now().plusDays(1), LocalTime.of(11, 0), 5);
+
+        entityManager.persist(reservation);
+        entityManager.persist(updateInformation);
+
+        UpdateReservationRequest request = new UpdateReservationRequest(reservation.getId(), updateInformation.getId());
+
+        // when
+        reservationService.updateReservation(request, ME.getId());
+
+        // then
+        Reservation updated = entityManager.find(Reservation.class, reservation.getId());
+        assertThat(updated.getReservationInformation().getId()).isEqualTo(updateInformation.getId());
+    }
+
+    @DisplayName("다른 사람의 예약은 수정할 수 없다.")
+    @Test
+    void cannotUpdateOtherReservation() {
+        // given
+        Member other = new Member(Role.CUSTOMER, "other", "other@test.com", "12341234");
+        Reservation reservation = new Reservation(RESERVATION_INFORMATION, ME);
+        ReservationInformation updateInformation = new ReservationInformation(RESTAURANT, LocalDate.now().plusDays(1), LocalTime.of(11, 0), 5);
+
+        entityManager.persist(other);
+        entityManager.persist(reservation);
+        entityManager.persist(updateInformation);
+
+        UpdateReservationRequest request = new UpdateReservationRequest(reservation.getId(), updateInformation.getId());
+
+        // when & then
+        assertThatThrownBy(() -> {
+            reservationService.updateReservation(request, other.getId());
         }).isInstanceOf(IllegalArgumentException.class);
     }
 }
