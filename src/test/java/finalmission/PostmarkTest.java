@@ -1,6 +1,7 @@
 package finalmission;
 
 import finalmission.planning.infra.EmailRequest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -9,7 +10,7 @@ import org.springframework.web.client.RestClient;
 
 public class PostmarkTest {
 
-
+    @Disabled
     @DisplayName("이메일 보내기 test")
     @Test
     void sendEmail() {

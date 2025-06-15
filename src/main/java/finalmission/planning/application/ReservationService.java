@@ -25,6 +25,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final ReservationSlotRepository reservationSlotRepository;
+    private final EmailService emailService;
 
     public ReservationResponse registerReservation(CreateReservationRequest request,  Long userId) {
         User user = userRepository.findById(userId)
@@ -34,6 +35,8 @@ public class ReservationService {
                 .orElseThrow(() -> new NotFoundException("ReservationSlot", request.reservationSlotId().toString()));
 
         Reservation saved = reservationRepository.save(new Reservation(user, reservationSlot));
+        emailService.sendEmailForReservation(saved);
+
         return ReservationResponse.from(saved);
     }
 

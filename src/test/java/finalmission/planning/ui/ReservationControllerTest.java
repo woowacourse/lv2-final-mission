@@ -7,7 +7,10 @@ import static finalmission.planning.TestFixture.DEFAULT_TIME_SLOT_3;
 import static finalmission.planning.TestFixture.createNormalUser;
 import static finalmission.planning.TestFixture.createNormalUserByName;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
+import finalmission.planning.application.EmailService;
 import finalmission.planning.domain.PlanDate;
 import finalmission.planning.domain.Reservation;
 import finalmission.planning.domain.ReservationSlot;
@@ -20,8 +23,12 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 class ReservationControllerTest extends IntegrationTest {
+
+    @MockitoBean
+    private EmailService emailService;
 
     @DisplayName("로그인되어있는 유저가 예약슬롯을 선택하여 예약 등록이 가능하다.")
     @Test
@@ -49,6 +56,7 @@ class ReservationControllerTest extends IntegrationTest {
         // then
         assertThat(response.ownerName()).isEqualTo(user.getName());
         assertThat(response.reservationSlot().date()).isEqualTo(planDate.getDate());
+        verify(emailService).sendEmailForReservation(any());
     }
 
     @DisplayName("현재 로그인되어있는 유저의 예약목록을 모두 조회한다.")
