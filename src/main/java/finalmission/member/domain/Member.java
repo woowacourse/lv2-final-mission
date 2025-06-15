@@ -1,5 +1,6 @@
 package finalmission.member.domain;
 
+import finalmission.exception.auth.LoginFailedException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -56,5 +57,12 @@ public class Member {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public void validatePassword(String password) {
+        if (this.password.equals(password)) {
+            return;
+        }
+        throw new LoginFailedException();
     }
 }
