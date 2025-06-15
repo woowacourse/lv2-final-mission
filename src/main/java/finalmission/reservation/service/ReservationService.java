@@ -69,6 +69,13 @@ public class ReservationService {
     }
 
     @Transactional
+    public void deleteReservation(final Long memberId, final Long reservationId) {
+        Member member = getMember(memberId);
+        validateOwnerOfReservation(reservationId, member);
+        reservationRepository.deleteById(reservationId);
+    }
+
+    @Transactional
     public ReservationResponse createReservation(CreateReservationRequest request, final Long memberId) {
         Member member = getMember(memberId);
         ReservationInformation restaurantInformation = getRestaurantInformation(request.reservationInformationId());
