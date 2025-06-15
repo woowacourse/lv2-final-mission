@@ -25,8 +25,11 @@ class ReservationSlotControllerTest extends IntegrationTest {
         CreateReservationSlotRequest request = new CreateReservationSlotRequest(
                 date, startTime, endTime);
 
+        String token = saveNormalUserAndCreateToken();
+
         // when
         ReservationSlotResponse response = RestAssured.given().log().all()
+                .cookie("token", token)
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().post("/reservationSlots")
