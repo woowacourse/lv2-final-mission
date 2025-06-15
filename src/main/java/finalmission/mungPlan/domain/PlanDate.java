@@ -29,7 +29,11 @@ public class PlanDate {
     @Embedded
     private TimeSlots timeSlots;
 
-    public static PlanDate createNew(LocalDate date, TimeSlots timeSlots) {
-        return new PlanDate(null, date, timeSlots);
+    public static PlanDate createNew(LocalDate date) {
+        return new PlanDate(null, date, new TimeSlots());
+    }
+
+    public void addTimeSlot(TimeSlot timeSlot) {
+        timeSlots.addTime(timeSlot);
     }
 }

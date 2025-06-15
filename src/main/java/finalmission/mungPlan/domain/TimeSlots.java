@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
-@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TimeSlots {
 
     @ElementCollection
@@ -34,7 +32,7 @@ public class TimeSlots {
 
     public Optional<TimeSlot> findByStartAt(LocalTime startAt) {
         return availableTimes.stream()
-                .filter(planTime -> planTime.getStartAt().equals(startAt))
+                .filter(planTime -> planTime.isSameStartAt(startAt))
                 .findAny();
     }
 }

@@ -12,15 +12,14 @@ class PlanDateTest {
     @Test
     void createPlanDate() {
         // given
-        TimeSlots timeSlots = new TimeSlots();
-        timeSlots.addTime(new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11, 0)));
 
         // when
 
-        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE, timeSlots);
+        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE);
+        TimeSlot timeSlot = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11, 0));
+        planDate.addTimeSlot(timeSlot);
 
         // then
-        System.out.println(planDate.getTimeSlots().getAvailableTimes());
-
+        System.out.println(planDate.getDate());
     }
 }

@@ -8,13 +8,11 @@ import finalmission.mungPlan.IntegrationTest;
 import finalmission.mungPlan.domain.PlanDate;
 import finalmission.mungPlan.domain.Reservation;
 import finalmission.mungPlan.domain.TimeSlot;
-import finalmission.mungPlan.domain.TimeSlots;
 import finalmission.mungPlan.domain.User;
 import finalmission.mungPlan.ui.dto.CreateReservationRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalTime;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,10 +22,9 @@ class ReservationControllerTest extends IntegrationTest {
     @Test
     void createReservationAPI() {
         // given
+        PlanDate planDate = dbHelper.insertPlanDate(PlanDate.createNew(DEFAULT_DATE));
         TimeSlot timeSlot = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11 ,0));
-        TimeSlots timeSlots = new TimeSlots(List.of(timeSlot));
-
-        PlanDate planDate = dbHelper.insertPlanDate(PlanDate.createNew(DEFAULT_DATE, timeSlots));
+        planDate.addTimeSlot(timeSlot);
         User user = dbHelper.insertUser(createSampleUser());
 
         // when & then
@@ -46,10 +43,9 @@ class ReservationControllerTest extends IntegrationTest {
     @Test
     void getReservationById() {
         // given
+        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE);
         TimeSlot timeSlot = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11 ,0));
-        TimeSlots timeSlots = new TimeSlots(List.of(timeSlot));
-
-        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE, timeSlots);
+        planDate.addTimeSlot(timeSlot);
         User user = createSampleUser();
         Reservation saved = dbHelper.insertReservation(Reservation.createNew(planDate, timeSlot, user));
 
@@ -65,11 +61,12 @@ class ReservationControllerTest extends IntegrationTest {
     @Test
     void getAllReservationsByUserId() {
         // given
+        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE);
         TimeSlot timeSlot1 = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11 ,0));
         TimeSlot timeSlot2 = new TimeSlot(LocalTime.of(11, 0), LocalTime.of(11 ,0));
-        TimeSlots timeSlots = new TimeSlots(List.of(timeSlot1, timeSlot2));
+        planDate.addTimeSlot(timeSlot1);
+        planDate.addTimeSlot(timeSlot2);
 
-        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE, timeSlots);
         User user = createSampleUser();
 
         dbHelper.insertReservation(Reservation.createNew(planDate, timeSlot1, user));
@@ -87,10 +84,9 @@ class ReservationControllerTest extends IntegrationTest {
     @Test
     void getReservationById_whenMyReservation() {
         // given
-        TimeSlot timeSlot = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11 ,0));
-        TimeSlots timeSlots = new TimeSlots(List.of(timeSlot));
+        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE);
+        TimeSlot timeSlot = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11, 0));
 
-        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE, timeSlots);
         User user = dbHelper.insertUser(createSampleUser());
         Reservation saved = dbHelper.insertReservation(Reservation.createNew(planDate, timeSlot, user));
 
@@ -106,10 +102,9 @@ class ReservationControllerTest extends IntegrationTest {
     @Test
     void error_getReservationById_whenNoPermission() {
         // given
-        TimeSlot timeSlot = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11 ,0));
-        TimeSlots timeSlots = new TimeSlots(List.of(timeSlot));
+        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE);
+        TimeSlot timeSlot = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11, 0));
 
-        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE, timeSlots);
         User user = dbHelper.insertUser(createUserByName("유저1"));
         Reservation saved = dbHelper.insertReservation(Reservation.createNew(planDate, timeSlot, user));
 

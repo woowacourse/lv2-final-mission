@@ -1,6 +1,8 @@
 package finalmission.mungPlan.infra.weather;
 
 import java.net.SocketTimeoutException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.ResourceAccessException;
@@ -19,14 +21,14 @@ public class WeatherClient {
         this.serviceKey = serviceKey;
     }
 
-    public WeatherResponse getWeatherData(int pageNo, int numOfRows) {
+    public WeatherResponse getWeatherData(LocalDate baseDate, int pageNo, int numOfRows) {
         try {
             UriComponents uriComponents = UriComponentsBuilder.fromUriString("/getVilageFcst")
                     .queryParam("serviceKey", serviceKey)
                     .queryParam("dataType", "JSON")
                     .queryParam("pageNo", pageNo)
                     .queryParam("numOfRows", numOfRows)
-                    .queryParam("base_date", "20250610")
+                    .queryParam("base_date", baseDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                     .queryParam("base_time", "0500")
                     .queryParam("nx", 55)
                     .queryParam("ny", 127)

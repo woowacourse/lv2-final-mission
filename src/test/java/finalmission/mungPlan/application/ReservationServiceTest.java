@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import finalmission.mungPlan.domain.PlanDate;
 import finalmission.mungPlan.domain.TimeSlot;
-import finalmission.mungPlan.domain.TimeSlots;
 import finalmission.mungPlan.domain.User;
 import finalmission.mungPlan.infra.PlanDateRepository;
 import finalmission.mungPlan.infra.ReservationRepository;
@@ -41,14 +40,11 @@ class ReservationServiceTest {
     @Test
     void saveReservation() {
         // given
+        PlanDate planDate = planDateRepository.save(PlanDate.createNew(DEFAULT_DATE));
         TimeSlot timeSlot1 = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11 ,0));
         TimeSlot timeSlot2 = new TimeSlot(LocalTime.of(11, 0), LocalTime.of(12, 0));
-
-        TimeSlots timeSlots = new TimeSlots();
-        timeSlots.addTime(timeSlot1);
-        timeSlots.addTime(timeSlot2);
-
-        PlanDate planDate = planDateRepository.save(PlanDate.createNew(DEFAULT_DATE, timeSlots));
+        planDate.addTimeSlot(timeSlot1);
+        planDate.addTimeSlot(timeSlot2);
 
         User user = userRepository.save(createSampleUser());
 

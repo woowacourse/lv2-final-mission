@@ -9,12 +9,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class TimeSlot {
     private LocalTime startAt;
     private LocalTime endAt;
+
+    public boolean isSameStartAt(LocalTime otherStartAt) {
+        return this.startAt.equals(otherStartAt);
+    }
 
     //TODO: startAt, endAt 검증 - 끝나는시간이 시작시간보다 늦는지
     @Override

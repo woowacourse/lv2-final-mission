@@ -4,7 +4,6 @@ import static finalmission.mungPlan.TestFixture.DEFAULT_DATE;
 
 import finalmission.mungPlan.domain.PlanDate;
 import finalmission.mungPlan.domain.TimeSlot;
-import finalmission.mungPlan.domain.TimeSlots;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.LocalTime;
@@ -26,10 +25,9 @@ class PlanDateRepositoryTest {
     @Test
     void savePlanDate() {
         // given
-        TimeSlots timeSlots = new TimeSlots();
-        timeSlots.addTime(new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11, 0)));
-        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE, timeSlots);
-
+        PlanDate planDate = PlanDate.createNew(DEFAULT_DATE);
+        TimeSlot timeSlot = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(11, 0));
+        planDate.addTimeSlot(timeSlot);
         // when
         planDateRepository.save(planDate);
 
