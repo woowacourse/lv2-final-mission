@@ -2,13 +2,19 @@ package finalmission.ballparkreservation.reservation;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.time.LocalDate;
 import java.util.Map;
+
+import static org.hamcrest.Matchers.is;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ReservationApiTest {
@@ -33,23 +39,50 @@ public class ReservationApiTest {
         jdbcTemplate.update("ALTER TABLE reservation ALTER COLUMN id RESTART WITH 1");
         jdbcTemplate.update("ALTER TABLE schedule ALTER COLUMN id RESTART WITH 1");
         jdbcTemplate.update("ALTER TABLE member ALTER COLUMN id RESTART WITH 1");
+
+        jdbcTemplate.update("INSERT INTO schedule(number, rank, date) VALUES (1, 'TABLE', '2025-05-05')");
+        jdbcTemplate.update("INSERT INTO member(email, password, name, age) VALUES ('may@gmail.com', '1234', '메이', 13)");
     }
 
-//    @DisplayName("/reservations GET 예약 정보 모두 조회 테스트")
-//    @Test
-//    void getAll() {
-//        // when & then
-//        RestAssured.given().port(port).log().all()
-//                .when().get("/reservations")
-//                .then().statusCode(200)
-//                .body()
-//    }
+    @DisplayName("/reservations POST 예약 생성 테스트")
+    @Test
+    void create1() {
+        Cookie tokenCookie = loginForTest();
 
-    private void createReservationForTest(Map<String, Object> parameter) {
         RestAssured.given().port(port).log().all()
                 .contentType(ContentType.JSON)
-                .body(parameter)
+                .cookie(tokenCookie)
+                .body(Map.of("seatRank", "TABLE", "seatNumber", 1, "date", LocalDate.of(2025, 5, 5)))
                 .when().post("/reservations")
                 .then().statusCode(201);
+    }
+
+    @DisplayName("/reservations GET 모든 예약 조회 테스트")
+    @Test
+    void getAll1() {
+        Cookie cookie = loginForTest();
+        createReservationForTest(cookie);
+
+        RestAssured.given().port(port).log().all()
+                .cookie(cookie)
+                .when().get("/reservations")
+                .then().statusCode(200)
+                .body("size()", is(1));
+    }
+
+    private Cookie loginForTest() {
+        return RestAssured.given().port(port).log().all()
+                .contentType(ContentType.JSON)
+                .body(Map.of("email", "may@gmail.com", "password", "1234"))
+                .when().post("/auth/login")
+                .then().extract().detailedCookie("token");
+    }
+
+    private void createReservationForTest(Cookie cookie) {
+        RestAssured.given().port(port).log().all()
+                .contentType(ContentType.JSON)
+                .cookie(cookie)
+                .body(Map.of("seatRank", "TABLE", "seatNumber", 1, "date", LocalDate.of(2025, 5, 5)))
+                .when().post("/reservations");
     }
 }
