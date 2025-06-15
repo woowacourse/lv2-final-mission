@@ -1,0 +1,6 @@
+security:
+  jwt:
+    token:
+      secret-key: Y}Fb>_3G@Z!;=A9&UuPLrE7*4^qK~XTsdQJvNfhcMBoIW2+Lx#Cn8yVz0HwRt%g
+      access:
+        expire-length: 600000
