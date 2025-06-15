@@ -40,6 +40,8 @@ public class ReservationService {
         boolean isHoliday = checkHoliday(request.date());
         int amount = reservation.getAmount(isHoliday);
 
+        reservationRepository.save(reservation);
+
         return new ReservationCreateResponse(amount);
     }
 
