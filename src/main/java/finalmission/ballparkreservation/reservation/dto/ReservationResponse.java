@@ -1,14 +1,14 @@
 package finalmission.ballparkreservation.reservation.dto;
 
 import finalmission.ballparkreservation.reservation.Reservation;
-import finalmission.ballparkreservation.schedule.Schedule;
+import finalmission.ballparkreservation.schedule.dto.ScheduleResponse;
 
 public record ReservationResponse(
-        Schedule schedule,
+        ScheduleResponse schedule,
         String memberName
 ) {
 
     public static ReservationResponse from(Reservation reservation) {
-        return new ReservationResponse(reservation.getSchedule(), reservation.getMember().getName());
+        return new ReservationResponse(ScheduleResponse.from(reservation.getSchedule()), reservation.getMember().getName());
     }
 }
