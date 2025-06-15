@@ -1,0 +1,38 @@
+package finalmission.reservation.service;
+
+import finalmission.exception.member.MemberNotFoundException;
+import finalmission.exception.toilet.ToiletNotFoundException;
+import finalmission.member.domain.Member;
+import finalmission.member.infrastructure.MemberRepository;
+import finalmission.reservation.domain.Reservation;
+import finalmission.reservation.dto.request.ReservationRequest;
+import finalmission.reservation.dto.response.ReservationResponse;
+import finalmission.reservation.infrastructure.ReservationRepository;
+import finalmission.toilet.domain.Toilet;
+import finalmission.toilet.infrastructure.ToiletRepository;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ReservationService {
+
+    private final ReservationRepository reservationRepository;
+    private final MemberRepository memberRepository;
+    private final ToiletRepository toiletRepository;
+
+    public ReservationService(ReservationRepository reservationRepository, MemberRepository memberRepository,
+                              ToiletRepository toiletRepository) {
+        this.reservationRepository = reservationRepository;
+        this.memberRepository = memberRepository;
+        this.toiletRepository = toiletRepository;
+    }
+
+    public ReservationResponse createReservation(Long memberId, ReservationRequest request) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+        Toilet toilet = toiletRepository.findById(request.toiletId())
+                .orElseThrow(ToiletNotFoundException::new);
+        Reservation reservation = new Reservation(request.date(), request.startAt(), request.endAt(), member, toilet);
+        Reservation savedReservation = reservationRepository.save(reservation);
+        return ReservationResponse.from(savedReservation);
+    }
+}
