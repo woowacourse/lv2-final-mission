@@ -5,8 +5,10 @@ import finalmission.planning.auth.ui.CurrentUser;
 import finalmission.planning.auth.ui.dto.CurrentUserInfo;
 import finalmission.planning.ui.dto.request.CreateReservationRequest;
 import finalmission.planning.ui.dto.response.ReservationResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,11 @@ public class ReservationController {
     @PostMapping
     public ReservationResponse createReservation(@RequestBody CreateReservationRequest request,
                                                  @CurrentUser CurrentUserInfo currentUserInfo) {
-        return reservationService.registerReservation(request, currentUserInfo);
+        return reservationService.registerReservation(request, currentUserInfo.id());
+    }
+
+    @GetMapping
+    public List<ReservationResponse> getReservationsByUser(@CurrentUser CurrentUserInfo currentUserInfo) {
+        return reservationService.getReservationsByUser(currentUserInfo.id());
     }
 }
