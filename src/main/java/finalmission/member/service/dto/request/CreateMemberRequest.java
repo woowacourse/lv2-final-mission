@@ -1,4 +1,4 @@
-package finalmission.member.service.dto;
+package finalmission.member.service.dto.request;
 
 import finalmission.member.domain.Member;
 import finalmission.member.domain.vo.Role;

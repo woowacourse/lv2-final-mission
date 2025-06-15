@@ -1,9 +1,9 @@
 package finalmission.member.controller;
 
 import finalmission.member.service.MemberService;
-import finalmission.member.service.dto.CreateMemberRequest;
-import finalmission.member.service.dto.LoginRequest;
-import finalmission.member.service.dto.LoginResponse;
+import finalmission.member.service.dto.request.CreateMemberRequest;
+import finalmission.member.service.dto.request.LoginRequest;
+import finalmission.member.service.dto.response.LoginResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;

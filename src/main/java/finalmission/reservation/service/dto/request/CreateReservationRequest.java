@@ -1,4 +1,4 @@
-package finalmission.reservation.service.dto;
+package finalmission.reservation.service.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 

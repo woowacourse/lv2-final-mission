@@ -5,9 +5,9 @@ import finalmission.member.domain.Member;
 import finalmission.member.domain.vo.Email;
 import finalmission.member.domain.vo.Password;
 import finalmission.member.repository.MemberRepository;
-import finalmission.member.service.dto.CreateMemberRequest;
-import finalmission.member.service.dto.LoginRequest;
-import finalmission.member.service.dto.LoginResponse;
+import finalmission.member.service.dto.request.CreateMemberRequest;
+import finalmission.member.service.dto.request.LoginRequest;
+import finalmission.member.service.dto.response.LoginResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

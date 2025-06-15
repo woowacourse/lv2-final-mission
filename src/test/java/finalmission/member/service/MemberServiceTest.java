@@ -3,7 +3,7 @@ package finalmission.member.service;
 import finalmission.auth.JwtTokenHandler;
 import finalmission.member.domain.Member;
 import finalmission.member.domain.vo.Role;
-import finalmission.member.service.dto.CreateMemberRequest;
+import finalmission.member.service.dto.request.CreateMemberRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;

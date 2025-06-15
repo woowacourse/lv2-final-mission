@@ -1,4 +1,4 @@
-package finalmission.reservation.service.dto;
+package finalmission.reservation.service.dto.response;
 
 import finalmission.reservation.domain.Reservation;
 
