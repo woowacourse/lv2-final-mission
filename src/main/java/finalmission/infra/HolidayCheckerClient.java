@@ -1,71 +1,56 @@
 package finalmission.infra;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import finalmission.domain.HolidayChecker;
+import finalmission.infra.HolidayCheckerClientConfig.HolidayResponse;
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class HolidayCheckerClient implements HolidayChecker {
-    private static final String SERVICE_KEY = "xSrbbK33xy8wA8Tcy7oIKWhgyc6qIDBu/oaiZaYZoU6sK9Oe2O4ZV3zZrY7bKklHMoJtqrhYLephXjFG1yhP0A==";
+
+    private @Value("${api.get-holiday.service-key}") String serviceKey;
+    private @Value("${api.get-holiday.base-url}") String baseUrl;
     private final RestTemplate restTemplate;
-    private final XmlMapper xmlMapper = new XmlMapper();
 
     @Override
     public boolean isHoliday(final LocalDate date) {
-        var solYear = date.getYear();
-        var solMonth = date.getMonthValue();
-        var uri = String.format("http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?solYear=%d&solMonth=%02d&ServiceKey=%s", solYear, solMonth, SERVICE_KEY);
-        System.out.println("uri = " + uri);
-        var apiResponse = restTemplate.postForEntity(URI.create(uri), null, String.class);
-        System.out.println("apiResponse.getBody() = " + apiResponse.getBody());
-        return true;
-//        System.out.println("apiResponse.getBody() = " + apiResponse.getBody().items);
-//        return apiResponse.getBody().items.holidays().stream().anyMatch(holiday -> holiday.locdate().equals(date));
-    }
-
-    @JacksonXmlRootElement(localName = "response")
-    public static class HolidaysResponse {
-
-        @JacksonXmlProperty(localName = "items")
-        private HolidaysResponseItems items;
-    }
-
-    public static class HolidaysResponseItems {
-
-        private List<Holiday> items;
-
-        @JacksonXmlProperty(localName = "item")
-        @JacksonXmlElementWrapper(useWrapping = false)
-        public List<Holiday> holidays() {
-            return items;
-        }
-
-        public void setItems(List<Holiday> items) {
-            this.items = items;
+        var uri = createGetHolidayUri(date);
+        try {
+            var response = restTemplate.getForObject(uri, HolidayResponse.class);
+            return isHolidayForDate(date, response, uri);
+        } catch (RestClientResponseException e) {
+            log.error("공휴일 API 요청에 실패했습니다 : ", e);
+            throw e;
         }
     }
 
-    private record Holiday(
-        @JacksonXmlProperty(localName = "dateKind")
-        int dateKind,
-        @JacksonXmlProperty(localName = "dateName")
-        String dateName,
-        @JacksonXmlProperty(localName = "isHoliday")
-        boolean isHoliday,
-        @JacksonXmlProperty(localName = "locdate")
-        LocalDate locdate,
-        @JacksonXmlProperty(localName = "seq")
-        int seq
-    ) {
+    private boolean isHolidayForDate(final LocalDate date, final HolidayResponse response, final URI uri) {
+        return Optional.ofNullable(response)
+            .map(r -> r.isHoliday(date))
+            .orElseThrow(() -> {
+                log.error("공휴일 API 응답이 null입니다. 요청한 URI = {}", uri);
+                return new RuntimeException("공휴일 API에서 비정상적인 응답을 받았습니다.");
+            });
+    }
 
+    private URI createGetHolidayUri(final LocalDate date) {
+        return UriComponentsBuilder
+            .fromUriString(baseUrl)
+            .queryParam("_type", "json")
+            .queryParam("solYear", date.getYear())
+            .queryParam("solMonth", String.format("%02d", date.getMonthValue()))
+            .queryParam("ServiceKey", serviceKey)
+            .build()
+            .toUri();
     }
 }
