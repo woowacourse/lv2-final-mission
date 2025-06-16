@@ -1,6 +1,7 @@
 package shh.reservation.application;
 
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shh.alias.application.AliasService;
@@ -8,6 +9,7 @@ import shh.alias.domain.Alias;
 import shh.common.exception.NotFoundException;
 import shh.member.domain.Member;
 import shh.member.domain.repository.MemberRepository;
+import shh.reservation.application.dto.MyReservationResponse;
 import shh.reservation.application.dto.ReservationAddRequest;
 import shh.reservation.application.dto.ReservationAddResponse;
 import shh.reservation.domain.Reservation;
@@ -39,6 +41,13 @@ public class ReservationService {
         final Reservation reservation = new Reservation(date, reservationTime, stall, member, alias);
         final Reservation saved = reservationRepository.save(reservation);
         return ReservationAddResponse.from(saved);
+    }
+
+    public List<MyReservationResponse> findMyReservation(final Long memberId) {
+        final List<Reservation> reservations = reservationRepository.findAllByMemberId(memberId);
+        return reservations.stream()
+                .map(MyReservationResponse::from)
+                .toList();
     }
 
     private ReservationTime getReservationTime(final Long timeId) {

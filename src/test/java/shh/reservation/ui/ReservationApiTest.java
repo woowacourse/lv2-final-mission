@@ -1,5 +1,7 @@
 package shh.reservation.ui;
 
+import static org.hamcrest.Matchers.is;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
@@ -61,5 +63,16 @@ class ReservationApiTest {
                 .when().post("/reservations")
                 .then().log().all()
                 .statusCode(201);
+    }
+
+    @Test
+    void 본인의_예약을_조회한다() {
+        RestAssured.given().log().all()
+                .cookie(TokenCookieService.COOKIE_TOKEN_KEY, token)
+                .contentType(ContentType.JSON)
+                .when().get("/mine")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(4));
     }
 }

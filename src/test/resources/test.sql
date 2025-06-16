@@ -77,3 +77,12 @@ INSERT INTO stall (name)
 VALUES ('명상의 방');
 INSERT INTO stall (name)
 VALUES ('소화의 방');
+
+INSERT INTO reservation (date, time_id, stall_id, member_id, alias)
+VALUES (DATEADD('DAY', 0, CURRENT_DATE), 1, 2, 1, 'Roy');
+INSERT INTO reservation (date, time_id, stall_id, member_id, alias)
+VALUES (DATEADD('DAY', 0, CURRENT_DATE), 2, 2, 1, 'Thomas');
+INSERT INTO reservation (date, time_id, stall_id, member_id, alias)
+VALUES (DATEADD('DAY', 0, CURRENT_DATE), 3, 2, 1, 'Ben');
+INSERT INTO reservation (date, time_id, stall_id, member_id, alias)
+VALUES (DATEADD('DAY', 0, CURRENT_DATE), 4, 2, 1, 'Heather');
