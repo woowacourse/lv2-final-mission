@@ -12,6 +12,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -38,6 +39,12 @@ public class BookingController {
     @PatchMapping("/{id}")
     public Booking modify(@PathVariable("id") final UUID id, final AuthInfo authInfo, @Valid @RequestBody final ModifyBookingRequest request) {
         return bookingService.modifyDate(id, authInfo.memberId(), request.dateToModify());
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancel(@PathVariable("id") final UUID id, final AuthInfo authInfo) {
+        bookingService.cancel(id, authInfo.memberId());
     }
 
     @GetMapping("/mine")

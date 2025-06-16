@@ -1,11 +1,13 @@
 package finalmission.application;
 
+import static finalmission.TestFixtures.*;
 import static finalmission.TestFixtures.anyBooking;
 import static finalmission.TestFixtures.anyFutureLocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import finalmission.TestFixtures;
+import finalmission.domain.AuthenticationException;
 import finalmission.domain.booking.Booking;
 import finalmission.domain.booking.BookingDate;
 import finalmission.domain.booking.BookingRepository;
@@ -101,14 +103,56 @@ class BookingServiceTest {
         assertThat(modifiedBooking.getDate()).isEqualTo(expectedBookingDate);
     }
 
+    @Test
+    @DisplayName("예약 날짜를 수정할 때 본인의 예약이 아니면 수정할 수 없다.")
+    void modifyDateCanOnlyMine() {
+        // given
+        var booking = new Booking(member, gym, BookingDate.of(anyFutureLocalDate()));
+        Mockito.doReturn(booking).when(bookingRepository).getById(booking.getId());
+        Mockito.doReturn(booking.getMember()).when(memberRepository).getById(booking.getMember().getId());
+
+        // when & then
+        assertThatThrownBy(() -> bookingService.modifyDate(booking.getId(), anyMember().getId(), anyFutureLocalDate()))
+            .isInstanceOf(AuthenticationException.class);
+    }
+
+    @Test
+    @DisplayName("예약을 취소한다.")
+    void cancelBooking() {
+        // given
+        var booking = new Booking(member, gym, BookingDate.of(anyFutureLocalDate()));
+        Mockito.doReturn(booking).when(bookingRepository).getById(booking.getId());
+        Mockito.doReturn(booking.getMember()).when(memberRepository).getById(booking.getMember().getId());
+
+        // when
+        bookingService.cancel(booking.getId(), member.getId());
+
+        // then
+        var memberBookings = bookingService.getMyBookings(member.getId());
+        assertThat(memberBookings).doesNotContain(booking);
+    }
+
+    @Test
+    @DisplayName("예약을 취소할 때 본인의 예약이 아니면 취소할 수 없다.")
+    void cancelBookingCanOnlyMine() {
+        // given
+        var booking = new Booking(member, gym, BookingDate.of(anyFutureLocalDate()));
+        Mockito.doReturn(booking).when(bookingRepository).getById(booking.getId());
+        Mockito.doReturn(booking.getMember()).when(memberRepository).getById(booking.getMember().getId());
+
+        // when & then
+        assertThatThrownBy(() -> bookingService.cancel(booking.getId(), anyMember().getId()))
+            .isInstanceOf(AuthenticationException.class);
+    }
+
     private Member anyMemberWithMocking() {
-        var member = TestFixtures.anyMember();
+        var member = anyMember();
         Mockito.doReturn(member).when(memberRepository).getById(member.getId());
         return member;
     }
 
     private Gym anyGymWithMocking() {
-        var gym = TestFixtures.anyGym();
+        var gym = anyGym();
         Mockito.doReturn(gym).when(gymRepository).getById(gym.getId());
         return gym;
     }

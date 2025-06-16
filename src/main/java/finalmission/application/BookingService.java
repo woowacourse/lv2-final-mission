@@ -52,4 +52,14 @@ public class BookingService {
         }
         throw new AuthenticationException("수정하려는 사용자가 예약자와 일치하지 않습니다. 현재 사용자 ID : " + memberId + ", 예약자 ID : " + booking.getMember().getId());
     }
+
+    public void cancel(final UUID id, final String memberId) {
+        var member = memberRepository.getById(memberId);
+        var booking = bookingRepository.getById(id);
+        if (booking.ownedBy(member)) {
+            bookingRepository.delete(booking);
+            return;
+        }
+        throw new AuthenticationException("취소하려는 사용자가 예약자와 일치하지 않습니다. 현재 사용자 ID : " + memberId + ", 예약자 ID : " + booking.getMember().getId());
+    }
 }

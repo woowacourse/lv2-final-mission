@@ -3,6 +3,7 @@ package finalmission.presentation;
 import static finalmission.TestFixtures.anyBooking;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -10,11 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import finalmission.TestFixtures;
 import finalmission.application.BookingService;
 import finalmission.domain.AuthInfo;
 import finalmission.domain.AuthenticationException;
-import finalmission.domain.member.MemberTokenProvider;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDate;
 import java.util.List;
@@ -105,15 +104,15 @@ class BookingControllerTest {
         Mockito.doReturn(booking).when(bookingService).modifyDate(eq(booking.getId()), any(), eq(dateToModify));
 
         mockMvc.perform(patch("/bookings/{id}", booking.getId())
-            .cookie(new Cookie("token", "token"))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("""
-                {
-                    "dateToModify": "2025-06-17"
-                }
-                """)
-        ).andExpect(status().isOk())
-        .andExpect(jsonPath("$..['id','member','gym','date']").exists());
+                .cookie(new Cookie("token", "token"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                        "dateToModify": "2025-06-17"
+                    }
+                    """)
+            ).andExpect(status().isOk())
+            .andExpect(jsonPath("$..['id','member','gym','date']").exists());
     }
 
     @Test
@@ -123,13 +122,36 @@ class BookingControllerTest {
         Mockito.doThrow(AuthenticationException.class).when(bookingService).modifyDate(any(), any(), any());
 
         mockMvc.perform(patch("/bookings/{id}", UUID.randomUUID())
-                .cookie(new Cookie("token", "token"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
+            .cookie(new Cookie("token", "token"))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
                 {
                     "dateToModify": "2025-06-17"
                 }
                 """)
-            ).andExpect(status().isUnauthorized());
+        ).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("예약을 취소하면 NO CONTENT를 응답한다.")
+    void cancelBooking() throws Exception {
+        authInfoArgumentResolver.stub(new AuthInfo("popo"));
+        var booking = anyBooking();
+        Mockito.doNothing().when(bookingService).cancel(eq(booking.getId()), eq("popo"));
+
+        mockMvc.perform(delete("/bookings/{id}", booking.getId())
+            .cookie(new Cookie("token", "token"))
+        ).andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("예약 취소 시 사용자 인증에 실패 하면 UNAUTHORIZED를 응답한다.")
+    void cancelBookingUnauthorized() throws Exception {
+        authInfoArgumentResolver.stub(new AuthInfo("xxxx"));
+        Mockito.doThrow(AuthenticationException.class).when(bookingService).cancel(any(), any());
+
+        mockMvc.perform(delete("/bookings/{id}", UUID.randomUUID())
+            .cookie(new Cookie("token", "token"))
+        ).andExpect(status().isUnauthorized());
     }
 }

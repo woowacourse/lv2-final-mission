@@ -95,3 +95,16 @@
       gym : 헬스장
       date : 예약 날짜
       ```
+
+### 내 예약 취소
+> DELETE /bookings/{id}
+
+- REQUEST HEADER
+  - COOKIE
+    - "token": 로그인을 통해 발급받은 JWT 토큰
+
+- PATH VARIABLE
+  - "id": 예약 ID
+
+- RESPONSE
+  - 204 NO CONTENT
