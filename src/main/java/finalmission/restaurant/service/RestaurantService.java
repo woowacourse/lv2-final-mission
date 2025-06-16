@@ -3,7 +3,6 @@ package finalmission.restaurant.service;
 import finalmission.restaurant.controller.dto.request.RestaurantRequest;
 import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.repository.JpaRestaurantRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 @Service

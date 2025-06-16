@@ -1,8 +1,5 @@
 package finalmission.restaurant.controller;
 
-import finalmission.member.controller.dto.request.MemberRequest;
-import finalmission.member.controller.dto.response.MemberResponse;
-import finalmission.member.domain.Member;
 import finalmission.restaurant.controller.dto.request.RestaurantRequest;
 import finalmission.restaurant.controller.dto.response.RestaurantResponse;
 import finalmission.restaurant.domain.Restaurant;
