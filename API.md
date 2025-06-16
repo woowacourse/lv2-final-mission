@@ -1,110 +1,194 @@
 # REST API DOCS
 
+헬스장 일일권 예약 REST API 엔드포인트에 대한 문서입니다.
+
+## 목차
+- [헬스장 등록](#헬스장-등록)
+- [사용자 등록](#사용자-등록-회원가입)
+- [사용자 로그인](#사용자-로그인)
+- [일일권 예약](#일일권-예약)
+- [내 예약 조회](#내-예약-조회)
+- [내 예약 수정](#내-예약-수정)
+- [내 예약 취소](#내-예약-취소)
+
 ## GYM
 
 ### 헬스장 등록
-> POST /gyms
 
-- REQUEST BODY
-  - "name": 헬스장 이름 (3자 이상 10자 이하)
-  - "street": 도로명 주소
-  - "detail": 상세 주소
+> **POST /gyms**
+
+> **⚠️ 관리자만 수행할 수 있습니다.**
+
+#### Request
+
+- **헤더**
+
+  |   이름   |  자료형   |       예시 값       |            설명            |
+  |:------:|:------:|:----------------:|:------------------------:|
+  | Cookie | String | token={JwtToken} | **관리자** 로그인을 통해 얻은 인증 토큰 |
+
+- **본문**
+
+  |   필드   |  자료형   |    예시 값    |          설명           |
+  |:------:|:------:|:----------:|:---------------------:|
+  |  name  | String |   "짐박스"    | 헬스장 이름 (3자 이상 10자 이하) |
+  | street | String | "군자로 12-3" |        도로명 주소         |
+  | detail | String |  "지하 1층"   |         상세 주소         |
   
-- RESPONSE
-  - 201 CREATED
+#### Response
+
+> **201 CREATED**
 
 ## Member
 
 ### 사용자 등록 (회원가입)
-> POST /members
 
-- REQUEST BODY
-  - "id": 사용자 ID
-  - "password": 비밀번호
-  - "name": 사용자 이름 (2자 이상 5자 이하)
+> **POST /members**
 
-- RESPONSE
-  - 201 CREATED
+#### Request
+
+- **본문**
+
+  |    필드    |  자료형   |    예시 값     |          설명          |
+  |:--------:|:------:|:-----------:|:--------------------:|
+  |    id    | String |   "popo"    |        사용자 ID        |
+  | password | String | "password!" |         비밀번호         |
+  |   name   | String |    "포포"     | 사용자 이름 (2자 이상 5자 이하) |
+
+#### Response
+
+> **201 CREATED**
 
 ### 사용자 로그인
-> POST /members/login
 
-- REQUEST BODY
-  - "id": 사용자 ID
-  - "password": 비밀번호
+> **POST /members/login**
 
-- RESPONSE
-  - 200 CREATED
-  - **헤더** 
-    - Set-Cookie: "token={발급한 인증 토큰}"
+#### Request
+
+- **본문**
+
+  |    필드    |  자료형   |    예시 값     |          설명          |
+  |:--------:|:------:|:-----------:|:--------------------:|
+  |    id    | String |   "popo"    |        사용자 ID        |
+  | password | String | "password!" |         비밀번호         |
+
+#### Response
+
+> **200 OK**
+
+- **헤더**
+
+  |     이름     |  자료형   |       예시 값       |        설명         |
+  |:----------:|:------:|:----------------:|:-----------------:|
+  | Set-Cookie | String | token={JwtToken} | 로그인을 통해 발급한 인증 토큰 |
 
 ## BOOKING
 
 ### 일일권 예약
-> POST /bookings
 
-- REQUEST HEADER
-  - COOKIE
-    - "token": 로그인을 통해 발급받은 JWT 토큰
+> **POST /bookings**
 
-- REQUEST BODY
-  - "gymId": 헬스장 ID
-  - "date": 예약할 날짜
+#### Request
 
-- RESPONSE
-  - 201 CREATED
+- **헤더**
+
+  |   이름   |  자료형   |       예시 값       |        설명        |
+  |:------:|:------:|:----------------:|:----------------:|
+  | Cookie | String | token={JwtToken} | 로그인을 통해 얻은 인증 토큰 |
+
+
+- **본문**
+
+  |   필드    |  자료형   |       예시 값        |        설명        |
+  |:-------:|:------:|:-----------------:|:----------------:|
+  |  gymId  | String | "abc12f-defg2..." |  헬스장 ID (UUID)   |
+  |  date   |  Date  |   "2025-01-01"    | 예약하려는 날짜 (미래 일시) |
+
+#### Response
+
+> **201 CREATED**
 
 ### 내 예약 조회
-> GET /bookings/mine
+> **GET /bookings/mine**
 
-- REQUEST HEADER
-  - COOKIE
-    - "token": 로그인을 통해 발급받은 JWT 토큰
+#### Request
 
-- RESPONSE
-  - 200 OK
-  - **바디**
-    - 아래와 같은 각각의 예약들로 이루어진 컬렉션 응답
-    - ```
-      id : 예약 ID
-      member : 예약자
-      gym : 헬스장
-      date : 예약 날짜
-      ```
+- **헤더**
+
+  |   이름   |  자료형   |       예시 값       |        설명        |
+  |:------:|:------:|:----------------:|:----------------:|
+  | Cookie | String | token={JwtToken} | 로그인을 통해 얻은 인증 토큰 |
+
+#### Response
+
+> **200 OK**
+
+- **본문**
+
+  아래와 같은 각각의 예약들로 이루어진 컬렉션 응답
+
+  |   필드   |   자료형    |                         예시 값                         |      설명      |
+  |:------:|:--------:|:----------------------------------------------------:|:------------:|
+  |   id   |  String  |                  "abc12f-defg2..."                   | 예약 ID (UUID) |
+  | member | JSON Map |              "{id: "popo", name: "포포"}"              |     예약자      |
+  |  gym   | JSON Map | "{id: "abc...", street: "군자로12-3", detail: "지하 1층"}" |   예약한 헬스장    |
+  |  date  |   Date   |                     "2025-01-01"                     |    예약 날짜     |
 
 ### 내 예약 수정
-> PATCH /bookings/{id}
 
-- REQUEST HEADER
-  - COOKIE
-    - "token": 로그인을 통해 발급받은 JWT 토큰
+> **PATCH /bookings/{id}**
 
-- PATH VARIABLE
-  - "id": 예약 ID
+#### Request
 
-- REQUEST BODY
-  - "dateToModify": 수정할 예약 날짜
+- **헤더**
 
-- RESPONSE
-  - 200 OK
-  - **바디**
-    - 아래와 같이 수정된 예약 응답
-    - ```
-      id : 예약 ID
-      member : 예약자
-      gym : 헬스장
-      date : 예약 날짜
-      ```
+  |   이름   |  자료형   |       예시 값       |        설명        |
+  |:------:|:------:|:----------------:|:----------------:|
+  | Cookie | String | token={JwtToken} | 로그인을 통해 얻은 인증 토큰 |
+
+- **경로 변수 (URL Path)**
+
+  | 필드 |  자료형   |        예시 값        |     설명      |
+  |:--:|:------:|:------------------:|:-----------:|
+  | id | String | "abcdef-ghijkl..." | 수정하려는 예약 ID |
+
+- **본문**
+
+  |      필드      |  자료형   |     예시 값     |        설명         |
+  |:------------:|:------:|:------------:|:-----------------:|
+  | dateToModify |  Date  | "2025-01-01" | 수정할 예약 날짜 (미래 일시) |
+
+#### Response
+
+> **200 OK**
+
+- **본문**
+
+  |   필드   |   자료형    |                         예시 값                         |      설명      |
+  |:------:|:--------:|:----------------------------------------------------:|:------------:|
+  |   id   |  String  |                  "abc12f-defg2..."                   | 예약 ID (UUID) |
+  | member | JSON Map |              "{id: "popo", name: "포포"}"              |     예약자      |
+  |  gym   | JSON Map | "{id: "abc...", street: "군자로12-3", detail: "지하 1층"}" |   예약한 헬스장    |
+  |  date  |   Date   |                     "2025-01-01"                     |  수정된 예약 날짜   |
 
 ### 내 예약 취소
-> DELETE /bookings/{id}
 
-- REQUEST HEADER
-  - COOKIE
-    - "token": 로그인을 통해 발급받은 JWT 토큰
+> **DELETE /bookings/{id}**
 
-- PATH VARIABLE
-  - "id": 예약 ID
+#### Request
 
-- RESPONSE
-  - 204 NO CONTENT
+- **헤더**
+
+  |   이름   |  자료형   |       예시 값       |        설명        |
+  |:------:|:------:|:----------------:|:----------------:|
+  | Cookie | String | token={JwtToken} | 로그인을 통해 얻은 인증 토큰 |
+
+- **경로 변수 (URL Path)**
+
+  | 필드 |  자료형   |        예시 값        |     설명      |
+  |:--:|:------:|:------------------:|:-----------:|
+  | id | String | "abcdef-ghijkl..." | 취소하려는 예약 ID |
+
+#### Response
+
+> **204 NO CONTENT**
