@@ -1,7 +1,7 @@
 package finalmission.reservation.service;
 
+import finalmission.auth.controller.dto.request.LoginMember;
 import finalmission.member.domain.Member;
-import finalmission.member.domain.Role;
 import finalmission.member.repository.JpaMemberRepository;
 import finalmission.reservation.controller.dto.request.ReservationRequest;
 import finalmission.reservation.domain.Reservation;
@@ -12,10 +12,8 @@ import finalmission.reservationTime.repository.JpaReservationTimeRepository;
 import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.repository.JpaRestaurantRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -37,8 +35,8 @@ public class ReservationService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public Reservation create(final ReservationRequest request) {
-        Member member = memberRepository.findById(request.memberId())
+    public Reservation create(final ReservationRequest request, final LoginMember loginMember) {
+        Member member = memberRepository.findById(loginMember.id())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
 
         Restaurant restaurant = restaurantRepository.findById(request.restaurantId())
@@ -58,13 +56,11 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
-
-
     public List<Reservation> readAll() {
         return reservationRepository.findAll();
     }
 
-    public List<Reservation> read(final long id) {
+    public List<Reservation> findReservationsByMemberId(final long id) {
         return reservationRepository.findByMemberId(id);
     }
 }
