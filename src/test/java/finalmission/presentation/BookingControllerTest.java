@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import finalmission.TestFixtures;
 import finalmission.application.BookingService;
+import finalmission.domain.AuthInfo;
 import finalmission.domain.AuthenticationException;
 import finalmission.domain.member.MemberTokenProvider;
 import jakarta.servlet.http.Cookie;
@@ -28,15 +29,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 class BookingControllerTest {
 
     private final BookingService bookingService = Mockito.mock(BookingService.class);
-    private final MemberTokenProvider tokenProvider = Mockito.mock(MemberTokenProvider.class);
+    private final StubAuthInfoArgumentResolver authInfoArgumentResolver = new StubAuthInfoArgumentResolver();
     private final MockMvc mockMvc = MockMvcBuilders
-        .standaloneSetup(new BookingController(bookingService, tokenProvider))
+        .standaloneSetup(new BookingController(bookingService))
+        .setCustomArgumentResolvers(authInfoArgumentResolver)
         .build();
 
     @Test
     @DisplayName("예약을 하면 CREATED를 응답한다.")
     void book() throws Exception {
-        Mockito.doReturn("popo").when(tokenProvider).extractId(eq("token"));
+        authInfoArgumentResolver.stub(new AuthInfo("popo"));
 
         mockMvc.perform(post("/bookings")
             .cookie(new Cookie("token", "token"))
@@ -59,7 +61,7 @@ class BookingControllerTest {
     @Test
     @DisplayName("로그인하지 않고 예약하려 하면 UNAUTHORIZED를 응답한다.")
     void bookShouldLogin() throws Exception {
-        Mockito.doThrow(AuthenticationException.class).when(tokenProvider).extractId(any());
+        authInfoArgumentResolver.stubNotLogin();
 
         mockMvc.perform(post("/bookings")
             .contentType(MediaType.APPLICATION_JSON)
@@ -75,7 +77,7 @@ class BookingControllerTest {
     @Test
     @DisplayName("내 예약을 조회하면 OK와 함께 예약들로 이루어진 컬렉션을 응답한다.")
     void getMyBookings() throws Exception {
-        Mockito.doReturn("popo").when(tokenProvider).extractId(eq("token"));
+        authInfoArgumentResolver.stub(new AuthInfo("popo"));
         Mockito.doReturn(List.of(anyBooking(), anyBooking())).when(bookingService).getMyBookings(eq("popo"));
 
         mockMvc.perform(get("/bookings/mine")
@@ -88,7 +90,7 @@ class BookingControllerTest {
     @Test
     @DisplayName("로그인하지 않고 내 예약을 조회하려 하면 UNAUTHORIZED를 응답한다.")
     void getMyBookingsShouldLogin() throws Exception {
-        Mockito.doThrow(AuthenticationException.class).when(tokenProvider).extractId(any());
+        authInfoArgumentResolver.stubNotLogin();
 
         mockMvc.perform(get("/bookings/mine"))
             .andExpect(status().isUnauthorized());
@@ -97,9 +99,9 @@ class BookingControllerTest {
     @Test
     @DisplayName("예약 날짜를 수정하면 OK와 함께 수정된 예약을 응답한다.")
     void modifyDate() throws Exception {
+        authInfoArgumentResolver.stub(new AuthInfo("popo"));
         var booking = anyBooking();
         var dateToModify = LocalDate.of(2025, 6, 17);
-        Mockito.doReturn("popo").when(tokenProvider).extractId(eq("token"));
         Mockito.doReturn(booking).when(bookingService).modifyDate(eq(booking.getId()), any(), eq(dateToModify));
 
         mockMvc.perform(patch("/bookings/{id}", booking.getId())
@@ -117,8 +119,7 @@ class BookingControllerTest {
     @Test
     @DisplayName("예약 수정 시 사용자 인증에 실패 하면 UNAUTHORIZED를 응답한다.")
     void modifyDateUnauthorized() throws Exception {
-        var member = TestFixtures.anyMember();
-        Mockito.doReturn(member.getId()).when(tokenProvider).extractId(any());
+        authInfoArgumentResolver.stub(new AuthInfo("xxxx"));
         Mockito.doThrow(AuthenticationException.class).when(bookingService).modifyDate(any(), any(), any());
 
         mockMvc.perform(patch("/bookings/{id}", UUID.randomUUID())

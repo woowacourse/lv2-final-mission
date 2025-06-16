@@ -1,15 +1,12 @@
 package finalmission.presentation;
 
 import finalmission.application.BookingService;
+import finalmission.domain.AuthInfo;
 import finalmission.domain.AuthenticationException;
 import finalmission.domain.booking.Booking;
-import finalmission.domain.member.MemberTokenProvider;
 import finalmission.presentation.request.BookingRequest;
 import finalmission.presentation.request.ModifyBookingRequest;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -31,43 +28,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookingController {
 
     private final BookingService bookingService;
-    private final MemberTokenProvider memberTokenProvider;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void book(HttpServletRequest httpServletRequest, @Valid @RequestBody final BookingRequest request) {
-        var userId = getUserIdFromCookies(httpServletRequest);
-        bookingService.book(
-            userId,
-            UUID.fromString(request.gymId()),
-            request.date()
-        );
+    public void book(final AuthInfo authInfo, @Valid @RequestBody final BookingRequest request) {
+        bookingService.book(authInfo.memberId(), UUID.fromString(request.gymId()), request.date());
     }
 
     @PatchMapping("/{id}")
-    public Booking modify(@PathVariable("id") final UUID id, final HttpServletRequest httpRequest, @Valid @RequestBody final ModifyBookingRequest request) {
-        return bookingService.modifyDate(id, getUserIdFromCookies(httpRequest), request.dateToModify());
+    public Booking modify(@PathVariable("id") final UUID id, final AuthInfo authInfo, @Valid @RequestBody final ModifyBookingRequest request) {
+        return bookingService.modifyDate(id, authInfo.memberId(), request.dateToModify());
     }
 
     @GetMapping("/mine")
     @ResponseStatus(HttpStatus.OK)
-    public List<Booking> getMyBookings(final HttpServletRequest httpServletRequest) {
-        var userId = getUserIdFromCookies(httpServletRequest);
-        return bookingService.getMyBookings(userId);
-    }
-
-    private String getUserIdFromCookies(final HttpServletRequest httpServletRequest) {
-        var cookies = httpServletRequest.getCookies();
-        if (cookies == null) {
-            throw new AuthenticationException("로그인이 필요합니다.");
-        }
-
-        return Arrays.stream(cookies)
-            .filter(c -> c.getName().equals("token"))
-            .map(Cookie::getValue)
-            .map(memberTokenProvider::extractId)
-            .findAny()
-            .orElseThrow(() -> new AuthenticationException("로그인이 필요합니다."));
+    public List<Booking> getMyBookings(final AuthInfo authInfo) {
+        var memberId = authInfo.memberId();
+        return bookingService.getMyBookings(memberId);
     }
 
     @ExceptionHandler(AuthenticationException.class)

@@ -41,9 +41,9 @@ class MemberControllerTest {
     @ParameterizedTest
     @DisplayName("요청 내용이 비어있으면 BAD REQUEST를 응답한다.")
     @ValueSource(strings = {
-        "{ \"id\": \"\", \"password\": \"password\", \"name\": \"포포\" }",
-        "{ \"id\": \"popo\", \"password\": \"\", \"name\": \"포포\" }",
-        "{ \"id\": \"popo\", \"password\": \"password\", \"name\": \"\" }",
+        "{ \"memberId\": \"\", \"password\": \"password\", \"name\": \"포포\" }",
+        "{ \"memberId\": \"popo\", \"password\": \"\", \"name\": \"포포\" }",
+        "{ \"memberId\": \"popo\", \"password\": \"password\", \"name\": \"\" }",
     })
     void validateBlank(String requestJson) throws Exception {
         mockMvc.perform(post("/members")

@@ -15,7 +15,7 @@ public class JwtMemberTokenProvider implements MemberTokenProvider {
 
     public String generateToken(final AuthInfo authInfo) {
         return Jwts.builder()
-            .subject(authInfo.id())
+            .subject(authInfo.memberId())
             .signWith(SECRET_KEY)
             .compact();
     }
