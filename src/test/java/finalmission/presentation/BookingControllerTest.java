@@ -4,6 +4,7 @@ import static finalmission.TestFixtures.anyBooking;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -12,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import finalmission.TestFixtures;
 import finalmission.application.BookingService;
 import finalmission.domain.AuthenticationException;
+import finalmission.domain.Member;
 import finalmission.domain.MemberTokenProvider;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDate;
@@ -91,5 +93,43 @@ class BookingControllerTest {
 
         mockMvc.perform(get("/bookings/mine"))
             .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("예약 날짜를 수정하면 OK와 함께 수정된 예약을 응답한다.")
+    void modifyDate() throws Exception {
+        var booking = anyBooking();
+        var dateToModify = LocalDate.of(2025, 6, 17);
+        Mockito.doReturn("popo").when(tokenProvider).extractId(eq("token"));
+        Mockito.doReturn(booking).when(bookingService).modifyDate(eq(booking.getId()), any(), eq(dateToModify));
+
+        mockMvc.perform(patch("/bookings/{id}", booking.getId())
+            .cookie(new Cookie("token", "token"))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {
+                    "dateToModify": "2025-06-17"
+                }
+                """)
+        ).andExpect(status().isOk())
+        .andExpect(jsonPath("$..['id','member','gym','date']").exists());
+    }
+
+    @Test
+    @DisplayName("예약 수정 시 사용자 인증에 실패 하면 UNAUTHORIZED를 응답한다.")
+    void modifyDateUnauthorized() throws Exception {
+        var member = TestFixtures.anyMember();
+        Mockito.doReturn(member.getId()).when(tokenProvider).extractId(any());
+        Mockito.doThrow(AuthenticationException.class).when(bookingService).modifyDate(any(), any(), any());
+
+        mockMvc.perform(patch("/bookings/{id}", UUID.randomUUID())
+                .cookie(new Cookie("token", "token"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                {
+                    "dateToModify": "2025-06-17"
+                }
+                """)
+            ).andExpect(status().isUnauthorized());
     }
 }

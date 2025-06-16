@@ -3,9 +3,13 @@ package finalmission.domain;
 import jakarta.persistence.Embeddable;
 import java.time.LocalDate;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 @Embeddable
 public class BookingDate {
 
@@ -29,7 +33,7 @@ public class BookingDate {
 
     public static BookingDate ofNew(final LocalDate date) {
         if (date.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("지난 날짜로 예약할 수 없습니다.");
+            throw new IllegalArgumentException("지난 날짜로 예약할 수 없습니다 : " + date);
         }
         return new BookingDate(date);
     }

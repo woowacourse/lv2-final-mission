@@ -24,18 +24,24 @@ public class TestFixtures {
         return new Gym(name, new Address("test street", "test detail"));
     }
 
-    public static BookingDate anyDate() {
-        return BookingDate.of(
-            LocalDate.of(
-                new Random().nextInt(2001, 2025),
-                new Random().nextInt(1, 12),
-                new Random().nextInt(1, 28)
-            )
+    public static LocalDate anyLocalDate() {
+        return LocalDate.of(
+            new Random().nextInt(2001, 2025),
+            new Random().nextInt(1, 12),
+            new Random().nextInt(1, 28)
         );
     }
 
+    public static LocalDate anyFutureLocalDate() {
+        return LocalDate.now().plusDays(new Random().nextInt(1, 999));
+    }
+
+    public static BookingDate anyBookingDate() {
+        return BookingDate.of(anyLocalDate());
+    }
+
     public static Booking anyBooking() {
-        return new Booking(anyMember(), anyGym(), anyDate());
+        return new Booking(anyMember(), anyGym(), anyBookingDate());
     }
 
     private static UUID generateUUID() {

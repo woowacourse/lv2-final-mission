@@ -71,3 +71,27 @@
       gym : 헬스장
       date : 예약 날짜
       ```
+
+### 내 예약 수정
+> PATCH /bookings/{id}
+
+- REQUEST HEADER
+  - COOKIE
+    - "token": 로그인을 통해 발급받은 JWT 토큰
+
+- PATH VARIABLE
+  - "id": 예약 ID
+
+- REQUEST BODY
+  - "dateToModify": 수정할 예약 날짜
+
+- RESPONSE
+  - 200 OK
+  - **바디**
+    - 아래와 같이 수정된 예약 응답
+    - ```
+      id : 예약 ID
+      member : 예약자
+      gym : 헬스장
+      date : 예약 날짜
+      ```

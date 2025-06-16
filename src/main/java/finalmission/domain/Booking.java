@@ -4,7 +4,6 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDate;
 import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,5 +30,13 @@ public class Booking {
         this.member = member;
         this.gym = gym;
         this.date = date;
+    }
+
+    public void modifyDate(final BookingDate dateToModify) {
+        this.date = dateToModify;
+    }
+
+    public boolean ownedBy(final Member member) {
+        return this.member.equals(member);
     }
 }

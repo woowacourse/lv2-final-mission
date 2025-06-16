@@ -1,5 +1,6 @@
 package finalmission.presentation;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import finalmission.application.BookingService;
 import finalmission.domain.AuthenticationException;
 import finalmission.domain.Booking;
@@ -7,6 +8,7 @@ import finalmission.domain.MemberTokenProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +35,7 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void book(HttpServletRequest httpServletRequest, @Valid @RequestBody BookingRequest request) {
+    public void book(HttpServletRequest httpServletRequest, @Valid @RequestBody final BookingRequest request) {
         var userId = getUserIdFromCookies(httpServletRequest);
         bookingService.book(
             userId,
@@ -40,9 +44,14 @@ public class BookingController {
         );
     }
 
+    @PatchMapping("/{id}")
+    public Booking modify(@PathVariable("id") final UUID id, final HttpServletRequest httpRequest, @Valid @RequestBody final ModifyBookingRequest request) {
+        return bookingService.modifyDate(id, getUserIdFromCookies(httpRequest), request.dateToModify());
+    }
+
     @GetMapping("/mine")
     @ResponseStatus(HttpStatus.OK)
-    public List<Booking> getMyBookings(HttpServletRequest httpServletRequest) {
+    public List<Booking> getMyBookings(final HttpServletRequest httpServletRequest) {
         var userId = getUserIdFromCookies(httpServletRequest);
         return bookingService.getMyBookings(userId);
     }
@@ -62,7 +71,7 @@ public class BookingController {
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Void> handleAuthenticationException(AuthenticationException e) {
+    public ResponseEntity<Void> handleAuthenticationException(final AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

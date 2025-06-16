@@ -1,12 +1,10 @@
 package finalmission.domain;
 
-import static finalmission.TestFixtures.anyDate;
+import static finalmission.TestFixtures.anyBookingDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import finalmission.RepositoryTestHelper;
-import finalmission.TestFixtures;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +28,7 @@ class BookingRepositoryTest {
         var booking = new Booking(
             helper.saveAnyMember(),
             helper.saveAnyGym(),
-            anyDate()
+            anyBookingDate()
         );
 
         var savedBooking = bookingRepository.save(booking);
@@ -50,9 +48,9 @@ class BookingRepositoryTest {
     void findAllByMember() {
         var member = helper.saveAnyMember();
 
-        bookingRepository.save(new Booking(member, helper.saveAnyGym(), anyDate()));
-        bookingRepository.save(new Booking(member, helper.saveAnyGym(), anyDate()));
-        bookingRepository.save(new Booking(member, helper.saveAnyGym(), anyDate()));
+        bookingRepository.save(new Booking(member, helper.saveAnyGym(), anyBookingDate()));
+        bookingRepository.save(new Booking(member, helper.saveAnyGym(), anyBookingDate()));
+        bookingRepository.save(new Booking(member, helper.saveAnyGym(), anyBookingDate()));
 
         var bookings = bookingRepository.findAllByMember(member);
 
