@@ -1,11 +1,9 @@
 package finalmission.auth.infrastructure;
 
-import finalmission.auth.service.AuthService;
 import finalmission.auth.controller.dto.request.LoginMember;
+import finalmission.auth.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -15,9 +13,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
-
-    private final Logger log = LoggerFactory.getLogger(LoginMemberArgumentResolver.class);
-
     private final AuthService authService;
     private final JwtTokenExtractor jwtTokenExtractor;
 
@@ -37,7 +32,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         final Cookie[] cookies = request.getCookies();
         validateTokenExists(cookies);
         String token = jwtTokenExtractor.extractTokenFromCookie(cookies);
-        log.info(token);
         return authService.findLoginMemberByToken(token);
     }
 

@@ -5,14 +5,10 @@ import finalmission.auth.controller.dto.request.LoginRequest;
 import finalmission.auth.infrastructure.JwtTokenProvider;
 import finalmission.member.domain.Member;
 import finalmission.member.repository.JpaMemberRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-    private final Logger log = LoggerFactory.getLogger(AuthService.class);
-
     private final JpaMemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
