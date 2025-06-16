@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shh.alias.application.AliasService;
 import shh.alias.domain.Alias;
+import shh.common.exception.BadRequestException;
 import shh.common.exception.NotFoundException;
 import shh.member.domain.Member;
 import shh.member.domain.repository.MemberRepository;
@@ -36,6 +37,7 @@ public class ReservationService {
         final LocalDate date = reservationAddRequest.date();
         final ReservationTime reservationTime = getReservationTime(reservationAddRequest.timeId());
         final Stall stall = getStall(reservationAddRequest);
+        validateDuplicateReservation(date, reservationTime, stall);
         final Member member = getMember(memberId);
         final Alias alias = aliasService.generateAlias(1);
         final Reservation reservation = new Reservation(date, reservationTime, stall, member, alias);
@@ -48,6 +50,16 @@ public class ReservationService {
         return reservations.stream()
                 .map(MyReservationResponse::from)
                 .toList();
+    }
+
+    private void validateDuplicateReservation(
+            final LocalDate date,
+            final ReservationTime reservationTime,
+            final Stall stall
+    ) {
+        if (reservationRepository.existsByDateAndTimeAndStall(date, reservationTime, stall)) {
+            throw new BadRequestException("이미 예약되었습니다.");
+        }
     }
 
     private ReservationTime getReservationTime(final Long timeId) {
