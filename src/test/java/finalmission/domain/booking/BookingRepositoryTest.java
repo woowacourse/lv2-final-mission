@@ -5,7 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import finalmission.RepositoryTestHelper;
-import java.util.NoSuchElementException;
+import finalmission.domain.member.Member;
+import finalmission.exception.ElementNotFoundException;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ class BookingRepositoryTest {
     @DisplayName("조회하려는 ID가 없으면 예외가 발생한다.")
     void getById() {
         assertThatThrownBy(() -> bookingRepository.getById(UUID.randomUUID()))
-            .isInstanceOf(NoSuchElementException.class);
+            .isInstanceOf(ElementNotFoundException.class);
     }
 
     @Test
@@ -55,5 +56,21 @@ class BookingRepositoryTest {
         var bookings = bookingRepository.findAllByMember(member);
 
         assertThat(bookings).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("특정 사용자와 특정 헬스장과 특정 날짜에 대한 예약이 존재하는 지 알 수 있다.")
+    void existsByMemberAndGymAndDate() {
+        // given
+        var member = helper.saveAnyMember();
+        var gym = helper.saveAnyGym();
+        var date = anyBookingDate();
+        bookingRepository.save(new Booking(member, gym, date));
+
+        // when
+        var exists = bookingRepository.existsByMemberAndGymAndDate(member, gym, date);
+
+        // then
+        assertThat(exists).isTrue();
     }
 }

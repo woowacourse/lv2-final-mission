@@ -4,9 +4,13 @@ import finalmission.domain.AuthenticationException;
 import finalmission.domain.booking.Booking;
 import finalmission.domain.booking.BookingDate;
 import finalmission.domain.booking.BookingRepository;
+import finalmission.domain.gym.Gym;
 import finalmission.domain.gym.GymRepository;
 import finalmission.domain.HolidayChecker;
+import finalmission.domain.member.Member;
 import finalmission.domain.member.MemberRepository;
+import finalmission.exception.BusinessRuleException;
+import finalmission.exception.DuplicatedException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +32,7 @@ public class BookingService {
         var bookingDate = BookingDate.ofNew(date);
         var member = memberRepository.getById(memberId);
         var gym = gymRepository.getById(gymId);
+        checkDuplicates(member, gym, bookingDate);
         bookingRepository.save(new Booking(member, gym, bookingDate));
     }
 
@@ -43,6 +48,7 @@ public class BookingService {
         var booking = bookingRepository.getById(id);
         if (booking.ownedBy(member)) {
             var toModify = BookingDate.ofNew(dateToModify);
+            checkDuplicates(member, booking.getGym(), toModify);
             booking.modifyDate(toModify);
             return booking;
         }
@@ -61,7 +67,14 @@ public class BookingService {
 
     private void checkNotHoliday(final LocalDate date) {
         if (holidayChecker.isHoliday(date)) {
-            throw new IllegalArgumentException("공휴일에는 예약할 수 없습니다.");
+            throw new BusinessRuleException("공휴일에는 예약할 수 없습니다.");
+        }
+    }
+
+    private void checkDuplicates(final Member member, final Gym gym, final BookingDate date) {
+        var duplicated = bookingRepository.existsByMemberAndGymAndDate(member, gym, date);
+        if (duplicated) {
+            throw new DuplicatedException("이미 예약되었습니다.");
         }
     }
 }
