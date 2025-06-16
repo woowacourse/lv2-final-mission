@@ -42,7 +42,7 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
         }
 
         User user = userRepository.findById(jwtPayload.id())
-                .orElseThrow(() -> new UnauthorizationException("유저를 찾을 수 없습니다, id: " + jwtPayload.id()));
+                .orElseThrow(() -> new UnauthorizationException("유저를 찾을 수 없습니다, reservationId: " + jwtPayload.id()));
         return new CurrentUserInfo(user.getId(), user.getName(), user.getRole());
     }
 }

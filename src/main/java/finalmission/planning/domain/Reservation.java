@@ -46,4 +46,8 @@ public class Reservation {
     public TimeSlot getTimeSlot() {
         return reservationSlot.getTimeSlot();
     }
+
+    public void changeReservationSlot(ReservationSlot reservationSlotToChange) {
+        this.reservationSlot = reservationSlotToChange;
+    }
 }

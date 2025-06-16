@@ -11,6 +11,7 @@ import finalmission.planning.infra.repository.ReservationRepository;
 import finalmission.planning.infra.repository.ReservationSlotRepository;
 import finalmission.planning.infra.repository.UserRepository;
 import finalmission.planning.ui.dto.request.CreateReservationRequest;
+import finalmission.planning.ui.dto.request.ModifyReservationRequest;
 import finalmission.planning.ui.dto.response.ReservationResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,7 @@ public class ReservationService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User", userId.toString()));
 
-        ReservationSlot reservationSlot = reservationSlotRepository.findById(request.reservationSlotId())
-                .orElseThrow(() -> new NotFoundException("ReservationSlot", request.reservationSlotId().toString()));
+        ReservationSlot reservationSlot = getReservationSlotByIdOrThrow(request.reservationSlotId());
 
         Reservation saved = reservationRepository.save(new Reservation(user, reservationSlot));
         emailService.sendEmailForReservation(saved);
@@ -45,19 +45,44 @@ public class ReservationService {
         return ReservationResponse.from(reservations);
     }
 
-    public ReservationResponse getReservationById(Long reservationId, CurrentUserInfo currentUserInfo) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new NotFoundException("Reservation", reservationId.toString()));
-        validateReadPermission(currentUserInfo, reservation);
+    public ReservationResponse getById(Long reservationId, CurrentUserInfo currentUserInfo) {
+        Reservation reservation = getReservationByIdOrThrow(reservationId);
+        validateAccessPermission(currentUserInfo, reservation);
         return ReservationResponse.from(reservation);
     }
 
-    private void validateReadPermission(CurrentUserInfo currentUserInfo, Reservation reservation) {
+    public void deleteById(Long reservationId, CurrentUserInfo currentUserInfo) {
+        Reservation reservation = getReservationByIdOrThrow(reservationId);
+        validateAccessPermission(currentUserInfo, reservation);
+        reservationRepository.delete(reservation);
+    }
+
+    public ReservationResponse modifyById(Long reservationId, ModifyReservationRequest request,
+                                          CurrentUserInfo currentUserInfo) {
+        Reservation reservation = getReservationByIdOrThrow(reservationId);
+        validateAccessPermission(currentUserInfo, reservation);
+
+        ReservationSlot reservationSlotToChange = getReservationSlotByIdOrThrow(request.reservationSlotId());
+        reservation.changeReservationSlot(reservationSlotToChange);
+        return ReservationResponse.from(reservation);
+    }
+
+    private void validateAccessPermission(CurrentUserInfo currentUserInfo, Reservation reservation) {
         if(currentUserInfo.role() == UserRole.ADMIN || reservation.isOwnedBy(currentUserInfo.id())) {
             return;
         }
         log.warn("예약 상세 정보 접근 불가 - reservationId={}, userId={}, userRole={}",
                 reservation.getId(), currentUserInfo.id(), currentUserInfo.role());
         throw new ForbiddenException();
+    }
+
+    private Reservation getReservationByIdOrThrow(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundException("Reservation", reservationId.toString()));
+    }
+
+    private ReservationSlot getReservationSlotByIdOrThrow(Long reservationSlotId) {
+        return reservationSlotRepository.findById(reservationSlotId)
+                .orElseThrow(() -> new NotFoundException("ReservationSlot", reservationSlotId.toString()));
     }
 }
