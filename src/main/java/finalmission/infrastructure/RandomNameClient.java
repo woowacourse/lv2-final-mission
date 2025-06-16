@@ -1,8 +1,9 @@
 package finalmission.infrastructure;
 
+import finalmission.application.service.NameClient;
 import org.springframework.web.client.RestClient;
 
-public class RandomNameClient {
+public class RandomNameClient implements NameClient {
 
     private static final String API_KEY = "1f1221731805408a8d552752127b95af";
 
@@ -12,7 +13,8 @@ public class RandomNameClient {
         this.restClient = restClient;
     }
 
-    public String getRandomName(){
+    @Override
+    public String approve(){
         return restClient.get()
                 .header("x-api-key", API_KEY)
                 .retrieve()

@@ -23,16 +23,17 @@ public class ReservationService {
     private final CrewRepository crewRepository;
     private final ReservationDateTimeRepository reservationDateTimeRepository;
     private final ReservationRepository reservationRepository;
-    private final RandomNameClient randomNameClient;
+    private final RandomNameService randomNameService;
 
     public ReservationService(final CoachRepository coachRepository, final CrewRepository crewRepository,
                               final ReservationDateTimeRepository reservationDateTimeRepository,
-                              final ReservationRepository reservationRepository, final RandomNameClient randomNameClient) {
+                              final ReservationRepository reservationRepository,
+                              RandomNameService randomNameService) {
         this.coachRepository = coachRepository;
         this.crewRepository = crewRepository;
         this.reservationDateTimeRepository = reservationDateTimeRepository;
         this.reservationRepository = reservationRepository;
-        this.randomNameClient = randomNameClient;
+        this.randomNameService = randomNameService;
     }
 
     public Long createReservation(final ReservationRequest reservationRequest) {
@@ -60,7 +61,7 @@ public class ReservationService {
 
     private Crew setCrew(ReservationRequest reservationRequest) {
         if(reservationRequest.getCrewId()==null){
-            return new Crew(randomNameClient.getRandomName());
+            return new Crew(randomNameService.approve());
         }
 
         return crewRepository.findById(reservationRequest.getCrewId())
