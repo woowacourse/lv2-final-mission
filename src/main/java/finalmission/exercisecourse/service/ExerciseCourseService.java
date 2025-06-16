@@ -4,6 +4,7 @@ import finalmission.exercisecourse.domain.ExerciseCourse;
 import finalmission.exercisecourse.dto.ExerciseCourseRequest;
 import finalmission.exercisecourse.dto.ExerciseCourseResponse;
 import finalmission.exercisecourse.infrastructure.ExerciseCourseRepository;
+import finalmission.reservation.infrastructure.ReservationRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ExerciseCourseService {
     private final ExerciseCourseRepository exerciseCourseRepository;
+    private final ReservationRepository reservationRepository;
 
-    public ExerciseCourseService(ExerciseCourseRepository exerciseCourseRepository) {
+    public ExerciseCourseService(ExerciseCourseRepository exerciseCourseRepository, ReservationRepository reservationRepository) {
         this.exerciseCourseRepository = exerciseCourseRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Transactional(readOnly = true)
@@ -25,7 +28,9 @@ public class ExerciseCourseService {
 
     @Transactional
     public ExerciseCourseResponse save(ExerciseCourseRequest request) {
-//        중복 검증
+        if (exerciseCourseRepository.existsByName(request.name())) {
+            throw new IllegalArgumentException("이미 존재하는 클래스 이름입니다.");
+        }
         ExerciseCourse exerciseCourse = ExerciseCourse.createWithoutId(request.name(), request.description());
         ExerciseCourse savedExerciseCourse = exerciseCourseRepository.save(exerciseCourse);
         return ExerciseCourseResponse.from(savedExerciseCourse);
@@ -33,7 +38,9 @@ public class ExerciseCourseService {
 
     @Transactional
     public void delete(Long id) {
-//        지우려는 클래스를 예약하고 있는 예약이 있는지 확인
+        if (reservationRepository.existsByExerciseCourseId(id)) {
+            throw new IllegalArgumentException("예약 중인 클래스입니다.");
+        }
         exerciseCourseRepository.deleteById(id);
     }
 }
