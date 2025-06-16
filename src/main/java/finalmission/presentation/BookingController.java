@@ -1,14 +1,14 @@
 package finalmission.presentation;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import finalmission.application.BookingService;
 import finalmission.domain.AuthenticationException;
-import finalmission.domain.Booking;
-import finalmission.domain.MemberTokenProvider;
+import finalmission.domain.booking.Booking;
+import finalmission.domain.member.MemberTokenProvider;
+import finalmission.presentation.request.BookingRequest;
+import finalmission.presentation.request.ModifyBookingRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;

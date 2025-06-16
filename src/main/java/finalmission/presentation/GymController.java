@@ -1,6 +1,7 @@
 package finalmission.presentation;
 
 import finalmission.application.GymService;
+import finalmission.presentation.request.RegisterGymRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

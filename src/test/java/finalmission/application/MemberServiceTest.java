@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 
 import finalmission.domain.AuthInfo;
-import finalmission.domain.Member;
-import finalmission.domain.MemberRepository;
-import finalmission.domain.MemberTokenProvider;
+import finalmission.domain.member.Member;
+import finalmission.domain.member.MemberRepository;
+import finalmission.domain.member.MemberTokenProvider;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

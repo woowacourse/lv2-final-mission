@@ -13,8 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import finalmission.TestFixtures;
 import finalmission.application.BookingService;
 import finalmission.domain.AuthenticationException;
-import finalmission.domain.Member;
-import finalmission.domain.MemberTokenProvider;
+import finalmission.domain.member.MemberTokenProvider;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDate;
 import java.util.List;

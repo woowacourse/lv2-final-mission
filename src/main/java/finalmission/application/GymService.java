@@ -1,8 +1,8 @@
 package finalmission.application;
 
-import finalmission.domain.Address;
-import finalmission.domain.Gym;
-import finalmission.domain.GymRepository;
+import finalmission.domain.member.Address;
+import finalmission.domain.gym.Gym;
+import finalmission.domain.gym.GymRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

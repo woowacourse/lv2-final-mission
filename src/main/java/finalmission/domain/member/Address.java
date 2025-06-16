@@ -1,4 +1,4 @@
-package finalmission.domain;
+package finalmission.domain.member;
 
 import jakarta.persistence.Embeddable;
 

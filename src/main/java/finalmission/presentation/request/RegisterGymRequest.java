@@ -1,6 +1,6 @@
-package finalmission.presentation;
+package finalmission.presentation.request;
 
-import finalmission.domain.Address;
+import finalmission.domain.member.Address;
 import jakarta.validation.constraints.NotBlank;
 
 public record RegisterGymRequest(

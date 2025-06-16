@@ -1,13 +1,12 @@
 package finalmission.application;
 
 import finalmission.domain.AuthenticationException;
-import finalmission.domain.Booking;
-import finalmission.domain.BookingDate;
-import finalmission.domain.BookingRepository;
-import finalmission.domain.GymRepository;
+import finalmission.domain.booking.Booking;
+import finalmission.domain.booking.BookingDate;
+import finalmission.domain.booking.BookingRepository;
+import finalmission.domain.gym.GymRepository;
 import finalmission.domain.HolidayChecker;
-import finalmission.domain.Member;
-import finalmission.domain.MemberRepository;
+import finalmission.domain.member.MemberRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;

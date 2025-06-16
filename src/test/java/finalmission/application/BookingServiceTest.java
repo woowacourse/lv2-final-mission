@@ -1,21 +1,19 @@
 package finalmission.application;
 
 import static finalmission.TestFixtures.anyBooking;
-import static finalmission.TestFixtures.anyBookingDate;
 import static finalmission.TestFixtures.anyFutureLocalDate;
-import static finalmission.TestFixtures.anyLocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import finalmission.TestFixtures;
-import finalmission.domain.Booking;
-import finalmission.domain.BookingDate;
-import finalmission.domain.BookingRepository;
-import finalmission.domain.Gym;
-import finalmission.domain.GymRepository;
+import finalmission.domain.booking.Booking;
+import finalmission.domain.booking.BookingDate;
+import finalmission.domain.booking.BookingRepository;
+import finalmission.domain.gym.Gym;
+import finalmission.domain.gym.GymRepository;
 import finalmission.domain.HolidayChecker;
-import finalmission.domain.Member;
-import finalmission.domain.MemberRepository;
+import finalmission.domain.member.Member;
+import finalmission.domain.member.MemberRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;

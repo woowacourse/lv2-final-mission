@@ -1,7 +1,7 @@
 package finalmission.application;
 
-import finalmission.domain.Address;
-import finalmission.domain.GymRepository;
+import finalmission.domain.member.Address;
+import finalmission.domain.gym.GymRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

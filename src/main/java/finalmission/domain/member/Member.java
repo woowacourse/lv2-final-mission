@@ -1,8 +1,7 @@
-package finalmission.domain;
+package finalmission.domain.member;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

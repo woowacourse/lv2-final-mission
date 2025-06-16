@@ -1,4 +1,4 @@
-package finalmission.domain;
+package finalmission.domain.booking;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

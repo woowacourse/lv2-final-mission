@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;

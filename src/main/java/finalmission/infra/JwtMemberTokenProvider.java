@@ -2,7 +2,7 @@ package finalmission.infra;
 
 import finalmission.domain.AuthInfo;
 import finalmission.domain.AuthenticationException;
-import finalmission.domain.MemberTokenProvider;
+import finalmission.domain.member.MemberTokenProvider;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import javax.crypto.SecretKey;

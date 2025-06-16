@@ -1,9 +1,9 @@
 package finalmission.application;
 
 import finalmission.domain.AuthInfo;
-import finalmission.domain.Member;
-import finalmission.domain.MemberRepository;
-import finalmission.domain.MemberTokenProvider;
+import finalmission.domain.member.Member;
+import finalmission.domain.member.MemberRepository;
+import finalmission.domain.member.MemberTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

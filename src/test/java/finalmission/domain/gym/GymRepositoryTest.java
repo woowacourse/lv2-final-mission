@@ -1,8 +1,9 @@
-package finalmission.domain;
+package finalmission.domain.gym;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import finalmission.domain.member.Address;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;

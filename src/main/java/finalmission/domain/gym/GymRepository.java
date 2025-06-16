@@ -1,4 +1,4 @@
-package finalmission.domain;
+package finalmission.domain.gym;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;

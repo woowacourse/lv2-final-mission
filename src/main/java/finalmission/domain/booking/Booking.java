@@ -1,5 +1,7 @@
-package finalmission.domain;
+package finalmission.domain.booking;
 
+import finalmission.domain.gym.Gym;
+import finalmission.domain.member.Member;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

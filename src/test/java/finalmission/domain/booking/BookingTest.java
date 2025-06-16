@@ -1,10 +1,11 @@
-package finalmission.domain;
+package finalmission.domain.booking;
 
 import static finalmission.TestFixtures.anyBookingDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import finalmission.TestFixtures;
-import java.time.LocalDate;
+import finalmission.domain.gym.Gym;
+import finalmission.domain.member.Address;
+import finalmission.domain.member.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

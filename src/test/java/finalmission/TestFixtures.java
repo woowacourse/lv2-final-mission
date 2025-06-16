@@ -1,10 +1,10 @@
 package finalmission;
 
-import finalmission.domain.Address;
-import finalmission.domain.Booking;
-import finalmission.domain.BookingDate;
-import finalmission.domain.Gym;
-import finalmission.domain.Member;
+import finalmission.domain.member.Address;
+import finalmission.domain.booking.Booking;
+import finalmission.domain.booking.BookingDate;
+import finalmission.domain.gym.Gym;
+import finalmission.domain.member.Member;
 import java.time.LocalDate;
 import java.util.Random;
 import java.util.UUID;

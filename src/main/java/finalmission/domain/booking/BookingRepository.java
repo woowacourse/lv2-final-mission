@@ -1,5 +1,6 @@
-package finalmission.domain;
+package finalmission.domain.booking;
 
+import finalmission.domain.member.Member;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;

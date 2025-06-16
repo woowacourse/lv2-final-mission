@@ -1,4 +1,6 @@
-package finalmission.domain;
+package finalmission.domain.member;
+
+import finalmission.domain.AuthInfo;
 
 public interface MemberTokenProvider {
 

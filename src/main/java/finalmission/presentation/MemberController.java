@@ -1,7 +1,8 @@
 package finalmission.presentation;
 
 import finalmission.application.MemberService;
-import finalmission.domain.AuthInfo;
+import finalmission.presentation.request.LoginRequest;
+import finalmission.presentation.request.RegisterMemberRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

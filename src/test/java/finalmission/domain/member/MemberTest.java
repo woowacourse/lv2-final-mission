@@ -1,4 +1,4 @@
-package finalmission.domain;
+package finalmission.domain.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

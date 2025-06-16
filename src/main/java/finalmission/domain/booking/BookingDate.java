@@ -1,4 +1,4 @@
-package finalmission.domain;
+package finalmission.domain.booking;
 
 import jakarta.persistence.Embeddable;
 import java.time.LocalDate;

@@ -1,7 +1,7 @@
 package finalmission;
 
-import finalmission.domain.Gym;
-import finalmission.domain.Member;
+import finalmission.domain.gym.Gym;
+import finalmission.domain.member.Member;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;

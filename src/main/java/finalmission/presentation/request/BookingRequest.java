@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.request;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;

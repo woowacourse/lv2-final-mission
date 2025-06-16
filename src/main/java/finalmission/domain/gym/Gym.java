@@ -1,5 +1,6 @@
-package finalmission.domain;
+package finalmission.domain.gym;
 
+import finalmission.domain.member.Address;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

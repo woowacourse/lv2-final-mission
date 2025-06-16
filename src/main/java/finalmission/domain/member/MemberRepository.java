@@ -1,4 +1,4 @@
-package finalmission.domain;
+package finalmission.domain.member;
 
 import java.util.NoSuchElementException;
 import org.springframework.data.repository.ListCrudRepository;
