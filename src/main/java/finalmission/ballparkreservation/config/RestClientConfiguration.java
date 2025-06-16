@@ -1,6 +1,7 @@
 package finalmission.ballparkreservation.config;
 
 import finalmission.ballparkreservation.external.HolidayClient;
+import finalmission.ballparkreservation.external.WeatherClient;
 import org.springframework.boot.web.client.RestClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,11 @@ public class RestClientConfiguration {
     @Bean
     public HolidayClient holidayClient(RestClient.Builder builder) {
         return new HolidayClient(builder.build());
+    }
+
+    @Bean
+    public WeatherClient weatherClient(RestClient.Builder builder) {
+        return new WeatherClient(builder.build());
     }
 
     @Bean
