@@ -144,12 +144,11 @@ Content-Type: application/json
     }
 }
 ```
-+ [ ] 예약 정보 수정
++ [x] 예약 정보 수정
 ```
-PUT /reservations HTTP/1.1
+PUT /reservations/{id} HTTP/1.1
 {  
     "crewId":1,
-    "reservationId": 1,
     "coach": "포비",
     "dateTime": "2025-08-09 10:00"
 }
@@ -160,7 +159,7 @@ Content-Type: application/json
 Location: /reservations/{id}
 ```
 
-+ [ ] 예약 삭제
++ [x] 예약 삭제
 ```
 DELETE /reservations/{id} HTTP/1.1
 {  

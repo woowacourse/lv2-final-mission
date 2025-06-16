@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Entity
 public class Reservation {
@@ -44,5 +45,11 @@ public class Reservation {
 
     public ReservationDateTime getReservationDateTime() {
         return reservationDateTime;
+    }
+
+    public void update(Crew crew, Coach coach, ReservationDateTime reservationDateTime) {
+        this.crew = crew;
+        this.coach = coach;
+        this.reservationDateTime = reservationDateTime;
     }
 }
