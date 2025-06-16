@@ -23,14 +23,12 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final HolidayChecker holidayChecker;
 
-    public Booking book(final String memberId, final UUID gymId, final LocalDate date) {
-        if (holidayChecker.isHoliday(date)) {
-            throw new IllegalArgumentException("공휴일에는 예약할 수 없습니다.");
-        }
+    public void book(final String memberId, final UUID gymId, final LocalDate date) {
+        checkNotHoliday(date);
         var bookingDate = BookingDate.ofNew(date);
         var member = memberRepository.getById(memberId);
         var gym = gymRepository.getById(gymId);
-        return bookingRepository.save(new Booking(member, gym, bookingDate));
+        bookingRepository.save(new Booking(member, gym, bookingDate));
     }
 
     public List<Booking> getMyBookings(final String memberId) {
@@ -40,9 +38,7 @@ public class BookingService {
 
     @Transactional
     public Booking modifyDate(final UUID id, final String memberId, final LocalDate dateToModify) {
-        if (holidayChecker.isHoliday(dateToModify)) {
-            throw new IllegalArgumentException("공휴일에는 예약할 수 없습니다.");
-        }
+        checkNotHoliday(dateToModify);
         var member = memberRepository.getById(memberId);
         var booking = bookingRepository.getById(id);
         if (booking.ownedBy(member)) {
@@ -61,5 +57,11 @@ public class BookingService {
             return;
         }
         throw new AuthenticationException("취소하려는 사용자가 예약자와 일치하지 않습니다. 현재 사용자 ID : " + memberId + ", 예약자 ID : " + booking.getMember().getId());
+    }
+
+    private void checkNotHoliday(final LocalDate date) {
+        if (holidayChecker.isHoliday(date)) {
+            throw new IllegalArgumentException("공휴일에는 예약할 수 없습니다.");
+        }
     }
 }
