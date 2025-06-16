@@ -38,7 +38,7 @@ public class Reservation {
 
     protected Reservation(){}
 
-    public Reservation(
+    private Reservation(
             final Member member,
             final Restaurant restaurant,
             final ReservationTime reservationTime,
@@ -63,6 +63,18 @@ public class Reservation {
             final Status status
     ) {
         return new Reservation(member, restaurant, reservationTime, date, visitor, status);
+    }
+
+    public void update(
+            final Restaurant restaurant,
+            final ReservationTime reservationTime,
+            final LocalDate date,
+            final int visitor
+    ) {
+        this.restaurant = restaurant;
+        this.reservationTime = reservationTime;
+        this.date = date;
+        this.visitor = visitor;
     }
 
     public Long getId() {

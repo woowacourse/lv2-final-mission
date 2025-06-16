@@ -1,13 +1,13 @@
-package finalmission.reservation.service;
+package finalmission.mail;
 
 import finalmission.reservation.domain.Reservation;
 import org.springframework.mail.SimpleMailMessage;
 
 import java.time.format.DateTimeFormatter;
 
-public class ReservationMailContentBuilder {
+public class MailContentBuilder {
 
-    public static SimpleMailMessage build(Reservation reservation) {
+    public static SimpleMailMessage reservationMailBuild(Reservation reservation) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(reservation.getMember().getEmail());
         message.setSubject(String.format(
