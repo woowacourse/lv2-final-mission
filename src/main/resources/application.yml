@@ -1,0 +1,42 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: spqjekdl1004
+    password: qavviarwxcmvobmm
+    properties:
+      mail:
+        smtp:
+          auth: true            # 사용자 인증 시도 여부
+          starttls:
+            enable: true        # starttls 활성화 여부
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/coffee
+    username: sa
+    password:
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+
+security:
+  jwt:
+    token:
+      secret-key: s8R$kQz3nZ!L5pT7c@J#xM9vB1&uD6hE
+      access:
+        expire-length: 6000000 # 100 분
