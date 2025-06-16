@@ -15,7 +15,7 @@ public class MemberService {
     }
 
     public Member create(final MemberRequest request) {
-        Member member = Member.beforeSave(request.email(), request.name(), request.password());
+        Member member = Member.beforeSave(request.email(),  request.password(),request.name());
         return memberRepository.save(member);
     }
 }
