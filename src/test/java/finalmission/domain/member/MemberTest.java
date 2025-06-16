@@ -3,6 +3,7 @@ package finalmission.domain.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import finalmission.exception.BusinessRuleException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,6 +23,6 @@ class MemberTest {
     @ValueSource(strings = {"", "포", "포포포포포포"})
     void validateName(String name) {
         assertThatThrownBy(() -> new Member("popo", "password", name))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(BusinessRuleException.class);
     }
 }

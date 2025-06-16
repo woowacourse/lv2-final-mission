@@ -1,5 +1,6 @@
 package finalmission.domain.booking;
 
+import finalmission.exception.BusinessRuleException;
 import jakarta.persistence.Embeddable;
 import java.time.LocalDate;
 import lombok.AccessLevel;
@@ -33,7 +34,7 @@ public class BookingDate {
 
     public static BookingDate ofNew(final LocalDate date) {
         if (date.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("지난 날짜로 예약할 수 없습니다 : " + date);
+            throw new BusinessRuleException("지난 날짜로 예약할 수 없습니다 : " + date);
         }
         return new BookingDate(date);
     }

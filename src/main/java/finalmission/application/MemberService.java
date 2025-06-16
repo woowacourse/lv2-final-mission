@@ -4,6 +4,7 @@ import finalmission.domain.AuthInfo;
 import finalmission.domain.member.Member;
 import finalmission.domain.member.MemberRepository;
 import finalmission.domain.member.MemberTokenProvider;
+import finalmission.exception.InvalidArgumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,6 @@ public class MemberService {
             .filter(m -> m.isSamePassword(password))
             .map(member -> new AuthInfo(member.getId(), member.getRole()))
             .map(tokenProvider::generateToken)
-            .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 틀렸습니다."));
+            .orElseThrow(() -> new InvalidArgumentException("아이디 또는 비밀번호가 틀렸습니다."));
     }
 }

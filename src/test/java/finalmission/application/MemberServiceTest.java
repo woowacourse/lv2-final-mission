@@ -8,6 +8,7 @@ import finalmission.domain.AuthInfo;
 import finalmission.domain.member.Member;
 import finalmission.domain.member.MemberRepository;
 import finalmission.domain.member.MemberTokenProvider;
+import finalmission.exception.InvalidArgumentException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ class MemberServiceTest {
             .when(memberRepository).findById("popo");
 
         assertThatThrownBy(() -> memberService.login("popo", "password"))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(InvalidArgumentException.class);
     }
 
     @Test
@@ -60,6 +61,6 @@ class MemberServiceTest {
             .when(memberRepository).findById("popo");
 
         assertThatThrownBy(() -> memberService.login("popo", "xxxxxxxx"))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(InvalidArgumentException.class);
     }
 }

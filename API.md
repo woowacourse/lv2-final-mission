@@ -10,6 +10,7 @@
 - [내 예약 조회](#내-예약-조회)
 - [내 예약 수정](#내-예약-수정)
 - [내 예약 취소](#내-예약-취소)
+- [예외 응답](#예외-응답)
 
 ## GYM
 
@@ -198,3 +199,60 @@
 #### Response
 
 > **204 NO CONTENT**
+
+# 예외
+
+REST API의 공통된 예외 응답에 대한 문서입니다.
+
+[RFC 7807 - Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc7807) 명세에 따라 응답합니다.
+
+### Response
+
+- **본문**
+
+  |    필드    |  자료형   |      예시 값      |                설명                |
+  |:--------:|:------:|:--------------:|:--------------------------------:|
+  |   type   | String | "about:blank"  | 문제 유형에 대한 URI (대부분 정의되어있지 않습니다.) |
+  |  title   | String | "Unauthorized" |           문제 유형에 대한 요약           |
+  |  status  | Number |      401       |            HTTP 상태 코드            |
+  |  detail  | String | "인증에 실패했습니다."  |         문제에 대한 구체적인 메시지          |
+  | instance | String |    "/login"    |           문제가 발생한 URI            |
+
+- **예시**
+
+  ```{
+  "type": "about:blank",
+  "title": "Bad Request",
+  "status": 400,
+  "detail": "아이디 또는 비밀번호가 틀렸습니다.",
+  "instance": "/members/login"
+  }```
+  
+---
+
+## HTTP 상태 코드 별 예외 상황
+
+> **400 BAD REQUEST**
+
+- 잘못된 요청을 보냈을 때 발생합니다.
+- 유효성 검사에 실패했을 때 주로 발생합니다.
+
+> **401 UNAUTHORIZED**
+
+- 인증에 실패했을 때 발생합니다.
+  - ex) 로그인하지 않은 채 예약하려 할 때
+
+> **404 NOT FOUND**
+
+- 요청한 대상을 찾을 수 없을 때 발생합니다.
+  - ex) 존재하지 않는 예약을 취소하려 할 때
+
+> **409 CONFLICT**
+
+- 요청한 대상이 중복되었을 때 발생합니다.
+  - ex) 같은 헬스장, 같은 날짜에 또 예약할 때
+
+> **500 INTERNAL SERVER ERROR**
+
+- 서버에 예기치 못한 오류가 생겼을 때 발생합니다.
+  - ex) 서버의 문제로 예약에 실패했을 때

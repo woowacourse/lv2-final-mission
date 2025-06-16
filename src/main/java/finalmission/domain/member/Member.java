@@ -1,5 +1,6 @@
 package finalmission.domain.member;
 
+import finalmission.exception.BusinessRuleException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.EqualsAndHashCode;
@@ -38,7 +39,7 @@ public class Member {
     private void validateNameLength(final String name) {
         if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
             var message = String.format("사용자 이름은 %d자 이상 %d자 이하여야 합니다.", MIN_NAME_LENGTH, MAX_NAME_LENGTH);
-            throw new IllegalArgumentException(message);
+            throw new BusinessRuleException(message);
         }
     }
 }

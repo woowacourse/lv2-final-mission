@@ -2,6 +2,7 @@ package finalmission.domain.booking;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import finalmission.exception.BusinessRuleException;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,6 @@ class BookingDateTest {
     void ofNew() {
         var yesterday = LocalDate.now().minusDays(1);
         assertThatThrownBy(() -> BookingDate.ofNew(yesterday))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(BusinessRuleException.class);
     }
 }

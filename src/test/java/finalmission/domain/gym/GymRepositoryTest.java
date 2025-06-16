@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import finalmission.domain.member.Address;
-import java.util.NoSuchElementException;
+import finalmission.exception.ElementNotFoundException;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +31,6 @@ class GymRepositoryTest {
     @DisplayName("조회하려는 ID가 없으면 예외가 발생한다.")
     void getById() {
         assertThatThrownBy(() -> gymRepository.getById(UUID.randomUUID()))
-            .isInstanceOf(NoSuchElementException.class);
+            .isInstanceOf(ElementNotFoundException.class);
     }
 }

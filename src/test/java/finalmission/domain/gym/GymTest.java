@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import finalmission.domain.member.Address;
+import finalmission.exception.BusinessRuleException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +24,6 @@ class GymTest {
     @ValueSource(strings = {"", "헬", "헬스", "헬스헬스헬스헬스헬스헬"})
     void validateName(String name) {
         assertThatThrownBy(() -> new Gym(name, new Address("군자로 123-1", "지하 1층")))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(BusinessRuleException.class);
     }
 }
