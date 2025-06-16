@@ -1,44 +1,43 @@
 package finalmission.ballparkreservation.external.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
-public record WeatherResponse(
-        Response response
-) {
-    public boolean isRaining() {
-        Response.Body.Items.Item rainyItem = response.body.items.item.stream()
-                .filter(item -> item.category.equals("POP"))
-                .findAny()
-                .orElseThrow(RuntimeException::new);
+@Getter
+@Setter
+@AllArgsConstructor
+public class WeatherResponse {
+    private Response response;
 
-        try {
-            Float factor = Float.valueOf(rainyItem.fcstValue);
-            return factor > 0.0f;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class Response {
+        private Body body;
     }
 
-    public List<Response.Body.Items.Item> getItems() {
-        return response.body().items().item;
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class Body {
+        private Items items;
     }
 
-    record Response(
-            Body body
-    ) {
-        record Body(
-                Items items
-        ) {
-            record Items(
-                    List<Item> item
-            ) {
-                record Item(
-                        String category,
-                        String fcstValue
-                ) {
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class Items {
+        private List<Item> item;
+    }
 
-                }
-            }
-        }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class Item {
+        private String category;
+        private String fcstValue;
     }
 }

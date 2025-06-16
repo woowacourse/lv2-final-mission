@@ -17,7 +17,7 @@ public class WeatherClientTest {
     @DisplayName("날씨를 확인하는 api를 호출할 수 있다")
     void checkWeather() {
         // when & then
-        assertThat(weatherClient.checkWeather().getItems().size())
-                .isEqualTo(12);
+        assertThat(weatherClient.checkWeather().getResponse().getBody().getItems().getItem().size())
+                .isEqualTo(14);
     }
 }

@@ -30,7 +30,7 @@ public class WeatherClient {
         URI uri = UriComponentsBuilder.fromHttpUrl(BASE_URL)
                 .queryParam("serviceKey", SERVICE_KEY)
                 .queryParam("pageNo", 1)
-                .queryParam("numOfRows", 12)
+                .queryParam("numOfRows", 14)
                 .queryParam("dataType", "JSON")
                 .queryParam("base_date", date.format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .queryParam("base_time", "0500")
