@@ -21,12 +21,14 @@ public class Member {
     private String id;
     private String password;
     private String name;
+    private MemberRole role;
 
     public Member(final String id, final String password, final String name) {
         validateNameLength(name);
         this.id = id;
         this.password = password;
         this.name = name;
+        this.role = MemberRole.USER;
     }
 
     public boolean isSamePassword(final String password) {

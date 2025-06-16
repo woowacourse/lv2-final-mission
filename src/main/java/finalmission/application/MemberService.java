@@ -22,8 +22,7 @@ public class MemberService {
     public String login(final String id, final String password) {
         return repository.findById(id)
             .filter(m -> m.isSamePassword(password))
-            .map(Member::getId)
-            .map(AuthInfo::new)
+            .map(member -> new AuthInfo(member.getId(), member.getRole()))
             .map(tokenProvider::generateToken)
             .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 틀렸습니다."));
     }

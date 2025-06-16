@@ -39,7 +39,7 @@ public class AuthInfoArgumentResolverTest {
     @DisplayName("쿠키의 토큰으로부터 컨트롤러 메서드 파라미터의 AuthInfo 객체를 바인딩한다.")
     void resolveArgument() throws Exception {
         var tokenInCookie = "token";
-        doReturn("popo").when(memberTokenProvider).extractId(tokenInCookie);
+        doReturn(new AuthInfo("popo")).when(memberTokenProvider).extractAuthInfo(tokenInCookie);
 
         mockMvc.perform(get(ENDPOINT_WITH_AUTH_INFO_PARAMETER)
             .cookie(new Cookie("token", tokenInCookie)))
@@ -53,7 +53,7 @@ public class AuthInfoArgumentResolverTest {
         mockMvc.perform(get(ENDPOINT_WITHOUT_AUTH_INFO_PARAMETER))
             .andExpect(status().isOk());
 
-        verify(memberTokenProvider, never()).extractId(anyString());
+        verify(memberTokenProvider, never()).extractAuthInfo(anyString());
     }
 
     @Controller

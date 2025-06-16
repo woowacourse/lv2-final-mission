@@ -31,6 +31,7 @@ class BookingControllerTest {
     private final StubAuthInfoArgumentResolver authInfoArgumentResolver = new StubAuthInfoArgumentResolver();
     private final MockMvc mockMvc = MockMvcBuilders
         .standaloneSetup(new BookingController(bookingService))
+        .setControllerAdvice(new GlobalExceptionHandler())
         .setCustomArgumentResolvers(authInfoArgumentResolver)
         .build();
 

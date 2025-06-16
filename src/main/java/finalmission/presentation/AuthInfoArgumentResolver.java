@@ -39,15 +39,14 @@ public class AuthInfoArgumentResolver implements HandlerMethodArgumentResolver {
             throw new AuthenticationException("로그인이 필요합니다.");
         }
 
-        var memberId = extractMemberIdFromCookies(cookies);
-        return new AuthInfo(memberId);
+        return extractAuthInfoFromCookies(cookies);
     }
 
-    private String extractMemberIdFromCookies(final Cookie[] cookies) {
+    private AuthInfo extractAuthInfoFromCookies(final Cookie[] cookies) {
         return Arrays.stream(cookies)
             .filter(c -> c.getName().equals("token"))
             .map(Cookie::getValue)
-            .map(memberTokenProvider::extractId)
+            .map(memberTokenProvider::extractAuthInfo)
             .findAny()
             .orElseThrow(() -> new AuthenticationException("로그인이 필요합니다."));
     }

@@ -6,5 +6,5 @@ public interface MemberTokenProvider {
 
     String generateToken(AuthInfo authInfo);
 
-    String extractId(String token);
+    AuthInfo extractAuthInfo(String token);
 }

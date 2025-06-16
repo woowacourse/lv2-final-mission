@@ -1,6 +1,8 @@
 package finalmission.presentation;
 
 import finalmission.application.GymService;
+import finalmission.domain.AuthInfo;
+import finalmission.domain.AuthenticationException;
 import finalmission.presentation.request.RegisterGymRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +22,14 @@ public class GymController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@Valid @RequestBody RegisterGymRequest request) {
-        gymService.register(request.name(), request.address());
+    public void register(
+        final AuthInfo authInfo,
+        @Valid @RequestBody RegisterGymRequest request
+    ) {
+        if (authInfo.isAdmin()) {
+            gymService.register(request.name(), request.address());
+            return;
+        }
+        throw new AuthenticationException("관리자만 수행할 수 있습니다.");
     }
 }
-
-

@@ -2,7 +2,6 @@ package finalmission.presentation;
 
 import finalmission.application.BookingService;
 import finalmission.domain.AuthInfo;
-import finalmission.domain.AuthenticationException;
 import finalmission.domain.booking.Booking;
 import finalmission.presentation.request.BookingRequest;
 import finalmission.presentation.request.ModifyBookingRequest;
@@ -11,9 +10,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,11 +49,6 @@ public class BookingController {
     public List<Booking> getMyBookings(final AuthInfo authInfo) {
         var memberId = authInfo.memberId();
         return bookingService.getMyBookings(memberId);
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Void> handleAuthenticationException(final AuthenticationException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
 

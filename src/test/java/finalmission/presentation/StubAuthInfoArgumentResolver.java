@@ -17,6 +17,11 @@ public class StubAuthInfoArgumentResolver extends AuthInfoArgumentResolver {
         super(new JwtMemberTokenProvider());
     }
 
+    public StubAuthInfoArgumentResolver(final AuthInfo stub) {
+        super(new JwtMemberTokenProvider());
+        this.stub = stub;
+    }
+
     public void stubNotLogin() {
         stubbedNotLogin = true;
     }
