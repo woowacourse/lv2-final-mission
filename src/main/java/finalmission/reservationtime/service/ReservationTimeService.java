@@ -1,5 +1,6 @@
 package finalmission.reservationtime.service;
 
+import finalmission.reservation.infrastructure.ReservationRepository;
 import finalmission.reservationtime.domain.ReservationTime;
 import finalmission.reservationtime.dto.ReservationTimeRequest;
 import finalmission.reservationtime.dto.ReservationTimeResponse;
@@ -12,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationTimeService {
 
     private final ReservationTimeRepository reservationTimeRepository;
+    private final ReservationRepository reservationRepository;
 
-    public ReservationTimeService(ReservationTimeRepository reservationTimeRepository) {
+    public ReservationTimeService(ReservationTimeRepository reservationTimeRepository, ReservationRepository reservationRepository) {
         this.reservationTimeRepository = reservationTimeRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Transactional(readOnly = true)
@@ -26,7 +29,9 @@ public class ReservationTimeService {
 
     @Transactional
     public ReservationTimeResponse save(ReservationTimeRequest request) {
-//        이미 존재하던 시간인지 중복 검증
+        if (reservationTimeRepository.existsByStartAt(request.startAt())) {
+            throw new IllegalArgumentException("이미 존재하는 예약 시간입니다.");
+        }
         ReservationTime reservationTime = ReservationTime.createWithoutId(request.startAt());
         ReservationTime savedReservationTime = reservationTimeRepository.save(reservationTime);
         return ReservationTimeResponse.from(savedReservationTime);
@@ -34,7 +39,9 @@ public class ReservationTimeService {
 
     @Transactional
     public void delete(Long id) {
-//        해당 시간에 예약이 존재하는지 검증
+        if (reservationRepository.existsByTimeId(id)) {
+            throw new IllegalArgumentException("예약 중인 시간입니다.");
+        }
         reservationTimeRepository.deleteById(id);
     }
 }
