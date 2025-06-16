@@ -18,6 +18,10 @@ public class Crew {
     protected Crew() {
     }
 
+    public Crew(String randomName) {
+        this.member = new Member(randomName);
+    }
+
     public Long getId() {
         return id;
     }

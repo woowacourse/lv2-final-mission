@@ -115,6 +115,7 @@ Content-Type: application/json
 
 #### 예약
 + [x] 예약 추가
+  + [x] 크루 아이디가 존재하지 않으면 랜덤 이름을 생성한다.
 ```
 POST /reservations HTTP/1.1
 {  
@@ -128,7 +129,7 @@ HTTP/1.1 201
 Content-Type: application/json
 Location: /reservations/{id}
 ```
-+ [ ] 크루별 예약 조회
++ [x] 크루별 예약 조회
 ```
 GET /reservations?crew="링크" HTTP/1.1
 ```
@@ -139,22 +140,6 @@ Content-Type: application/json
     {
         "id": 1,
         "coach": "포비",
-        "dateTime": "2025-08-09 10:00"
-    }
-}
-```
-
-+ [ ] 코치별 예약 조회
-```
-GET /reservations HTTP/1.1
-```
-```
-HTTP/1.1 201
-Content-Type: application/json
-{  
-    {
-        "id": 1,
-        "crew": "링크",
         "dateTime": "2025-08-09 10:00"
     }
 }

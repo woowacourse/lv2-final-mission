@@ -12,6 +12,14 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
+    protected Member() {
+    }
+
+    public Member(String randomName) {
+        this.nickname = randomName;
+        this.password = randomName;
+    }
+
     public String getNickname() {
         return nickname;
     }
