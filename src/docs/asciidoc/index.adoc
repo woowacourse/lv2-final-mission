@@ -1,0 +1,95 @@
+= API 문서
+:toc: left
+:doctype: book
+
+== 인증 API
+
+=== 로그인
+
+==== 로그인 (성공)
+include::{snippets}/login/http-request.adoc[]
+include::{snippets}/login/http-response.adoc[]
+
+==== 로그인 (실패:비밀번호가 맞지 않음)
+include::{snippets}/login/incorrect_password/http-request.adoc[]
+include::{snippets}/login/incorrect_password/http-response.adoc[]
+
+=== 로그아웃
+
+==== 로그아웃 (성공)
+include::{snippets}/logout/http-request.adoc[]
+include::{snippets}/logout/http-response.adoc[]
+
+== 회원 API
+
+=== 회원가입
+
+==== 회원가입 (성공)
+include::{snippets}/signup/http-request.adoc[]
+include::{snippets}/signup/http-response.adoc[]
+
+==== 회원가입 (실패: 이미 존재하는 이메일)
+include::{snippets}/signup/duplicated_email/http-request.adoc[]
+include::{snippets}/signup/duplicated_email/http-response.adoc[]
+
+== 예약 API
+
+=== 자리별 예약 조회
+
+==== 자리별 예약 조회 (성공)
+include::{snippets}/find_reservation_by_seat/http-request.adoc[]
+include::{snippets}/find_reservation_by_seat/http-response.adoc[]
+
+=== 회원별 예약 조회
+
+==== 회원별 예약 조회 (성공)
+include::{snippets}/find_reservation_by_member/http-request.adoc[]
+include::{snippets}/find_reservation_by_member/http-response.adoc[]
+
+==== 회원별 예약 조회 (실패: 인증되지 않은 사용자)
+include::{snippets}/find_reservation_by_member/unauthorized/http-request.adoc[]
+include::{snippets}/find_reservation_by_member/unauthorized/http-response.adoc[]
+
+=== 예약의 세부내용 조회
+
+==== 예약의 세부내용 조회 (성공)
+include::{snippets}/find_reservation_by_id/http-request.adoc[]
+include::{snippets}/find_reservation_by_id/http-response.adoc[]
+
+==== 예약의 세부내용 조회 (실패: 다른 사람의 예약 세부내용 조회)
+include::{snippets}/find_reservation_by_id/other_member/http-request.adoc[]
+include::{snippets}/find_reservation_by_id/other_member/http-response.adoc[]
+
+=== 예약 추가
+
+==== 예약 추가 (성공)
+include::{snippets}/add_reservation/http-request.adoc[]
+include::{snippets}/add_reservation/http-response.adoc[]
+
+==== 예약 추가 (실패: 이미 완료된 예약)
+include::{snippets}/add_reservation/already_reserved/http-request.adoc[]
+include::{snippets}/add_reservation/already_reserved/http-response.adoc[]
+
+==== 예약 추가 (실패: 과거 날짜로의 예약)
+include::{snippets}/add_reservation/past_date/http-request.adoc[]
+include::{snippets}/add_reservation/past_date/http-response.adoc[]
+
+=== 예약 수정
+
+==== 예약 수정 (성공)
+include::{snippets}/update_reservation/http-request.adoc[]
+include::{snippets}/update_reservation/http-response.adoc[]
+
+==== 예약 수정 (실패: 다른 회원의 예약 수정)
+include::{snippets}/update_reservation/other_member/http-request.adoc[]
+include::{snippets}/update_reservation/other_member/http-response.adoc[]
+
+=== 예약 삭제
+
+==== 예약 삭제 (성공)
+include::{snippets}/delete_reservation/http-request.adoc[]
+include::{snippets}/delete_reservation/http-response.adoc[]
+
+==== 예약 삭제 (실패: 다른 회원의 예약 삭제)
+include::{snippets}/delete_reservation/other_member/http-request.adoc[]
+include::{snippets}/delete_reservation/other_member/http-response.adoc[]
