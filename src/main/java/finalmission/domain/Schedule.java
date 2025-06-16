@@ -9,10 +9,34 @@ public record Schedule(
     LocalTime time
 ) {
 
-    public boolean isAvailableSchedule(final Schedule targetSchedule) {
-        return !((targetSchedule.room().equals(this.room())) &&
-            (targetSchedule.date().equals(this.date())) &&
-            !(targetSchedule.time().plusMinutes(59).isBefore(this.time())) &&
-            !(targetSchedule.time().isAfter(this.time().plusMinutes(59))));
+    public Schedule {
+        validateNonNull(room, date, time);
+    }
+
+    private void validateNonNull(
+        final Room room,
+        final LocalDate date,
+        final LocalTime time
+    ) {
+        if (room == null) {
+            throw new IllegalArgumentException("회의실은 필수입니다.");
+        }
+        if (date == null) {
+            throw new IllegalArgumentException("날짜는 필수입니다.");
+        }
+        if (time == null) {
+            throw new IllegalArgumentException("시간은 필수입니다.");
+        }
+    }
+
+    public boolean isConflictWith(final Schedule other) {
+        if (!this.room.equals(other.room) || !this.date.equals(other.date)) {
+            return false;
+        }
+
+        final LocalTime thisEndTime = this.time.plusMinutes(59);
+        final LocalTime otherEndTime = other.time.plusMinutes(59);
+
+        return !thisEndTime.isBefore(other.time) && !this.time.isAfter(otherEndTime);
     }
 }

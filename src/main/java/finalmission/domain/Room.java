@@ -7,12 +7,11 @@ import lombok.Getter;
 
 @Getter
 public enum Room {
-
-    임팩트("임팩트"),
-    백스윙("백스윙"),
-    피니시("피니시"),
-    톱오브스윙("톱오브스윙"),
-    어드레스("어드레스");
+    IMPACT("임팩트"),
+    BACKSWING("백스윙"),
+    FINISH("피니시"),
+    TOPOFSWING("톱오브스윙"),
+    ADDRESS("어드레스");
 
     private final String title;
 

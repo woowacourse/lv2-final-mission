@@ -16,6 +16,12 @@ spring:
 jwt:
   secret-key: s8R$kQz3nZ!L5pT7c@J#xM9vB1&uD6hE
 
+kasi:
+  base-url: https://apis.data.go.kr/B090041/openapi
+  secret-key: 2yUyrqooUJ111Di09rkgSJZcuDe6zeexdXax1oQM1pKnRu1B3GmjpoeUIzYzgwPYLA0SUDhoYSaFRAo9/Go6dw==
+  connect-timeout: 3000
+  read-timeout: 5000
+
 logging:
   level:
     org:

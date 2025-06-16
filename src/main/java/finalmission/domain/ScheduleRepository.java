@@ -1,8 +1,10 @@
 package finalmission.domain;
 
+import java.util.Optional;
+
 public interface ScheduleRepository {
 
     Ticket save(final Schedule schedule);
 
-    Schedule findByTicket(final Ticket ticket);
+    Optional<Schedule> findById(final Ticket ticket);
 }

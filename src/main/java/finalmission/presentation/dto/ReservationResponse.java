@@ -1,4 +1,4 @@
-package finalmission.dto;
+package finalmission.presentation.dto;
 
 import finalmission.domain.Reservation;
 import finalmission.domain.Schedule;
@@ -10,7 +10,8 @@ public record ReservationResponse(
     LocalDate date,
     LocalTime time,
     String crew,
-    String description
+    String description,
+    String status
 ) {
 
     public static ReservationResponse of(
@@ -18,6 +19,7 @@ public record ReservationResponse(
         final Reservation reservation
     ) {
         return new ReservationResponse(schedule.room().getTitle(), schedule.date(), schedule.time(),
-            reservation.getCrew(), reservation.getDescription());
+            reservation.getDetails().crew(), reservation.getDetails().description(),
+            reservation.getStatus().getTitle());
     }
 }

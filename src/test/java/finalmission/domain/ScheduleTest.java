@@ -13,7 +13,7 @@ class ScheduleTest {
 
     @ParameterizedTest
     @MethodSource("provideTargetScheduleCases")
-    void 이용가능한_스케줄인지_확인한다(
+    void 충돌이_발생하는_스케줄인지_확인한다(
         Schedule targetSchedule,
         boolean expected
     ) {
@@ -21,7 +21,7 @@ class ScheduleTest {
         var schedule = createSchedule(LocalTime.of(18, 0));
 
         // when
-        var result = schedule.isAvailableSchedule(targetSchedule);
+        var result = schedule.isConflictWith(targetSchedule);
 
         // then
         assertThat(result).isEqualTo(expected);
@@ -30,15 +30,15 @@ class ScheduleTest {
 
     static Stream<Arguments> provideTargetScheduleCases() {
         return Stream.of(
-            Arguments.of(createSchedule(LocalTime.of(17, 0)), true),
-            Arguments.of(createSchedule(LocalTime.of(17, 30)), false),
-            Arguments.of(createSchedule(LocalTime.of(18, 0)), false),
-            Arguments.of(createSchedule(LocalTime.of(18, 30)), false),
-            Arguments.of(createSchedule(LocalTime.of(19, 0)), true)
+            Arguments.of(createSchedule(LocalTime.of(17, 0)), false),
+            Arguments.of(createSchedule(LocalTime.of(17, 30)), true),
+            Arguments.of(createSchedule(LocalTime.of(18, 0)), true),
+            Arguments.of(createSchedule(LocalTime.of(18, 30)), true),
+            Arguments.of(createSchedule(LocalTime.of(19, 0)), false)
         );
     }
 
     private static Schedule createSchedule(LocalTime time) {
-        return new Schedule(Room.백스윙, LocalDate.of(2025, 6, 10), time);
+        return new Schedule(Room.IMPACT, LocalDate.of(2025, 6, 10), time);
     }
 }

@@ -1,4 +1,4 @@
-package finalmission.dto;
+package finalmission.presentation.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
