@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

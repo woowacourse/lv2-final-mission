@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import finalmission.application.MemberService;
 import finalmission.presentation.request.LoginRequest;

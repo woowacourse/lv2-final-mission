@@ -36,7 +36,6 @@ public class JwtMemberTokenProvider implements MemberTokenProvider {
             var memberRole = MemberRole.valueOf(payload.get(MEMBER_ROLE, String.class));
             return new AuthInfo(memberId, memberRole);
         } catch (JwtException e) {
-            System.out.println("e = " + e);
             throw new AuthenticationException("유효하지 않은 토큰입니다.");
         }
     }

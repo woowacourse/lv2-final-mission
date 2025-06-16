@@ -1,10 +1,10 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import finalmission.application.BookingService;
 import finalmission.domain.AuthInfo;
-import finalmission.domain.booking.Booking;
 import finalmission.presentation.request.BookingRequest;
 import finalmission.presentation.request.ModifyBookingRequest;
+import finalmission.presentation.response.BookingResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -34,8 +34,9 @@ public class BookingController {
     }
 
     @PatchMapping("/{id}")
-    public Booking modify(@PathVariable("id") final UUID id, final AuthInfo authInfo, @Valid @RequestBody final ModifyBookingRequest request) {
-        return bookingService.modifyDate(id, authInfo.memberId(), request.dateToModify());
+    public BookingResponse modify(@PathVariable("id") final UUID id, final AuthInfo authInfo, @Valid @RequestBody final ModifyBookingRequest request) {
+        var booking = bookingService.modifyDate(id, authInfo.memberId(), request.dateToModify());
+        return BookingResponse.from(booking);
     }
 
     @DeleteMapping("/{id}")
@@ -46,9 +47,10 @@ public class BookingController {
 
     @GetMapping("/mine")
     @ResponseStatus(HttpStatus.OK)
-    public List<Booking> getMyBookings(final AuthInfo authInfo) {
+    public List<BookingResponse> getMyBookings(final AuthInfo authInfo) {
         var memberId = authInfo.memberId();
-        return bookingService.getMyBookings(memberId);
+        var myBookings = bookingService.getMyBookings(memberId);
+        return BookingResponse.from(myBookings);
     }
 }
 

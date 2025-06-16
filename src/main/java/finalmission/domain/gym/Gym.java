@@ -28,6 +28,8 @@ public class Gym {
 
     public Gym(final String name, final Address address) {
         validateNameLength(name);
+        this.name = name;
+        this.address = address;
     }
 
     private void validateNameLength(final String name) {

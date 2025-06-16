@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import static finalmission.TestFixtures.anyBooking;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,6 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import finalmission.application.BookingService;
 import finalmission.domain.AuthInfo;
 import finalmission.domain.AuthenticationException;
+import finalmission.presentation.GlobalExceptionHandler;
+import finalmission.presentation.StubAuthInfoArgumentResolver;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDate;
 import java.util.List;
@@ -84,7 +86,7 @@ class BookingControllerTest {
                 .cookie(new Cookie("token", "token"))
             ).andDo(print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$..['id','member','gym','date']").exists());
+            .andExpect(jsonPath("$..['id', 'memberId', 'gymId', 'date']").exists());
     }
 
     @Test
@@ -113,7 +115,7 @@ class BookingControllerTest {
                     }
                     """)
             ).andExpect(status().isOk())
-            .andExpect(jsonPath("$..['id','member','gym','date']").exists());
+            .andExpect(jsonPath("$..['id', 'memberId', 'gymId', 'date']").exists());
     }
 
     @Test

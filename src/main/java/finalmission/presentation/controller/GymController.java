@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import finalmission.application.GymService;
 import finalmission.domain.AuthInfo;

@@ -1,4 +1,4 @@
-package finalmission.presentation;
+package finalmission.presentation.controller;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
@@ -9,6 +9,8 @@ import finalmission.application.GymService;
 import finalmission.domain.AuthInfo;
 import finalmission.domain.member.Address;
 import finalmission.domain.member.MemberRole;
+import finalmission.presentation.GlobalExceptionHandler;
+import finalmission.presentation.StubAuthInfoArgumentResolver;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
