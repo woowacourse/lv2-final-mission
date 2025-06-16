@@ -6,6 +6,7 @@ import finalmission.member.dto.SignupRequest;
 import finalmission.member.dto.SignupResponse;
 import finalmission.member.infrastructure.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberService {
@@ -16,6 +17,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    @Transactional
     public SignupResponse createUser(SignupRequest request) {
         Member member = Member.createWithoutId(request.name(), request.email(), request.password(), Role.USER);
         Member savedMember = memberRepository.save(member);

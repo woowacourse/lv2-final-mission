@@ -6,6 +6,7 @@ import finalmission.reservationtime.dto.ReservationTimeResponse;
 import finalmission.reservationtime.infrastructure.ReservationTimeRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReservationTimeService {
@@ -16,12 +17,14 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<ReservationTimeResponse> getReservationTimes() {
         return reservationTimeRepository.findAll().stream()
                 .map(ReservationTimeResponse::from)
                 .toList();
     }
 
+    @Transactional
     public ReservationTimeResponse save(ReservationTimeRequest request) {
 //        이미 존재하던 시간인지 중복 검증
         ReservationTime reservationTime = ReservationTime.createWithoutId(request.startAt());
@@ -29,6 +32,7 @@ public class ReservationTimeService {
         return ReservationTimeResponse.from(savedReservationTime);
     }
 
+    @Transactional
     public void delete(Long id) {
 //        해당 시간에 예약이 존재하는지 검증
         reservationTimeRepository.deleteById(id);

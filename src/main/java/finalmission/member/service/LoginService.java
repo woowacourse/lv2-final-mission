@@ -5,8 +5,8 @@ import finalmission.member.domain.Member;
 import finalmission.member.dto.LoginMember;
 import finalmission.member.dto.LoginRequest;
 import finalmission.member.infrastructure.MemberRepository;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LoginService {
@@ -19,6 +19,7 @@ public class LoginService {
         this.memberRepository = memberRepository;
     }
 
+    @Transactional
     public String loginAndReturnToken(LoginRequest request) {
         Member member = memberRepository.findByEmailAndPassword(
                 request.email(),
@@ -27,13 +28,11 @@ public class LoginService {
         return tokenProvider.createToken(member);
     }
 
+    @Transactional
     public LoginMember loginCheck(String token) {
         Long memberId = tokenProvider.getMemberId(token);
-        Optional<Member> member = memberRepository.findById(memberId);
-        if (member.isEmpty()) {
-            throw new IllegalArgumentException("유효하지 않은 회원입니다.");
-        }
-        Member findMember = member.get();
+        Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 회원입니다."));
         return new LoginMember(memberId, findMember.getName());
     }
 }
