@@ -4,8 +4,8 @@ public record SpcdeInfoConfirmRequest(
         String serviceKey,
 //        Integer pageNo,
 //        Integer numOfRows,
-        Integer solYear,
-        Integer solMonth,
+        String solYear,
+        String solMonth,
         String _type
 ) {
 }

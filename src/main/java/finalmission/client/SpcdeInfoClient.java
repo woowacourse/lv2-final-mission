@@ -1,31 +1,61 @@
 package finalmission.client;
 
-import finalmission.client.dto.SpcdeInfoConfirmRequest;
-import finalmission.client.dto.SpcdeInfoResponse;
-import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import finalmission.client.dto.SpcdeInfoResponseWrapper;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestClient;
 
 @Component
 public class SpcdeInfoClient {
 
-    private final RestClient spcdeInfoClient;
+    private static String serviceKey = "dhCJs0Hk87xeU6jKWLg1aOEjdX%2BmhaAxCezeT9NqSXQgKkXZmEBpihBbKecC97NMTFsIS6MS4xS%2B4OksX7gW6w%3D%3D";
 
-    public SpcdeInfoClient(RestClient spcdeInfoClient) {
-        this.spcdeInfoClient = spcdeInfoClient;
+    public static SpcdeInfoResponseWrapper holidayInfoAPI(String year, String month) throws java.io.IOException {
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo");
+        urlBuilder.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "=" + serviceKey);
+        urlBuilder.append("&" + URLEncoder.encode("solYear", "UTF-8") + "=" + URLEncoder.encode(year, "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("solMonth", "UTF-8") + "=" + URLEncoder.encode(month, "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
+
+        URL url = new URL(urlBuilder.toString());
+        System.out.println("요청url= " + urlBuilder.toString());
+
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-Type", "application/json");
+        System.out.println("response code: " + conn.getResponseCode());
+
+        BufferedReader rd;
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+
+        return stringToMap(sb.toString());
     }
 
-    public ResponseEntity<SpcdeInfoResponse> confirmRestInfo(@RequestParam SpcdeInfoConfirmRequest request) {
+    public static SpcdeInfoResponseWrapper stringToMap(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        SpcdeInfoResponseWrapper response = null;
+
         try {
-            return spcdeInfoClient.post()
-                    .uri("/SpcdeInfoService/getRestDeInfo")
-                    .body(request)
-                    .retrieve()
-                    .toEntity(SpcdeInfoResponse.class);
-        } catch (HttpStatusCodeException e) {
-            throw new IllegalArgumentException("공휴일 조회 api 응답에 실패하였습니다.");
+            response = mapper.readValue(json, SpcdeInfoResponseWrapper.class);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return response;
     }
 }
