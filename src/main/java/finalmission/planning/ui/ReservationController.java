@@ -41,7 +41,7 @@ public class ReservationController {
     @GetMapping("/{reservationId}")
     public ReservationResponse getReservationById(@PathVariable Long reservationId,
                                                   @CurrentUser CurrentUserInfo currentUserInfo) {
-        return reservationService.getById(reservationId, currentUserInfo);
+        return reservationService.getDetailById(reservationId, currentUserInfo);
     }
 
     @PutMapping("/{reservationId}")

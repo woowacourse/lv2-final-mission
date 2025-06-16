@@ -3,6 +3,7 @@ package finalmission.planning.ui.dto.response;
 import finalmission.planning.domain.ReservationSlot;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public record ReservationSlotResponse(
         Long id,
@@ -16,5 +17,11 @@ public record ReservationSlotResponse(
                 reservationSlot.getPlanDate().getDate(),
                 reservationSlot.getTimeSlot().getStartTime(),
                 reservationSlot.getTimeSlot().getEndTime());
+    }
+
+    public static List<ReservationSlotResponse> from(List<ReservationSlot> reservationSlots) {
+        return reservationSlots.stream()
+                .map(ReservationSlotResponse::from)
+                .toList();
     }
 }

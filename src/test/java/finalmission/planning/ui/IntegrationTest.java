@@ -1,5 +1,6 @@
 package finalmission.planning.ui;
 
+import finalmission.DBCleaner;
 import finalmission.planning.DBHelper;
 import finalmission.planning.auth.infra.JwtTokenProvider;
 import finalmission.planning.domain.User;
@@ -23,9 +24,17 @@ public abstract class IntegrationTest {
     @Autowired
     protected DBHelper dbHelper;
 
+    @Autowired
+    private DBCleaner dbCleaner;
+
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+    }
+
+    @BeforeEach
+    void cleanDatabase() {
+        dbCleaner.clean();
     }
 
     protected String saveNormalUserAndCreateToken() {

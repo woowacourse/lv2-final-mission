@@ -45,7 +45,7 @@ public class ReservationService {
         return ReservationResponse.from(reservations);
     }
 
-    public ReservationResponse getById(Long reservationId, CurrentUserInfo currentUserInfo) {
+    public ReservationResponse getDetailById(Long reservationId, CurrentUserInfo currentUserInfo) {
         Reservation reservation = getReservationByIdOrThrow(reservationId);
         validateAccessPermission(currentUserInfo, reservation);
         return ReservationResponse.from(reservation);

@@ -29,4 +29,9 @@ public class ReservationSlot {
         this.planDate = planDate;
         this.timeSlot = timeSlot;
     }
+
+    public void updateInfo(PlanDate newPlanDate, TimeSlot newTimeSlot) {
+        this.planDate = newPlanDate;
+        this.timeSlot = newTimeSlot;
+    }
 }
