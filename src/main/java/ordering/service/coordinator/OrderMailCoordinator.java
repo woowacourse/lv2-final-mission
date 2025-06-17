@@ -19,7 +19,7 @@ public class OrderMailCoordinator {
 
     public OrderResponse sendOrder(OrderRegister request) {
         OrderResponse response = orderService.registerOrder(request);
-        String result = mailService.sendMail();
+        String result = mailService.sendMail(response);
 
         if(result.equals("Accepted")) {
             throw new IllegalStateException();

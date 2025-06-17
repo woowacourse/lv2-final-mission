@@ -11,7 +11,7 @@ public record OrderResponse(
     String product,
     Long count,
     String emailStatus,
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")LocalDateTime createdAt) {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime createdAt) {
 
     public static OrderResponse from(Order order) {
         return new OrderResponse(
@@ -23,5 +23,13 @@ public record OrderResponse(
             order.getEmailStatus().getText(),
             order.getCreatedAt()
         );
+    }
+
+    public String toText() {
+        return "id: " + id
+            + "username: " + username
+            + "category: " + category
+            + "product: " + product
+            + "count: " + count;
     }
 }

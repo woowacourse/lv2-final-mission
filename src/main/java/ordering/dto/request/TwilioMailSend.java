@@ -7,6 +7,15 @@ public record TwilioMailSend(
     From from,
     List<Content> content) {
 
+    public static TwilioMailSend from(String toEmail, String subject, String fromEmail,
+        String contentValue) {
+        return new TwilioMailSend(
+            List.of(new Personalization(List.of(new To(toEmail)), subject)),
+            new From(fromEmail),
+            List.of(new Content("text/plain", contentValue))
+        );
+    }
+
     private record Personalization(
         List<To> to,
         String subject) {
