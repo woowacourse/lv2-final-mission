@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: lv2-final-mission
+  datasource:
+    url: jdbc:h2:mem:database
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+
+jwt:
+  secret-key: bkatwhn8gqo23ywudr8miawyuercn&Q#RJOViuyjroaj983yq2uahwlejchskhskugvqiw
+  validity-in-milliseconds: 30000
+
+api:
+  connection-timeout: 3000
+  read-timeout: 5000
+
+mailgun:
+  api-key: fdfd1f648f95761e74866134b5ad89a8-51afd2db-6ca1b6ce
