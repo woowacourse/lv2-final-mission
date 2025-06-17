@@ -25,10 +25,10 @@ class AlbumServiceTest {
     @Test
     @DisplayName("앨범 등록을 할 수 있다.")
     @Transactional
-    void can_save_album() {
+    void can_create_album() {
         AlbumRequest albumRequest = new AlbumRequest("test", "test", 0, LocalDate.of(2020, 5, 24), "test-spotify");
 
-        AlbumResponse saveAlbum = sut.save(albumRequest);
+        AlbumResponse saveAlbum = sut.create(albumRequest);
 
         Assertions.assertThat(saveAlbum.name()).isEqualTo(albumRequest.name());
         Assertions.assertThat(saveAlbum.artistName()).isEqualTo(albumRequest.artistName());

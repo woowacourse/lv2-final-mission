@@ -26,7 +26,7 @@ class MemberServiceTest {
     void can_sign_up() {
         MemberRequest request = new MemberRequest("test");
 
-        MemberResponse member = sut.save(request);
+        MemberResponse member = sut.create(request);
 
         Assertions.assertThat(member.name()).isEqualTo(request.name());
         Assertions.assertThat(memberRepository.existsById(member.name())).isTrue();
@@ -38,10 +38,10 @@ class MemberServiceTest {
     void dont_sign_up_duplicate_name() {
         MemberRequest request1 = new MemberRequest("test");
         MemberRequest request2 = new MemberRequest("test");
-        sut.save(request1);
+        sut.create(request1);
 
         // when-then
-        Assertions.assertThatThrownBy(() -> sut.save(request2))
+        Assertions.assertThatThrownBy(() -> sut.create(request2))
             .isInstanceOf(IllegalArgumentException.class);
     }
 }

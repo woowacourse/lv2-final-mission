@@ -13,7 +13,7 @@ public class AlbumService {
 
     private final AlbumRepository albumRepository;
 
-    public AlbumResponse save(final AlbumRequest request) {
+    public AlbumResponse create(final AlbumRequest request) {
         Album album = albumRepository.save(
             new Album(
                 request.name(),

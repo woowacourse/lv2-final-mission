@@ -13,7 +13,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberResponse save(MemberRequest request) {
+    public MemberResponse create(MemberRequest request) {
         if (memberRepository.existsById(request.name())) {
             throw new IllegalArgumentException("[ERROR] 중복된 이름입니다.");
         }

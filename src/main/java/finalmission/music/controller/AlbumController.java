@@ -21,7 +21,7 @@ public class AlbumController {
 
     @PostMapping("/albums")
     public ResponseEntity<AlbumResponse> save(@RequestBody final AlbumRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(albumService.save(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(albumService.create(request));
     }
 
     @GetMapping("/albums/{id}")

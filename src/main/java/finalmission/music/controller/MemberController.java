@@ -18,6 +18,6 @@ public class MemberController {
 
     @PostMapping("/members")
     public ResponseEntity<MemberResponse> create(@RequestBody final MemberRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.save(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.create(request));
     }
 }
