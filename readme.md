@@ -12,7 +12,8 @@
 - "/runningSessions" GET 요청으로 모든 사용자는 세션 예약 정보를 조회할 수 있다.
 - "/runningSessions/{id}" GET 요청으로 세션 생성자와 참가자는 세션의 상세정보를 조회할 수 있다.
   - [예외] 로그인 정보가 일치하지 않는 경우
-- "/runningSessions/{id}" UPDATE 요청으로 세션 생성자는 세션 정보를 수정 할 수 있다.
+- "/runningSessions/{id}" PATCH 요청으로 세션 생성자는 세션 시간을 수정 할 수 있다.
+  - [예외] 수정한 시작시간이 끝나는 시간보다 느린 경우
 - "/runningSessions/{id}" DELETE 요청으로 세션 생성자는 세션을 삭제할 수 있다.
 - "/runningSessions/{id}/participants" DELETE 요청으로 세션 참가자는 러닝 세션 참가를 취소할 수 있다.
 
