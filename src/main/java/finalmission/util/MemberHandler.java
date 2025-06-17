@@ -34,8 +34,10 @@ public class MemberHandler implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
         Cookie[] cookies = httpServletRequest.getCookies();
-        Cookie foundCookie = Arrays.stream(cookies).filter(cookie -> cookie.getName() == "tocken").findAny()
-                .orElse(null);
+        Cookie foundCookie = Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("tocken")).findAny()
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException("없다.");
+                });
         String jwt = foundCookie.getValue();
         String secret = "since-jjwt-api-0.11-secret-key-must-be-longer-than-32-bytes";
         SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes());

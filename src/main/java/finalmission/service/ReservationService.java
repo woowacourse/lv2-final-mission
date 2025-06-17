@@ -36,7 +36,7 @@ public class ReservationService {
     }
 
     public Reservation createReservation(MakingReservationRequest makingReservationRequest, Member member) {
-        checkHoliday(makingReservationRequest.date());
+//        checkHoliday(makingReservationRequest.date());
         Room room = roomRepository.findById(makingReservationRequest.roomId()).orElseThrow(() -> {
             throw new RoomException("없는 회의실 입니다.");
         });

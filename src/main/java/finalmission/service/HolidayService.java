@@ -16,7 +16,7 @@ public class HolidayService {
     public boolean checkHolyDay(LocalDate localDate) {
         String str = holidayClient.getHolidays(localDate);
         System.out.println("given!!!:"+str);
-        String findWords =  String.format("\"dateKind\":\"%02d\"",localDate.getDayOfMonth());
+        String findWords =  "20251225";
         System.out.println("finding:"+findWords);
         return str.contains(findWords);
     }

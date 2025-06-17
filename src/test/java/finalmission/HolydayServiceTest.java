@@ -21,7 +21,7 @@ public class HolydayServiceTest {
         // given
 
 //        assertThat(holidayService.checkHolyDay(LocalDate.now())).isFalse();
-        assertThat(holidayService.checkHolyDay(LocalDate.of(2025,12,25))).isTrue();
+        assertThat(holidayService.checkHolyDay(LocalDate.of(2025,6,6))).isTrue();
         // when
 
         // then

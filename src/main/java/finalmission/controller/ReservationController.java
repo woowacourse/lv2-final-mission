@@ -6,18 +6,22 @@ import finalmission.dto.MakingReservationRequest;
 import finalmission.service.ReservationService;
 import java.net.URI;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/reservation")
+@RestController
+@RequestMapping("/reservation")
 public class ReservationController {
 
-    @Autowired
-    ReservationService reservationService;
+    private final ReservationService reservationService;
+
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
 
     @GetMapping
     ResponseEntity<List<Reservation>> getAllReservations() {
@@ -26,7 +30,8 @@ public class ReservationController {
     }
 
     @PostMapping
-    ResponseEntity<Reservation> createReservaiton(@RequestBody MakingReservationRequest request, Member member){
+    ResponseEntity<Reservation> createReservation(@RequestBody MakingReservationRequest request, Member member) {
+        System.out.println("hihi");
         return ResponseEntity.created(URI.create("/reservation")).body(reservationService.createReservation(request,member));
     }
 }

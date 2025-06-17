@@ -7,6 +7,7 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class SignupController {
 
     @Autowired
-    MemberService memberService;
+    private MemberService memberService;
 
     @PostMapping
-    ResponseEntity<Member> signUp(SignUpInfo signUpInfo) {
+    ResponseEntity<Member> signUp(@RequestBody SignUpInfo signUpInfo) {
         return ResponseEntity.created(URI.create("/signup"))
                 .body(memberService.createMember(signUpInfo));
     }

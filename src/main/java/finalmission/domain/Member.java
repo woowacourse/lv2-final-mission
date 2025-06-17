@@ -46,7 +46,7 @@ public class Member {
     }
 
     private void validateName(String name) {
-        if (name.isBlank()) {
+        if (name == null || name.isBlank() ) {
             throw new MemberException("이름 없이는 멤버를 생성할 수 없습니다.");
         }
     }
