@@ -2,11 +2,11 @@ package finalmission.running.service;
 
 import finalmission.member.domain.Member;
 import finalmission.member.dto.response.LoginInfo;
-import finalmission.member.exception.UnauthorizedException;
-import finalmission.member.repository.MemberRepository;
+import finalmission.member.service.LoginService;
 import finalmission.running.domain.RunningSession;
 import finalmission.running.dto.request.ReservationRequest;
 import finalmission.running.dto.response.ReservationResponse;
+import finalmission.running.exception.ReservationException;
 import finalmission.running.repository.RunningReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class RunningReservationService {
 
     private final RunningReservationRepository reservationRepository;
-    private final MemberRepository memberRepository;
+    private final LoginService loginService;
 
     @Transactional
     public ReservationResponse createRunningReservation(ReservationRequest request, LoginInfo loginInfo) {
-        Member creator = memberRepository.findById(loginInfo.id())
-            .orElseThrow(() -> new UnauthorizedException("사용자를 찾을 수 없습니다."));
+        Member creator = loginService.findMember(loginInfo.id());
 
         RunningSession runningSession = RunningSession.createWithoutId(
             creator,
@@ -34,12 +33,11 @@ public class RunningReservationService {
 
         RunningSession save = reservationRepository.save(runningSession);
 
-        return new ReservationResponse(
-            save.getId(),
-            save.getCreator().getNickname(),
-            save.getDate(),
-            save.getStartAt(),
-            save.getEndTime()
-        );
+        return ReservationResponse.from(save);
+    }
+
+    public RunningSession findRunningSession(Long id) {
+        return reservationRepository.findById(id)
+            .orElseThrow(() -> new ReservationException("러닝 세션을 찾을 수 없습니다."));
     }
 }

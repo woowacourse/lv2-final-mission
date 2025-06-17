@@ -7,6 +7,7 @@ import finalmission.running.dto.response.ReservationResponse;
 import finalmission.running.service.RunningService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,5 +23,12 @@ public class RunningController {
         @RequestBody ReservationRequest request,
         @LoginMember LoginInfo loginInfo) {
         return ResponseEntity.ok(runningService.createRunningReservation(request, loginInfo));
+    }
+
+    @PostMapping("/runningSessions/{id}")
+    public ResponseEntity<ReservationResponse> joinRunningSession(
+        @PathVariable("id") Long id,
+        @LoginMember LoginInfo loginInfo) {
+        return ResponseEntity.ok(runningService.joinRunningReservation(id, loginInfo));
     }
 }

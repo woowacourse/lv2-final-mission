@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
@@ -72,5 +73,28 @@ public class RunningSession {
 
     public static RunningSession createWithoutId(Member creator, LocalDate date, LocalTime startAt, LocalTime endTime) {
         return new RunningSession(null, creator, date, startAt, endTime);
+    }
+
+    public boolean contains(Participant participant) {
+        return this.participants.contains(participant);
+    }
+
+    public void addParticipant(Participant participant) {
+        this.participants.add(participant);
+        if (!participant.hasSameRunningSession(this)) {
+            participant.setRunningSession(this);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        RunningSession that = (RunningSession) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

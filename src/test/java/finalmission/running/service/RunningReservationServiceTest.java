@@ -56,7 +56,8 @@ class RunningReservationServiceTest {
             "드라고",
             LocalDate.now().plusDays(1),
             LocalTime.of(10, 0),
-            LocalTime.of(11, 0)
+            LocalTime.of(11, 0),
+            List.of()
         );
         assertThat(result).isEqualTo(expected);
     }
