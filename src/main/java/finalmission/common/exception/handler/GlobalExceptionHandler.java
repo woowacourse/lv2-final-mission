@@ -2,6 +2,8 @@ package finalmission.common.exception.handler;
 
 import finalmission.member.exception.LoginException;
 import finalmission.member.exception.UnauthorizedException;
+import finalmission.running.exception.ReservationException;
+import finalmission.running.exception.WeatherException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,5 +20,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ProblemDetail handleUnauthorizedException(Exception e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
+    @ExceptionHandler(ReservationException.class)
+    public ProblemDetail handleReservationException(Exception e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(WeatherException.class)
+    public ProblemDetail handleWeatherException(Exception e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 }

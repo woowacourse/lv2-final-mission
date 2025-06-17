@@ -2,7 +2,7 @@ package finalmission.running.weather;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import finalmission.running.exception.ReservationException;
+import finalmission.running.exception.WeatherException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -23,7 +23,8 @@ public class WeatherApiClient {
     @Value("${weather.api.key}")
     private String weatherApiKey;
 
-    public String checkWeather(LocalDate date, LocalTime startAt, LocalTime endTime) {
+    // 지역코드 "11B00000"
+    public String checkWeather(String reg, LocalDate date, LocalTime startAt, LocalTime endTime) {
         String kstFormat = "yyyy-MM-dd HH:mm:ss";
         LocalDateTime start = date.atTime(startAt);
         LocalDateTime end = date.atTime(endTime);
@@ -32,7 +33,7 @@ public class WeatherApiClient {
         String weather = restClient.get()
             .uri(uriBuilder -> uriBuilder
                 .path("/api/typ01/url/fct_medm_reg.php")
-                .queryParam("reg", "11B00000")
+                .queryParam("reg", reg)
                 .queryParam("tmfc1", start.format(sdf))
                 .queryParam("tmfc2", end.format(sdf))
                 .queryParam("mode", 0)
@@ -48,7 +49,7 @@ public class WeatherApiClient {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readValue(weather, String.class);
         } catch (JsonProcessingException e) {
-            throw new ReservationException("기상정보가 잘못 전달되었습니다.");
+            throw new WeatherException("기상정보가 잘못 전달되었습니다.");
         }
     }
 }

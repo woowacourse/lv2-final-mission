@@ -33,7 +33,7 @@ public class RunningSession {
     @JoinColumn(name = "member_id")
     Member creator;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "participant")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "runningSession")
     List<Participant> participants = new ArrayList<>();
 
     LocalDate date;
