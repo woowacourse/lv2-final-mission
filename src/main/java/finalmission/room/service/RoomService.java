@@ -18,7 +18,7 @@ public class RoomService {
 
     public List<RoomResponse> getAllRooms() {
         return roomRepository.findAll().stream()
-                .map(room -> new RoomResponse(room.getName(), room.getCapacity()))
+                .map(room -> new RoomResponse(room.getId(), room.getName(), room.getCapacity()))
                 .toList();
     }
 }

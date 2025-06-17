@@ -37,7 +37,7 @@ public class ReservationService {
         Room room = getRoomById(request.roomId());
         Reservation reservation = new Reservation(null, request.date(), request.time(), request.description(), room, member);
         Reservation newReservation = reservationRepository.save(reservation);
-        ReservationResponse response = new ReservationResponse(newReservation.getId(), new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
+        ReservationResponse response = new ReservationResponse(newReservation.getId(), new RoomResponse(newReservation.getRoom().getId(), newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
 
         emailService.sendEmail(member.getEmail(), response);
 
@@ -51,7 +51,7 @@ public class ReservationService {
 
     public List<ReservationResponse> getAll() {
         return reservationRepository.findAll().stream()
-                .map(reservation -> new ReservationResponse(reservation.getId(), new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime()))
+                .map(reservation -> new ReservationResponse(reservation.getId(), new RoomResponse(reservation.getRoom().getId(), reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime()))
                 .toList();
     }
 
@@ -67,7 +67,7 @@ public class ReservationService {
 
         Reservation reservation = optionalReservation.get();
 
-        return new MyReservationResponse(new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime(), reservation.getDescription(), new MemberResponse(reservation.getMember().getName()));
+        return new MyReservationResponse(new RoomResponse(reservation.getRoom().getId(), reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime(), reservation.getDescription(), new MemberResponse(reservation.getMember().getName()));
     }
 
     @Transactional
@@ -86,7 +86,7 @@ public class ReservationService {
 
         Reservation newReservation = reservationRepository.save(new Reservation(oldReservation.getId(), request.date(), request.time(), request.description(), room, oldReservation.getMember()));
 
-        return new MyReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime(), newReservation.getDescription(), new MemberResponse(newReservation.getMember().getName()));
+        return new MyReservationResponse(new RoomResponse(newReservation.getRoom().getId(), newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime(), newReservation.getDescription(), new MemberResponse(newReservation.getMember().getName()));
     }
 
     @Transactional
