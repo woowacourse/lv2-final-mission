@@ -32,7 +32,7 @@ class MemberControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/login")
                 .then().log().all()
-                .statusCode(500);
+                .statusCode(400);
 
         RestAssured.given().log().all()
                 .body(new SignupRequest("Solar", "4@a.com", "wooteco7"))
