@@ -1,9 +1,11 @@
 package finalmission.application;
 
+import finalmission.client.MailClient;
 import finalmission.domain.Car;
 import finalmission.domain.Member;
 import finalmission.domain.Rent;
 import finalmission.domain.repository.CarRepository;
+import finalmission.domain.repository.MemberCredentialRepository;
 import finalmission.domain.repository.RentRepository;
 import finalmission.dto.RequestRent;
 import finalmission.dto.ResponseRent;
@@ -19,18 +21,39 @@ public class RentService {
 
     private final CarRepository carRepository;
     private final RentRepository rentRepository;
+    private final MemberCredentialRepository memberCredentialRepository;
+    private final MailClient mailClient;
 
     @Transactional
     public Long rent(Member member, RequestRent requestRent) {
         Car car = getCar(requestRent);
         validateExistsTime(car, requestRent);
-        validateExistsRent(member, car, requestRent);
+        validateExistsRent(member, requestRent);
         Rent rent = createRent(member, car, requestRent);
         Rent savedRent = rentRepository.save(rent);
+        sendCheckMail(member, requestRent, car);
         return savedRent.getId();
     }
 
-    private void validateExistsRent(Member member, Car car, RequestRent requestRent) {
+    private void sendCheckMail(Member member, RequestRent requestRent, Car car) {
+        mailClient.send(
+                getMemberEmail(member),
+                "렌트 예약 확인",
+                String.format("차량: %s, 날짜: %s, 시작 시간: %s, 반납 시간: %s",
+                        car.getName(),
+                        requestRent.date(),
+                        requestRent.startTime(),
+                        requestRent.returnTime())
+        );
+    }
+
+    private String getMemberEmail(Member member) {
+        return memberCredentialRepository.findById(member.getId())
+                .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."))
+                .getEmail();
+    }
+
+    private void validateExistsRent(Member member, RequestRent requestRent) {
         boolean existsRent = rentRepository.existsByMemberAndDateAndStartTimeGreaterThanEqualAndReturnTimeLessThanEqual(
                 member,
                 requestRent.date(),

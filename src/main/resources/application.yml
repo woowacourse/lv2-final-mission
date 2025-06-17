@@ -18,7 +18,7 @@ spring:
 security:
   jwt:
     token:
-      raw-secret-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.ih1aovtQShabQ7l0cINw4k1fagApg3qLWiB8Kt59Lno
-holiday:
-  base-url: https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService
-  secret-key: FmkstPMhTmLgqTbw3Jx86Q6jEWbYaQwZS53BsuxCdk3bRPN%2BpYEIiUTfJm8Xv6mymMv3gJPul74XrA5AYzDZcw%3D%3D
+      raw-secret-key: ${RAW_SECRET_KEY}
+mail:
+  api-key: ${MAIL_API_KEY}
+  from: ${MAIL_FROM}

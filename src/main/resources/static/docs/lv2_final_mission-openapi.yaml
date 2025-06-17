@@ -4,7 +4,7 @@ info:
   description: "차량을 등록하고, 대여 및 반납을 관리하는 API입니다."
   version: "1.0.0"
 servers:
-  - url: "https://lv2_final_mission"
+  - url: "http://localhost:8080"
 paths:
   /signup:
     post:
