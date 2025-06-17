@@ -20,12 +20,10 @@ public class Party extends BaseEntity {
     }
 
     public void open() {
-        requireClose();
         this.partyStatus = PartyStatus.OPEN;
     }
 
     public void close() {
-        requireOpen();
         this.partyStatus = PartyStatus.CLOSED;
     }
 
@@ -34,12 +32,5 @@ public class Party extends BaseEntity {
             return;
         }
         throw new IllegalStateException("마감인데요?");
-    }
-
-    private void requireClose() {
-        if (partyStatus.isClosed()) {
-            return;
-        }
-        throw new IllegalStateException("진행 중인데요?");
     }
 }

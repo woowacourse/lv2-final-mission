@@ -13,20 +13,14 @@ public class PartyStatusUpdater {
     private final PartyFinder partyFinder;
 
     public void open(final Long id) {
-        final Party party = partyFinder.getById(id);
-        party.open();
+        getParty(id).open();
     }
 
     public void close(final Long id) {
-        final Party party = partyFinder.getById(id);
-        party.close();
+        getParty(id).close();
     }
 
-    public void openIfClosed(final Long id) {
-        try {
-            open(id);
-        } catch (final IllegalStateException ignored) {
-            // 그럴 수 있지...
-        }
+    private Party getParty(final Long id) {
+        return partyFinder.getById(id);
     }
 }

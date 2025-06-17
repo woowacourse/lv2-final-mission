@@ -1,4 +1,4 @@
-package finalmission.facade.application;
+package finalmission.matchmaking.application;
 
 import finalmission.apply.application.ApplyFinder;
 import finalmission.apply.domain.Apply;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GetApplyUseCase {
+public class GetMatchMakingUseCase {
 
     private final PlayerFinder playerFinder;
     private final ApplyFinder applyFinder;

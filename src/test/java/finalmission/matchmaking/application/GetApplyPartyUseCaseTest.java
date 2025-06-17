@@ -1,4 +1,4 @@
-package finalmission.facade.application;
+package finalmission.matchmaking.application;
 
 import finalmission.apply.domain.Apply;
 import finalmission.apply.infrastructure.ApplyRepository;
@@ -20,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GetApplyPartyUseCaseTest {
 
     @Autowired
-    private GetApplyUseCase getApplyUseCase;
+    private GetMatchMakingUseCase getMatchMakingUseCase;
 
     @Autowired
-    private CreateApplyUseCase createApplyUseCase;
+    private JoinMatchMakingUseCase joinMatchMakingUseCase;
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -41,8 +41,8 @@ class GetApplyPartyUseCaseTest {
         final Player p1 = playerRepository.save(Player.of("p1", "pw", PlayerStatus.STOP));
         final Player p2 = playerRepository.save(Player.of("p2", "pw", PlayerStatus.STOP));
 
-        createApplyUseCase.execute(p1.getNickname());
-        createApplyUseCase.execute(p2.getNickname());
+        joinMatchMakingUseCase.execute(p1.getNickname());
+        joinMatchMakingUseCase.execute(p2.getNickname());
 
         applyRepository.save(Apply.of(12L, p1.getId()));
         applyRepository.save(Apply.of(123L, p1.getId()));
@@ -50,8 +50,8 @@ class GetApplyPartyUseCaseTest {
         applyRepository.save(Apply.of(12345L, p1.getId()));
 
         // when
-        final List<Apply> p1Apply = getApplyUseCase.execute(p1.getNickname());
-        final List<Apply> p2Apply = getApplyUseCase.execute(p2.getNickname());
+        final List<Apply> p1Apply = getMatchMakingUseCase.execute(p1.getNickname());
+        final List<Apply> p2Apply = getMatchMakingUseCase.execute(p2.getNickname());
 
         // then
         assertThat(p1Apply.size()).isEqualTo(5);

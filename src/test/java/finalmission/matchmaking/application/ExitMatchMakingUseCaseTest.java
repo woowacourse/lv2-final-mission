@@ -1,4 +1,4 @@
-package finalmission.facade.application;
+package finalmission.matchmaking.application;
 
 import finalmission.party.domain.Party;
 import finalmission.party.domain.PartyStatus;
@@ -17,13 +17,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class DeleteApplyUseCaseTest {
+class ExitMatchMakingUseCaseTest {
 
     @Autowired
-    private DeleteApplyUseCase deleteApplyUseCase;
+    private ExitMatchMakingUseCase exitMatchMakingUseCase;
 
     @Autowired
-    private CreateApplyUseCase createApplyUseCase;
+    private JoinMatchMakingUseCase joinMatchMakingUseCase;
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -36,11 +36,11 @@ class DeleteApplyUseCaseTest {
         // given
         final Player player = playerRepository.save(Player.of("nickname", "pw", PlayerStatus.STOP));
         final PlayerStatus playerStatusBeforeCreateApply = player.getPlayerStatus();
-        createApplyUseCase.execute(player.getNickname());
+        joinMatchMakingUseCase.execute(player.getNickname());
 
         final PlayerStatus playerStatusBeforeDeleteApply = player.getPlayerStatus();
         // when
-        deleteApplyUseCase.execute(player.getNickname());
+        exitMatchMakingUseCase.execute(player.getNickname());
 
         // then
         final PlayerStatus playerStatusAfterDeleteApply = player.getPlayerStatus();
@@ -56,10 +56,10 @@ class DeleteApplyUseCaseTest {
         final Player p2 = playerRepository.save(Player.of("p2", "pw", PlayerStatus.STOP));
         final Player p3 = playerRepository.save(Player.of("p3", "pw", PlayerStatus.STOP));
         final Player p4IsMe = playerRepository.save(Player.of("p4", "pw", PlayerStatus.STOP));
-        createApplyUseCase.execute(p1.getNickname());
-        createApplyUseCase.execute(p2.getNickname());
-        createApplyUseCase.execute(p3.getNickname());
-        createApplyUseCase.execute(p4IsMe.getNickname());
+        joinMatchMakingUseCase.execute(p1.getNickname());
+        joinMatchMakingUseCase.execute(p2.getNickname());
+        joinMatchMakingUseCase.execute(p3.getNickname());
+        joinMatchMakingUseCase.execute(p4IsMe.getNickname());
 
         final List<Party> parties = partyRepository.findAll();
         assert(parties.size() == 1);
@@ -67,7 +67,7 @@ class DeleteApplyUseCaseTest {
         final PartyStatus partyStatusBeforeDeleteApply = party.getPartyStatus();
 
         // when
-        deleteApplyUseCase.execute(p4IsMe.getNickname());
+        exitMatchMakingUseCase.execute(p4IsMe.getNickname());
 
         // then
         assertThat(partyStatusBeforeDeleteApply).isEqualTo(PartyStatus.CLOSED);

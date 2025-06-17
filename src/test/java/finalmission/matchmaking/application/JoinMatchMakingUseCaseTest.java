@@ -1,4 +1,4 @@
-package finalmission.facade.application;
+package finalmission.matchmaking.application;
 
 import finalmission.party.domain.Party;
 import finalmission.party.domain.PartyStatus;
@@ -18,10 +18,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
-class CreateApplyUseCaseTest {
+class JoinMatchMakingUseCaseTest {
 
     @Autowired
-    private CreateApplyUseCase createApplyUseCase;
+    private JoinMatchMakingUseCase joinMatchMakingUseCase;
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -36,7 +36,7 @@ class CreateApplyUseCaseTest {
         final PlayerStatus playerStatusBeforeCreateApply = player.getPlayerStatus();
 
         // when
-        createApplyUseCase.execute(player.getNickname());
+        joinMatchMakingUseCase.execute(player.getNickname());
 
         // then
         assertThat(playerStatusBeforeCreateApply).isEqualTo(PlayerStatus.STOP);
@@ -52,7 +52,7 @@ class CreateApplyUseCaseTest {
 
         // when
         // then
-        assertThatThrownBy(() -> createApplyUseCase.execute(player.getNickname()))
+        assertThatThrownBy(() -> joinMatchMakingUseCase.execute(player.getNickname()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("넌 이미 진행 중이다");
     }
@@ -63,9 +63,9 @@ class CreateApplyUseCaseTest {
         final Player p1 = playerRepository.save(Player.of("p1", "pw", PlayerStatus.STOP));
         final Player p2 = playerRepository.save(Player.of("p2", "pw", PlayerStatus.STOP));
         final Player p3 = playerRepository.save(Player.of("p3", "pw", PlayerStatus.STOP));
-        createApplyUseCase.execute(p1.getNickname());
-        createApplyUseCase.execute(p2.getNickname());
-        createApplyUseCase.execute(p3.getNickname());
+        joinMatchMakingUseCase.execute(p1.getNickname());
+        joinMatchMakingUseCase.execute(p2.getNickname());
+        joinMatchMakingUseCase.execute(p3.getNickname());
 
         final List<Party> parties = partyRepository.findAll();
         assert(parties.size() == 1);
@@ -75,7 +75,7 @@ class CreateApplyUseCaseTest {
         final Player me = playerRepository.save(Player.of("me", "pw", PlayerStatus.STOP));
 
         // when
-        createApplyUseCase.execute(me.getNickname());
+        joinMatchMakingUseCase.execute(me.getNickname());
 
         // then
         assertThat(partyStatusBeforeCreateApply).isEqualTo(PartyStatus.OPEN);
@@ -91,17 +91,17 @@ class CreateApplyUseCaseTest {
         final Player p2 = playerRepository.save(Player.of("p2", "pw", PlayerStatus.STOP));
         final Player p3 = playerRepository.save(Player.of("p3", "pw", PlayerStatus.STOP));
         final Player p4 = playerRepository.save(Player.of("p4", "pw", PlayerStatus.STOP));
-        createApplyUseCase.execute(p1.getNickname());
-        createApplyUseCase.execute(p2.getNickname());
-        createApplyUseCase.execute(p3.getNickname());
-        createApplyUseCase.execute(p4.getNickname());
+        joinMatchMakingUseCase.execute(p1.getNickname());
+        joinMatchMakingUseCase.execute(p2.getNickname());
+        joinMatchMakingUseCase.execute(p3.getNickname());
+        joinMatchMakingUseCase.execute(p4.getNickname());
 
         final int partyCountBeforeCreateApply = partyRepository.findAll().size();
 
         final Player me = playerRepository.save(Player.of("me", "pw", PlayerStatus.STOP));
 
         // when
-        createApplyUseCase.execute(me.getNickname());
+        joinMatchMakingUseCase.execute(me.getNickname());
         // then
         assertThat(partyCountBeforeCreateApply).isEqualTo(1);
 

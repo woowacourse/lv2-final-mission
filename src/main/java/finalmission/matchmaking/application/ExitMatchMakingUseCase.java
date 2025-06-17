@@ -1,4 +1,4 @@
-package finalmission.facade.application;
+package finalmission.matchmaking.application;
 
 import finalmission.apply.application.ApplyDeleter;
 import finalmission.apply.application.ApplyFinder;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class DeleteApplyUseCase {
+public class ExitMatchMakingUseCase {
 
     private final PlayerFinder playerFinder;
     private final ApplyFinder applyFinder;
@@ -28,6 +28,6 @@ public class DeleteApplyUseCase {
 
         playerStatusUpdater.stop(playerId);
         final Long partyId = target.getPartyId();
-        partyStatusUpdater.openIfClosed(partyId);
+        partyStatusUpdater.open(partyId);
     }
 }

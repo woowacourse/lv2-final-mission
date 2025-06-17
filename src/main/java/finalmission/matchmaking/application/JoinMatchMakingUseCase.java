@@ -1,4 +1,4 @@
-package finalmission.facade.application;
+package finalmission.matchmaking.application;
 
 import finalmission.apply.application.ApplyCounter;
 import finalmission.apply.application.ApplyCreator;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CreateApplyUseCase {
+public class JoinMatchMakingUseCase {
 
     private final PlayerFinder playerFinder;
     private final VacancyGetter vacancyGetter;
@@ -26,7 +26,7 @@ public class CreateApplyUseCase {
         final Long playerId = playerFinder.getIdByNickname(nickname);
 
         final Long partyId = vacancyGetter.execute();
-        final Long applyId = applyCreator.execute(partyId, playerId);
+        applyCreator.execute(partyId, playerId);
         playerStatusUpdater.go(playerId);
 
         final int count = applyCounter.executeByPartyId(partyId);
