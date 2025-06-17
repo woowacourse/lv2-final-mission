@@ -71,6 +71,19 @@ class NicknameReservationServiceTest {
                 .hasMessage("이미 예약 중인 닉네임입니다.");
     }
 
+    @DisplayName("닉네임이 중복될 시 예외가 발생한다")
+    @Test
+    void aaaab() {
+        // when
+        NicknameReservation reservation = nicknameReservationService.reserve("레오", savedMember.getId());
+        nicknameReservationService.confirm(reservation.getId(), savedMember.getId());
+
+        // then
+        assertThatThrownBy(() -> nicknameReservationService.reserve("히포", savedMember.getId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 확정된 닉네임이 있습니다.");
+    }
+
     @DisplayName("예약을 취소할 수 있다")
     @Test
     void aaaaa() {
@@ -94,6 +107,47 @@ class NicknameReservationServiceTest {
 
         // when, then
         assertThatThrownBy(() -> nicknameReservationService.cancel(savedReservation.getId(), otherMemberId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 예약에 대한 삭제 권한이 없습니다.");
+    }
+
+    @DisplayName("자신의 것이 아닌 예약을 취소할 경우 예외가 발생한다")
+    @Test
+    void aaaaaaa() {
+        // given
+        NicknameReservation savedReservation = nicknameReservationService.reserve("레오", savedMember.getId());
+        savedReservation.confirm();
+
+        // when, then
+        assertThatThrownBy(() -> nicknameReservationService.cancel(savedReservation.getId(), savedMember.getId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("확정된 예약은 취소할 수 없습니다.");
+    }
+
+    @DisplayName("예약을 확정하면 다른 예약은 취소된다")
+    @Test
+    void aaaaaaaa() {
+        // given
+        NicknameReservation savedReservation1 = nicknameReservationService.reserve("레오", savedMember.getId());
+        NicknameReservation savedReservation2 = nicknameReservationService.reserve("히포", savedMember.getId());
+
+        // when
+        nicknameReservationService.confirm(savedReservation1.getId(), savedMember.getId());
+
+        // then
+        List<NicknameReservation> reservations = fakeNicknameReservationRepository.findAll();
+        assertThat(reservations).containsExactly(savedReservation1);
+    }
+
+    @DisplayName("자신의 것이 아닌 예약을 확정할 경우 예외가 발생한다")
+    @Test
+    void aaaaaaaaa() {
+        // given
+        NicknameReservation savedReservation = nicknameReservationService.reserve("레오", savedMember.getId());
+        long otherMemberId = savedMember.getId() + 1;
+
+        // when, then
+        assertThatThrownBy(() -> nicknameReservationService.confirm(savedReservation.getId(), otherMemberId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 예약에 대한 삭제 권한이 없습니다.");
     }

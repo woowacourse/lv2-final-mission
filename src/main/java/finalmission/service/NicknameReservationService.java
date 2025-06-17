@@ -6,7 +6,9 @@ import finalmission.domain.NicknameReservation;
 import finalmission.repository.MemberRepository;
 import finalmission.repository.NicknameReservationRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class NicknameReservationService {
@@ -22,19 +24,20 @@ public class NicknameReservationService {
         this.memberRepository = memberRepository;
     }
 
+    /**
+     * TODO
+     * findAll 조회를 줄일 수 있지 않을까?
+     */
     public NicknameReservation reserve(String name, long memberId) {
         Nickname nickname = new Nickname(name);
         validateDuplicateName(nickname);
         Member member = getMember(memberId);
         validateReservationCount(member);
+        validateAlreadyConfirmed(member);
         NicknameReservation reservation = new NicknameReservation(member, nickname);
         return nicknameReservationRepository.save(reservation);
     }
 
-    /**
-     * TODO
-     * 리팩터링
-     */
     private void validateDuplicateName(Nickname nickname) {
         List<NicknameReservation> nicknameReservations = nicknameReservationRepository.findAll();
         for (NicknameReservation nicknameReservation : nicknameReservations) {
@@ -51,16 +54,42 @@ public class NicknameReservationService {
         }
     }
 
-    /**
-     * TODO
-     * 리팩터링
-     */
+    private void validateAlreadyConfirmed(Member member) {
+        List<NicknameReservation> nicknameReservations = nicknameReservationRepository.findAllByMember(member);
+        boolean alreadyConfirmed = nicknameReservations.stream()
+                .anyMatch(NicknameReservation::isConfirmed);
+        if (alreadyConfirmed) {
+            throw new IllegalArgumentException("이미 확정된 닉네임이 있습니다.");
+        }
+    }
+
+    @Transactional
+    public void confirm(long reservationId, long memberId) {
+        NicknameReservation reservation = getReservation(reservationId);
+        checkSameMember(reservation, memberId);
+        reservation.confirm();
+        cancelAnotherReservations(reservationId);
+    }
+
+    private void cancelAnotherReservations(long exceptionReservationId) {
+        findAll().stream()
+                .filter(r -> r.getId() != exceptionReservationId)
+                .forEach(nicknameReservationRepository::delete);
+    }
+
     public void cancel(long reservationId, long memberId) {
         NicknameReservation reservation = getReservation(reservationId);
+        if (reservation.isConfirmed()) {
+            throw new IllegalArgumentException("확정된 예약은 취소할 수 없습니다.");
+        }
+        checkSameMember(reservation, memberId);
+        nicknameReservationRepository.delete(reservation);
+    }
+
+    private void checkSameMember(NicknameReservation reservation, long memberId) {
         if (!reservation.hasSameMemberId(memberId)) {
             throw new IllegalArgumentException("해당 예약에 대한 삭제 권한이 없습니다.");
         }
-        nicknameReservationRepository.delete(reservation);
     }
 
     private NicknameReservation getReservation(long reservationId) {

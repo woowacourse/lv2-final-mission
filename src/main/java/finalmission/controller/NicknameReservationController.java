@@ -35,6 +35,15 @@ public class NicknameReservationController {
                 .body(new ReservationCreateResponse(reservation));
     }
 
+    @PostMapping("/{reservationId}/confirm")
+    public ResponseEntity<ReservationCreateResponse> confirm(
+            @PathVariable(value = "reservationId") long reservationId,
+            MemberInfo memberInfo
+    ) {
+        nicknameReservationService.confirm(reservationId, memberInfo.memberId());
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<Void> cancel(
             @PathVariable(value = "reservationId") long reservationId,
@@ -45,7 +54,7 @@ public class NicknameReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponse>> reserve() {
+    public ResponseEntity<List<ReservationResponse>> findAll() {
         List<NicknameReservation> reservations = nicknameReservationService.findAll();
         List<ReservationResponse> response = reservations.stream()
                 .map(ReservationResponse::new)

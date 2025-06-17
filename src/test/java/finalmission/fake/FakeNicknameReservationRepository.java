@@ -30,7 +30,7 @@ public class FakeNicknameReservationRepository implements NicknameReservationRep
 
     @Override
     public List<NicknameReservation> findAll() {
-        return Collections.unmodifiableList(reservations);
+        return List.copyOf(reservations);
     }
 
     @Override

@@ -2,6 +2,8 @@ package finalmission.domain;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,6 +22,9 @@ public class NicknameReservation {
     @Embedded
     Nickname nickname;
 
+    @Enumerated(value = EnumType.STRING)
+    ReservationStatus status;
+
     public NicknameReservation() {
     }
 
@@ -27,10 +32,22 @@ public class NicknameReservation {
         this.id = null;
         this.member = member;
         this.nickname = nickname;
+        this.status = ReservationStatus.RESERVE;
     }
 
     public boolean hasSameMemberId(long memberId) {
         return member.hasSameMemberId(memberId);
+    }
+
+    public void confirm() {
+        if (isConfirmed()) {
+            throw new IllegalArgumentException("이미 확정되었습니다.");
+        }
+        status = ReservationStatus.CONFIRM;
+    }
+
+    public boolean isConfirmed() {
+        return status == ReservationStatus.CONFIRM;
     }
 
     public Long getId() {
@@ -43,5 +60,9 @@ public class NicknameReservation {
 
     public Nickname getNickname() {
         return nickname;
+    }
+
+    public ReservationStatus getStatus() {
+        return status;
     }
 }
