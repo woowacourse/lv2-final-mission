@@ -93,14 +93,14 @@ public class AdminReservationService {
     )
     public void deleteAsAdmin(final Long reservationId) {
         final Reservation reservation = reservationRepository.getById(reservationId);
-
-        reservation.getReservationSlot().decreaseCurrentReservationCount();
+        final ReservationSlot reservationSlot = reservation.getReservationSlot();
+        reservationSlot.decreaseCurrentReservationCount();
         reservationRepository.deleteById(reservationId);
 
         final List<Member> waitingMembers = memberRepository.findAll();
         for (final Member waitingMember : waitingMembers) {
             emailDomainService.sendEmail(
-                    SendEmailRequest.waitingAlarm(waitingMember.getEmail())
+                    SendEmailRequest.alarmForWaiting(waitingMember.getEmail(), reservationSlot)
             );
         }
     }

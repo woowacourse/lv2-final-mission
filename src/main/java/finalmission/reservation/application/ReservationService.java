@@ -116,13 +116,14 @@ public class ReservationService {
             throw new AuthorizationException("본인이 아니면 예약을 삭제할 수 없습니다.");
         }
 
-        reservation.getReservationSlot().decreaseCurrentReservationCount();
+        final ReservationSlot reservationSlot = reservation.getReservationSlot();
+        reservationSlot.decreaseCurrentReservationCount();
         reservationRepository.deleteById(reservationId);
 
         final List<Member> waitingMembers = memberRepository.findAll();
         for (final Member waitingMember : waitingMembers) {
             emailDomainService.sendEmail(
-                    SendEmailRequest.waitingAlarm(waitingMember.getEmail())
+                    SendEmailRequest.alarmForWaiting(waitingMember.getEmail(), reservationSlot)
             );
         }
     }
