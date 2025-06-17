@@ -16,14 +16,8 @@ public class HolydayServiceTest {
 
     @DisplayName("외부 api 테스트")
     @Test
-    void apiTest() {
-        // given
-
+    void holyDayTest() {
         assertThat(holidayService.isHolyDay(LocalDate.now())).isFalse();
         assertThat(holidayService.isHolyDay(LocalDate.of(2025,6,6))).isTrue();
-        // when
-
-        // then
     }
-
 }
