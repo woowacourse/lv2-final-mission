@@ -45,7 +45,8 @@ public class ReservationService {
     }
 
     private Room getRoomById(Long id) {
-        return roomRepository.findById(id).orElseThrow();
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 방 id입니다."));
     }
 
     public List<ReservationResponse> getAll() {
@@ -81,7 +82,7 @@ public class ReservationService {
         }
 
         Reservation oldReservation = reservation.get();
-        Room room = roomRepository.findById(request.roomId()).orElseThrow();
+        Room room = getRoomById(request.roomId());
 
         Reservation newReservation = reservationRepository.save(new Reservation(oldReservation.getId(), request.date(), request.time(), request.description(), room, oldReservation.getMember()));
 

@@ -30,7 +30,8 @@ public class MemberService {
 
     public Member findMemberByToken(String token) {
         String payload = tokenProvider.getPayload(token);
-        return memberRepository.findById(Long.parseLong(payload)).orElseThrow();
+        return memberRepository.findById(Long.parseLong(payload))
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버입니다."));
     }
 
     public Cookie getMemberByCredentials(SigninRequest request) {
