@@ -2,6 +2,7 @@ package finalmission.reservation.application;
 
 import finalmission.member.application.out.MemberRepository;
 import finalmission.member.domain.Member;
+import finalmission.popupstore.application.PopupStorePolicy;
 import finalmission.popupstore.application.out.PopupStoreRepository;
 import finalmission.popupstore.domain.PopupStore;
 import finalmission.reservation.application.in.dto.Reserve;
@@ -23,6 +24,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final PopupStoreRepository popupStoreRepository;
+    private final PopupStorePolicy popupStorePolicy;
 
     @Transactional
     public void reserve(final Reserve command) {
@@ -33,39 +35,32 @@ public class ReservationService {
 
         LocalDateTime reservedAt = LocalDateTime.now();
 
-        boolean isFulledPopupStore = isFulledPopupStore(popupStore);
+        boolean isFulled = popupStorePolicy.isFulled(popupStore);
         Reservation reservation = Reservation.reserve(
-                reserver, popupStore, reservedAt, isFulledPopupStore
+                reserver, popupStore, reservedAt, isFulled
         );
 
         reservationRepository.save(reservation);
-    }
-
-    private boolean isFulledPopupStore(final PopupStore popupStore) {
-        int currentEnteredCount = reservationRepository.countByPopupStoreIdAndReservationStatus(
-                popupStore.getId(), ReservationStatus.ENTERED);
-
-        return popupStore.isFulled(currentEnteredCount);
     }
 
     public MyReservationWaitingCount getMyWaitingCount(final Long reservationId, final Long memberId) {
         Reservation myReservation = reservationRepository.findById(reservationId)
                 .orElseThrow();
 
-        List<Reservation> targetReservations = reservationRepository.findAllByPopupStoreAndReservationStatusOrderByReservedAtAsc(
+        List<Reservation> reservationsOfTargetPopupStore = reservationRepository.findAllByPopupStoreAndReservationStatusOrderByReservedAtAsc(
                 myReservation.getPopupStore(),
                 ReservationStatus.WAITING
         );
 
-        for (Reservation reservation : targetReservations) {
-            if (reservation.isMyReservation(memberId)) {
+        for (Reservation reservationOfTargetPopupStore : reservationsOfTargetPopupStore) {
+            if (reservationOfTargetPopupStore.isMine(memberId)) {
                 return new MyReservationWaitingCount(
-                        reservation.getId(),
-                        targetReservations.indexOf(reservation) + 1
+                        reservationOfTargetPopupStore.getId(),
+                        reservationsOfTargetPopupStore.indexOf(reservationOfTargetPopupStore) + 1
                 );
             }
         }
-        return new MyReservationWaitingCount(reservationId, 0);
+        return new MyReservationWaitingCount(reservationId, -1);
     }
 
     @Transactional
@@ -73,18 +68,23 @@ public class ReservationService {
         Reservation myReservation = reservationRepository.findById(reservationId)
                 .orElseThrow();
 
-        List<Reservation> targetReservations = reservationRepository.findAllByPopupStoreAndReservationStatusOrderByReservedAtAsc(
+        List<Reservation> reservationsOfTargetPopupStore = reservationRepository.findAllByPopupStoreAndReservationStatusOrderByReservedAtAsc(
                 myReservation.getPopupStore(),
                 ReservationStatus.ENTERED
         );
 
         int i;
-        for (i = 0; i < targetReservations.size(); i++) {
-            Reservation reservation = targetReservations.get(i);
-            if (reservation.isMyReservation(memberId)) {
+        for (i = 0; i < reservationsOfTargetPopupStore.size(); i++) {
+            Reservation reservation = reservationsOfTargetPopupStore.get(i);
+            if (reservation.isMine(memberId)) {
                 reservation.leave();
             }
         }
-        targetReservations.get(i).enter();
+
+        List<Reservation> waitings = reservationRepository.findAllByPopupStoreAndReservationStatusOrderByReservedAtAsc(
+                myReservation.getPopupStore(),
+                ReservationStatus.WAITING
+        );
+        waitings.getFirst().enter();
     }
 }

@@ -54,13 +54,13 @@ public class Reservation {
             final LocalDateTime reservedAt,
             final boolean isFulledPopupStore
     ) {
-        if (isFulledPopupStore) {
-            return new Reservation(reserver, popupStore, reservedAt, ReservationStatus.WAITING);
-        }
-        return new Reservation(reserver, popupStore, reservedAt, ReservationStatus.ENTERED);
+        ReservationStatus status = isFulledPopupStore
+                ? ReservationStatus.WAITING
+                : ReservationStatus.ENTERED;
+        return new Reservation(reserver, popupStore, reservedAt, status);
     }
 
-    public boolean isMyReservation(final Long memberId) {
+    public boolean isMine(final Long memberId) {
         return reserver.getId().equals(memberId);
     }
 
