@@ -26,7 +26,7 @@ public class ReservationSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Version
     private Long version;   // 낙관적 락을 위한 버전
 
@@ -82,7 +82,6 @@ public class ReservationSlot {
         }
         currentReservationCount--;
     }
-
 
     private void validateDate(final LocalDate date) {
         if (date == null) {
