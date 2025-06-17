@@ -45,4 +45,9 @@ public class Reservation {
     public Reservation(LocalDate date, ReservationTime time, Stall stall, Member member, Alias alias) {
         this(null, date, time, stall, member, alias);
     }
+
+    public void updateDateAndTime(final LocalDate date, final ReservationTime time) {
+        this.date = date;
+        this.time = time;
+    }
 }

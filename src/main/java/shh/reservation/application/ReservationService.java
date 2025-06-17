@@ -13,6 +13,7 @@ import shh.member.domain.repository.MemberRepository;
 import shh.reservation.application.dto.MyReservationResponse;
 import shh.reservation.application.dto.ReservationAddRequest;
 import shh.reservation.application.dto.ReservationAddResponse;
+import shh.reservation.application.dto.ReservationUpdateRequest;
 import shh.reservation.domain.Reservation;
 import shh.reservation.domain.ReservationTime;
 import shh.reservation.domain.repository.ReservationRepository;
@@ -52,6 +53,18 @@ public class ReservationService {
                 .toList();
     }
 
+    public void updateDateAndTime(
+            final Long memberId,
+            final Long id,
+            final ReservationUpdateRequest updateReservationTimeRequest
+    ) {
+        final Reservation reservation = getReservation(id);
+        validateOwnReservation(memberId, reservation);
+        validateDuplicateReservation(updateReservationTimeRequest.date(), updateReservationTimeRequest.time(),
+                reservation.getStall());
+        reservation.updateDateAndTime(updateReservationTimeRequest.date(), updateReservationTimeRequest.time());
+    }
+
     private void validateDuplicateReservation(
             final LocalDate date,
             final ReservationTime reservationTime,
@@ -60,6 +73,17 @@ public class ReservationService {
         if (reservationRepository.existsByDateAndTimeAndStall(date, reservationTime, stall)) {
             throw new BadRequestException("이미 예약되었습니다.");
         }
+    }
+
+    private void validateOwnReservation(final Long memberId, final Reservation reservation) {
+        if (!reservation.getMember().getId().equals(memberId)) {
+            throw new BadRequestException("사용자의 예약이 아닙니다.");
+        }
+    }
+
+    private Reservation getReservation(final Long id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("예약이 존재하지 않습니다."));
     }
 
     private ReservationTime getReservationTime(final Long timeId) {
