@@ -33,7 +33,7 @@ public class ReservationApiTest {
         RestAssured.port = port;
     }
 
-    @DisplayName("GET /schedules/{id}/reservations")
+    @DisplayName("POST /schedules/{id}/reservations")
     @Test
     void createReservation() {
         // given

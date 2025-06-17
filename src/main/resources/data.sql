@@ -6,29 +6,29 @@ INSERT INTO restaurant(name, address, description)
 VALUES ('식당3', '명륜동', '끝내줘요.');
 
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-11', '13:00', 20);
+VALUES (1, '2025-06-21', '13:00', 20);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-11', '14:00', 20);
+VALUES (1, '2025-06-21', '14:00', 20);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-11', '15:00', 20);
+VALUES (1, '2025-06-21', '15:00', 20);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-12', '13:00', 20);
+VALUES (1, '2025-06-22', '13:00', 20);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-12', '14:00', 20);
+VALUES (1, '2025-06-22', '14:00', 20);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-12', '15:00', 20);
+VALUES (1, '2025-06-22', '15:00', 20);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-13', '13:00', 20);
+VALUES (1, '2025-06-23', '13:00', 20);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-13', '14:00', 20);
+VALUES (1, '2025-06-23', '14:00', 20);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-13', '15:00', 20);
+VALUES (1, '2025-06-23', '15:00', 20);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-13', '18:00', 30);
+VALUES (1, '2025-06-23', '18:00', 30);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-13', '19:00', 30);
+VALUES (1, '2025-06-23', '19:00', 30);
 INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
-VALUES (1, '2025-06-13', '20:00', 30);
+VALUES (1, '2025-06-23', '20:00', 30);
 
 INSERT INTO reservation(schedule_id, number_of_guest, message, nickname, email, password)
 VALUES (1, 10, '10명 예약', '예약자1', 'juheedorothy@gamil.com', '1234');
