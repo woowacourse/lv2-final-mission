@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class RestaurantService {
+
     private final RestaurantRepository restaurantRepository;
 
     @Transactional
@@ -22,7 +23,8 @@ public class RestaurantService {
                 request.name(),
                 request.description(),
                 request.place(),
-                request.phoneNumber()
+                request.phoneNumber(),
+                request.maxReservationCount()
         );
         final Restaurant saved = restaurantRepository.save(restaurant);
 

@@ -1,6 +1,6 @@
 package finalmission.reservation.application;
 
-import finalmission.email.application.EmailService;
+import finalmission.email.domain.EmailDomainService;
 import finalmission.email.infrastructure.twilio.dto.SendEmailRequest;
 import finalmission.exception.auth.AuthorizationException;
 import finalmission.exception.resource.AlreadyExistException;
@@ -20,6 +20,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +34,14 @@ public class ReservationService {
     private final RestaurantRepository restaurantRepository;
     private final MemberRepository memberRepository;
     private final ReservationRepository reservationRepository;
-    private final EmailService emailService;
+    private final EmailDomainService emailDomainService;
 
     @Transactional
+    @Retryable(
+            retryFor = {OptimisticLockingFailureException.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 100)
+    )
     public ReservationResponse create(
             final CreateReservationRequest request,
             final Long memberId
@@ -41,30 +49,33 @@ public class ReservationService {
         final ReservationTime time = getReservationTime(request.date(), request.timeId());
         final Restaurant restaurant = restaurantRepository.getById(request.restaurantId());
         final Member member = memberRepository.getById(memberId);
+        final Reservation reservation
+                = createReservation(request.date(), time, restaurant, member, restaurant.getMaxReservationCount());
+        reservation.getReservationSlot().increaseCurrentReservationCount();
 
-        final Reservation reservation = createReservedReservation(
-                request.date(), time, restaurant, member
+        emailDomainService.sendEmail(
+                SendEmailRequest.confirmReservation(member.getEmail())
         );
-        emailService.sendEmail(SendEmailRequest.confirmReservation(member.getEmail()));
-        
+
         return ReservationResponse.from(reservation);
     }
 
-    private Reservation createReservedReservation(
+    private Reservation createReservation(
             final LocalDate date,
             final ReservationTime time,
             final Restaurant restaurant,
-            final Member member
+            final Member member,
+            final int maxReservationCount
     ) {
-        final ReservationSlot reservationSlot = new ReservationSlot(date, time, restaurant);
-
+        final ReservationSlot reservationSlot = new ReservationSlot(date, time, restaurant, maxReservationCount);
         if (reservationRepository.existsByReservationSlot(reservationSlot)) {
             throw new AlreadyExistException("해당 예약 슬롯에 예약이 있습니다.");
         }
+        if (reservationSlot.isFull()) {
+            throw new IllegalArgumentException("해당 음식점의 예약이 모두 찼습니다.");
+        }
 
-        final Reservation reservation = new Reservation(reservationSlot, member);
-
-        return reservationRepository.save(reservation);
+        return reservationRepository.save(new Reservation(reservationSlot, member));
     }
 
     private ReservationTime getReservationTime(final LocalDate date, final Long timeId) {
@@ -79,18 +90,26 @@ public class ReservationService {
     }
 
     @Transactional
+    @Retryable(
+            retryFor = {OptimisticLockingFailureException.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 100)
+    )
     public void deleteIfOwner(final Long reservationId, final Long memberId) {
         final Reservation reservation = reservationRepository.getById(reservationId);
         final Member member = memberRepository.getById(memberId);
-
         if (!Objects.equals(reservation.getMember(), member)) {
             throw new AuthorizationException("본인이 아니면 예약을 삭제할 수 없습니다.");
         }
 
+        reservation.getReservationSlot().decreaseCurrentReservationCount();
         reservationRepository.deleteById(reservationId);
-        List<Member> waitingMembers = memberRepository.findAll();
+
+        final List<Member> waitingMembers = memberRepository.findAll();
         for (final Member waitingMember : waitingMembers) {
-            emailService.sendEmail(SendEmailRequest.waitingAlarm(waitingMember.getEmail()));
+            emailDomainService.sendEmail(
+                    SendEmailRequest.waitingAlarm(waitingMember.getEmail())
+            );
         }
     }
 

@@ -1,5 +1,7 @@
 package finalmission.reservation.application;
 
+import finalmission.email.domain.EmailDomainService;
+import finalmission.email.infrastructure.twilio.dto.SendEmailRequest;
 import finalmission.exception.resource.AlreadyExistException;
 import finalmission.member.domain.Member;
 import finalmission.member.domain.MemberRepository;
@@ -15,6 +17,9 @@ import finalmission.restaurant.domain.RestaurantRepository;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,25 +31,37 @@ public class AdminReservationService {
     private final RestaurantRepository restaurantRepository;
     private final MemberRepository memberRepository;
     private final ReservationRepository reservationRepository;
+    private final EmailDomainService emailDomainService;
 
     @Transactional
+    @Retryable(
+            retryFor = {OptimisticLockingFailureException.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 100)
+    )
     public ReservationResponse create(final CreateReservationRequest request) {
         final ReservationTime time = reservationTimeRepository.getById(request.timeId());
         final Restaurant restaurant = restaurantRepository.getById(request.restaurantId());
         final Member member = memberRepository.getById(request.memberId());
+        final Reservation reservation
+                = createReservation(request.date(), time, restaurant, member, restaurant.getMaxReservationCount());
+        reservation.getReservationSlot().increaseCurrentReservationCount();
 
-        return ReservationResponse.from(
-                createReservation(request.date(), time, restaurant, member)
+        emailDomainService.sendEmail(
+                SendEmailRequest.confirmReservation(member.getEmail())
         );
+
+        return ReservationResponse.from(reservation);
     }
 
     private Reservation createReservation(
             final LocalDate date,
             final ReservationTime time,
             final Restaurant restaurant,
-            final Member member
+            final Member member,
+            final int maxReservationCount
     ) {
-        final ReservationSlot reservationSlot = new ReservationSlot(date, time, restaurant);
+        final ReservationSlot reservationSlot = new ReservationSlot(date, time, restaurant, maxReservationCount);
 
         if (reservationRepository.existsByReservationSlot(reservationSlot)) {
             throw new AlreadyExistException("해당 예약 슬롯에 예약이 있습니다.");
@@ -56,11 +73,23 @@ public class AdminReservationService {
     }
 
     @Transactional
+    @Retryable(
+            retryFor = {OptimisticLockingFailureException.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 100)
+    )
     public void deleteAsAdmin(final Long reservationId) {
         final Reservation reservation = reservationRepository.getById(reservationId);
 
+        reservation.getReservationSlot().decreaseCurrentReservationCount();
         reservationRepository.deleteById(reservationId);
-        // TODO: 대기자들에게 메일 알람
+
+        final List<Member> waitingMembers = memberRepository.findAll();
+        for (final Member waitingMember : waitingMembers) {
+            emailDomainService.sendEmail(
+                    SendEmailRequest.waitingAlarm(waitingMember.getEmail())
+            );
+        }
     }
 
     @Transactional(readOnly = true)

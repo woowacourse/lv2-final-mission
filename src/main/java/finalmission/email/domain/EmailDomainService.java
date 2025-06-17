@@ -1,13 +1,12 @@
-package finalmission.email.application;
+package finalmission.email.domain;
 
-import finalmission.email.domain.EmailClient;
 import finalmission.email.infrastructure.twilio.dto.SendEmailRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailDomainService {
 
     private final EmailClient emailClient;
 

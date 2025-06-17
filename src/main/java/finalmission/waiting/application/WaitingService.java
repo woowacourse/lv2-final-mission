@@ -43,16 +43,19 @@ public class WaitingService {
         final Restaurant restaurant = restaurantRepository.getById(request.restaurantId());
         final Member member = memberRepository.getById(memberId);
 
-        return WaitingResponse.from(createWaiting(request.date(), time, restaurant, member));
+        return WaitingResponse.from(
+                createWaiting(request.date(), time, restaurant, member, restaurant.getMaxReservationCount())
+        );
     }
 
     private Waiting createWaiting(
             final LocalDate date,
             final ReservationTime time,
             final Restaurant restaurant,
-            final Member member
+            final Member member,
+            final int maxReservationCount
     ) {
-        final ReservationSlot reservationSlot = new ReservationSlot(date, time, restaurant);
+        final ReservationSlot reservationSlot = new ReservationSlot(date, time, restaurant, maxReservationCount);
         final Reservation reservation = reservationRepository.findByReservationSlot(reservationSlot)
                 .orElseThrow(() -> new ResourceNotFoundException("예약이 없는 상태에서 예약 대기를 추가할 수 없습니다."));
 

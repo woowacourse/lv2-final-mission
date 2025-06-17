@@ -34,21 +34,27 @@ public class Restaurant {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
+    private int maxReservationCount;
+
     public Restaurant(
             final String name,
             final String description,
             final String place,
-            final String phoneNumber
+            final String phoneNumber,
+            final int maxReservationCount
     ) {
         validateName(name);
         validateDescription(description);
         validatePlace(place);
         validatePhoneNumber(phoneNumber);
+        validateMaxReservationCount(maxReservationCount);
 
         this.name = name;
         this.description = description;
         this.place = place;
         this.phoneNumber = phoneNumber;
+        this.maxReservationCount = maxReservationCount;
     }
 
     private void validateName(final String name) {
@@ -72,6 +78,12 @@ public class Restaurant {
     private void validatePhoneNumber(final String phoneNumber) {
         if (phoneNumber == null || phoneNumber.isBlank()) {
             throw new IllegalArgumentException("전화번호는 null 이거나 빈 문자열일 수 없습니다.");
+        }
+    }
+
+    private void validateMaxReservationCount(final int maxReservationCount) {
+        if (maxReservationCount < 0) {
+            throw new IllegalArgumentException("최대 예약 수는 0 미만일 수 없습니다.");
         }
     }
 }

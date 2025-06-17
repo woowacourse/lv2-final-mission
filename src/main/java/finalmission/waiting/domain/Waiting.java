@@ -2,8 +2,8 @@ package finalmission.waiting.domain;
 
 import finalmission.member.domain.Member;
 import finalmission.reservation.domain.ReservationSlot;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,7 +28,8 @@ public class Waiting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "reservation_slot_id", nullable = false)
     private ReservationSlot reservationSlot;
 
     @ManyToOne
