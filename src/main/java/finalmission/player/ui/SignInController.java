@@ -1,6 +1,6 @@
 package finalmission.player.ui;
 
-import finalmission.player.application.RegisterPlayerUseCase;
+import finalmission.player.application.usecase.RegisterPlayerUseCase;
 import finalmission.player.application.SignInRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

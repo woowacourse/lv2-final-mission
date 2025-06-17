@@ -4,6 +4,7 @@ import finalmission.apply.domain.Apply;
 import finalmission.matchmaking.application.JoinMatchMakingUseCase;
 import finalmission.matchmaking.application.ExitMatchMakingUseCase;
 import finalmission.matchmaking.application.GetMatchMakingUseCase;
+import finalmission.player.application.usecase.ValidatePlayerUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,26 +25,28 @@ public class MatchMakingController {
     private final GetMatchMakingUseCase getMatchMakingUseCase;
     private final JoinMatchMakingUseCase joinMatchMakingUseCase;
     private final ExitMatchMakingUseCase exitMatchMakingUseCase;
-
-    // TODO validation Password
+    private final ValidatePlayerUseCase validatePlayerUseCase;
 
     @GetMapping
-    public ResponseEntity<List<Apply>> get(@RequestBody final MatchMakingRequest matchMakingRequest) {
-        final List<Apply> result = getMatchMakingUseCase.execute(matchMakingRequest.nickname());
+    public ResponseEntity<List<Apply>> get(@RequestBody final UserInfo userInfo) {
+        validatePlayerUseCase.execute(userInfo);
+        final List<Apply> result = getMatchMakingUseCase.execute(userInfo.nickname());
 
         return ResponseEntity.ok(result);
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody final MatchMakingRequest matchMakingRequest) {
-        joinMatchMakingUseCase.execute(matchMakingRequest.nickname());
+    public ResponseEntity<String> create(@RequestBody final UserInfo userInfo) {
+        validatePlayerUseCase.execute(userInfo);
+        joinMatchMakingUseCase.execute(userInfo.nickname());
 
         return ResponseEntity.status(HttpStatus.CREATED).body("신청 성공");
     }
 
     @DeleteMapping
-    public ResponseEntity<String> delete(@RequestBody final MatchMakingRequest matchMakingRequest) {
-        exitMatchMakingUseCase.execute(matchMakingRequest.nickname());
+    public ResponseEntity<String> delete(@RequestBody final UserInfo userInfo) {
+        validatePlayerUseCase.execute(userInfo);
+        exitMatchMakingUseCase.execute(userInfo.nickname());
 
         return ResponseEntity.ok().body("삭제 완료");
     }

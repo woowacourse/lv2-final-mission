@@ -1,5 +1,7 @@
-package finalmission.player.application;
+package finalmission.player.application.usecase;
 
+import finalmission.player.application.PlayerFinder;
+import finalmission.player.application.SignInRequest;
 import finalmission.player.domain.Player;
 import finalmission.player.domain.PlayerStatus;
 import finalmission.player.infrastructure.PlayerRepository;

@@ -1,6 +1,6 @@
 package finalmission.matchmaking.ui;
 
-public record MatchMakingRequest(
+public record UserInfo(
         String nickname,
         String password
 ) {
