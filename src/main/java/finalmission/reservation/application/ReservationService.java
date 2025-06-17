@@ -2,7 +2,6 @@ package finalmission.reservation.application;
 
 import finalmission.member.application.out.MemberRepository;
 import finalmission.member.domain.Member;
-import finalmission.popupstore.application.PopupStorePolicy;
 import finalmission.popupstore.application.out.PopupStoreRepository;
 import finalmission.popupstore.domain.PopupStore;
 import finalmission.reservation.application.in.dto.Reserve;
@@ -25,7 +24,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final PopupStoreRepository popupStoreRepository;
-    private final PopupStorePolicy popupStorePolicy;
+    private final ReservationPolicy reservationPolicy;
 
     @Transactional
     public void reserve(final Reserve command) {
@@ -36,7 +35,7 @@ public class ReservationService {
 
         LocalDateTime reservedAt = LocalDateTime.now();
 
-        boolean isFulled = popupStorePolicy.isFulled(popupStore);
+        boolean isFulled = reservationPolicy.isFulled(popupStore);
         Reservation reservation = Reservation.reserve(
                 reserver, popupStore, reservedAt, isFulled
         );
@@ -45,10 +44,10 @@ public class ReservationService {
     }
 
     public MyReservationWaitingCount getMyWaitingCount(final Long reservationId, final Long memberId) {
-        Reservation myReservation = reservationRepository.findById(reservationId)
+        Reservation myReservation = reservationRepository.findWithPopupStoreAndReserverById(reservationId)
                 .orElseThrow();
 
-        List<Reservation> reservationsOfTargetPopupStore = reservationRepository.findAllByPopupStoreAndReservationStatusOrderByReservedAtAsc(
+        List<Reservation> reservationsOfTargetPopupStore = reservationRepository.findWithPopupStoreByPopupStoreAndReservationStatusOrderByReservedAtAsc(
                 myReservation.getPopupStore(),
                 ReservationStatus.WAITING
         );

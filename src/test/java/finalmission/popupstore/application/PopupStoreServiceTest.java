@@ -2,11 +2,12 @@ package finalmission.popupstore.application;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import finalmission.common.CleanUp;
 import finalmission.popupstore.application.in.dto.OpenPopUpStore;
-import finalmission.popupstore.application.out.PopupStoreRepository;
 import finalmission.shopkeeper.application.out.ShopkeeperRepository;
 import finalmission.shopkeeper.domain.Shopkeeper;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,12 @@ class PopupStoreServiceTest {
     @Autowired
     private ShopkeeperRepository shopkeeperRepository;
     @Autowired
-    private PopupStoreRepository popupStoreRepository;
+    private CleanUp cleanUp;
+
+    @BeforeEach
+    void setUp() {
+        cleanUp.all();
+    }
 
     private static Shopkeeper createShopkeeper() {
         return Shopkeeper.create("상점주 이름");

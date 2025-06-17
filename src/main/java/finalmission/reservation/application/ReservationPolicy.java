@@ -1,4 +1,4 @@
-package finalmission.popupstore.application;
+package finalmission.reservation.application;
 
 import finalmission.popupstore.domain.PopupStore;
 import finalmission.reservation.application.out.ReservationRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class PopupStorePolicy {
+public class ReservationPolicy {
 
     private final ReservationRepository reservationRepository;
 

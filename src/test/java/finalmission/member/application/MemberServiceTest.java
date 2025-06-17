@@ -2,9 +2,11 @@ package finalmission.member.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import finalmission.common.CleanUp;
 import finalmission.member.application.in.dto.SignupMember;
 import finalmission.member.application.out.client.RandomNicknameGenerator;
 import finalmission.member.application.out.dto.SignedMember;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +19,13 @@ class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private CleanUp cleanUp;
+
+    @BeforeEach
+    void setUp() {
+        cleanUp.all();
+    }
 
     @TestConfiguration
     static class RandomNicknameGeneratorTestConfig {
