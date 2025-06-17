@@ -12,7 +12,6 @@ import finalmission.reservation.repository.ReservationRepository;
 import finalmission.room.domain.Room;
 import finalmission.room.dto.RoomResponse;
 import finalmission.room.repository.RoomRepository;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,11 +40,9 @@ public class ReservationService {
         Reservation reservation = new Reservation(null, request.date(), request.time(), request.description(), room, member);
         Reservation newReservation = reservationRepository.save(reservation);
         ReservationResponse response = new ReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
-        try {
-            sendGridUtil.sendEmail(member.getEmail(), response);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        sendGridUtil.sendEmail(member.getEmail(), response);
+
         return response;
     }
 
