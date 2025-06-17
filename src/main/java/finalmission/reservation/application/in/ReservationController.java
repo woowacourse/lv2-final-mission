@@ -3,6 +3,8 @@ package finalmission.reservation.application.in;
 import finalmission.reservation.application.ReservationService;
 import finalmission.reservation.application.in.dto.Reserve;
 import finalmission.reservation.application.out.dto.MyReservationWaitingCount;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "예약 API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/reservations")
@@ -20,6 +23,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+    @Operation(summary = "예약하기 API")
     @PostMapping
     public ResponseEntity<Void> reserve(@RequestBody final Reserve request) {
         reservationService.reserve(request);
@@ -29,6 +33,7 @@ public class ReservationController {
                 .build();
     }
 
+    @Operation(summary = "대기 순번 조회 API")
     @GetMapping("/{reservationId}/waiting-count/{memberId}")
     public ResponseEntity<MyReservationWaitingCount> getMyWaitingCount(
             @PathVariable final Long reservationId,
@@ -40,6 +45,7 @@ public class ReservationController {
         return ResponseEntity.ok(myReservationWaitingCount);
     }
 
+    @Operation(summary = "대기 취소 API")
     @PostMapping("/{reservationId}/leave/{memberId}")
     public ResponseEntity<Void> leave(
             @PathVariable final Long reservationId,
@@ -51,5 +57,4 @@ public class ReservationController {
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
-
 }
