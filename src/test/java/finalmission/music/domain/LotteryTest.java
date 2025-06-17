@@ -1,5 +1,7 @@
 package finalmission.music.domain;
 
+import finalmission.music.album.domain.Album;
+import finalmission.music.lottery.domain.Lottery;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;

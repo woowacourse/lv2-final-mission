@@ -1,14 +1,13 @@
 package finalmission.music.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import finalmission.music.controller.dto.ReservationResponse;
-import finalmission.music.domain.Album;
-import finalmission.music.domain.Lottery;
-import finalmission.music.domain.Member;
-import finalmission.music.repository.AlbumRepository;
-import finalmission.music.repository.LotteryRepository;
-import finalmission.music.repository.MemberRepository;
+import finalmission.music.reservation.controller.dto.ReservationResponse;
+import finalmission.music.album.domain.Album;
+import finalmission.music.lottery.domain.Lottery;
+import finalmission.music.member.domain.Member;
+import finalmission.music.album.repository.AlbumRepository;
+import finalmission.music.lottery.repository.LotteryRepository;
+import finalmission.music.member.repository.MemberRepository;
+import finalmission.music.reservation.service.ReservationService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;

@@ -1,8 +1,9 @@
 package finalmission.music.service;
 
-import finalmission.music.controller.dto.MemberRequest;
-import finalmission.music.controller.dto.MemberResponse;
-import finalmission.music.repository.MemberRepository;
+import finalmission.music.member.controller.dto.MemberRequest;
+import finalmission.music.member.controller.dto.MemberResponse;
+import finalmission.music.member.service.MemberService;
+import finalmission.music.member.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

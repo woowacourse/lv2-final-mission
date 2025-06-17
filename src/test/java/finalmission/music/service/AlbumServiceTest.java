@@ -1,9 +1,10 @@
 package finalmission.music.service;
 
-import finalmission.music.controller.dto.AlbumRequest;
-import finalmission.music.controller.dto.AlbumResponse;
-import finalmission.music.domain.Album;
-import finalmission.music.repository.AlbumRepository;
+import finalmission.music.album.controller.dto.AlbumRequest;
+import finalmission.music.album.controller.dto.AlbumResponse;
+import finalmission.music.album.domain.Album;
+import finalmission.music.album.repository.AlbumRepository;
+import finalmission.music.album.service.AlbumService;
 import java.time.LocalDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

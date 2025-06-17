@@ -1,6 +1,6 @@
 package finalmission.music.global.auth.interceptor;
 
-import finalmission.music.domain.Member;
+import finalmission.music.member.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
