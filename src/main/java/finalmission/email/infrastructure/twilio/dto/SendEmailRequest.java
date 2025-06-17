@@ -8,7 +8,7 @@ public record SendEmailRequest(
         List<EmailContent> content
 ) {
 
-    private static final String DOMAIN_EMAIL = "threepebbles@naver.com";
+    private static final String DOMAIN_EMAIL = "wooheiler@gmail.com";
 
     public static SendEmailRequest confirmReservation(final String emailTo) {
         final List<EmailTo> emailTos = List.of(new EmailTo(emailTo));

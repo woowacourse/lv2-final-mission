@@ -2,7 +2,7 @@ spring:
   config:
     import: optional:application-secret.yml
   application:
-    name: lv2-final-mission
+    name: test
 
   h2:
     console:
@@ -10,7 +10,7 @@ spring:
       path: /h2-console
 
   datasource:
-    url: jdbc:h2:mem:database
+    url: jdbc:h2:mem:testdb
     username: sa
     password:
 
@@ -32,4 +32,3 @@ security:
     access-token:
       secret-key: since-jjwt-api-0.11-secret-key-must-be-longer-than-32-bytes
       validity-in-milliseconds: 900000 # 15 minutes
-
