@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import shh.common.exception.UnauthorizedException;
+import shh.common.exception.impl.UnauthorizedException;
 import shh.login.application.dto.Token;
 import shh.member.domain.Member;
 

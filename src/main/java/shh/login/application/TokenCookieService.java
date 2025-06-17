@@ -4,7 +4,7 @@ import jakarta.servlet.http.Cookie;
 import java.util.Arrays;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
-import shh.common.exception.UnauthorizedException;
+import shh.common.exception.impl.UnauthorizedException;
 
 @Service
 public class TokenCookieService {

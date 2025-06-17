@@ -9,7 +9,7 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import shh.common.exception.UnauthorizedException;
+import shh.common.exception.impl.UnauthorizedException;
 import shh.login.application.JwtService;
 import shh.login.application.TokenCookieService;
 import shh.login.application.dto.LoginCheckRequest;

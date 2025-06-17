@@ -2,7 +2,7 @@ package shh.member.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import shh.common.exception.NotFoundException;
+import shh.common.exception.impl.NotFoundException;
 import shh.member.domain.Email;
 import shh.member.domain.Member;
 import shh.member.domain.Password;
