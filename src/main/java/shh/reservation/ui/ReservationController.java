@@ -17,6 +17,7 @@ import shh.reservation.application.ReservationService;
 import shh.reservation.application.dto.MyReservationResponse;
 import shh.reservation.application.dto.ReservationAddRequest;
 import shh.reservation.application.dto.ReservationAddResponse;
+import shh.reservation.application.dto.ReservationResponse;
 import shh.reservation.application.dto.ReservationUpdateRequest;
 
 @Controller
@@ -58,5 +59,13 @@ public class ReservationController {
     ) {
         reservationService.deleteReservation(loginCheckRequest.id(), id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/reservations/{id}")
+    public ResponseEntity<List<ReservationResponse>> findReservationById(
+            @PathVariable("id") final Long stallId
+    ) {
+        final List<ReservationResponse> responses = reservationService.findReservationByStallId(stallId);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 }

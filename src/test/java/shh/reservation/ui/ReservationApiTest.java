@@ -104,4 +104,15 @@ class ReservationApiTest {
                 .then().log().all()
                 .statusCode(204);
     }
+
+    @Test
+    void stallId로_예약을_조회한다() {
+        RestAssured.given().log().all()
+                .cookie(TokenCookieService.COOKIE_TOKEN_KEY, token)
+                .contentType(ContentType.JSON)
+                .when().get("/reservations/2")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(4));
+    }
 }

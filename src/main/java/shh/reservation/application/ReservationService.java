@@ -13,6 +13,7 @@ import shh.member.domain.repository.MemberRepository;
 import shh.reservation.application.dto.MyReservationResponse;
 import shh.reservation.application.dto.ReservationAddRequest;
 import shh.reservation.application.dto.ReservationAddResponse;
+import shh.reservation.application.dto.ReservationResponse;
 import shh.reservation.application.dto.ReservationUpdateRequest;
 import shh.reservation.domain.Reservation;
 import shh.reservation.domain.ReservationTime;
@@ -69,6 +70,13 @@ public class ReservationService {
         final Reservation reservation = getReservation(id);
         validateOwnReservation(memberId, reservation);
         reservationRepository.delete(reservation);
+    }
+
+    public List<ReservationResponse> findReservationByStallId(final Long stallId) {
+        final List<Reservation> reservations = reservationRepository.findAllByStallId(stallId);
+        return reservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
     }
 
     private void validateDuplicateReservation(
