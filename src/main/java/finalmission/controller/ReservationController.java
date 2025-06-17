@@ -7,6 +7,7 @@ import finalmission.service.ReservationService;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,10 +36,17 @@ public class ReservationController {
         return ResponseEntity.created(URI.create("/reservation")).body(reservationService.createReservation(request,member));
     }
 
-    @GetMapping
-    @RequestMapping("/mine")
+    @GetMapping("/mine")
     ResponseEntity<List<Reservation>> myReservations(Member member) {
 
         return ResponseEntity.ok().body(reservationService.findMyReservation(member));
+    }
+
+    @DeleteMapping("/delete")
+    ResponseEntity<Void> deleteMyReservation(Long reservationId, Member member) {
+
+        reservationService.deleteMyReservation(reservationId, member);
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -60,4 +60,15 @@ public class ReservationService {
 
         return reservationRepository.findByMemberId(member.getId());
     }
+
+    public void deleteMyReservation(Long reservationId, Member member) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> {
+            throw new ReservationException("없는 예약입니다.");
+        });
+        if (reservation.getMember().getId() != member.getId()) {
+            throw new ReservationException("자신의 예약이 아닙니다.");
+        }
+
+        reservationRepository.deleteById(reservationId);
+    }
 }

@@ -31,4 +31,24 @@ public class Reservation {
         this.room = room;
         this.reservationTime = reservationTime;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public ReservationTime getReservationTime() {
+        return reservationTime;
+    }
 }
