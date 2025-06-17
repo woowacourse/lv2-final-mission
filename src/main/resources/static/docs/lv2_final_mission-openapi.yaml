@@ -1,0 +1,250 @@
+openapi: "3.1.0"
+info:
+  title: "공유 차량 렌트 서비스 API"
+  description: "차량을 등록하고, 대여 및 반납을 관리하는 API입니다."
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:8080"
+paths:
+  /signup:
+    post:
+      summary: "회원 가입"
+      operationId: "signup"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestSignup"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+  /login:
+    post:
+      summary: "로그인"
+      operationId: "login"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestLogin"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AccessToken"
+  /cars:
+    post:
+      summary: "공유 차량 등록"
+      operationId: "registerCar"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestRegisterCar"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "공유 차량 목록 조회"
+      operationId: "getCars"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ResponseCar"
+  /cars/{carId}:
+    delete:
+      summary: "공유 차량 삭제"
+      operationId: "deleteCar"
+      parameters:
+        - name: "carId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+  /rent:
+    post:
+      summary: "공유 차량 대여 요청"
+      operationId: "rent"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestRent"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+    get:
+      summary: "공유 차량 대여 목록 조회"
+      operationId: "getAllRent"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ResponseRent"
+  /rent/{rentId}:
+    delete:
+      summary: "공유 차량 대여 취소"
+      operationId: "cancelRent"
+      parameters:
+        - name: "rentId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+  /rent/mine:
+    get:
+      summary: "내 차량 대여 목록 조회"
+      operationId: "getMine"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ResponseRentDetail"
+components:
+  schemas:
+    RequestSignup:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+        name:
+          type: "string"
+        age:
+          type: "integer"
+          format: "int32"
+    Void:
+      type: "object"
+      properties: { }
+    RequestLogin:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+    AccessToken:
+      type: "object"
+      properties:
+        value:
+          type: "string"
+    RequestRegisterCar:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        licensePlate:
+          type: "string"
+        feePerMinute:
+          type: "integer"
+          format: "int64"
+    ResponseCar:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+        licensePlate:
+          type: "string"
+        feePerMinute:
+          type: "integer"
+          format: "int64"
+    RequestRent:
+      type: "object"
+      properties:
+        carId:
+          type: "integer"
+          format: "int64"
+        date:
+          type: "string"
+          format: "date"
+        startTime:
+          type: "string"
+          format: "partial-time"
+        returnTime:
+          type: "string"
+          format: "partial-time"
+    ResponseRent:
+      type: "object"
+      properties:
+        car:
+          $ref: "#/components/schemas/ResponseCar"
+        date:
+          type: "string"
+          format: "date"
+        startTime:
+          type: "string"
+          format: "partial-time"
+        returnTime:
+          type: "string"
+          format: "partial-time"
+    ResponseRentDetail:
+      type: "object"
+      properties:
+        rentId:
+          type: "integer"
+          format: "int64"
+        car:
+          $ref: "#/components/schemas/ResponseCar"
+        date:
+          type: "string"
+          format: "date"
+        startTime:
+          type: "string"
+          format: "partial-time"
+        returnTime:
+          type: "string"
+          format: "partial-time"
+        fee:
+          type: "integer"
+          format: "int64"
