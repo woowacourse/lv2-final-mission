@@ -29,17 +29,13 @@ class GetApplyPartyUseCaseTest {
     private PlayerRepository playerRepository;
 
     @Autowired
-    private PartyRepository partyRepository;
-
-    @Autowired
     private ApplyRepository applyRepository;
 
-    // TODO 테스트하고 보니 의미가 없는 API, 개선 필요
     @Test
     void 닉네임으로_플레이어의_모든예약을_조회할수있다() {
         // given
-        final Player p1 = playerRepository.save(Player.of("p1", "pw", PlayerStatus.STOP));
-        final Player p2 = playerRepository.save(Player.of("p2", "pw", PlayerStatus.STOP));
+        final Player p1 = playerRepository.save(Player.of("p1", "pw", "email", PlayerStatus.STOP));
+        final Player p2 = playerRepository.save(Player.of("p2", "pw", "email", PlayerStatus.STOP));
 
         joinMatchMakingUseCase.execute(p1.getNickname());
         joinMatchMakingUseCase.execute(p2.getNickname());

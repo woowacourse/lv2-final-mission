@@ -14,12 +14,12 @@ public class RegisterPlayerUseCase {
 
     private final PlayerFinder playerFinder;
     private final PlayerRepository playerRepository;
-    
+
     public Player execute(final SignInRequest signInRequest) {
         if (playerFinder.existsByNickname(signInRequest.nickname())) {
             throw new IllegalArgumentException("이미 사용 중인 닉네임이야");
         }
         return playerRepository.save(
-                Player.of(signInRequest.nickname(), signInRequest.password(), PlayerStatus.GO));
+                Player.of(signInRequest.nickname(), signInRequest.password(), signInRequest.email(), PlayerStatus.GO));
     }
 }

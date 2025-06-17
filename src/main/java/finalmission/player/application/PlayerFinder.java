@@ -4,7 +4,10 @@ import finalmission.player.infrastructure.PlayerRepository;
 import finalmission.player.domain.Player;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +33,9 @@ public class PlayerFinder {
 
     public boolean existsByNickname(final String nickname) {
         return playerRepository.existsByNickname(nickname);
+    }
+
+    public List<Player> getAllByIds(final List<Long> ids) {
+        return playerRepository.findAllById(ids);
     }
 }
