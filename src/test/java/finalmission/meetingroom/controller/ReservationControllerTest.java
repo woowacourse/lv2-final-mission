@@ -32,7 +32,7 @@ class ReservationControllerTest {
         );
 
         RestAssured.given().log().all()
-                .cookie("token", getUserTokenValue("1111@email.com", "1234"))
+                .cookie("token", getUserTokenValue("ykmxxi97@gmail.com", "1234"))
                 .contentType(ContentType.JSON)
                 .body(reservationParams)
                 .when().post("/reservations")
@@ -43,7 +43,7 @@ class ReservationControllerTest {
     @DisplayName("모든 회의실 예약 현황을 조회한다.")
     @Test
     void getMeetingRoomReservations() {
-        String userTokenValue = getUserTokenValue("1111@email.com", "1234");
+        String userTokenValue = getUserTokenValue("ykmxxi97@gmail.com", "1234");
         Map<String, Object> reservationParams = Map.of(
                 "meetingRoomName", "임팩트룸",
                 "reservationDate", LocalDate.now().plusDays(1L),
@@ -97,7 +97,7 @@ class ReservationControllerTest {
                 "endAt", "13:00"
         );
 
-        String myToken = getUserTokenValue("1111@email.com", "1234");
+        String myToken = getUserTokenValue("ykmxxi97@gmail.com", "1234");
         RestAssured.given().log().all()
                 .cookie("token", myToken)
                 .contentType(ContentType.JSON)
@@ -131,7 +131,7 @@ class ReservationControllerTest {
                 "endAt", "11:00"
         );
 
-        String userTokenValue = getUserTokenValue("1111@email.com", "1234");
+        String userTokenValue = getUserTokenValue("ykmxxi97@gmail.com", "1234");
         int reservationId = (int) RestAssured.given().log().all()
                 .cookie("token", userTokenValue)
                 .contentType(ContentType.JSON)
@@ -164,7 +164,7 @@ class ReservationControllerTest {
                 "endAt", "11:00"
         );
 
-        String userTokenValue = getUserTokenValue("1111@email.com", "1234");
+        String userTokenValue = getUserTokenValue("ykmxxi97@gmail.com", "1234");
         int reservationId = RestAssured.given().log().all()
                 .cookie("token", userTokenValue)
                 .contentType(ContentType.JSON)

@@ -17,9 +17,18 @@ spring:
   sql:
     init:
       data-locations: classpath:data.sql
+  config:
+    import: optional:file:.env[.properties]
 
 security:
   jwt:
     token:
       secret-key: Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=
       expire-length: 36000000 # 60 minutes
+
+api:
+  sendgrid:
+    api-key: ${SENDGRID_API_KEY}
+    from-email: ${SENDGRID_FROM_EMAIL}
+    base-url: https://api.sendgrid.com/
+    end-point: v3/mail/send

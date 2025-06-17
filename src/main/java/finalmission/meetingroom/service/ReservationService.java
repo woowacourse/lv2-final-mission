@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,11 @@ import finalmission.meetingroom.repository.ReservationRepository;
 import finalmission.meetingroom.service.request.LoginMember;
 import finalmission.meetingroom.service.request.ReservationCreateRequest;
 import finalmission.meetingroom.service.request.ReservationTimeChangeRequest;
+import finalmission.meetingroom.service.request.sendgrid.EmailContent;
+import finalmission.meetingroom.service.request.sendgrid.EmailSendingRequest;
+import finalmission.meetingroom.service.request.sendgrid.FromEmail;
+import finalmission.meetingroom.service.request.sendgrid.Personalization;
+import finalmission.meetingroom.service.request.sendgrid.ToEmail;
 import finalmission.meetingroom.service.response.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -31,9 +37,13 @@ public class ReservationService {
     private static final LocalTime START_TIME = LocalTime.of(10, 0);
     private static final LocalTime END_TIME = LocalTime.of(22, 0);
 
+    private final SendGridEmailService sendGridEmailService;
     private final ReservationRepository reservationRepository;
     private final MeetingRoomRepository meetingRoomRepository;
     private final MemberRepository memberRepository;
+
+    @Value("${api.sendgrid.from-email}")
+    private String fromEmail;
 
     @Transactional
     public ReservationResponse reserveMeetingRoom(
@@ -55,6 +65,7 @@ public class ReservationService {
                 meetingRoom, member, reservationDate, startAt, endAt
         );
         reservationRepository.save(reservation);
+        sendReservationCompleteEmail(loginMember);
 
         return ReservationResponse.from(reservation);
     }
@@ -98,6 +109,16 @@ public class ReservationService {
 
     private boolean isEndAtBeforeStartAt(final LocalTime startAt, final LocalTime endAt) {
         return endAt.isBefore(startAt);
+    }
+
+    private void sendReservationCompleteEmail(final LoginMember loginMember) {
+        Member member = getMember(loginMember);
+
+        sendGridEmailService.sendEmail(new EmailSendingRequest(
+                List.of(new Personalization(List.of(new ToEmail(member.getEmail())), "회의실 예약 완료.")),
+                new FromEmail(fromEmail),
+                List.of(new EmailContent("text/plain", "회의실 예약이 완료되었습니다."))
+        ));
     }
 
     public List<ReservationResponse> getReservations() {
