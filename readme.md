@@ -16,6 +16,7 @@
   - [예외] 수정한 시작시간이 끝나는 시간보다 느린 경우
 - "/runningSessions/{id}" DELETE 요청으로 세션 생성자는 세션을 삭제할 수 있다.
 - "/runningSessions/{id}/participants" DELETE 요청으로 세션 참가자는 러닝 세션 참가를 취소할 수 있다.
+  - [예외] 참가자가 아닌 경우
 
 ## 로그인
 - "/login" POST 요청으로 로그인 할 수 있다.
