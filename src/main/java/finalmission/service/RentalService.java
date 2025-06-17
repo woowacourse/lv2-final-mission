@@ -17,12 +17,14 @@ public class RentalService {
     private final RentalRepository rentalRepository;
     private final BookRepository bookRepository;
     private final MemberRepository memberRepository;
+    private final HolidayService holidayService;
 
     public RentalService(RentalRepository rentalRepository, BookRepository bookRepository,
-                         MemberRepository memberRepository) {
+            MemberRepository memberRepository, HolidayService holidayService) {
         this.rentalRepository = rentalRepository;
         this.bookRepository = bookRepository;
         this.memberRepository = memberRepository;
+        this.holidayService = holidayService;
     }
 
     public List<RentalResponse> getRentals() {
@@ -33,6 +35,10 @@ public class RentalService {
     }
 
     public RentalResponse createRental(RentalRequest rentalRequest) {
+        if (holidayService.isHoliday(rentalRequest.rentalDate())) {
+            throw new IllegalArgumentException("공휴일에는 대여가 불가능합니다.");
+        }
+
         Member member = memberRepository.findById(rentalRequest.memberId()).get();
         Book book = bookRepository.findById(rentalRequest.bookId()).get();
         Rental rental = new Rental(member, book, rentalRequest.rentalDate(), rentalRequest.returnDate());

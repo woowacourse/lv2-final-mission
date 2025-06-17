@@ -1,6 +1,8 @@
 package finalmission.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 import finalmission.dto.request.RentalRequest;
@@ -45,5 +47,20 @@ class RentalServiceTest {
         assertThat(rental.book().getId()).isEqualTo(bookId);
         assertThat(rental.rentalDate()).isEqualTo(rentalDate);
         assertThat(rental.returnDate()).isEqualTo(returnDate);
+    }
+
+    @Test
+    void 공휴일에_대여_불가능() {
+
+        // given
+        Long memberId = 1L;
+        Long bookId = 1L;
+        LocalDate rentalDate = LocalDate.of(2024,1,1);
+        LocalDate returnDate = LocalDate.of(2024,1,16);
+        RentalRequest rentalRequest = new RentalRequest(memberId, bookId, rentalDate, returnDate);
+
+        // when & then
+        assertThatThrownBy(() -> rentalService.createRental(rentalRequest))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
