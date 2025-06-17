@@ -69,13 +69,13 @@ class RestaurantRestControllerTest {
         final String firstRestaurantDescription = "첫 번째 음식점 설명";
         final String firstRestaurantPlace = "서울시 강남구";
         final String firstRestaurantPhoneNumber = "02-1111-1111";
-        final int firstMaxReservationCount = 15;
+        final int firstMaxReservationCount = 11;
 
         final String secondRestaurantName = "두 번째 음식점";
         final String secondRestaurantDescription = "두 번째 음식점 설명";
         final String secondRestaurantPlace = "서울시 서초구";
         final String secondRestaurantPhoneNumber = "02-2222-2222";
-        final int secondMaxReservationCount = 25;
+        final int secondMaxReservationCount = 22;
 
         final Map<String, String> adminCookies = adminLoginAndGetCookies();
 
