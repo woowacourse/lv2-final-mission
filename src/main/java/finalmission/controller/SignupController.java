@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/signup")
 public class SignupController {
 
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
+
+    public SignupController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     @PostMapping
     ResponseEntity<Member> signUp(@RequestBody SignUpInfo signUpInfo) {

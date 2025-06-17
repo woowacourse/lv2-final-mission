@@ -7,7 +7,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginLogoutController {
 
-    @Autowired
-    MemberService memberService;
+    private final MemberService memberService;
+
+    public LoginLogoutController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     @PostMapping("/login")
     void login(@RequestBody LoginInfo loginInfo, HttpServletResponse httpServletResponse) {
