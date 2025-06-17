@@ -13,31 +13,31 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ReservationTimeRepositoryImpl implements ReservationTimeRepository {
 
-    private final JpaReservationTimeRepository jpaRepository;
+    private final JpaReservationTimeRepository jpaReservationTimeRepository;
 
     @Override
     public ReservationTime save(final ReservationTime reservationTime) {
-        return jpaRepository.save(reservationTime);
+        return jpaReservationTimeRepository.save(reservationTime);
     }
 
     @Override
     public void deleteById(final Long timeId) {
-        jpaRepository.deleteById(timeId);
+        jpaReservationTimeRepository.deleteById(timeId);
     }
 
     @Override
     public ReservationTime getById(final Long timeId) {
-        return jpaRepository.findById(timeId)
+        return jpaReservationTimeRepository.findById(timeId)
                 .orElseThrow(() -> new ResourceNotFoundException("해당 예약 시간이 존재하지 않습니다. id = " + timeId));
     }
 
     @Override
     public List<ReservationTime> findAllByStartAt(final LocalTime startAt) {
-        return jpaRepository.findAllByStartAt(startAt);
+        return jpaReservationTimeRepository.findAllByStartAt(startAt);
     }
 
     @Override
     public List<ReservationTime> findAll() {
-        return jpaRepository.findAll();
+        return jpaReservationTimeRepository.findAll();
     }
 }

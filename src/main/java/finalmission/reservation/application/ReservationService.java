@@ -9,6 +9,7 @@ import finalmission.member.domain.MemberRepository;
 import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.domain.ReservationRepository;
 import finalmission.reservation.domain.ReservationSlot;
+import finalmission.reservation.domain.ReservationSlotRepository;
 import finalmission.reservation.domain.ReservationTime;
 import finalmission.reservation.domain.ReservationTimeRepository;
 import finalmission.reservation.ui.dto.CreateReservationRequest;
@@ -33,6 +34,7 @@ public class ReservationService {
     private final ReservationTimeRepository reservationTimeRepository;
     private final RestaurantRepository restaurantRepository;
     private final MemberRepository memberRepository;
+    private final ReservationSlotRepository reservationSlotRepository;
     private final ReservationRepository reservationRepository;
     private final EmailDomainService emailDomainService;
 
@@ -67,7 +69,7 @@ public class ReservationService {
             final Member member,
             final int maxReservationCount
     ) {
-        final ReservationSlot reservationSlot = new ReservationSlot(date, time, restaurant, maxReservationCount);
+        final ReservationSlot reservationSlot = getReservationSlot(date, time, restaurant, maxReservationCount);
         if (reservationRepository.existsByReservationSlot(reservationSlot)) {
             throw new AlreadyExistException("해당 예약 슬롯에 예약이 있습니다.");
         }
@@ -87,6 +89,18 @@ public class ReservationService {
         }
 
         return reservationTime;
+    }
+
+    private ReservationSlot getReservationSlot(
+            final LocalDate date,
+            final ReservationTime time,
+            final Restaurant restaurant,
+            final int maxReservationCount
+    ) {
+        if (!reservationSlotRepository.existsByRestaurantId(restaurant.getId())) {
+            return reservationSlotRepository.save(new ReservationSlot(date, time, restaurant, maxReservationCount));
+        }
+        return reservationSlotRepository.getByRestaurantId(restaurant.getId());
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package finalmission.reservation.infrastructure;
 
+import finalmission.exception.resource.ResourceNotFoundException;
 import finalmission.reservation.domain.ReservationSlot;
 import finalmission.reservation.domain.ReservationSlotRepository;
 import java.util.List;
@@ -18,8 +19,19 @@ public class ReservationSlotRepositoryImpl implements ReservationSlotRepository 
     }
 
     @Override
-    public void deleteById(final Long id) {
-        jpaReservationSlotRepository.deleteById(id);
+    public void deleteById(final Long reservationSlotId) {
+        jpaReservationSlotRepository.deleteById(reservationSlotId);
+    }
+
+    @Override
+    public boolean existsByRestaurantId(final Long restaurantId) {
+        return jpaReservationSlotRepository.existsByRestaurantId(restaurantId);
+    }
+
+    @Override
+    public ReservationSlot getByRestaurantId(final Long restaurantId) {
+        return jpaReservationSlotRepository.findByRestaurantId(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("해당 예약 슬롯이 존재하지 않습니다. id = " + restaurantId));
     }
 
     @Override

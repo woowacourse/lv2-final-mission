@@ -6,7 +6,11 @@ public interface ReservationSlotRepository {
 
     ReservationSlot save(ReservationSlot reservationSlot);
 
-    void deleteById(Long id);
+    void deleteById(Long reservationSlotId);
+
+    boolean existsByRestaurantId(Long restaurantId);
+
+    ReservationSlot getByRestaurantId(Long restaurantId);
 
     List<ReservationSlot> findAll();
 }
