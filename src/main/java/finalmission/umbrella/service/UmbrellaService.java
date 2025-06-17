@@ -1,6 +1,7 @@
 package finalmission.umbrella.service;
 
 import finalmission.umbrella.domain.Umbrella;
+import finalmission.umbrella.dto.response.UmbrellaResponse;
 import finalmission.umbrella.repository.UmbrellaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,9 @@ public class UmbrellaService {
 
     private final UmbrellaRepository umbrellaRepository;
 
-    public Umbrella createUmbrella() {
+    public UmbrellaResponse createUmbrella() {
         Umbrella umbrella = Umbrella.create();
-        return umbrellaRepository.save(umbrella);
+        Umbrella saveUmbrella = umbrellaRepository.save(umbrella);
+        return new UmbrellaResponse(saveUmbrella.getId());
     }
 }
