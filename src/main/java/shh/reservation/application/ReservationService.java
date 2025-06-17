@@ -65,6 +65,12 @@ public class ReservationService {
         reservation.updateDateAndTime(updateReservationTimeRequest.date(), updateReservationTimeRequest.time());
     }
 
+    public void deleteReservation(final Long memberId, final Long id) {
+        final Reservation reservation = getReservation(id);
+        validateOwnReservation(memberId, reservation);
+        reservationRepository.delete(reservation);
+    }
+
     private void validateDuplicateReservation(
             final LocalDate date,
             final ReservationTime reservationTime,

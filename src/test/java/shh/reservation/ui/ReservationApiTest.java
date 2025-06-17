@@ -94,4 +94,14 @@ class ReservationApiTest {
                 .then().log().all()
                 .statusCode(200);
     }
+
+    @Test
+    void 본인의_예약을_제거한다() {
+        RestAssured.given().log().all()
+                .cookie(TokenCookieService.COOKIE_TOKEN_KEY, token)
+                .contentType(ContentType.JSON)
+                .when().delete("/reservations/1")
+                .then().log().all()
+                .statusCode(204);
+    }
 }
