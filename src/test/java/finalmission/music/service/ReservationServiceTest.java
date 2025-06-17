@@ -1,0 +1,63 @@
+package finalmission.music.service;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import finalmission.music.controller.dto.ReservationResponse;
+import finalmission.music.domain.Album;
+import finalmission.music.domain.Lottery;
+import finalmission.music.domain.Member;
+import finalmission.music.repository.AlbumRepository;
+import finalmission.music.repository.LotteryRepository;
+import finalmission.music.repository.MemberRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.transaction.annotation.Transactional;
+
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+class ReservationServiceTest {
+
+    @Autowired
+    private ReservationService sut;
+
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private AlbumRepository albumRepository;
+    @Autowired
+    private LotteryRepository lotteryRepository;
+
+    @Test
+    @DisplayName("지나간 추첨에 대해서 예약할 수 없다.")
+    @Transactional
+    void dont_reserve_to_expire_lottery() {
+        Member member = memberRepository.save(new Member("test-member"));
+        Album album = albumRepository.save(
+            new Album("test", "test", 0, LocalDate.now(), "test-id")
+        );
+        Lottery lottery = lotteryRepository.save(new Lottery(album, LocalDateTime.now().minusDays(1)));
+
+        Assertions.assertThatThrownBy(() -> sut.reserve(lottery.getId(), "test-address", member.getName()))
+            .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    @DisplayName("올바른 추첨에 대해서 예약할 수 있다.")
+    @Transactional
+    void can_reserve_to_lottery() {
+        Member member = memberRepository.save(new Member("test-member"));
+        Album album = albumRepository.save(
+            new Album("test", "test", 0, LocalDate.now(), "test-id")
+        );
+        Lottery lottery = lotteryRepository.save(new Lottery(album, LocalDateTime.now().plusDays(1)));
+
+        ReservationResponse response = sut.reserve(lottery.getId(), "test-address", member.getName());
+
+        Assertions.assertThat(response.lotteryId()).isEqualTo(lottery.getId());
+    }
+}

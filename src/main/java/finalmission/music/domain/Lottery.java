@@ -24,8 +24,12 @@ public class Lottery {
 
     private LocalDateTime expirationDateTime;
 
-    public Lottery(Album album, LocalDateTime expirationDateTime) {
+    public Lottery(final Album album, final LocalDateTime expirationDateTime) {
         this.album = album;
         this.expirationDateTime = expirationDateTime;
+    }
+
+    public boolean isExpired() {
+        return expirationDateTime.isBefore(LocalDateTime.now());
     }
 }

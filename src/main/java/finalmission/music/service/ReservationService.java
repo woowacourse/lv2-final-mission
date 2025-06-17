@@ -1,13 +1,10 @@
 package finalmission.music.service;
 
 import finalmission.music.controller.dto.MyReservationResponse;
-import finalmission.music.controller.dto.ReservationRequest;
 import finalmission.music.controller.dto.ReservationResponse;
-import finalmission.music.domain.Album;
 import finalmission.music.domain.Lottery;
 import finalmission.music.domain.Member;
 import finalmission.music.domain.Reservation;
-import finalmission.music.repository.AlbumRepository;
 import finalmission.music.repository.LotteryRepository;
 import finalmission.music.repository.MemberRepository;
 import finalmission.music.repository.ReservationRepository;
@@ -26,12 +23,19 @@ public class ReservationService {
     public ReservationResponse reserve(final Long lotteryId, final String address, final String memberName) {
         Lottery lottery = lotteryRepository.findById(lotteryId)
             .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 추첨입니다."));
+        validateIsExpired(lottery);
 
         Member member = memberRepository.findById(memberName)
             .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 멤버입니다."));
 
         Reservation reservation = reservationRepository.save(new Reservation(lottery, member, address));
         return ReservationResponse.from(reservation);
+    }
+
+    private void validateIsExpired(final Lottery lottery) {
+        if (lottery.isExpired()) {
+            throw new IllegalStateException("[ERROR] 지나간 추첨에 대해서 예약할 수 없습니다.");
+        }
     }
 
     public List<MyReservationResponse> getMemberReservations(final String member) {
