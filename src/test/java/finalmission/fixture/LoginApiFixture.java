@@ -22,7 +22,7 @@ public class LoginApiFixture {
     }
 
     public static Map<String, String> adminLoginAndGetCookies() {
-        final LoginRequest loginRequest = new LoginRequest("admin@admin.com", "admin");
+        final LoginRequest loginRequest = new LoginRequest("wooheiler@gmail.com", "admin");
 
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
