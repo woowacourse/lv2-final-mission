@@ -1,6 +1,6 @@
 package finalmission.reservation.service;
 
-import finalmission.config.SendGridUtil;
+import finalmission.email.service.EmailService;
 import finalmission.member.domain.Member;
 import finalmission.member.dto.MemberResponse;
 import finalmission.reservation.domain.Reservation;
@@ -15,7 +15,6 @@ import finalmission.room.repository.RoomRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ReservationService {
 
-    @Autowired
-    SendGridUtil sendGridUtil;
-
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
+    private final EmailService emailService;
 
-    public ReservationService(ReservationRepository reservationRepository, RoomRepository roomRepository) {
+    public ReservationService(ReservationRepository reservationRepository, RoomRepository roomRepository, EmailService emailService) {
         this.reservationRepository = reservationRepository;
         this.roomRepository = roomRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -41,7 +39,7 @@ public class ReservationService {
         Reservation newReservation = reservationRepository.save(reservation);
         ReservationResponse response = new ReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
 
-        sendGridUtil.sendEmail(member.getEmail(), response);
+        emailService.sendEmail(member.getEmail(), response);
 
         return response;
     }
