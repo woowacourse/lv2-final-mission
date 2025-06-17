@@ -1,0 +1,56 @@
+package finalmission.matchmaking.application;
+
+import finalmission.apply.domain.Apply;
+import finalmission.apply.infrastructure.ApplyRepository;
+import finalmission.party.infrastructure.PartyRepository;
+import finalmission.player.domain.Player;
+import finalmission.player.domain.PlayerStatus;
+import finalmission.player.infrastructure.PlayerRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
+@Transactional
+class GetApplyPartyUseCaseTest {
+
+    @Autowired
+    private GetMatchMakingUseCase getMatchMakingUseCase;
+
+    @Autowired
+    private JoinMatchMakingUseCase joinMatchMakingUseCase;
+
+    @Autowired
+    private PlayerRepository playerRepository;
+
+    @Autowired
+    private ApplyRepository applyRepository;
+
+    @Test
+    void 닉네임으로_플레이어의_모든예약을_조회할수있다() {
+        // given
+        final Player p1 = playerRepository.save(Player.of("p1", "pw", "email", PlayerStatus.STOP));
+        final Player p2 = playerRepository.save(Player.of("p2", "pw", "email", PlayerStatus.STOP));
+
+        joinMatchMakingUseCase.execute(p1.getNickname());
+        joinMatchMakingUseCase.execute(p2.getNickname());
+
+        applyRepository.save(Apply.of(12L, p1.getId()));
+        applyRepository.save(Apply.of(123L, p1.getId()));
+        applyRepository.save(Apply.of(1234L, p1.getId()));
+        applyRepository.save(Apply.of(12345L, p1.getId()));
+
+        // when
+        final List<Apply> p1Apply = getMatchMakingUseCase.execute(p1.getNickname());
+        final List<Apply> p2Apply = getMatchMakingUseCase.execute(p2.getNickname());
+
+        // then
+        assertThat(p1Apply.size()).isEqualTo(5);
+        assertThat(p2Apply.size()).isEqualTo(1);
+    }
+}
