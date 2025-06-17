@@ -31,6 +31,6 @@ INSERT INTO schedule(restaurant_id, date, time, maximum_capacity)
 VALUES (1, '2025-06-23', '20:00', 30);
 
 INSERT INTO reservation(schedule_id, number_of_guest, message, nickname, email, password)
-VALUES (1, 10, '10명 예약', '예약자1', 'juheedorothy@gamil.com', '1234');
+VALUES (1, 10, '10명 예약', '예약자1', 'norang@gamil.com', '1234');
 INSERT INTO reservation(schedule_id, number_of_guest, message, nickname, email, password)
-VALUES (1, 5, '5명 예약', '예약자2', 'juheedorothy@gamil.com', '1234');
+VALUES (1, 5, '5명 예약', '예약자2', 'norang@gamil.com', '1234');
