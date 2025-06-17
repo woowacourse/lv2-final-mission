@@ -31,7 +31,14 @@ public class ReservationController {
 
     @PostMapping
     ResponseEntity<Reservation> createReservation(@RequestBody MakingReservationRequest request, Member member) {
-        System.out.println("hihi");
+
         return ResponseEntity.created(URI.create("/reservation")).body(reservationService.createReservation(request,member));
+    }
+
+    @GetMapping
+    @RequestMapping("/mine")
+    ResponseEntity<List<Reservation>> myReservations(Member member) {
+
+        return ResponseEntity.ok().body(reservationService.findMyReservation(member));
     }
 }

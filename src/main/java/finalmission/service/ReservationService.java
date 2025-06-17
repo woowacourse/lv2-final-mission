@@ -55,4 +55,9 @@ public class ReservationService {
             throw new ReservationException("공휴일에는 예약을 할 수 없습니다.") ;
         }
     }
+
+    public List<Reservation> findMyReservation(Member member) {
+
+        return reservationRepository.findByMemberId(member.getId());
+    }
 }

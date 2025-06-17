@@ -13,8 +13,7 @@ public class HolidayClient {
     }
 
     public String getHolidays(LocalDate localDate) {
-        int year = 2025;
-        int month = 12;
+
         return restClient.get()
                 .uri("https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?serviceKey={secretKey}&solYear={year}&solMonth={month}&_type=json",secretKey,year,month)
                 .retrieve()
