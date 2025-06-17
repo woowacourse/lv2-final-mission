@@ -1,7 +1,10 @@
 package finalmission.domain.schedule.detail;
 
+import finalmission.domain.reservation.Reservation;
+import finalmission.domain.reservation.detail.NumberOfGuest;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
+import java.util.List;
 import java.util.Objects;
 
 @Embeddable
@@ -17,6 +20,27 @@ public class ScheduleDetail {
     private MaximumCapacity maximumCapacity;
 
     protected ScheduleDetail() {
+    }
+
+    public int calculateRemainingCapacity(final List<Reservation> reservations) {
+        final int numberOfReserved = reservations.stream()
+                .mapToInt(reservation -> reservation.getNumberOfGuest().getValue())
+                .sum();
+        validateNumberOfReserved(numberOfReserved);
+        return getMaximumCapacity().getValue() - numberOfReserved;
+    }
+
+    public void validateNewReservationNumberOfGuest(final List<Reservation> reservations,
+                                                    final NumberOfGuest numberOfGuest) {
+        if (calculateRemainingCapacity(reservations) < numberOfGuest.getValue()) {
+            throw new IllegalArgumentException("[400] 예약 가능 인원을 초과했습니다.");
+        }
+    }
+
+    private void validateNumberOfReserved(final int numberOfReserved) {
+        if (numberOfReserved > getMaximumCapacity().getValue()) {
+            throw new IllegalStateException("[500] 예약 상태 오류");
+        }
     }
 
     public DateSchedule getDate() {

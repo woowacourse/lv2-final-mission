@@ -1,12 +1,8 @@
 package finalmission.domain.reservation;
 
-import finalmission.domain.reservation.detail.Message;
 import finalmission.domain.reservation.detail.NumberOfGuest;
 import finalmission.domain.reservation.detail.ReservationDetail;
-import finalmission.domain.reservation.owner.Email;
-import finalmission.domain.reservation.owner.Nickname;
 import finalmission.domain.reservation.owner.Owner;
-import finalmission.domain.reservation.owner.Password;
 import finalmission.domain.schedule.Schedule;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -53,20 +49,8 @@ public class Reservation {
         return detail.getNumberOfGuest();
     }
 
-    public Message getReservatonMessage() {
-        return detail.getReservatonMessage();
-    }
-
-    public Nickname getNickname() {
-        return owner.getNickname();
-    }
-
-    public Email getEmail() {
-        return owner.getEmail();
-    }
-
-    public Password getPassword() {
-        return owner.getPassword();
+    public ReservationDetail getDetail() {
+        return detail;
     }
 
     public Schedule getSchedule() {

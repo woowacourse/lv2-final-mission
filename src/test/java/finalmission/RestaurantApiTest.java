@@ -2,9 +2,9 @@ package finalmission;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import finalmission.dto.RestaurantDetailResponse;
-import finalmission.dto.RestaurantSimpleResponse;
-import finalmission.dto.ScheduleResponse;
+import finalmission.dto.restaurant.RestaurantDetailResponse;
+import finalmission.dto.restaurant.RestaurantSimpleResponse;
+import finalmission.dto.schedule.ScheduleResponse;
 import finalmission.fixture.DocumentationFixture;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;

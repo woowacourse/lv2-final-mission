@@ -1,6 +1,7 @@
-package finalmission.dto;
+package finalmission.dto.restaurant;
 
 import finalmission.domain.restaurant.Restaurant;
+import finalmission.dto.schedule.ScheduleResponse;
 import java.util.List;
 
 public record RestaurantDetailResponse(

@@ -1,8 +1,9 @@
 package finalmission.controller;
 
-import finalmission.dto.CreateReservationRequest;
-import finalmission.dto.CreateReservationResponse;
+import finalmission.dto.reservation.CreateReservationRequest;
+import finalmission.dto.reservation.CreateReservationResponse;
 import finalmission.service.ReservationService;
+import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,6 @@ public class ReservationController {
             @RequestBody CreateReservationRequest request
     ) {
         final CreateReservationResponse response = reservationService.createReservation(scheduleId, request);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.created(URI.create("/restaurants/" + scheduleId)).body(response);
     }
 }

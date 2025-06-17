@@ -1,4 +1,4 @@
-package finalmission.dto;
+package finalmission.dto.restaurant;
 
 import finalmission.domain.restaurant.Restaurant;
 

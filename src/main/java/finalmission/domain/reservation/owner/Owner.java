@@ -25,8 +25,8 @@ public class Owner {
         this.password = password;
     }
 
-    public Owner(final String nickname, final String email, final String password) {
-        new Owner(new Nickname(nickname), new Email(email), new Password(password));
+    public Owner(final Nickname nickname, final String email, final String password) {
+        this(nickname, new Email(email), new Password(password));
     }
 
     public Nickname getNickname() {

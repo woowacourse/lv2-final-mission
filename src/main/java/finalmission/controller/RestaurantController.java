@@ -1,7 +1,7 @@
 package finalmission.controller;
 
-import finalmission.dto.RestaurantDetailResponse;
-import finalmission.dto.RestaurantSimpleResponse;
+import finalmission.dto.restaurant.RestaurantDetailResponse;
+import finalmission.dto.restaurant.RestaurantSimpleResponse;
 import finalmission.service.RestaurantService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;

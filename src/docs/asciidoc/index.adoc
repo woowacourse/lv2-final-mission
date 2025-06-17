@@ -42,13 +42,15 @@ operation::restaurant-api-test/find-restaurant-by-id[snippets='curl-request,http
 
 사용자는 특정 맛집의 예약을 생성할 수 있다.
 
+operation::reservation-api-test/create-reservation[snippets='curl-request,http-request,http-response']
+
 === 세부 사항
 
-- [ ] 스케줄 ID로 대상 리소스를 지정할 수 있다.
-- [ ] 예약자 정보(이메일, 예약 비밀번호)를 입력한다.
-- [ ] 예약 상세 정보(예약 인원, 예약 메시지)를 입력한다.
-- [ ] 사용자는 랜덤 닉네임을 부여받는다.
-- [ ] 생성된 정보를 응답 받는다.
+- [x] 스케줄 ID로 대상 리소스를 지정할 수 있다.
+- [x] 예약자 정보(이메일, 예약 비밀번호)를 입력한다.
+- [x] 예약 상세 정보(예약 인원, 예약 메시지)를 입력한다.
+- [x] 사용자는 랜덤 닉네임을 부여받는다.
+- [x] 생성된 정보를 응답 받는다.
 
 
 ==== 에러 응답
@@ -56,6 +58,7 @@ operation::restaurant-api-test/find-restaurant-by-id[snippets='curl-request,http
 - [ ] **[400]** 요청 정보의 형식이 올바르지 않은 경우
 - [ ] **[400]** 예약 가능한 인원을 초과한 경우
 - [ ] **[404]** 스케줄 ID를 찾을 수 없는 경우
+- [ ] **[500]** 외부 API (랜덤 닉네임 생성) 오류가 발생한 경우
 
 == 내 예약 상세 정보 확인
 

@@ -2,9 +2,9 @@ package finalmission.service;
 
 import finalmission.domain.restaurant.Restaurant;
 import finalmission.domain.schedule.Schedule;
-import finalmission.dto.RestaurantDetailResponse;
-import finalmission.dto.RestaurantSimpleResponse;
-import finalmission.dto.ScheduleResponse;
+import finalmission.dto.restaurant.RestaurantDetailResponse;
+import finalmission.dto.restaurant.RestaurantSimpleResponse;
+import finalmission.dto.schedule.ScheduleResponse;
 import finalmission.repository.ReservationRepository;
 import finalmission.repository.RestaurantRepository;
 import finalmission.repository.ScheduleRepository;
@@ -38,7 +38,7 @@ public class RestaurantService {
         final List<Schedule> schedules = scheduleRepository.findByRestaurant(restaurant);
         final List<ScheduleResponse> scheduleResponses = schedules.stream().map(
                 schedule -> new ScheduleResponse(schedule,
-                        schedule.getRemainingCapacity(
+                        schedule.calculateRemainingCapacity(
                                 reservationRepository.findBySchedule(schedule)
                         ))
         ).toList();

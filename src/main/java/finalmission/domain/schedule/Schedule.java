@@ -1,6 +1,7 @@
 package finalmission.domain.schedule;
 
 import finalmission.domain.reservation.Reservation;
+import finalmission.domain.reservation.detail.NumberOfGuest;
 import finalmission.domain.restaurant.Restaurant;
 import finalmission.domain.schedule.detail.DateSchedule;
 import finalmission.domain.schedule.detail.ScheduleDetail;
@@ -30,13 +31,13 @@ public class Schedule {
     public Schedule() {
     }
 
-    public int getRemainingCapacity(final List<Reservation> reservations) {
-        final int numberOfReserved = reservations.stream()
-                .mapToInt(reservation -> reservation.getNumberOfGuest().getValue()).sum();
-        if (numberOfReserved > detail.getMaximumCapacity().getValue()) {
-            throw new IllegalStateException("[500] 예약 상태 오류");
-        }
-        return detail.getMaximumCapacity().getValue() - numberOfReserved;
+    public int calculateRemainingCapacity(final List<Reservation> reservations) {
+        return detail.calculateRemainingCapacity(reservations);
+    }
+
+    public void validateNewReservationNumberOfGuest(final List<Reservation> reservations,
+                                                    final NumberOfGuest numberOfGuest) {
+        detail.validateNewReservationNumberOfGuest(reservations, numberOfGuest);
     }
 
     public Long getId() {

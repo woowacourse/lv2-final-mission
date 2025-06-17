@@ -1,4 +1,4 @@
-package finalmission.dto;
+package finalmission.dto.schedule;
 
 import finalmission.domain.schedule.Schedule;
 import java.time.LocalDate;
