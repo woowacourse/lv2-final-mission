@@ -6,6 +6,7 @@ import finalmission.music.domain.Album;
 import finalmission.music.repository.AlbumRepository;
 import java.time.LocalDate;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,8 +23,9 @@ class AlbumServiceTest {
     private AlbumRepository albumRepository;
 
     @Test
+    @DisplayName("앨범 등록을 할 수 있다.")
     @Transactional
-    void 앨범_등록을_할_수_있다() {
+    void can_save_album() {
         AlbumRequest albumRequest = new AlbumRequest("test", "test", 0, LocalDate.of(2020, 5, 24), "test-spotify");
 
         AlbumResponse saveAlbum = sut.save(albumRequest);
@@ -35,8 +37,9 @@ class AlbumServiceTest {
     }
 
     @Test
+    @DisplayName("앨범 조회가 가능하다.")
     @Transactional
-    void 앨범_조회가_가능하다() {
+    void can_find_album() {
         Album album = albumRepository.save(new Album("test", "test", 0, LocalDate.of(2020, 5, 24), "test-spotify"));
 
         AlbumResponse response = sut.getAlbum(album.getId());
@@ -48,8 +51,9 @@ class AlbumServiceTest {
     }
 
     @Test
+    @DisplayName("앨범 삭제가 가능하다.")
     @Transactional
-    void 앨범_삭제가_가능하다() {
+    void can_delete_album() {
         Album album = albumRepository.save(new Album("test", "test", 0, LocalDate.of(2020, 5, 24), "test-spotify"));
 
         sut.delete(album.getId());

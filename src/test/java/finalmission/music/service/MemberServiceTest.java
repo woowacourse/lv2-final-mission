@@ -4,6 +4,7 @@ import finalmission.music.controller.dto.MemberRequest;
 import finalmission.music.controller.dto.MemberResponse;
 import finalmission.music.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,8 +21,9 @@ class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @Test
+    @DisplayName("회원가입을 할 수 있다.")
     @Transactional
-    void 회원가입을_할_수_있다() {
+    void can_sign_up() {
         MemberRequest request = new MemberRequest("test");
 
         MemberResponse member = sut.save(request);
@@ -31,8 +33,9 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("중복된 이름으로 회원가입을 할 수 없다.")
     @Transactional
-    void 중복된_이름으로_회원가입을_할_수_없다() {
+    void dont_sign_up_duplicate_name() {
         MemberRequest request1 = new MemberRequest("test");
         MemberRequest request2 = new MemberRequest("test");
         sut.save(request1);
