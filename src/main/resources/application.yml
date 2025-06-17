@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: lv2-final-mission
+
+  profiles:
+    include: secret
+
+  jpa:
+    database: mysql
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: trace
