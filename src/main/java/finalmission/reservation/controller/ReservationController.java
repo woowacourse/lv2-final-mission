@@ -6,6 +6,7 @@ import finalmission.reservation.dto.MyReservationResponse;
 import finalmission.reservation.dto.ReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
 import finalmission.reservation.service.ReservationService;
+import java.net.URI;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +30,8 @@ public class ReservationController {
 
     @PostMapping
     private ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationRequest request, Member member) {
-        return ResponseEntity.ok(reservationService.addReservation(request, member));
+        ReservationResponse response = reservationService.addReservation(request, member);
+        return ResponseEntity.created(URI.create("/reservations/" + response.id())).body(response);
     }
 
     @GetMapping
@@ -50,6 +52,6 @@ public class ReservationController {
     @DeleteMapping("/{id}")
     private ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id, Member member) {
         reservationService.deleteReservation(id, member.getId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

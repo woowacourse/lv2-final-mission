@@ -37,7 +37,7 @@ public class ReservationService {
         Room room = getRoomById(request.roomId());
         Reservation reservation = new Reservation(null, request.date(), request.time(), request.description(), room, member);
         Reservation newReservation = reservationRepository.save(reservation);
-        ReservationResponse response = new ReservationResponse(new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
+        ReservationResponse response = new ReservationResponse(newReservation.getId(), new RoomResponse(newReservation.getRoom().getName(), newReservation.getRoom().getCapacity()), newReservation.getDate(), newReservation.getTime());
 
         emailService.sendEmail(member.getEmail(), response);
 
@@ -51,7 +51,7 @@ public class ReservationService {
 
     public List<ReservationResponse> getAll() {
         return reservationRepository.findAll().stream()
-                .map(reservation -> new ReservationResponse(new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime()))
+                .map(reservation -> new ReservationResponse(reservation.getId(), new RoomResponse(reservation.getRoom().getName(), reservation.getRoom().getCapacity()), reservation.getDate(), reservation.getTime()))
                 .toList();
     }
 
