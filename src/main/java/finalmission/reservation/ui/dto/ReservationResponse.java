@@ -3,7 +3,9 @@ package finalmission.reservation.ui.dto;
 import finalmission.reservation.domain.Reservation;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import lombok.Builder;
 
+@Builder
 public record ReservationResponse(
         Long restaurantId,
         LocalDate date,
@@ -15,15 +17,15 @@ public record ReservationResponse(
         Long memberId
 ) {
     public static ReservationResponse from(final Reservation reservation) {
-        return new ReservationResponse(
-                reservation.getId(),
-                reservation.getReservationSlot().getDate(),
-                reservation.getReservationSlot().getTime().getStartAt(),
-                reservation.getReservationSlot().getRestaurant().getName(),
-                reservation.getReservationSlot().getRestaurant().getDescription(),
-                reservation.getReservationSlot().getRestaurant().getPlace(),
-                reservation.getReservationSlot().getRestaurant().getPhoneNumber(),
-                reservation.getMember().getId()
-        );
+        return ReservationResponse.builder()
+                .restaurantId(reservation.getReservationSlot().getRestaurant().getId())
+                .date(reservation.getReservationSlot().getDate())
+                .time(reservation.getReservationSlot().getTime().getStartAt())
+                .restaurantName(reservation.getReservationSlot().getRestaurant().getName())
+                .description(reservation.getReservationSlot().getRestaurant().getDescription())
+                .place(reservation.getReservationSlot().getRestaurant().getPlace())
+                .phoneNumber(reservation.getReservationSlot().getRestaurant().getPhoneNumber())
+                .memberId(reservation.getMember().getId())
+                .build();
     }
 }

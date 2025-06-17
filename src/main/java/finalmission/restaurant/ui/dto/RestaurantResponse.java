@@ -1,7 +1,9 @@
 package finalmission.restaurant.ui.dto;
 
 import finalmission.restaurant.domain.Restaurant;
+import lombok.Builder;
 
+@Builder
 public record RestaurantResponse(
         Long id,
         String name,
@@ -10,12 +12,12 @@ public record RestaurantResponse(
         String phoneNumber
 ) {
     public static RestaurantResponse from(final Restaurant restaurant) {
-        return new RestaurantResponse(
-                restaurant.getId(),
-                restaurant.getName(),
-                restaurant.getDescription(),
-                restaurant.getPlace(),
-                restaurant.getPhoneNumber()
-        );
+        return RestaurantResponse.builder()
+                .id(restaurant.getId())
+                .name(restaurant.getName())
+                .description(restaurant.getDescription())
+                .place(restaurant.getPlace())
+                .phoneNumber(restaurant.getPhoneNumber())
+                .build();
     }
 }

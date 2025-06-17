@@ -5,7 +5,9 @@ import finalmission.restaurant.ui.dto.RestaurantResponse;
 import finalmission.waiting.domain.Waiting;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.Builder;
 
+@Builder
 public record WaitingResponse(
         Long id,
         LocalDate date,
@@ -17,14 +19,14 @@ public record WaitingResponse(
 ) {
 
     public static WaitingResponse from(final Waiting waiting) {
-        return new WaitingResponse(
-                waiting.getId(),
-                waiting.getReservationSlot().getDate(),
-                ReservationTimeResponse.from(waiting.getReservationSlot().getTime()),
-                RestaurantResponse.from(waiting.getReservationSlot().getRestaurant()),
-                waiting.getMember().getId(),
-                waiting.getMember().getNickname(),
-                waiting.getCreatedAt()
-        );
+        return WaitingResponse.builder()
+                .id(waiting.getId())
+                .date(waiting.getReservationSlot().getDate())
+                .time(ReservationTimeResponse.from(waiting.getReservationSlot().getTime()))
+                .restaurant(RestaurantResponse.from(waiting.getReservationSlot().getRestaurant()))
+                .memberId(waiting.getMember().getId())
+                .memberNickname(waiting.getMember().getNickname())
+                .createdAt(waiting.getCreatedAt())
+                .build();
     }
 }

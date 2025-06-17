@@ -1,7 +1,9 @@
 package finalmission.member.ui.dto;
 
 import finalmission.member.domain.Member;
+import lombok.Builder;
 
+@Builder
 public record MemberResponse(
         Long id,
         String nickname,
@@ -10,10 +12,10 @@ public record MemberResponse(
 ) {
 
     public static MemberResponse from(final Member member) {
-        return new MemberResponse(
-                member.getId(),
-                member.getNickname(),
-                member.getEmail()
-        );
+        return MemberResponse.builder()
+                .id(member.getId())
+                .nickname(member.getNickname())
+                .email(member.getEmail())
+                .build();
     }
 }
