@@ -4,7 +4,9 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import finalmission.application.ReservationService;
+import finalmission.domain.customer.Customer;
 import finalmission.domain.reservation.Reservation;
+import finalmission.presentation.auth.Authenticated;
 import finalmission.presentation.request.CreateReservationRequest;
 import finalmission.presentation.response.ReservationResponse;
 import jakarta.validation.Valid;
@@ -28,11 +30,11 @@ public class ReservationController {
 
     @PostMapping("/reservations")
     @ResponseStatus(CREATED)
-    public ReservationResponse createReservation(
-            @RequestBody @Valid final CreateReservationRequest request
+    public ReservationResponse createReservationByCustomer(
+            @Authenticated final Customer customer, @RequestBody @Valid final CreateReservationRequest request
     ) {
         Reservation reservation = reservationService.createReservation(
-                request.customerId(),
+                customer,
                 request.date(),
                 request.time(),
                 request.designId(),
@@ -42,14 +44,18 @@ public class ReservationController {
     }
 
     @GetMapping("reservations")
-    public List<ReservationResponse> readReservations(final Long customerId) {
-        List<Reservation> reservations = reservationService.getReservationsByCustomerId(customerId);
+    public List<ReservationResponse> readMyReservation(
+            @Authenticated final Customer customer
+    ) {
+        List<Reservation> reservations = reservationService.getReservationsByCustomer(customer);
         return ReservationResponse.fromReservations(reservations);
     }
 
     @DeleteMapping("/reservations/{id}")
     @ResponseStatus(NO_CONTENT)
-    public void deleteReservation(@PathVariable("id") final long reservationId) {
-        reservationService.removeReservation(reservationId);
+    public void deleteMyReservation(
+            @Authenticated final Customer customer, @PathVariable("id") final long reservationId
+    ) {
+        reservationService.removeReservation(customer, reservationId);
     }
 }
