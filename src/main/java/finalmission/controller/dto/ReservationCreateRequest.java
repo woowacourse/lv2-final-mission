@@ -1,4 +1,4 @@
-package finalmission.controller;
+package finalmission.controller.dto;
 
 public record ReservationCreateRequest(String name) {
 }

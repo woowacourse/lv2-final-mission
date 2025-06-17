@@ -1,6 +1,8 @@
 package finalmission.controller;
 
 import finalmission.controller.dto.MemberInfo;
+import finalmission.controller.dto.ReservationCreateRequest;
+import finalmission.controller.dto.ReservationCreateResponse;
 import finalmission.controller.dto.ReservationResponse;
 import finalmission.domain.NicknameReservation;
 import finalmission.service.NicknameReservationService;
