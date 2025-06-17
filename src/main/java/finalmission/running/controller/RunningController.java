@@ -25,7 +25,7 @@ public class RunningController {
         return ResponseEntity.ok(runningService.createRunningReservation(request, loginInfo));
     }
 
-    @PostMapping("/runningSessions/{id}")
+    @PostMapping("/runningSessions/{id}/participants")
     public ResponseEntity<ReservationResponse> joinRunningSession(
         @PathVariable("id") Long id,
         @LoginMember LoginInfo loginInfo) {

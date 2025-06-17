@@ -5,7 +5,7 @@
   - [예외] 로그인 정보가 없는 경우
   - [예외] 과거 시간에 대한 세션 생성의 경우
   - [예외] 현재 날씨가 눈/비 일 경우
-- "/runningSessions/{id}" POST 요청으로 러닝 세션에 참가 할 수 있다.
+- "/runningSessions/{id}/participants" POST 요청으로 러닝 세션에 참가 할 수 있다.
   - [예외] 로그인 정보가 없는 경우
   - [예외] 존재하지 않는 러닝 세션에 참가요청을 보낸 경우
   - [예외] 생성자가 참가요청을 보낸 경우
@@ -14,7 +14,7 @@
   - [예외] 로그인 정보가 일치하지 않는 경우
 - "/runningSessions/{id}" UPDATE 요청으로 세션 생성자는 세션 정보를 수정 할 수 있다.
 - "/runningSessions/{id}" DELETE 요청으로 세션 생성자는 세션을 삭제할 수 있다.
-- "/runningSessions/{id}" PUT 요청으로 세션 참가자는 러닝 세션 참가를 취소할 수 있다.
+- "/runningSessions/{id}/participants" DELETE 요청으로 세션 참가자는 러닝 세션 참가를 취소할 수 있다.
 
 ## 로그인
 - "/login" POST 요청으로 로그인 할 수 있다.
