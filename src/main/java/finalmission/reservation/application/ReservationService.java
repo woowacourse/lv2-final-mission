@@ -6,6 +6,7 @@ import finalmission.popupstore.application.PopupStorePolicy;
 import finalmission.popupstore.application.out.PopupStoreRepository;
 import finalmission.popupstore.domain.PopupStore;
 import finalmission.reservation.application.in.dto.Reserve;
+import finalmission.reservation.application.out.MyReservation;
 import finalmission.reservation.application.out.ReservationRepository;
 import finalmission.reservation.application.out.dto.MyReservationWaitingCount;
 import finalmission.reservation.domain.Reservation;
@@ -86,5 +87,22 @@ public class ReservationService {
                 ReservationStatus.WAITING
         );
         waitings.getFirst().enter();
+    }
+
+    public MyReservation getMyReservation(final Long reservationId, final Long memberId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow();
+
+        if (!reservation.isMine(memberId)) {
+            throw new IllegalArgumentException("해당 예약은 본인의 예약이 아닙니다.");
+        }
+
+        return new MyReservation(
+                reservation.getId(),
+                reservation.getPopupStore().getId(),
+                reservation.getPopupStore().getTitle(),
+                reservation.getReservedAt(),
+                reservation.getReservationStatus()
+        );
     }
 }

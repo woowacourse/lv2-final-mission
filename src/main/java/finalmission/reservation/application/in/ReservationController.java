@@ -2,6 +2,7 @@ package finalmission.reservation.application.in;
 
 import finalmission.reservation.application.ReservationService;
 import finalmission.reservation.application.in.dto.Reserve;
+import finalmission.reservation.application.out.MyReservation;
 import finalmission.reservation.application.out.dto.MyReservationWaitingCount;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,5 +57,16 @@ public class ReservationController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @Operation(summary = "내 예약 상세 조회 API")
+    @GetMapping("/{reservationId}/my-reservation/{memberId}")
+    public ResponseEntity<MyReservation> getMyReservation(
+            @PathVariable final Long reservationId,
+            @PathVariable final Long memberId
+    ) {
+        MyReservation myReservation = reservationService.getMyReservation(reservationId, memberId);
+
+        return ResponseEntity.ok(myReservation);
     }
 }
