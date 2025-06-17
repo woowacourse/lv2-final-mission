@@ -25,7 +25,8 @@ public class ReservationController {
     @PostMapping("/reservations")
     public ResponseEntity<ReservationResponse> reserve(@RequestBody final ReservationRequest request,
                                                        @LoginMember final String memberName) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.reserve(request, memberName));
+        ReservationResponse response = reservationService.reserve(request.lotteryId(), request.address(), memberName);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/reservations/me")

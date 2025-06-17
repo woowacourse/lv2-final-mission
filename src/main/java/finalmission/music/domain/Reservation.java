@@ -19,15 +19,15 @@ public class Reservation {
     private Long id;
 
     @ManyToOne
-    private Album album;
+    private Lottery lottery;
 
     @ManyToOne
     private Member member;
 
     private String address;
 
-    public Reservation(Album album, Member member, String address) {
-        this.album = album;
+    public Reservation(Lottery lottery, Member member, String address) {
+        this.lottery = lottery;
         this.member = member;
         this.address = address;
     }

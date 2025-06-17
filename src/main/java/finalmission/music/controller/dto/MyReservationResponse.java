@@ -3,13 +3,13 @@ package finalmission.music.controller.dto;
 import finalmission.music.domain.Reservation;
 
 public record MyReservationResponse(
-    AlbumResponse albumResponse,
+    LotteryResponse lotteryResponse,
     String member,
     String address
 ) {
     public static MyReservationResponse from(Reservation reservation) {
         return new MyReservationResponse(
-            new AlbumResponse(reservation.getAlbum().getName(), reservation.getAlbum().getArtistName(), reservation.getAlbum().getTotalTracks(), reservation.getAlbum().getReleaseDate()),
+            LotteryResponse.from(reservation.getLottery()),
             reservation.getMember().getName(),
             reservation.getAddress()
         );
