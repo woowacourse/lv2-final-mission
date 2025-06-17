@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RestaurantRestController {
 
-    private RestaurantService restaurantService;
+    private final RestaurantService restaurantService;
 
     @PostMapping
     @RequiresRole(authRoles = {ADMIN})
