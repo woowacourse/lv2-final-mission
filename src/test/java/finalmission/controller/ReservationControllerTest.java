@@ -55,9 +55,8 @@ class ReservationControllerTest {
     @DisplayName("사용자 예약 테스트")
     @Test
     void reservationTest() {
-        // given
+        // given & when & then
         MakingReservationRequest makingReservationRequest = new MakingReservationRequest(LocalDate.now(), 1L, 1L);
-        System.out.println("testStart");
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
@@ -66,8 +65,5 @@ class ReservationControllerTest {
                 .when().post("/reservation")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
-        // when
-
-        // then
     }
 }

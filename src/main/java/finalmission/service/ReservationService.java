@@ -36,7 +36,7 @@ public class ReservationService {
     }
 
     public Reservation createReservation(MakingReservationRequest makingReservationRequest, Member member) {
-//        checkHoliday(makingReservationRequest.date());
+        checkHoliday(makingReservationRequest.date());
         Room room = roomRepository.findById(makingReservationRequest.roomId()).orElseThrow(() -> {
             throw new RoomException("없는 회의실 입니다.");
         });
@@ -49,9 +49,9 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    private void checkHoliday(LocalDate date) {
+    private void checkHoliday(LocalDate todayDate) {
 
-        if(!holidayService.checkHolyDay(date)){
+        if (holidayService.isHolyDay(todayDate)) {
             throw new ReservationException("공휴일에는 예약을 할 수 없습니다.") ;
         }
     }

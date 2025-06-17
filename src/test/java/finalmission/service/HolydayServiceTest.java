@@ -1,8 +1,7 @@
-package finalmission;
+package finalmission.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import finalmission.service.HolidayService;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,8 +19,8 @@ public class HolydayServiceTest {
     void apiTest() {
         // given
 
-//        assertThat(holidayService.checkHolyDay(LocalDate.now())).isFalse();
-        assertThat(holidayService.checkHolyDay(LocalDate.of(2025,6,6))).isTrue();
+        assertThat(holidayService.isHolyDay(LocalDate.now())).isFalse();
+        assertThat(holidayService.isHolyDay(LocalDate.of(2025,6,6))).isTrue();
         // when
 
         // then
