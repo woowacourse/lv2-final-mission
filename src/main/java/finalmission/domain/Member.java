@@ -23,7 +23,7 @@ public class Member {
 
     private int age;
 
-    @Builder()
+    @Builder
     public Member(String name, int age) {
         this.name = name;
         this.age = age;
