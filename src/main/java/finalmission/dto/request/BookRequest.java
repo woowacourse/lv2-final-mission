@@ -9,6 +9,7 @@ public record BookRequest(
         String name,
         String author,
         Long category_id,
-        int stock
+        int stock,
+        int period
 ) {
 }

@@ -20,23 +20,26 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
     private int stock;
+    private int period;
 
     public Book() {
     }
 
-    public Book(Long id, String name, String author, Category category, int stock) {
+    public Book(Long id, String name, String author, Category category, int stock,  int period) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.category = category;
         this.stock = stock;
+        this.period = period;
     }
 
-    public Book(String name, String author, Category category, int stock) {
+    public Book(String name, String author, Category category, int stock, int period) {
         this.name = name;
         this.author = author;
         this.category = category;
         this.stock = stock;
+        this.period = period;
     }
 
     public Long getId() {
@@ -57,5 +60,9 @@ public class Book {
 
     public int getStock() {
         return stock;
+    }
+
+    public int getPeriod() {
+        return period;
     }
 }

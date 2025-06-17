@@ -22,4 +22,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                   WHERE b.id = :id
             """)
     int addStockById(@Param("id") Long id, @Param("stock") int stock);
+
+    @Query("SELECT b.period FROM Book b WHERE b.id = :id")
+    Optional<Integer> findPeriodById(@Param("id") Long id);
 }

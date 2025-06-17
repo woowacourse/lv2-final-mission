@@ -32,7 +32,8 @@ class BookServiceTest {
         String author = "author2";
         Long categoryId = 1L;
         int stock = 1;
-        BookRequest bookRequest = new BookRequest(name, author, categoryId, stock);
+        int period = 14;
+        BookRequest bookRequest = new BookRequest(name, author, categoryId, stock, period);
 
         // when
         BookResponse bookResponse = bookService.addBook(bookRequest);
@@ -50,7 +51,8 @@ class BookServiceTest {
         String author = "author1";
         Long categoryId = 1L;
         int stock = 3;
-        BookRequest bookRequest = new BookRequest(name, author, categoryId, stock);
+        int period = 14;
+        BookRequest bookRequest = new BookRequest(name, author, categoryId, stock,  period);
 
         // when
         bookService.addBook(bookRequest);

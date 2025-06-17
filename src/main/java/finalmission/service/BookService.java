@@ -34,7 +34,7 @@ public class BookService {
             return BookResponse.from(bookRepository.findById(bookId).get());
         }
         Category category = categoryRepository.findById(bookRequest.category_id()).get();
-        Book book = new Book(bookRequest.name(), bookRequest.author(),  category, bookRequest.stock());
+        Book book = new Book(bookRequest.name(), bookRequest.author(),  category, bookRequest.stock(), bookRequest.period());
         return BookResponse.from(bookRepository.save(book));
     }
 }
