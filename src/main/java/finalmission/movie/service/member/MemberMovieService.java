@@ -1,5 +1,6 @@
 package finalmission.movie.service.member;
 
+import finalmission.global.error.exception.ForbiddenException;
 import finalmission.member.entity.Member;
 import finalmission.member.repository.MemberRepository;
 import finalmission.movie.dto.response.MovieReservationCreateResponse;
@@ -45,7 +46,7 @@ public class MemberMovieService {
 
     private Member findMemberByIdOrThrow(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("영화 슬롯을 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
     }
 
     private MovieSlot findMovieSlotByIdOrThrow(Long movieSlotId) {
@@ -68,5 +69,23 @@ public class MemberMovieService {
                 movieReservation.getMovieSlot().getStartAt(),
                 movieReservation.getSeat()
         );
+    }
+
+    public void deleteMovieReservation(Long memberId, Long movieReservationId) {
+        MovieReservation movieReservation = findMovieReservationByIdOrThrow(movieReservationId);
+        validateMovieReservationOwnerMatch(movieReservation, memberId);
+
+        movieReservationRepository.delete(movieReservation);
+    }
+
+    private MovieReservation findMovieReservationByIdOrThrow(Long movieReservationId) {
+        return movieReservationRepository.findById(movieReservationId)
+                .orElseThrow(() -> new IllegalArgumentException("영화 예약을 찾을 수 없습니다."));
+    }
+
+    private void validateMovieReservationOwnerMatch(MovieReservation movieReservation, Long requestMemberId) {
+        if (!movieReservation.getMember().getId().equals(requestMemberId)) {
+            throw new ForbiddenException("영화 예약 주인의 요청이 아닙니다.");
+        }
     }
 }

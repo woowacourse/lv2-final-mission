@@ -11,7 +11,9 @@ import finalmission.movie.service.member.MemberMovieService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,5 +50,16 @@ public class MemberMovieController {
                 memberMovieService.readMovieReservation(loginMember.id());
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(movieReservationReadResponses);
+    }
+
+    @DeleteMapping("/movies/reservation/{id}")
+    @RoleRequired(roleType = RoleType.USER)
+    public ResponseEntity<Void> deleteMovieReservation(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @PathVariable(name = "id") Long movieReservationId
+    ) {
+        memberMovieService.deleteMovieReservation(loginMember.id(), movieReservationId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT.value()).build();
     }
 }

@@ -1,5 +1,6 @@
 package finalmission.movie.controller.member;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -11,11 +12,14 @@ import finalmission.member.entity.Member;
 import finalmission.member.repository.MemberRepository;
 import finalmission.movie.dto.request.MovieReservationCreateRequest;
 import finalmission.movie.entity.Movie;
+import finalmission.movie.entity.MovieReservation;
 import finalmission.movie.entity.MovieSlot;
 import finalmission.movie.repository.MovieRepository;
+import finalmission.movie.repository.MovieReservationRepository;
 import finalmission.movie.repository.MovieSlotRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +42,8 @@ class MemberMovieControllerTest {
     private MovieSlotRepository movieSlotRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MovieReservationRepository movieReservationRepository;
 
     @BeforeEach
     void setUp() {
@@ -115,5 +121,93 @@ class MemberMovieControllerTest {
                 .body("$", hasSize(1))
                 .body("[0].movieName", equalTo(movie.getName()))
                 .body("[0].seat", equalTo(selectSeat));
+    }
+
+    @Test
+    @DisplayName("회원 영화 예약 - 성공")
+    void deleteMovieReservation() {
+        // given
+        Movie movie = MovieFixture.createDefault();
+        movieRepository.save(movie);
+
+        MovieSlot movieSlot = MovieSlotFixture.create(movie);
+        movieSlotRepository.save(movieSlot);
+
+        Member member = MemberFixture.createDefault();
+        memberRepository.save(member);
+        Integer selectSeat = 1;
+        MovieReservationCreateRequest request = new MovieReservationCreateRequest(movieSlot.getId(), selectSeat);
+        String token = RestAssureHelper.getLoginToken(member.getEmail(), member.getPassword());
+
+        Integer movieReservationId = RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .body(request)
+
+                .when()
+                .post("/movies/reservation")
+
+                .then()
+                .extract().jsonPath()
+                .get("id");
+
+        // when & then
+        RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+
+                .when()
+                .delete("/movies/reservation/{id}", movieReservationId);
+
+        List<MovieReservation> result = movieReservationRepository.findAll();
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("회원 영화 예약 - 실패 - 다른 회원 요청")
+    void deleteMovieReservation_fail_otherMemberRequest() {
+        // given
+        Movie movie = MovieFixture.createDefault();
+        movieRepository.save(movie);
+
+        MovieSlot movieSlot = MovieSlotFixture.create(movie);
+        movieSlotRepository.save(movieSlot);
+
+        Member member = MemberFixture.createDefault();
+        memberRepository.save(member);
+        Integer selectSeat = 1;
+        MovieReservationCreateRequest request = new MovieReservationCreateRequest(movieSlot.getId(), selectSeat);
+        String token = RestAssureHelper.getLoginToken(member.getEmail(), member.getPassword());
+
+        Integer movieReservationId = RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .body(request)
+
+                .when()
+                .post("/movies/reservation")
+
+                .then()
+                .extract().jsonPath()
+                .get("id");
+
+        Member otherMember = MemberFixture.createDefault();
+        memberRepository.save(otherMember);
+        String otherMemberToken = RestAssureHelper.getLoginToken(otherMember.getEmail(), otherMember.getPassword());
+
+        // when & then
+        RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .cookie("token", otherMemberToken)
+
+                .when()
+                .delete("/movies/reservation/{id}", movieReservationId)
+
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value());
     }
 }
