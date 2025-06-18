@@ -25,6 +25,11 @@ public class MeetingRoom {
     @Column(nullable = false)
     private int maximumTime;
 
+    public MeetingRoom(String name, int maximumTime) {
+        this.name = name;
+        this.maximumTime = maximumTime;
+    }
+
     public void checkAvailableTime(LocalTime startAt, LocalTime endAt) {
         int endAtHour = endAt.getHour();
         int endAtMinute = endAt.getMinute();
