@@ -63,7 +63,11 @@ public class WaitingLine {
 
     public void removeMember(Member member) {
         if (this.hasMember(member)) {
-            this.waitingMembers.remove(WaitingMember.create(member, this));
+            WaitingMember waitingMemberToRemove = this.waitingMembers.stream()
+                    .filter(wm -> wm.getMember().equals(member))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException("[ERROR] 해당 대기에 존재하지 않습니다."));
+            this.waitingMembers.remove(waitingMemberToRemove);
         }
     }
 
