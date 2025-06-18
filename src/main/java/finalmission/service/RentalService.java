@@ -35,10 +35,7 @@ public class RentalService {
     }
 
     public RentalResponse createRental(RentalRequest rentalRequest) {
-        if (holidayService.isHoliday(rentalRequest.rentalDate())) {
-            throw new IllegalArgumentException("공휴일에는 대여가 불가능합니다.");
-        }
-
+        validateHoliday(rentalRequest);
         validateRentalPeriod(rentalRequest);
 
         Member member = memberService.findById(rentalRequest.memberId());
@@ -48,7 +45,16 @@ public class RentalService {
         return RentalResponse.from(rentalRepository.save(rental));
     }
 
-    public void validateRentalPeriod(RentalRequest rentalRequest) {
+    private void validateHoliday(RentalRequest rentalRequest) {
+        if (holidayService.isHoliday(rentalRequest.rentalDate())) {
+            throw new IllegalArgumentException("공휴일 및 주말에는 대여가 불가능합니다.");
+        }
+        if (holidayService.isHoliday(rentalRequest.returnDate())) {
+            throw new IllegalArgumentException("공휴일 및 주말에는 반납이 불가능합니다.");
+        }
+    }
+
+    private void validateRentalPeriod(RentalRequest rentalRequest) {
         LocalDate rentalDate = rentalRequest.rentalDate();
         LocalDate returnDate = rentalRequest.returnDate();
         Long bookId = rentalRequest.bookId();
