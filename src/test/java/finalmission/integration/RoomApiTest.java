@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import finalmission.controller.dto.RoomCreateRequest;
+import finalmission.controller.dto.RoomUpdateRequest;
 import finalmission.domain.Member;
 import finalmission.domain.Room;
 import finalmission.domain.RoomMember;
@@ -15,7 +16,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -98,7 +98,7 @@ public class RoomApiTest {
         assertThat(roomMemberRepository.findAll()).isNotEmpty();
     }
 
-    @DisplayName("과거의 날짜로 방을 생성하면 400을 응답한다.")
+    @DisplayName("과거의 날짜 및 시간으로 방을 생성하면 400을 응답한다.")
     @Test
     void createPastDateTime() {
         // given
@@ -262,6 +262,131 @@ public class RoomApiTest {
         RestAssured.given().log().all()
                 .cookie("token", member1AccessToken)
                 .when().delete("/room/{id}", room.getId())
+                .then().log().all()
+                .statusCode(400);
+    }
+
+    @DisplayName("내전방 정보를 수정한다.")
+    @Test
+    void update() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        final RoomUpdateRequest request = new RoomUpdateRequest(
+                "update_name",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "update_description"
+        );
+
+        // when & then
+        RestAssured.given().log().all()
+                .cookie("token", member1AccessToken)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().put("/room/{id}", room.getId())
+                .then().log().all()
+                .statusCode(200);
+
+        final Room updatedRoom = roomRepository.findById(room.getId()).get();
+        assertThat(updatedRoom)
+                .extracting("name", "description")
+                .containsExactly("update_name", "update_description");
+    }
+
+    @DisplayName("방장이 아닌 유저가 내전방 정보 수정을 요청하면 401을 응답한다.")
+    @Test
+    void updateByNonManager() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        final RoomUpdateRequest request = new RoomUpdateRequest(
+                "update_name",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "update_description"
+        );
+
+        // when & then
+        RestAssured.given().log().all()
+                .cookie("token", member2AccessToken)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().put("/room/{id}", room.getId())
+                .then().log().all()
+                .statusCode(401);
+    }
+
+    @DisplayName("방장이 아닌 유저가 내전방 정보 수정을 요청하면 401을 응답한다.")
+    @Test
+    void updateAlreadyStart() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().minusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        final RoomUpdateRequest request = new RoomUpdateRequest(
+                "update_name",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "update_description"
+        );
+
+        // when & then
+        RestAssured.given().log().all()
+                .cookie("token", member1AccessToken)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().put("/room/{id}", room.getId())
+                .then().log().all()
+                .statusCode(400);
+    }
+
+    @DisplayName("과거의 날짜 및 시간으로 방을 수정하면 400을 응답한다.")
+    @Test
+    void updatePastDateTime() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        final RoomUpdateRequest request = new RoomUpdateRequest(
+                "update_name",
+                LocalDate.now().minusDays(1),
+                LocalTime.NOON,
+                "update_description"
+        );
+
+        // when & then
+        RestAssured.given().log().all()
+                .cookie("token", member1AccessToken)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().put("/room/{id}", room.getId())
                 .then().log().all()
                 .statusCode(400);
     }

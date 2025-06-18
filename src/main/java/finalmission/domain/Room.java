@@ -74,4 +74,24 @@ public class Room {
 
         return startDateTime.isBefore(LocalDateTime.now());
     }
+
+    public void update(
+            final String name,
+            final LocalDate startDate,
+            final LocalTime startTime,
+            final String description
+    ) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (startDate != null) {
+            this.startDate = startDate;
+        }
+        if (startTime != null) {
+            this.startTime = startTime;
+        }
+        if (description != null) {
+            this.description = description;
+        }
+    }
 }

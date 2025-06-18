@@ -1,8 +1,10 @@
 package finalmission.service;
 
+import finalmission.controller.dto.RoomUpdateResponse;
 import finalmission.controller.dto.RoomCreateRequest;
 import finalmission.controller.dto.RoomCreateResponse;
 import finalmission.controller.dto.RoomResponse;
+import finalmission.controller.dto.RoomUpdateRequest;
 import finalmission.controller.dto.RoomWithoutParticipantsResponse;
 import finalmission.domain.Member;
 import finalmission.domain.Room;
@@ -82,13 +84,41 @@ public class RoomService {
         validateGameAlreadyStart(room);
 
         final Member member = memberService.getById(memberId);
-
-        if (!room.isManager(member)) {
-            throw new UnauthorizedException("방장 이외에는 내전방을 삭제할 수 없습니다.");
-        }
+        validateIsManager(room, member);
 
         roomMemberRepository.deleteByRoomId(roomId);
         roomRepository.deleteById(roomId);
+    }
+
+    @Transactional
+    public RoomUpdateResponse update(
+            final RoomUpdateRequest request,
+            final Long roomId,
+            final Long memberId
+    ) {
+        validateStartDateAndTimeNotFuture(request.startDate(), request.startTime());
+
+        final Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new NotFoundException("해당 id의 내전방을 찾을 수 없습니다. id: " + roomId));
+        validateGameAlreadyStart(room);
+
+        final Member member = memberService.getById(memberId);
+        validateIsManager(room, member);
+
+        room.update(
+                request.name(),
+                request.startDate(),
+                request.startTime(),
+                request.description()
+        );
+
+        return RoomUpdateResponse.from(room);
+    }
+
+    private void validateIsManager(final Room room, final Member member) {
+        if (!room.isManager(member)) {
+            throw new UnauthorizedException("방장 이외에는 내전방을 삭제할 수 없습니다.");
+        }
     }
 
     @Transactional
