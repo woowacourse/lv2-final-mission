@@ -1,6 +1,7 @@
 package finalmission.music.auth.controller;
 
 import finalmission.music.auth.controller.dto.LoginRequest;
+import finalmission.music.global.auth.LoginMember;
 import finalmission.music.member.domain.Member;
 import finalmission.music.auth.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,16 @@ public class AuthController {
 
         HttpSession session = request.getSession();
         session.setAttribute("loginMember", loginMember);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(final HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
         return ResponseEntity.ok().build();
     }
 }
