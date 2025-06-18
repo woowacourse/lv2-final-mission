@@ -1,6 +1,5 @@
 package finalmission.controller;
 
-import finalmission.controller.dto.MemberLoginResponse;
 import finalmission.controller.dto.MemberSignUpRequest;
 import finalmission.domain.vo.LolName;
 import finalmission.service.MemberService;
