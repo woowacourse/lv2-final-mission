@@ -40,14 +40,10 @@ public class MonsterEnergyStock {
             throw new IllegalArgumentException("재고가 부족합니다.");
         }
         this.stock -= quantity;
-        System.out.println("quantity = " + quantity);
-        System.out.println("stock = " + stock);
     }
 
     public void increment(int quantity) {
         this.stock += quantity;
-        System.out.println("quantity = " + quantity);
-        System.out.println("stock = " + stock);
     }
 
     public boolean isMonsterEnergy(MonsterEnergy monsterEnergy) {
