@@ -20,20 +20,20 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private User user;
+    private Member member;
     @ManyToOne
     private YogaClass yogaClass;
     private LocalDate date;
     private LocalTime time;
 
-    public Reservation(User user, YogaClass yogaClass, LocalDate date, LocalTime time) {
-        this.user = user;
+    public Reservation(Member member, YogaClass yogaClass, LocalDate date, LocalTime time) {
+        this.member = member;
         this.yogaClass = yogaClass;
         this.date = date;
         this.time = time;
     }
 
-    public boolean isOwner(Long userId) {
-        return this.user.getId().equals(userId);
+    public boolean isOwner(Long memberId) {
+        return this.member.getId().equals(memberId);
     }
 }

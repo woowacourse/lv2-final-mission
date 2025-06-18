@@ -22,18 +22,18 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping()
-    public Reservation reserve(@RequestBody ReservationRequest request, Long userId) {
-        return reservationService.register(userId, request.classId(), request.date(), request.time());
+    public Reservation reserve(@RequestBody ReservationRequest request, Long memberId) {
+        return reservationService.register(memberId, request.classId(), request.date(), request.time());
     }
 
     @GetMapping("/mine")
-    public List<ReservationResponse> getMyReservations(Long userId) {
-        var reservations = reservationService.getMyReservations(userId);
+    public List<ReservationResponse> getMyReservations(Long memberId) {
+        var reservations = reservationService.getMyReservations(memberId);
         return ReservationResponse.from(reservations);
     }
 
     @DeleteMapping("/{id}")
-    public void cancel(@PathVariable Long id, Long userId) {
-        reservationService.cancel(id, userId);
+    public void cancel(@PathVariable Long id, Long memberId) {
+        reservationService.cancel(id, memberId);
     }
 }
