@@ -86,12 +86,6 @@ public class RoomService {
         room.addRoomMember(roomMember);
     }
 
-    private void validateGameAlreadyStart(final Room room) {
-        if (room.isGameStarted()) {
-            throw new IllegalArgumentException("이미 시작한 내전입니다.");
-        }
-    }
-
     private void validateParticipantsSize(final Room room) {
         if (room.isFull()) {
             throw new IllegalArgumentException("이미 방이 꽉 찼습니다.");
@@ -108,11 +102,20 @@ public class RoomService {
     public void leave(final Long roomId, final Long memberId) {
         final Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new NotFoundException("해당 id의 내전방을 찾을 수 없습니다. id: " + roomId));
+        validateGameAlreadyStart(room);
+
         final Member member = memberService.getById(memberId);
 
         final RoomMember roomMember = roomMemberRepository.findByRoomIdAndMemberId(room.getId(), member.getId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 내전방에 참여하지 않은 유저입니다."));
 
         roomMemberRepository.delete(roomMember);
+    }
+
+
+    private void validateGameAlreadyStart(final Room room) {
+        if (room.isGameStarted()) {
+            throw new IllegalArgumentException("이미 시작한 내전입니다.");
+        }
     }
 }
