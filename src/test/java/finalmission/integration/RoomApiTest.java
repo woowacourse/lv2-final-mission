@@ -206,6 +206,28 @@ public class RoomApiTest {
         assertThat(roomMemberRepository.findAll()).hasSize(2);
     }
 
+    @DisplayName("날짜가 지난 내전방에 참여를 요청하면 400을 응답한다.")
+    @Test
+    void joinAlreadyStart() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().minusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        // when & then
+        RestAssured.given().log().all()
+                .param("memberId", 2L)
+                .param("roomId", 1L)
+                .when().get("/room/join")
+                .then().log().all()
+                .statusCode(400);
+    }
+
     @DisplayName("이미 내전방에 참여한 유저가 참여를 요청하면 400을 응답한다.")
     @Test
     void joinAlreadyJoinedMember() {
