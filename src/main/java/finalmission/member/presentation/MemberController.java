@@ -6,7 +6,9 @@ import finalmission.member.dto.SignupRequest;
 import finalmission.member.dto.SignupResponse;
 import finalmission.member.service.MemberService;
 import java.net.URI;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,12 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<SignupResponse>> getMembers() {
+        List<SignupResponse> response = memberService.getMembers();
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping
     public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
         SignupResponse response = memberService.createUser(request);
@@ -31,8 +39,4 @@ public class MemberController {
         return ResponseEntity.created(uri).body(response);
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<MemberResponse>> findAllMembers() {
-//        return ResponseEntity.ok().body(memberService.findAllMember());
-//    }
 }

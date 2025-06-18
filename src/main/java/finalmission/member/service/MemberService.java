@@ -5,6 +5,7 @@ import finalmission.member.domain.Role;
 import finalmission.member.dto.SignupRequest;
 import finalmission.member.dto.SignupResponse;
 import finalmission.member.infrastructure.MemberRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,5 +23,11 @@ public class MemberService {
         Member member = Member.createWithoutId(request.name(), request.email(), request.password(), Role.USER);
         Member savedMember = memberRepository.save(member);
         return SignupResponse.from(savedMember);
+    }
+
+    public List<SignupResponse> getMembers() {
+        return memberRepository.findAll().stream()
+                .map(SignupResponse::from)
+                .toList();
     }
 }
