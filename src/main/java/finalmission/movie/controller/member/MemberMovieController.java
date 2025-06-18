@@ -1,5 +1,9 @@
 package finalmission.movie.controller.member;
 
+import finalmission.global.auth.annotation.AuthenticationPrincipal;
+import finalmission.global.auth.annotation.RoleRequired;
+import finalmission.global.auth.dto.LoginMember;
+import finalmission.member.entity.RoleType;
 import finalmission.movie.dto.request.MovieReservationCreateRequest;
 import finalmission.movie.dto.response.MovieReservationCreateResponse;
 import finalmission.movie.dto.response.MovieReservationReadResponse;
@@ -10,24 +14,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MemberMovieController {
 
-    private MemberMovieService memberMovieService;
+    private final MemberMovieService memberMovieService;
 
     public MemberMovieController(MemberMovieService memberMovieService) {
         this.memberMovieService = memberMovieService;
     }
 
     @PostMapping("/movies/reservation")
+    @RoleRequired(roleType = {RoleType.ADMIN, RoleType.USER})
     public ResponseEntity<MovieReservationCreateResponse> createMovieReservation(
+            @AuthenticationPrincipal LoginMember loginMember,
             @RequestBody MovieReservationCreateRequest movieReservationCreateRequest
     ) {
         MovieReservationCreateResponse movieReservationCreateResponse = memberMovieService.createMovieReservation(
-                movieReservationCreateRequest.memberName(),
+                loginMember.id(),
                 movieReservationCreateRequest.movieSlotId(),
                 movieReservationCreateRequest.seat()
         );
@@ -35,11 +40,12 @@ public class MemberMovieController {
     }
 
     @GetMapping("/movies/reservation")
+    @RoleRequired(roleType = {RoleType.ADMIN, RoleType.USER})
     public ResponseEntity<List<MovieReservationReadResponse>> readMovieReservation(
-            @RequestParam String memberName
+            @AuthenticationPrincipal LoginMember loginMember
     ) {
         List<MovieReservationReadResponse> movieReservationReadResponses =
-                memberMovieService.readMovieReservation(memberName);
+                memberMovieService.readMovieReservation(loginMember.id());
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(movieReservationReadResponses);
     }

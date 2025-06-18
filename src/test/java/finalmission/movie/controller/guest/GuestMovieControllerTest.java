@@ -3,11 +3,14 @@ package finalmission.movie.controller.guest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
+import finalmission.fixture.MemberFixture;
+import finalmission.fixture.MovieFixture;
+import finalmission.fixture.MovieSlotFixture;
+import finalmission.member.entity.Member;
+import finalmission.member.repository.MemberRepository;
 import finalmission.movie.entity.Movie;
 import finalmission.movie.entity.MovieReservation;
 import finalmission.movie.entity.MovieSlot;
-import finalmission.fixture.MovieFixture;
-import finalmission.fixture.MovieSlotFixture;
 import finalmission.movie.repository.MovieRepository;
 import finalmission.movie.repository.MovieReservationRepository;
 import finalmission.movie.repository.MovieSlotRepository;
@@ -36,6 +39,8 @@ class GuestMovieControllerTest {
     private MovieSlotRepository movieSlotRepository;
     @Autowired
     private MovieReservationRepository movieReservationRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
@@ -73,8 +78,11 @@ class GuestMovieControllerTest {
         MovieSlot movieSlot = MovieSlotFixture.create(movie);
         movieSlotRepository.save(movieSlot);
 
+        Member member = MemberFixture.createDefault();
+        memberRepository.save(member);
+
         Integer selectSeat = 1;
-        MovieReservation movieReservation = new MovieReservation("회원 이름", movieSlot, selectSeat);
+        MovieReservation movieReservation = new MovieReservation(member, movieSlot, selectSeat);
         movieReservationRepository.save(movieReservation);
 
         // when & then

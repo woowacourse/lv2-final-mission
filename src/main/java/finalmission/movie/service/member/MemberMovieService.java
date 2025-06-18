@@ -1,5 +1,7 @@
 package finalmission.movie.service.member;
 
+import finalmission.member.entity.Member;
+import finalmission.member.repository.MemberRepository;
 import finalmission.movie.dto.response.MovieReservationCreateResponse;
 import finalmission.movie.dto.response.MovieReservationReadResponse;
 import finalmission.movie.entity.MovieReservation;
@@ -13,26 +15,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class MemberMovieService {
 
-    private MovieReservationRepository movieReservationRepository;
-    private MovieSlotRepository movieSlotRepository;
+    private final MovieReservationRepository movieReservationRepository;
+    private final MovieSlotRepository movieSlotRepository;
+    private final MemberRepository memberRepository;
 
-    public MemberMovieService(MovieReservationRepository movieReservationRepository,
-                              MovieSlotRepository movieSlotRepository) {
+    public MemberMovieService(
+            MovieReservationRepository movieReservationRepository,
+            MovieSlotRepository movieSlotRepository,
+            MemberRepository memberRepository
+    ) {
         this.movieReservationRepository = movieReservationRepository;
         this.movieSlotRepository = movieSlotRepository;
+        this.memberRepository = memberRepository;
     }
 
-    public MovieReservationCreateResponse createMovieReservation(String memberName, Long movieSlotId, Integer seat) {
+    public MovieReservationCreateResponse createMovieReservation(Long memberId, Long movieSlotId, Integer seat) {
+        Member member = findMemberByIdOrThrow(memberId);
         MovieSlot movieSlot = findMovieSlotByIdOrThrow(movieSlotId);
-        MovieReservation reservation = new MovieReservation(memberName, movieSlot, seat);
+        MovieReservation reservation = new MovieReservation(member, movieSlot, seat);
         movieReservationRepository.save(reservation);
 
         return new MovieReservationCreateResponse(
                 reservation.getId(),
-                reservation.getMemberName(),
+                member.getName(),
                 reservation.getMovieSlot().getMovie().getName(),
                 reservation.getSeat()
         );
+    }
+
+    private Member findMemberByIdOrThrow(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("영화 슬롯을 찾을 수 없습니다."));
     }
 
     private MovieSlot findMovieSlotByIdOrThrow(Long movieSlotId) {
@@ -40,8 +53,8 @@ public class MemberMovieService {
                 .orElseThrow(() -> new IllegalArgumentException("영화 슬롯을 찾을 수 없습니다."));
     }
 
-    public List<MovieReservationReadResponse> readMovieReservation(String memberName) {
-        List<MovieReservation> memberMovieReservations = movieReservationRepository.findByMemberName(memberName);
+    public List<MovieReservationReadResponse> readMovieReservation(Long memberId) {
+        List<MovieReservation> memberMovieReservations = movieReservationRepository.findByMemberId(memberId);
         return memberMovieReservations.stream()
                 .map(this::MovieReservationReadResponse)
                 .collect(Collectors.toList());

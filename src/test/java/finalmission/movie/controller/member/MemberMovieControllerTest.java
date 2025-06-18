@@ -3,11 +3,15 @@ package finalmission.movie.controller.member;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
+import finalmission.fixture.MemberFixture;
+import finalmission.fixture.MovieFixture;
+import finalmission.fixture.MovieSlotFixture;
+import finalmission.helper.RestAssureHelper;
+import finalmission.member.entity.Member;
+import finalmission.member.repository.MemberRepository;
 import finalmission.movie.dto.request.MovieReservationCreateRequest;
 import finalmission.movie.entity.Movie;
 import finalmission.movie.entity.MovieSlot;
-import finalmission.fixture.MovieFixture;
-import finalmission.fixture.MovieSlotFixture;
 import finalmission.movie.repository.MovieRepository;
 import finalmission.movie.repository.MovieSlotRepository;
 import io.restassured.RestAssured;
@@ -32,6 +36,8 @@ class MemberMovieControllerTest {
     private MovieRepository movieRepository;
     @Autowired
     private MovieSlotRepository movieSlotRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
@@ -48,23 +54,25 @@ class MemberMovieControllerTest {
         MovieSlot movieSlot = MovieSlotFixture.create(movie);
         movieSlotRepository.save(movieSlot);
 
+        Member member = MemberFixture.createDefault();
+        memberRepository.save(member);
         Integer selectSeat = 1;
-        MovieReservationCreateRequest request = new MovieReservationCreateRequest(
-                "회원 이름",
-                movieSlot.getId(),
-                selectSeat
-        );
+        MovieReservationCreateRequest request = new MovieReservationCreateRequest(movieSlot.getId(), selectSeat);
+        String token = RestAssureHelper.getLoginToken(member.getEmail(), member.getPassword());
 
         // when & then
         RestAssured
                 .given()
                 .contentType(ContentType.JSON)
+                .cookie("token", token)
                 .body(request)
+
                 .when()
                 .post("movies/reservation")
+
                 .then()
                 .statusCode(HttpStatus.CREATED.value())
-                .body("memberName", equalTo("회원 이름"))
+                .body("memberName", equalTo(member.getName()))
                 .body("movieName", equalTo(movie.getName()));
     }
 
@@ -78,25 +86,30 @@ class MemberMovieControllerTest {
         MovieSlot movieSlot = MovieSlotFixture.create(movie);
         movieSlotRepository.save(movieSlot);
 
+        Member member = MemberFixture.createDefault();
+        memberRepository.save(member);
         Integer selectSeat = 1;
-        MovieReservationCreateRequest request = new MovieReservationCreateRequest(
-                "회원 이름",
-                movieSlot.getId(),
-                selectSeat
-        );
+        MovieReservationCreateRequest request = new MovieReservationCreateRequest(movieSlot.getId(), selectSeat);
+        String token = RestAssureHelper.getLoginToken(member.getEmail(), member.getPassword());
+
         RestAssured
                 .given()
                 .contentType(ContentType.JSON)
+                .cookie("token", token)
                 .body(request)
+
                 .when()
                 .post("movies/reservation");
 
         // when & then
         RestAssured
                 .given()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+
                 .when()
-                .queryParam("memberName", "회원 이름")
                 .get("/movies/reservation")
+
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("$", hasSize(1))

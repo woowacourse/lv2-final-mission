@@ -1,5 +1,6 @@
 package finalmission.movie.entity;
 
+import finalmission.member.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,8 +15,8 @@ public class MovieReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_name")
-    private String memberName;
+    @ManyToOne
+    private Member member;
 
     @ManyToOne
     private MovieSlot movieSlot;
@@ -23,8 +24,8 @@ public class MovieReservation {
     @Column(name = "seat")
     private Integer seat;
 
-    public MovieReservation(String memberName, MovieSlot movieSlot, Integer seat) {
-        this.memberName = memberName;
+    public MovieReservation(Member member, MovieSlot movieSlot, Integer seat) {
+        this.member = member;
         this.movieSlot = movieSlot;
         this.seat = seat;
     }
@@ -36,8 +37,8 @@ public class MovieReservation {
         return id;
     }
 
-    public String getMemberName() {
-        return memberName;
+    public Member getMember() {
+        return member;
     }
 
     public MovieSlot getMovieSlot() {
