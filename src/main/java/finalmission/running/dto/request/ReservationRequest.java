@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 public record ReservationRequest(
-    String reg,
+    int stn,
     List<String> participants,
     LocalDate date,
     LocalTime startAt,

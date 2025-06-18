@@ -46,7 +46,7 @@ class RunningServiceTest {
     @BeforeEach
     void setUp() {
         request = new ReservationRequest(
-            "11B00000",
+            108,
             List.of(),
             LocalDate.now().plusDays(1),
             LocalTime.of(10, 0),
