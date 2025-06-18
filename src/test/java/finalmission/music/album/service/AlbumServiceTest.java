@@ -4,6 +4,7 @@ import finalmission.music.album.controller.dto.AlbumRequest;
 import finalmission.music.album.controller.dto.AlbumResponse;
 import finalmission.music.album.domain.Album;
 import finalmission.music.album.repository.AlbumRepository;
+import finalmission.music.common.BaseServiceTest;
 import java.time.LocalDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-class AlbumServiceTest {
+class AlbumServiceTest extends BaseServiceTest {
 
     @Autowired
     private AlbumService sut;
@@ -24,7 +25,6 @@ class AlbumServiceTest {
 
     @Test
     @DisplayName("앨범 등록을 할 수 있다.")
-    @Transactional
     void can_create_album() {
         AlbumRequest albumRequest = new AlbumRequest("test", "test", 0, LocalDate.of(2020, 5, 24), "test-spotify");
 
@@ -38,7 +38,6 @@ class AlbumServiceTest {
 
     @Test
     @DisplayName("앨범 조회가 가능하다.")
-    @Transactional
     void can_find_album() {
         Album album = albumRepository.save(new Album("test", "test", 0, LocalDate.of(2020, 5, 24), "test-spotify"));
 

@@ -1,13 +1,14 @@
 package finalmission.music.reservation.service;
 
-import finalmission.music.member.domain.Role;
-import finalmission.music.reservation.controller.dto.ReservationResponse;
 import finalmission.music.album.domain.Album;
-import finalmission.music.lottery.domain.Lottery;
-import finalmission.music.member.domain.Member;
 import finalmission.music.album.repository.AlbumRepository;
+import finalmission.music.common.BaseServiceTest;
+import finalmission.music.lottery.domain.Lottery;
 import finalmission.music.lottery.repository.LotteryRepository;
+import finalmission.music.member.domain.Member;
+import finalmission.music.member.domain.Role;
 import finalmission.music.member.repository.MemberRepository;
+import finalmission.music.reservation.controller.dto.ReservationResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
@@ -16,10 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-class ReservationServiceTest {
+class ReservationServiceTest extends BaseServiceTest {
 
     @Autowired
     private ReservationService sut;
@@ -33,7 +33,6 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("지나간 추첨에 대해서 예약할 수 없다.")
-    @Transactional
     void dont_reserve_to_expired_lottery() {
         Member member = memberRepository.save(new Member("test-member", Role.USER));
         Album album = albumRepository.save(
@@ -47,7 +46,6 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("올바른 추첨에 대해서 예약할 수 있다.")
-    @Transactional
     void can_reserve_to_lottery() {
         Member member = memberRepository.save(new Member("test-member", Role.USER));
         Album album = albumRepository.save(
