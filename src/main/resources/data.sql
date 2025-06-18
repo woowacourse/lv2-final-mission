@@ -4,6 +4,8 @@ INSERT INTO exercise_course (name, description)
 VALUES ('요가', '테레사수녀');
 INSERT INTO exercise_course (name, description)
 VALUES ('풋살', '익살');
+INSERT INTO exercise_course (name, description)
+VALUES ('크로스핏', '흥미진진');
 
 INSERT INTO reservation_time (start_at)
 VALUES ('10:00');
