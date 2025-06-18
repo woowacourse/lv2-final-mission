@@ -1,0 +1,115 @@
+package finalmission.reservation.service;
+
+import finalmission.external.holiday.RestDayRestClient;
+import finalmission.external.holiday.dto.SimpleHoliday;
+import finalmission.global.AuthenticationPrincipal;
+import finalmission.meetingroom.domain.MeetingRoom;
+import finalmission.meetingroom.repository.MeetingRoomRepository;
+import finalmission.member.domian.Member;
+import finalmission.member.dto.LoginMember;
+import finalmission.member.repository.MemberRepository;
+import finalmission.reservation.domain.Reservation;
+import finalmission.reservation.dto.ReservationRequest;
+import finalmission.reservation.dto.ReservationResponse;
+import finalmission.reservation.dto.ReservationUpdateRequest;
+import finalmission.reservation.exception.ReservationAccessDeniedException;
+import finalmission.reservation.repository.ReservationRepository;
+import finalmission.reservationtime.domain.ReservationTime;
+import finalmission.reservationtime.repository.ReservationTimeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+@Service
+@RequiredArgsConstructor
+public class ReservationService {
+
+    private final ReservationRepository reservationRepository;
+    private final MeetingRoomRepository meetingRoomRepository;
+    private final MemberRepository memberRepository;
+    private final ReservationTimeRepository timeRepository;
+    private final RestDayRestClient restDayRestClient;
+
+    public ReservationResponse addReservation(
+            ReservationRequest request,
+            @AuthenticationPrincipal LoginMember loginMember
+    ) {
+//        if (checkHoliday(request.date())) {
+//            throw new IllegalArgumentException("공휴일엔 예약할 수 없습니다.");
+//        }
+
+        MeetingRoom meetingRoom = getMeetingRoom(request.roomId());
+
+        Member member = getMember(loginMember);
+
+        ReservationTime reservationTime = getReservationTime(request.timeId());
+
+        Reservation reservation = new Reservation(request.date(), reservationTime, member, meetingRoom);
+        Reservation savedReservation = reservationRepository.save(reservation);
+        return new ReservationResponse(savedReservation.getId(), savedReservation.getDate(), savedReservation.getTime().getStartAt(), savedReservation.getMeetingRoom().getRoomName());
+    }
+
+    public List<ReservationResponse> findAllByMember(
+            @AuthenticationPrincipal LoginMember loginMember
+    ) {
+        Member member = getMember(loginMember);
+        List<Reservation> reservations = reservationRepository.findByMember((member));
+        return reservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
+    }
+
+    public void deleteReservationById(Long reservationId, LoginMember loginMember) {
+        if (!reservationRepository.existsReservationByIdAndMemberId(reservationId, loginMember.id())) {
+            throw new NoSuchElementException("해당 예약은 존재하지 않습니다.");
+        }
+        reservationRepository.deleteById(reservationId);
+    }
+
+    public ReservationResponse updateReservation(Long reservationId, ReservationUpdateRequest request, LoginMember loginMember) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NoSuchElementException("해당 예약은 존재하지 않습니다."));
+
+        validateUpdate(reservation, loginMember);
+
+        MeetingRoom meetingRoom = getMeetingRoom(request.roomId());
+        ReservationTime reservationTime = getReservationTime(request.timeId());
+        reservation.update(request.date(), reservationTime, meetingRoom);
+        return new ReservationResponse(reservation.getId(), reservation.getDate(), reservation.getTime().getStartAt(), reservation.getMeetingRoom().getRoomName());
+    }
+
+    private void validateUpdate(Reservation reservation, LoginMember loginMember) {
+        if (!reservation.equalMember(loginMember.id())) {
+            throw new ReservationAccessDeniedException("해당 예약을 수정할 권한이 없습니다.");
+        }
+    }
+
+    private ReservationTime getReservationTime(Long timeId) {
+        return timeRepository.findById(timeId)
+                .orElseThrow(() -> new NoSuchElementException("해당 예약 시간은 존재하지 않습니다."));
+    }
+
+    private MeetingRoom getMeetingRoom(Long roomId) {
+        return meetingRoomRepository.findById(roomId)
+                .orElseThrow(() -> new NoSuchElementException("해당 회의실은 존재하지 않습니다."));
+    }
+
+    private Member getMember(LoginMember loginMember) {
+        return memberRepository.findById(loginMember.id())
+                .orElseThrow(() -> new NoSuchElementException("해당 멤버는 존재하지 않는 회원입니다."));
+    }
+
+    private boolean checkHoliday(LocalDate date) {
+        List<SimpleHoliday> holidays = restDayRestClient.getHolidays(date.getYear(), date.getMonthValue());
+
+        return holidays.stream()
+                .anyMatch(holiday -> {
+                    LocalDate holidayDate = LocalDate.parse(holiday.locdate(), DateTimeFormatter.ofPattern("yyyyMMdd"));
+                    return holidayDate.isEqual(date);
+                });
+    }
+}
