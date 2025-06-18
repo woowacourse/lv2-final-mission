@@ -51,27 +51,47 @@ public class OrderServiceTest {
     void findOrderByUser() {
         User user = userJpaRepository.save(new User("사용자"));
 
-        Order order = createProcessingOrder(user, 1L, 1L, 3L, "사무용품으로 볼펜 구입");
+        Order order = createOrder(user, 1L, 1L, 3L, "사무용품으로 볼펜 구입");
         orderJpaRepository.save(order);
 
         assertThat(orderService.findByUser(user.getId())).hasSize(1);
     }
 
     @Test
-    @DisplayName("사용자 입력에 대한 발주를 저장할 수 있다.")
-    void createProcessingOrder() {
+    @DisplayName("사용자가 입력한 발주를 저장할 수 있다.")
+    void createOrder() {
         OrderRegister request = new OrderRegister(
             "사용자1", 1L, 1L, 3L, "사무용품으로 볼펜 구입");
 
         OrderResponse response = orderService.registerOrder(request);
 
+        Order order = orderJpaRepository.findById(response.id())
+            .orElseThrow(IllegalArgumentException::new);
+
         assertAll(() -> {
-            assertThat(orderJpaRepository.findById(response.id()).isPresent()).isTrue();
-            assertThat(orderJpaRepository.findAll()).hasSize(1);
+            assertThat(order.getCreatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
+            assertThat(order.getEmailStatus()).isEqualTo(EmailStatus.PROCESSING);
+            assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.SUCCESS);
         });
     }
 
-    private Order createProcessingOrder(User user, Long categoryId, Long productId, Long count,
+    @Test
+    @DisplayName("사용자가 선택한 발주를 삭제할 수 있다.")
+    void deleteOrder() {
+        User user = userJpaRepository.save(new User("사용자"));
+
+        Order order = createOrder(user, 1L, 1L, 3L, "사무용품으로 볼펜 구입");
+        orderJpaRepository.save(order);
+
+        OrderResponse response = orderService.deleteOrder(order.getId());
+
+        assertAll(() -> {
+            assertThat(response.orderStatus()).isEqualTo(OrderStatus.DELETE.getText());
+            assertThat(response.emailStatus()).isEqualTo(EmailStatus.PROCESSING.getText());
+        });
+    }
+
+    private Order createOrder(User user, Long categoryId, Long productId, Long count,
         String detail) {
         Category category = categoryJpaRepository.findById(categoryId)
             .orElseThrow(IllegalArgumentException::new);
@@ -79,6 +99,6 @@ public class OrderServiceTest {
             .orElseThrow(IllegalArgumentException::new);
 
         return new Order(user, category, product, count, detail, LocalDateTime.now(),
-            EmailStatus.DONE, OrderStatus.PROCESSING);
+            EmailStatus.DONE, OrderStatus.SUCCESS);
     }
 }

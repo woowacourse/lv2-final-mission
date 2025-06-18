@@ -1,7 +1,7 @@
 package ordering.entity;
 
 public enum OrderStatus {
-    PROCESSING("발주 성공"),
+    SUCCESS("발주 성공"),
     DELETE("발주 취소");
 
     private final String text;
