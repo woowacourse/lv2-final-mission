@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class GuestMovieService {
 
     private final MovieReservationRepository movieReservationRepository;
-    private MovieSlotRepository movieSlotRepository;
+    private final MovieSlotRepository movieSlotRepository;
 
     public GuestMovieService(MovieSlotRepository movieSlotRepository,
                              MovieReservationRepository movieReservationRepository) {
