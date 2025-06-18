@@ -79,7 +79,7 @@ public class ReservationService {
         if (isPastTime(reservationDate, startAt)) {
             throw new BusinessException("과거의 시간에 예약할 수 없습니다.");
         }
-        if (isAvailableTime(startAt) && isAvailableTime(endAt)) {
+        if (isInvalidTime(startAt) || isInvalidTime(endAt)) {
             throw new BusinessException("예약 불가능한 시간입니다.");
         }
         if (isEndAtBeforeStartAt(startAt, endAt)) {
@@ -92,7 +92,7 @@ public class ReservationService {
         return LocalDateTime.now().isAfter(reservationStartDateTime);
     }
 
-    private boolean isAvailableTime(final LocalTime reservationTIme) {
+    private boolean isInvalidTime(final LocalTime reservationTIme) {
         return START_TIME.isAfter(reservationTIme) || END_TIME.isBefore(reservationTIme);
     }
 
