@@ -23,7 +23,7 @@ public class AuthService {
     public String login(LoginRequest loginRequest) {
         MemberResponse memberResponse = memberService.findByEmail(loginRequest.email());
         Member member = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
-                memberResponse.memberRole());
+                memberResponse.password(), memberResponse.memberRole());
         if (member.isSamePassword(loginRequest.password())) {
             return jwtTokenProvider.createToken(
                     new LoginMember(member.getId(), member.getEmail(), member.getName(), member.getMemberRole()));
