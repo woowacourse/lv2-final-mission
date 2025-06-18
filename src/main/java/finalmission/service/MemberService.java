@@ -39,7 +39,7 @@ public class MemberService {
         final Member member = memberRepository.findByLolName(lolName)
                 .orElseThrow(() -> new NotFoundException("해당하는 이름의 회원이 존재하지 않습니다."));
 
-        if (!member.getPassword().equals(password)) {
+        if (!member.isPasswordCorrect(password)) {
             throw new UnauthorizedException("비밀번호가 틀립니다.");
         }
 

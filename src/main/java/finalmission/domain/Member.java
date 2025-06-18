@@ -29,6 +29,10 @@ public class Member {
         this.password = password;
     }
 
+    public boolean isPasswordCorrect(final String password) {
+        return this.password.equals(password);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (o == null || getClass() != o.getClass()) {
