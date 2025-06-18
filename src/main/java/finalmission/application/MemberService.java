@@ -2,7 +2,7 @@ package finalmission.application;
 
 import finalmission.domain.Member;
 import finalmission.domain.repository.MemberRepository;
-import finalmission.exception.AuthorizationException;
+import finalmission.exception.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class MemberService {
         if (isMember(email, password)) {
             return getMemberIdByEmail(email);
         }
-        throw new AuthorizationException("이메일 또는 비밀번호가 옳지 않습니다.");
+        throw new AuthenticationException("이메일 또는 비밀번호가 옳지 않습니다.");
     }
 
     public boolean isMember(String email, String password) {
@@ -25,7 +25,7 @@ public class MemberService {
 
     public long getMemberIdByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new AuthorizationException("가입된 이메일이 아닙니다."));
+                .orElseThrow(() -> new AuthenticationException("가입된 이메일이 아닙니다."));
         return member.getId();
     }
 }
