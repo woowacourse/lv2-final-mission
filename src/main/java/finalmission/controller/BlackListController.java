@@ -41,6 +41,7 @@ public class BlackListController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBlackList(@PathVariable("id") Long id) {
         blackListService.deleteBlackList(id);
     }
