@@ -1,6 +1,6 @@
 package finalmission.controller;
 
-import finalmission.controller.restaurant.controller.dto.request.RestaurantRequest;
+import finalmission.restaurant.controller.dto.request.RestaurantRequest;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

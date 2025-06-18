@@ -1,6 +1,6 @@
 package finalmission.config;
 
-import finalmission.controller.reservation.infrastructure.PublishHolidayClient;
+import finalmission.reservation.infrastructure.PublishHolidayClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

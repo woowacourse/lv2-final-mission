@@ -1,6 +1,6 @@
 package finalmission.controller;
 
-import finalmission.controller.member.controller.dto.request.MemberRequest;
+import finalmission.member.controller.dto.request.MemberRequest;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
