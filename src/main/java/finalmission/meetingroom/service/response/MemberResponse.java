@@ -3,7 +3,7 @@ package finalmission.meetingroom.service.response;
 import finalmission.meetingroom.domain.Member;
 
 public record MemberResponse(
-        Long id,
+        Long memberId,
         String name,
         String email
 ) {

@@ -62,4 +62,33 @@ class MemberControllerTest {
                 .then().log().all()
                 .statusCode(409);
     }
+
+    @DisplayName("회원탈퇴 요청을 보낸다.")
+    @Test
+    void deleteMember() {
+        Map<String, String> signupParams = Map.of(
+                "name", "포스티",
+                "email", "test@email.com",
+                "password", "1234"
+        );
+        int memberId = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(signupParams)
+                .when().post("/members")
+                .then().extract().path("memberId");
+
+        RestAssured.given().log().all()
+                .when().delete("/members/" + memberId)
+                .then().log().all()
+                .statusCode(204);
+    }
+
+    @DisplayName("회원탈퇴 요청을 보낸다.")
+    @Test
+    void deleteMemberWithNonExistsMemberId() {
+        RestAssured.given().log().all()
+                .when().delete("/members/" + 0)
+                .then().log().all()
+                .statusCode(404);
+    }
 }

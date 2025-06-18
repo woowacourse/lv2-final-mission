@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import finalmission.meetingroom.common.exception.AlreadyInUseException;
+import finalmission.meetingroom.common.exception.EntityNotFoundException;
 import finalmission.meetingroom.domain.Member;
 import finalmission.meetingroom.repository.MemberRepository;
 import finalmission.meetingroom.service.request.SignupRequest;
@@ -25,5 +26,14 @@ public class MemberService {
         Member member = new Member(request.name(), request.email(), request.password());
         memberRepository.save(member);
         return MemberResponse.from(member);
+    }
+
+    @Transactional
+    public void deleteMember(final Long memberId) {
+        if (!memberRepository.existsById(memberId)) {
+            throw new EntityNotFoundException("존재하지 않는 사용자입니다.");
+        }
+
+        memberRepository.deleteById(memberId);
     }
 }
