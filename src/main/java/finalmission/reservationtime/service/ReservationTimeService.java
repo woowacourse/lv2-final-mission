@@ -4,7 +4,6 @@ import finalmission.meetingroom.domain.MeetingRoom;
 import finalmission.meetingroom.repository.MeetingRoomRepository;
 import finalmission.reservation.repository.ReservationRepository;
 import finalmission.reservationtime.domain.ReservationTime;
-import finalmission.reservationtime.dto.ReservationTimeAvailableRequest;
 import finalmission.reservationtime.dto.ReservationTimeAvailableResponse;
 import finalmission.reservationtime.dto.ReservationTimeRequest;
 import finalmission.reservationtime.dto.ReservationTimeResponse;
@@ -12,6 +11,7 @@ import finalmission.reservationtime.repository.ReservationTimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,9 +35,9 @@ public class ReservationTimeService {
                 .toList();
     }
 
-    public List<ReservationTimeAvailableResponse> findAvailableTimes(ReservationTimeAvailableRequest request) {
-        MeetingRoom meetingRoom = getMeetingRoom(request.roomId());
-        return reservationRepository.findAvailableTimes(request.date(), meetingRoom);
+    public List<ReservationTimeAvailableResponse> findAvailableTimes(LocalDate date, Long roomId) {
+        MeetingRoom meetingRoom = getMeetingRoom(roomId);
+        return reservationRepository.findAvailableTimes(date, meetingRoom);
     }
 
     private MeetingRoom getMeetingRoom(Long roomId) {

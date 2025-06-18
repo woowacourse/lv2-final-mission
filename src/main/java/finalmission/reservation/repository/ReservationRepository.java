@@ -6,6 +6,7 @@ import finalmission.reservation.domain.Reservation;
 import finalmission.reservationtime.dto.ReservationTimeAvailableResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,5 +29,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
         LEFT JOIN Reservation r
             ON r.time = rt AND r.date = :date AND r.meetingRoom = :room
 """)
-    List<ReservationTimeAvailableResponse> findAvailableTimes(LocalDate date, MeetingRoom room);
+    List<ReservationTimeAvailableResponse> findAvailableTimes(
+            @Param("date") LocalDate date,
+            @Param("room") MeetingRoom room);
 }

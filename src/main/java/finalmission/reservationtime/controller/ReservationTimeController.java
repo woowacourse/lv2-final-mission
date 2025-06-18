@@ -1,17 +1,19 @@
 package finalmission.reservationtime.controller;
 
-import finalmission.reservationtime.dto.ReservationTimeAvailableRequest;
 import finalmission.reservationtime.dto.ReservationTimeAvailableResponse;
 import finalmission.reservationtime.dto.ReservationTimeRequest;
 import finalmission.reservationtime.dto.ReservationTimeResponse;
 import finalmission.reservationtime.service.ReservationTimeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -36,9 +38,10 @@ public class ReservationTimeController {
 
     @GetMapping("/reservationTimes/available")
     public ResponseEntity<List<ReservationTimeAvailableResponse>> getAvailableTimes(
-            @RequestBody ReservationTimeAvailableRequest request
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam("roomId") Long roomId
             ) {
-        List<ReservationTimeAvailableResponse> availableTimes = timeService.findAvailableTimes(request);
+        List<ReservationTimeAvailableResponse> availableTimes = timeService.findAvailableTimes(date, roomId);
         return ResponseEntity.ok().body(availableTimes);
     }
 }
