@@ -1,5 +1,6 @@
 package finalmission.infra.exception;
 
+import finalmission.infra.thirdparty.OpenApiException;
 import java.util.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,17 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(errorResponse);
     }
-    
+
+    @ExceptionHandler(OpenApiException.class)
+    public ResponseEntity<ErrorResponse> handleOpenApiException(OpenApiException e) {
+        String message = e.getMessage();
+        log.warn(message);
+        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, message);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAllExceptions(Exception e) {
         String message = INTERNAL_SERVER_ERROR_MESSAGE;
