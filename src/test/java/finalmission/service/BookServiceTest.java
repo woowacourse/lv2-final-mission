@@ -1,7 +1,6 @@
 package finalmission.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import finalmission.dto.request.BookRequest;
 import finalmission.dto.response.BookResponse;
@@ -31,9 +30,9 @@ class BookServiceTest {
         String name = "name2";
         String author = "author2";
         Long categoryId = 1L;
-        int stock = 1;
+        int inventory = 1;
         int period = 14;
-        BookRequest bookRequest = new BookRequest(name, author, categoryId, stock, period);
+        BookRequest bookRequest = new BookRequest(name, author, categoryId, inventory, period);
 
         // when
         BookResponse bookResponse = bookService.addBook(bookRequest);
@@ -41,7 +40,7 @@ class BookServiceTest {
         // then
         assertThat(bookResponse.name()).isEqualTo(name);
         assertThat(bookResponse.author()).isEqualTo(author);
-        assertThat(bookResponse.stock()).isEqualTo(stock);
+        assertThat(bookResponse.inventory()).isEqualTo(inventory);
     }
 
     @Test
@@ -50,9 +49,9 @@ class BookServiceTest {
         String name = "name1";
         String author = "author1";
         Long categoryId = 1L;
-        int stock = 3;
+        int inventory = 3;
         int period = 14;
-        BookRequest bookRequest = new BookRequest(name, author, categoryId, stock,  period);
+        BookRequest bookRequest = new BookRequest(name, author, categoryId, inventory,  period);
 
         // when
         bookService.addBook(bookRequest);
@@ -61,6 +60,6 @@ class BookServiceTest {
         // then
         assertThat(bookResponse.name()).isEqualTo(name);
         assertThat(bookResponse.author()).isEqualTo(author);
-        assertThat(bookResponse.stock()).isEqualTo(6);
+        assertThat(bookResponse.inventory()).isEqualTo(6);
     }
 }

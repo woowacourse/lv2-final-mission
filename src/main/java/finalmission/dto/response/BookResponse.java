@@ -8,9 +8,9 @@ public record BookResponse(
         String name,
         String author,
         Category category,
-        int stock
+        int inventory
 ) {
     public static BookResponse from(Book book) {
-        return new BookResponse(book.getId(), book.getName(), book.getAuthor(), book.getCategory(), book.getStock());
+        return new BookResponse(book.getId(), book.getName(), book.getAuthor(), book.getCategory(), book.getInventory());
     }
 }

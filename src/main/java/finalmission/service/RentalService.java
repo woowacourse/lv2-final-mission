@@ -49,6 +49,7 @@ public class RentalService {
         Member member = memberRepository.findById(rentalRequest.memberId()).get();
         Book book = bookRepository.findById(rentalRequest.bookId()).get();
         Rental rental = new Rental(member, book, rentalRequest.rentalDate(), rentalRequest.returnDate());
+        bookRepository.removeOneStockById(book.getId());
         return RentalResponse.from(rentalRepository.save(rental));
     }
 

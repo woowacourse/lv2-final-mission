@@ -30,11 +30,11 @@ public class BookService {
     public BookResponse addBook(BookRequest bookRequest) {
         if (bookRepository.existsByName(bookRequest.name())) {
             Long bookId = bookRepository.findByName(bookRequest.name()).get().getId();
-            bookRepository.addStockById(bookId, bookRequest.stock());
+            bookRepository.addInventoryById(bookId, bookRequest.inventory());
             return BookResponse.from(bookRepository.findById(bookId).get());
         }
         Category category = categoryRepository.findById(bookRequest.category_id()).get();
-        Book book = new Book(bookRequest.name(), bookRequest.author(),  category, bookRequest.stock(), bookRequest.period());
+        Book book = new Book(bookRequest.name(), bookRequest.author(),  category, bookRequest.inventory(), bookRequest.period());
         return BookResponse.from(bookRepository.save(book));
     }
 }
