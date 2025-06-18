@@ -3,8 +3,8 @@ package finalmission.auth.service;
 import finalmission.auth.controller.dto.request.LoginMember;
 import finalmission.auth.controller.dto.request.LoginRequest;
 import finalmission.auth.infrastructure.JwtTokenProvider;
-import finalmission.member.domain.Member;
-import finalmission.member.repository.JpaMemberRepository;
+import finalmission.controller.member.domain.Member;
+import finalmission.controller.member.repository.JpaMemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service

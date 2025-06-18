@@ -1,6 +1,6 @@
 package finalmission.mail;
 
-import finalmission.reservation.domain.Reservation;
+import finalmission.controller.reservation.domain.Reservation;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 

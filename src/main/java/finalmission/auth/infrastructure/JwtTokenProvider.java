@@ -1,6 +1,6 @@
 package finalmission.auth.infrastructure;
 
-import finalmission.member.domain.Member;
+import finalmission.controller.member.domain.Member;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
