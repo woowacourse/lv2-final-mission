@@ -1,5 +1,6 @@
 package finalmission.movie.service.guest;
 
+import finalmission.holiday.service.HolidayCheckService;
 import finalmission.movie.dto.response.MovieSlotReadResponse;
 import finalmission.movie.entity.MovieSlot;
 import finalmission.movie.repository.MovieReservationRepository;
@@ -13,11 +14,16 @@ public class GuestMovieService {
 
     private final MovieReservationRepository movieReservationRepository;
     private final MovieSlotRepository movieSlotRepository;
+    private final HolidayCheckService holidayCheckService;
 
-    public GuestMovieService(MovieSlotRepository movieSlotRepository,
-                             MovieReservationRepository movieReservationRepository) {
+    public GuestMovieService(
+            MovieSlotRepository movieSlotRepository,
+            MovieReservationRepository movieReservationRepository,
+            HolidayCheckService holidayCheckService
+    ) {
         this.movieSlotRepository = movieSlotRepository;
         this.movieReservationRepository = movieReservationRepository;
+        this.holidayCheckService = holidayCheckService;
     }
 
     public List<MovieSlotReadResponse> readByMovieIdAndDate(Long movieId, LocalDate date) {
@@ -38,6 +44,7 @@ public class GuestMovieService {
                 movieSlot.getMovie().getName(),
                 movieSlot.getDate(),
                 movieSlot.getStartAt(),
+                holidayCheckService.isHoliday(movieSlot.getDate()),
                 movieSlot.getSeats(),
                 leftSeats
         );

@@ -14,8 +14,12 @@ public class MovieSlotFixture {
         return new MovieSlot(movie, date, startAt, seats);
     }
 
+    public static MovieSlot create(Movie movie, LocalDate date) {
+        return create(movie, date, LocalTime.now(), 200);
+    }
+
     public static MovieSlot create(Movie movie) {
-        return new MovieSlot(movie, LocalDate.now(), LocalTime.now(), 200);
+        return create(movie, LocalDate.now());
     }
 
     public static List<MovieSlot> createList(List<Movie> movies, int size) {

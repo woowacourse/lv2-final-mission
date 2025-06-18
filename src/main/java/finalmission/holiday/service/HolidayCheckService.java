@@ -15,7 +15,7 @@ public class HolidayCheckService {
         this.holidayClient = holidayClient;
     }
 
-    boolean isHoliday(LocalDate date) {
+    public boolean isHoliday(LocalDate date) {
         String year = date.format(DateTimeFormatter.ofPattern("yyyy"));
         String month = date.format(DateTimeFormatter.ofPattern("MM"));
         KoreaAnniversaries koreaAnniversaries = holidayClient.requestKoreaAnniversaries(year, month);
