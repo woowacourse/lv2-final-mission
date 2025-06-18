@@ -48,6 +48,18 @@ public class Store {
         this.storeStatus = status;
     }
 
+    public void addWaiting(Member member) {
+        this.waitingLine.addMember(member);
+    }
+
+    public int getWaitingRank(Member member) {
+        return this.waitingLine.getSequenceByMember(member);
+    }
+
+    public void removeWaitingMember(Member member) {
+        this.waitingLine.removeMember(member);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -60,17 +72,5 @@ public class Store {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    public void addWaiting(Member member) {
-        this.waitingLine.addMember(member);
-    }
-
-    public int getWaitingRank(Member member) {
-        return this.waitingLine.getSequenceByMember(member);
-    }
-
-    public void removeWaitingMember(Member member) {
-        this.waitingLine.removeMember(member);
     }
 }
