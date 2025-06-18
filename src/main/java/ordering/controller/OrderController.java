@@ -36,7 +36,6 @@ public class OrderController {
 
     @PutMapping
     public OrderResponse modifyOrder(OrderRegister request) {
-        // TODO: 발주 내역 수정
-        return null;
+        return orderMailCoordinator.sendOrder(request);
     }
 }
