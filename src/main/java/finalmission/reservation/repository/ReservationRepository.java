@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
-    long countByReservationDate(LocalDate reservationDate);
 
     List<Reservation> findByCustomerAndReservationDate(Customer customer, LocalDate reservationDate);
 

@@ -27,7 +27,7 @@ public class ReservationIntegrationTest {
                 .then().extract().response().as(CustomerResponse.class);
 
         LocalDate reservationDate = LocalDate.now();
-        ReservationRequest reservationRequest = new ReservationRequest(customerResponse.userId(), reservationDate);
+        ReservationRequest reservationRequest = new ReservationRequest(customerResponse.customerId(), reservationDate);
 
         RestAssured.given()
                 .when().post("/umbrellas");
@@ -51,11 +51,40 @@ public class ReservationIntegrationTest {
                 .then().extract().response().as(CustomerResponse.class);
 
         LocalDate reservationDate = LocalDate.now();
-        ReservationRequest reservationRequest = new ReservationRequest(customerResponse.userId(), reservationDate);
+        ReservationRequest reservationRequest = new ReservationRequest(customerResponse.customerId(), reservationDate);
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON).body(reservationRequest)
                 .when().post("/reservations")
                 .then().statusCode(500);
+    }
+
+    @DisplayName("자신의 예약 정보를 조회할 수 있다")
+    @Test
+    void findMyReservations(){
+        CustomerCreateRequest createRequest = new CustomerCreateRequest("id","password");
+
+        CustomerResponse customerResponse = RestAssured.given()
+                .contentType(ContentType.JSON).body(createRequest)
+                .when().post("/customers")
+                .then().extract().response().as(CustomerResponse.class);
+
+        LocalDate reservationDate = LocalDate.now();
+        ReservationRequest reservationRequest = new ReservationRequest(customerResponse.customerId(), reservationDate);
+        RestAssured.given()
+                .when().post("/umbrellas");
+        RestAssured.given()
+                .when().post("/umbrellas");
+
+        RestAssured.given()
+                .contentType(ContentType.JSON).body(reservationRequest)
+                .when().post("/reservations");
+
+        ReservationRequest reservationRequest3 = new ReservationRequest(customerResponse.customerId(), reservationDate);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON).body(reservationRequest3)
+                .when().get("/reservations-mine")
+                .then().statusCode(200);
     }
 }

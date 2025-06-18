@@ -1,4 +1,4 @@
 package finalmission.customer.dto.response;
 
-public record CustomerResponse(long userId, String email) {
+public record CustomerResponse(long customerId, String email) {
 }
