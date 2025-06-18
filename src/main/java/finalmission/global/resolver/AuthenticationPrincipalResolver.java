@@ -3,6 +3,8 @@ package finalmission.global.resolver;
 import finalmission.auth.service.AuthService;
 import finalmission.external.jwt.JwtTokenExtractor;
 import finalmission.global.AuthenticationPrincipal;
+import finalmission.member.domian.Member;
+import finalmission.member.dto.LoginMember;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -32,6 +34,7 @@ public class AuthenticationPrincipalResolver implements HandlerMethodArgumentRes
     ) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String token = JwtTokenExtractor.extract(request);
-        return authService.findMemberByToken(token);
+        Member member = authService.findMemberByToken(token);
+        return new LoginMember(member.getId(), member.getName(), member.getRole());
     }
 }
