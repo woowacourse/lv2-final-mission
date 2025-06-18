@@ -75,14 +75,12 @@ public class SpotifyIntegrationTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(objectMapper.writeValueAsString(response))));
 
-        SpotifySearchRequest request = new SpotifySearchRequest("DONDA");
-
         // when-then
         SpotifyAlbumSearchResponse searchResponse = RestAssured.given().log().all()
             .contentType(ContentType.JSON)
             .header("Cookie", "JSESSIONID=" + sessionId)
-            .body(request)
-            .when().post("/spotify/search")
+            .queryParam("name", "DONDA")
+            .when().get("/spotify/search")
             .then().log().all()
             .statusCode(200).extract().body()
             .as(SpotifyAlbumSearchResponse.class);
