@@ -12,12 +12,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
@@ -65,5 +63,29 @@ public class Reservation {
                                          final Design design,
                                          final Designer designer) {
         return new Reservation(reservationId, customer, date, time, design, designer);
+    }
+
+    public Long getReservationId() {
+        return reservationId;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public Design getDesign() {
+        return design;
+    }
+
+    public Designer getDesigner() {
+        return designer;
     }
 }

@@ -6,12 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
@@ -32,7 +30,8 @@ public class Customer {
                      final String password,
                      final String name,
                      final String phoneNumber,
-                     final CustomerRole role) {
+                     final CustomerRole role
+    ) {
         this.customerId = customerId;
         this.email = email;
         this.password = password;
@@ -52,5 +51,29 @@ public class Customer {
 
     public boolean matchesPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return PhoneNumber;
+    }
+
+    public CustomerRole getRole() {
+        return role;
     }
 }

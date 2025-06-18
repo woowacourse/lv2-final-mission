@@ -6,12 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
@@ -38,5 +36,21 @@ public class Design {
 
     public static Design ofExisting(Long designId, String name, int price, int turnaroundTime) {
         return new Design(designId, name, price, turnaroundTime);
+    }
+
+    public Long getDesignId() {
+        return designId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getTurnaroundTime() {
+        return turnaroundTime;
     }
 }

@@ -7,12 +7,10 @@ import jakarta.persistence.Id;
 import java.time.DayOfWeek;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
@@ -41,5 +39,17 @@ public class Designer {
 
     public boolean isOffDay(final DayOfWeek dayOfWeek) {
         return offDay.equals(dayOfWeek);
+    }
+
+    public Long getDesignerId() {
+        return designerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public DayOfWeek getOffDay() {
+        return offDay;
     }
 }
