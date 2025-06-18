@@ -1,9 +1,6 @@
-package finalmission.member.domain;
+package finalmission.customer.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,13 +18,13 @@ public class User {
 
     private String password;
 
-    private User(Long id, String email, String password) {
+    private Customer(Long id, String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;
     }
 
-    public static User createWithoutId(String email, String password) {
-        return new User(null, email, password);
+    public static Customer createWithoutId(String email, String password) {
+        return new Customer(null, email, password);
     }
 }

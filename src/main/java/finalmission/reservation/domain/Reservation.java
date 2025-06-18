@@ -1,6 +1,6 @@
 package finalmission.reservation.domain;
 
-import finalmission.member.domain.User;
+import finalmission.customer.domain.Customer;
 import finalmission.umbrella.domain.Umbrella;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,21 +19,21 @@ public class Reservation {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private User user;
+    private Customer customer;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Umbrella umbrella;
 
     private LocalDate reservationDate;
 
-    private Reservation(Long id, User user, Umbrella umbrella, LocalDate reservationDate) {
+    private Reservation(Long id, Customer customer, Umbrella umbrella, LocalDate reservationDate) {
         this.id = id;
-        this.user = user;
+        this.customer = customer;
         this.umbrella = umbrella;
         this.reservationDate = reservationDate;
     }
 
-    public static Reservation createWithoutId(User user, Umbrella umbrella, LocalDate reservationDate) {
-        return new Reservation(null, user, umbrella, reservationDate);
+    public static Reservation createWithoutId(Customer customer, Umbrella umbrella, LocalDate reservationDate) {
+        return new Reservation(null, customer, umbrella, reservationDate);
     }
 }

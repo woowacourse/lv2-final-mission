@@ -1,7 +1,7 @@
 package finalmission.reservation.service;
 
-import finalmission.member.domain.User;
-import finalmission.member.repository.UserRepository;
+import finalmission.customer.domain.Customer;
+import finalmission.customer.repository.CustomerRepository;
 import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.dto.request.ReservationRequest;
 import finalmission.reservation.repository.ReservationRepository;
@@ -18,36 +18,22 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
     private final UmbrellaRepository umbrellaRepository;
 
     public Reservation createReservation(ReservationRequest request) {
-        long reservationCounts = countReservationByDate(request.reservationDate());
-        long umbrellaCounts = countUmbrella();
+        Customer customer = findUser(request.userId());
+        Umbrella umbrella = umbrellaRepository.findAvailableUmbrella(request.reservationDate())
+                .stream().findFirst().orElseThrow(() -> new IllegalStateException("예약가능한 우산이 없습니다."));
 
-        if(reservationCounts == umbrellaCounts) {
-            throw new IllegalStateException("이미 모든 우산이 예약되었습니다 일자 : " + request.reservationDate());
-        }
-
-        User user = findUser(request.userId());
-        Umbrella umbrella = findUmbrella(umbrellaCounts + 1);
-
-        Reservation withoutId = Reservation.createWithoutId(user, umbrella, request.reservationDate());
+        Reservation withoutId = Reservation.createWithoutId(customer, umbrella, request.reservationDate());
 
         return reservationRepository.save(withoutId);
     }
-
-    private long countUmbrella() {
-        return umbrellaRepository.count();
-    }
-
-    private long countReservationByDate(LocalDate reservationDate) {
-        return reservationRepository.countByReservationDate(reservationDate);
-    }
     
     public List<Reservation> findReservations(ReservationRequest request){
-        User user = findUser(request.userId());
-        return reservationRepository.findByUserAndReservationDate(user, request.reservationDate());
+        Customer customer = findUser(request.userId());
+        return reservationRepository.findByCustomerAndReservationDate(customer, request.reservationDate());
     }
 
     public List<Reservation> findAllReservations(LocalDate reservationDate){
@@ -55,18 +41,13 @@ public class ReservationService {
     }
 
     public void deleteReservation(ReservationRequest request) {
-        User user = findUser(request.userId());
-        reservationRepository.deleteByUserAndReservationDate(user, request.reservationDate());
+        Customer customer = findUser(request.userId());
+        reservationRepository.deleteByCustomerAndReservationDate(customer, request.reservationDate());
     }
 
-    private User findUser(long userId){
-        return userRepository
+    private Customer findUser(long userId){
+        return customerRepository
                 .findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 User를 찾을 수 없습니다. ID : " + userId));
-    }
-
-    private Umbrella findUmbrella(long umbrellaId) {
-        return umbrellaRepository.findById(umbrellaId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 우산을 찾을 수 없습니다. ID : " + umbrellaId));
     }
 }
 
