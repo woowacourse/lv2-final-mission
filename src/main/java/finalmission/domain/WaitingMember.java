@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,10 +29,15 @@ public class WaitingMember {
     @ManyToOne
     private WaitingLine waitingLine;
 
-    public WaitingMember(Member member, WaitingLine waitingLine) {
-        this(null, member, waitingLine);
+    private LocalDateTime createdAt;
+
+    private WaitingMember(Member member, WaitingLine waitingLine) {
+        this(null, member, waitingLine, LocalDateTime.now());
     }
 
+    public static WaitingMember create(Member member, WaitingLine waitingLine) {
+        return new WaitingMember(member, waitingLine);
+    }
 
     @Override
     public boolean equals(final Object o) {

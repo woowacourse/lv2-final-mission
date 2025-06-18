@@ -2,10 +2,12 @@ package finalmission.domain;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,15 +26,25 @@ public class WaitingLine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "waitingLine", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "waitingLine", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<WaitingMember> waitingMembers = new ArrayList<>();
 
-    public static WaitingLine makeNewWaiting() {
-        return new WaitingLine(null, new ArrayList<>());
+    @OneToOne
+    private Store store;
+
+    private WaitingLine(Store store) {
+        this(null, new ArrayList<>(), store);
+    }
+
+    public static WaitingLine makeNewWaiting(Store store) {
+        return new WaitingLine(store);
     }
 
     public void addMember(Member member) {
-        WaitingMember waitingMember = new WaitingMember(member, this);
+        if (hasMember(member)) {
+            throw new IllegalArgumentException("이미 대기 중인 회원입니다.");
+        }
+        WaitingMember waitingMember = WaitingMember.create(member, this);
         waitingMembers.add(waitingMember);
     }
 
@@ -48,6 +60,10 @@ public class WaitingLine {
             }
         }
         return -1;
+    }
+
+    public void removeMember(Member member) {
+        waitingMembers.removeIf(wm -> wm.getMember().equals(member));
     }
 
     @Override

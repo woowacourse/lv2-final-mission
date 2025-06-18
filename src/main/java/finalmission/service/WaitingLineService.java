@@ -1,17 +1,15 @@
 package finalmission.service;
 
 import finalmission.domain.Member;
+import finalmission.domain.Store;
 import finalmission.domain.WaitingLine;
-import finalmission.dto.response.RankResponse;
-import finalmission.dto.response.WaitingLineCreateResponse;
-import finalmission.infra.auth.LoginMember;
 import finalmission.repository.WaitingLineRepository;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class WaitingLineService {
 
     private final WaitingLineRepository waitingLineRepository;
@@ -21,22 +19,30 @@ public class WaitingLineService {
     }
 
     @Transactional
-    public WaitingLineCreateResponse save(WaitingLine waitingLine) {
-        return WaitingLineCreateResponse.from(waitingLineRepository.save(waitingLine));
+    public void addWaitingMember(Store store, Member member) {
+        WaitingLine waitingLine = findByStoreId(store.getId());
+        if (waitingLine.hasMember(member)) {
+            throw new IllegalStateException("이미 대기 중인 회원입니다.");
+        }
+        waitingLine.addMember(member);
     }
 
-    @Transactional(readOnly = true)
-    public RankResponse findRankById(Long id, LoginMember loginMember) {
-        Optional<WaitingLine> waitingLine = waitingLineRepository.findById(id);
-        if (waitingLine.isEmpty()) {
-            throw new NoSuchElementException("[ERROR] 대기가 존재하지 않습니다.");
+    @Transactional
+    public void removeWaitingMember(Store store, Member member) {
+        WaitingLine waitingLine = findByStoreId(store.getId());
+        if (!waitingLine.hasMember(member)) {
+            throw new IllegalStateException("대기 목록에 없는 회원입니다.");
         }
-        Member member = new Member(loginMember.id(), loginMember.email(), loginMember.name(), loginMember.memberRole());
-        int rank = waitingLine.get().getSequenceByMember(member);
+        waitingLine.removeMember(member);
+    }
 
-        if (rank == -1) {
-            throw new NoSuchElementException("[ERROR] 회원의 대기가 존재하지 않습니다.");
-        }
-        return new RankResponse(rank);
+    public int getWaitingRank(Store store, Member member) {
+        WaitingLine waitingLine = findByStoreId(store.getId());
+        return waitingLine.getSequenceByMember(member);
+    }
+
+    public WaitingLine findByStoreId(Long storeId) {
+        return waitingLineRepository.findByStoreId(storeId)
+                .orElseThrow(() -> new NoSuchElementException("해당 가게의 대기열이 존재하지 않습니다."));
     }
 }

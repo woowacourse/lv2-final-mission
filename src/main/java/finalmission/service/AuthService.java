@@ -1,7 +1,6 @@
 package finalmission.service;
 
 import finalmission.domain.Member;
-import finalmission.domain.MemberRole;
 import finalmission.dto.request.LoginRequest;
 import finalmission.dto.response.MemberResponse;
 import finalmission.infra.auth.LoginMember;
@@ -41,13 +40,5 @@ public class AuthService {
         MemberResponse memberResponse = memberService.findById(memberId);
         return new LoginMember(memberResponse.id(), memberResponse.email(), memberResponse.name(),
                 memberResponse.memberRole());
-    }
-
-    @Transactional(readOnly = true)
-    public MemberRole findRoleByToken(String token) {
-        if (!jwtTokenProvider.validateToken(token)) {
-            throw new IllegalArgumentException("[ERROR] 유효하지 않은 토큰입니다.");
-        }
-        return jwtTokenProvider.getRole(token);
     }
 }

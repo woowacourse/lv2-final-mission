@@ -1,6 +1,9 @@
 package finalmission.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,6 +26,7 @@ public class Store {
 
     private String storeName;
 
+    @Enumerated(EnumType.STRING)
     private StoreStatus storeStatus;
 
     private String description;
@@ -32,12 +36,16 @@ public class Store {
     @OneToOne
     private Member member;
 
-    @OneToOne
+    @OneToOne(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private WaitingLine waitingLine;
 
-    public Store(String storeName, StoreStatus storeStatus, String description, Double starRating, Member member,
-                 WaitingLine waitingLine) {
-        this(null, storeName, storeStatus, description, starRating, member, waitingLine);
+    public Store(String storeName, StoreStatus storeStatus, String description, Double starRating, Member member) {
+        this(null, storeName, storeStatus, description, starRating, member, null);
+        this.waitingLine = WaitingLine.makeNewWaiting(this);
+    }
+
+    public void updateStatus(StoreStatus status) {
+        this.storeStatus = status;
     }
 
     @Override
