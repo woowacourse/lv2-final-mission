@@ -34,6 +34,16 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Optional<Reservation> findByIdAndMember(Long id, Member member);
 
+    @Query("""
+            SELECT r
+            FROM Reservation r
+            JOIN FETCH r.meetingRoom
+            JOIN FETCH r.member
+            WHERE r.meetingRoom.id = :meetingRoomId
+                AND r.reservationDate = :reservationDate
+            """)
+    List<Reservation> findByMeetingRoomIdAndReservationDate(Long meetingRoomId, LocalDate reservationDate);
+
     boolean existsByMeetingRoomAndReservationDateAndStartAtBetween(
             MeetingRoom meetingRoom,
             LocalDate reservationDate,

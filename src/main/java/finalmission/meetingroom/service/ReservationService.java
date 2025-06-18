@@ -179,4 +179,11 @@ public class ReservationService {
         return memberRepository.findById(loginMember.id())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 입니다."));
     }
+
+    public List<ReservationResponse> getReservationsByRoomAndDate(final Long roomId, final LocalDate reservationDate) {
+        return reservationRepository.findByMeetingRoomIdAndReservationDate(roomId, reservationDate)
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
+    }
 }

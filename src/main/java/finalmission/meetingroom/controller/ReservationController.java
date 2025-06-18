@@ -1,8 +1,11 @@
 package finalmission.meetingroom.controller;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +40,16 @@ public class ReservationController {
     @GetMapping("/my")
     public ResponseEntity<List<ReservationResponse>> getMyMeetingRoomReservations(final LoginMember loginMember) {
         List<ReservationResponse> responses = reservationService.getMyReservations(loginMember);
+        return ResponseEntity.ok()
+                .body(responses);
+    }
+
+    @GetMapping("/meeting-rooms/{roomId}/date/{reservationDate}")
+    public ResponseEntity<List<ReservationResponse>> getMeetingRoomReservationsByRoomAndDate(
+            @PathVariable("roomId") Long roomId,
+            @PathVariable("reservationDate") @DateTimeFormat(iso = ISO.DATE) LocalDate reservationDate
+    ) {
+        List<ReservationResponse> responses = reservationService.getReservationsByRoomAndDate(roomId, reservationDate);
         return ResponseEntity.ok()
                 .body(responses);
     }

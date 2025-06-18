@@ -179,6 +179,46 @@ class ReservationControllerTest {
                 .statusCode(204);
     }
 
+    @DisplayName("지정한 날짜의 회의실 예약 현황을 조회한다.")
+    @Test
+    void getMeetingRoomReservationsByRoomIdAndDate() {
+        LocalDate reservationDate = LocalDate.now().plusDays(1L);
+
+        Map<String, Object> reservationParams = Map.of(
+                "meetingRoomName", "임팩트룸",
+                "reservationDate", reservationDate,
+                "startAt", "10:00",
+                "endAt", "11:00"
+        );
+        Map<String, Object> reservationParams2 = Map.of(
+                "meetingRoomName", "임팩트룸",
+                "reservationDate", reservationDate,
+                "startAt", "12:00",
+                "endAt", "13:00"
+        );
+
+        String myToken = getUserTokenValue("ykmxxi97@gmail.com", "1234");
+        RestAssured.given().log().all()
+                .cookie("token", myToken)
+                .contentType(ContentType.JSON)
+                .body(reservationParams)
+                .when().post("/reservations")
+                .then();
+        RestAssured.given().log().all()
+                .cookie("token", myToken)
+                .contentType(ContentType.JSON)
+                .body(reservationParams2)
+                .when().post("/reservations")
+                .then();
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .when().get("/reservations/meeting-rooms/" + "1" + "/date/" + reservationDate)
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(2));
+    }
+
     private String getUserTokenValue(final String email, final String password) {
         Map<String, String> loginParams = Map.of("email", email, "password", password);
 
