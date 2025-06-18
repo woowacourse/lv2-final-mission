@@ -1,5 +1,7 @@
 package finalmission.controller;
 
+import finalmission.annotation.CheckRole;
+import finalmission.common.Role;
 import finalmission.dto.request.RentalRequest;
 import finalmission.dto.response.RentalResponse;
 import finalmission.service.RentalService;
@@ -22,6 +24,7 @@ public class RentalController {
         this.rentalService = rentalService;
     }
 
+    @CheckRole(Role.ADMIN)
     @GetMapping
     public ResponseEntity<List<RentalResponse>> getAllRentals() {
         return ResponseEntity.ok(rentalService.getRentals());

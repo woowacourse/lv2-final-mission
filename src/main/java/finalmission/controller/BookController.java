@@ -1,5 +1,7 @@
 package finalmission.controller;
 
+import finalmission.annotation.CheckRole;
+import finalmission.common.Role;
 import finalmission.dto.request.BookRequest;
 import finalmission.dto.response.BookResponse;
 import finalmission.service.BookService;
@@ -27,6 +29,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.getAllBooks());
     }
 
+    @CheckRole(Role.ADMIN)
     @PostMapping
     public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest) {
         BookResponse bookResponse = bookService.addBook(bookRequest);

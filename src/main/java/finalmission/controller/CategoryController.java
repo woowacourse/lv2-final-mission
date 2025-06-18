@@ -1,5 +1,7 @@
 package finalmission.controller;
 
+import finalmission.annotation.CheckRole;
+import finalmission.common.Role;
 import finalmission.dto.request.CategoryRequest;
 import finalmission.dto.response.CategoryResponse;
 import finalmission.service.CategoryService;
@@ -27,6 +29,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
+    @CheckRole(Role.ADMIN)
     @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest category) {
         CategoryResponse categoryResponse = categoryService.createCategory(category);
