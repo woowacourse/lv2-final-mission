@@ -27,8 +27,11 @@ public class RoomService {
     private final RoomMemberRepository roomMemberRepository;
 
     @Transactional
-    public RoomCreateResponse create(final RoomCreateRequest request) {
-        final Member manager = memberService.getById(request.memberId());
+    public RoomCreateResponse create(
+            final RoomCreateRequest request,
+            final Long memberId
+    ) {
+        final Member manager = memberService.getById(memberId);
 
         validateStartDateAndTimeNotFuture(request.startDate(), request.startTime());
         final Room room = roomRepository.save(request.toRoom(manager));

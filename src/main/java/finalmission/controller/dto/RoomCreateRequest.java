@@ -9,8 +9,7 @@ public record RoomCreateRequest(
         String name,
         LocalDate startDate,
         LocalTime startTime,
-        String description,
-        Long memberId
+        String description
 ) {
 
     public Room toRoom(final Member manager) {

@@ -41,7 +41,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
             return verifyTokenAndGetMemberId(token);
         } catch (NoSuchElementException e) {
-            return 0L;
+            throw new UnauthorizedException(e.getMessage());
         }
     }
 

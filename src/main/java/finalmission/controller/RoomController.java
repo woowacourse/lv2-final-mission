@@ -1,5 +1,6 @@
 package finalmission.controller;
 
+import finalmission.config.MemberId;
 import finalmission.controller.dto.RoomCreateRequest;
 import finalmission.controller.dto.RoomCreateResponse;
 import finalmission.controller.dto.RoomResponse;
@@ -25,8 +26,11 @@ public class RoomController {
     private final RoomService roomService;
 
     @PostMapping
-    public ResponseEntity<RoomCreateResponse> create(@RequestBody final RoomCreateRequest request) {
-        final RoomCreateResponse response = roomService.create(request);
+    public ResponseEntity<RoomCreateResponse> create(
+            @RequestBody final RoomCreateRequest request,
+            @MemberId final Long memberId
+    ) {
+        final RoomCreateResponse response = roomService.create(request, memberId);
 
         return ResponseEntity.ok(response);
     }

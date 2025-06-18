@@ -11,6 +11,8 @@ import finalmission.domain.vo.LolName;
 import finalmission.repository.MemberRepository;
 import finalmission.repository.RoomMemberRepository;
 import finalmission.repository.RoomRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -32,6 +35,10 @@ public class RoomApiTest {
 
     private Member member1;
     private Member member2;
+
+    @Value("${jwt.secret}")
+    private String secretKey;
+    private String accessToken;
 
     @Autowired
     public RoomApiTest(
@@ -54,6 +61,10 @@ public class RoomApiTest {
                 new LolName("훌라보노", "KR1"),
                 "qwe123"
         ));
+        accessToken = Jwts.builder()
+                .setSubject(member1.getId().toString())
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .compact();
     }
 
     @DisplayName("방을 생성한다.")
@@ -64,12 +75,12 @@ public class RoomApiTest {
                 "5대5 내전 구함",
                 LocalDate.now().plusDays(1),
                 LocalTime.NOON,
-                "5대5 내전 구함, 훌라 필참",
-                1L
+                "5대5 내전 구함, 훌라 필참"
         );
 
         // when & then
         RestAssured.given().log().all()
+                .cookie("token", accessToken)
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().post("/room")
@@ -88,12 +99,12 @@ public class RoomApiTest {
                 "5대5 내전 구함",
                 LocalDate.now().minusDays(1),
                 LocalTime.NOON,
-                "5대5 내전 구함, 훌라 필참",
-                1L
+                "5대5 내전 구함, 훌라 필참"
         );
 
         // when & then
         RestAssured.given().log().all()
+                .cookie("token", accessToken)
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().post("/room")
