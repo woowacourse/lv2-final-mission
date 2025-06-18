@@ -1,8 +1,8 @@
 package finalmission.service;
 
-import finalmission.domain.MemberRole;
 import finalmission.dto.request.CreateReservationRequest;
 import finalmission.dto.request.MemberInfo;
+import finalmission.dto.request.MyReservationResponse;
 import finalmission.dto.response.CreateReservationResponse;
 import finalmission.dto.response.ReservationResponse;
 import finalmission.entity.BlackList;
@@ -11,6 +11,7 @@ import finalmission.entity.Member;
 import finalmission.entity.Reservation;
 import finalmission.entity.ReservationTime;
 import finalmission.exception.custom.CannotAccessException;
+import finalmission.exception.custom.CannotRemoveException;
 import finalmission.exception.custom.DuplicatedValueException;
 import finalmission.exception.custom.NotAuthenticatedException;
 import finalmission.exception.custom.NotExistedValueException;
@@ -45,9 +46,16 @@ public class ReservationService {
     }
 
     public List<ReservationResponse> findAllReservation() {
-        return reservationRepository.findAll()
+        return reservationRepository.findAllFetch()
                 .stream()
                 .map(ReservationResponse::from)
+                .toList();
+    }
+
+    public List<MyReservationResponse> findAllMyReservation(final MemberInfo memberInfo) {
+        return reservationRepository.findAllByMemberId(memberInfo.id())
+                .stream()
+                .map(MyReservationResponse::from)
                 .toList();
     }
 
@@ -55,7 +63,7 @@ public class ReservationService {
                                                     final MemberInfo memberInfo) {
 
         Member member = memberRepository.findById(memberInfo.id())
-                .orElseThrow(() -> new NotAuthenticatedException("유효하지 않은 유저입니다."));
+                .orElseThrow(() -> new NotAuthenticatedException("존재하지 않는 유저입니다."));
 
         checkBannedMember(member);
 
@@ -80,7 +88,7 @@ public class ReservationService {
 
         if (blackListOptional.isPresent()) {
             BlackList blackList = blackListOptional.get();
-            throw new CannotAccessException("관리자에 의해 제한된 유저입니다. - 기간: %s, 사유: %s"
+            throw new CannotAccessException("관리자에 의해 제한된 유저입니다. - 시작일: %s, 사유: %s"
                     .formatted(blackList.getBannedSince(), blackList.getReason()));
         }
     }
@@ -89,9 +97,8 @@ public class ReservationService {
         if (!reservationRepository.existsById(id)) {
             throw new NotExistedValueException("존재하지 않는 예약입니다.");
         }
-        if (memberInfo.role() != MemberRole.ADMIN
-                || !reservationRepository.existsByIdAndMemberId(id, memberInfo.id())) {
-            throw new CannotAccessException("예약자만 삭제할 수 있습니다.");
+        if (!reservationRepository.existsByIdAndMemberId(id, memberInfo.id())) {
+            throw new CannotRemoveException("예약자만 삭제할 수 있습니다.");
         }
         reservationRepository.deleteById(id);
     }
