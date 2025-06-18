@@ -31,6 +31,7 @@ dependencies {
 
     runtimeOnly 'com.h2database:h2'
 
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner:4.3.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured:5.3.1'
 }

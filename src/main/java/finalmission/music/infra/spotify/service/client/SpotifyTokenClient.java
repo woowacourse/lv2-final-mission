@@ -12,7 +12,7 @@ public class SpotifyTokenClient {
     private final String clientSecretKey;
     private final RestClient spotifyTokenRestClient;
 
-    public SpotifyTokenClient(@Value("${spotify.client.id}")String clientId,
+    public SpotifyTokenClient(@Value("${spotify.client.id}") String clientId,
                               @Value("${spotify.client.secret.key}") String clientSecretKey,
                               RestClient spotifyTokenRestClient) {
         this.clientId = clientId;
