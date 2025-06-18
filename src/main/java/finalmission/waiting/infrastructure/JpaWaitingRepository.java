@@ -11,4 +11,6 @@ public interface JpaWaitingRepository extends JpaRepository<Waiting, Long> {
     boolean existsByReservationSlotAndMember(ReservationSlot reservationSlot, Member member);
 
     List<Waiting> findAllWaitingByMemberId(Long memberId);
+
+    List<Waiting> findAllWaitingByReservationSlotId(Long reservationSlotId);
 }

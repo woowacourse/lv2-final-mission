@@ -52,6 +52,11 @@ public class WaitingRepositoryImpl implements WaitingRepository {
     }
 
     @Override
+    public List<Waiting> findAllWaitingByReservationSlotId(final Long reservationSlotId) {
+        return jpaWaitingRepository.findAllWaitingByReservationSlotId(reservationSlotId);
+    }
+
+    @Override
     public List<Waiting> findAll() {
         return jpaWaitingRepository.findAll();
     }

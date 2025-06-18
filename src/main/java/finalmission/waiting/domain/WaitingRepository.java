@@ -19,6 +19,8 @@ public interface WaitingRepository {
     Waiting getById(Long waitingId);
 
     List<Waiting> findAllWaitingByMemberId(Long memberId);
+    
+    List<Waiting> findAllWaitingByReservationSlotId(Long reservationSlotId);
 
     List<Waiting> findAll();
 }

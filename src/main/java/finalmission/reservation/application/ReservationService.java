@@ -16,6 +16,8 @@ import finalmission.reservation.ui.dto.CreateReservationRequest;
 import finalmission.reservation.ui.dto.ReservationResponse;
 import finalmission.restaurant.domain.Restaurant;
 import finalmission.restaurant.domain.RestaurantRepository;
+import finalmission.waiting.domain.Waiting;
+import finalmission.waiting.domain.WaitingRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +38,7 @@ public class ReservationService {
     private final MemberRepository memberRepository;
     private final ReservationSlotRepository reservationSlotRepository;
     private final ReservationRepository reservationRepository;
+    private final WaitingRepository waitingRepository;
     private final EmailDomainService emailDomainService;
 
     @Transactional
@@ -120,7 +123,10 @@ public class ReservationService {
         reservationSlot.decreaseCurrentReservationCount();
         reservationRepository.deleteById(reservationId);
 
-        final List<Member> waitingMembers = memberRepository.findAll();
+        final List<Member> waitingMembers = waitingRepository.findAllWaitingByReservationSlotId(reservationSlot.getId())
+                .stream()
+                .map(Waiting::getMember)
+                .toList();
         for (final Member waitingMember : waitingMembers) {
             emailDomainService.sendEmail(
                     SendEmailRequest.alarmForWaiting(waitingMember.getEmail(), reservationSlot)
