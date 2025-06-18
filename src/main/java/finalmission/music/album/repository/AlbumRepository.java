@@ -4,4 +4,5 @@ import finalmission.music.album.domain.Album;
 import org.springframework.data.repository.ListCrudRepository;
 
 public interface AlbumRepository extends ListCrudRepository<Album, Long> {
+    boolean existsByNameAndArtistName(String name, String artistName);
 }

@@ -21,12 +21,14 @@ public class AlbumController {
 
     @PostMapping("/albums")
     public ResponseEntity<AlbumResponse> save(@RequestBody final AlbumRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(albumService.create(request));
+        AlbumResponse response = albumService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/albums/{id}")
     public ResponseEntity<AlbumResponse> getAlbum(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(albumService.getAlbum(id));
+        AlbumResponse response = albumService.getAlbum(id);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/albums/{id}")

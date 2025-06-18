@@ -14,6 +14,8 @@ public class AlbumService {
     private final AlbumRepository albumRepository;
 
     public AlbumResponse create(final AlbumRequest request) {
+        validateIsDuplicatedAlbum(request.name(), request.artistName());
+
         Album album = albumRepository.save(
             new Album(
                 request.name(),
@@ -24,6 +26,12 @@ public class AlbumService {
             ));
 
         return AlbumResponse.from(album);
+    }
+
+    private void validateIsDuplicatedAlbum(final String name, final String artistName) {
+        if (albumRepository.existsByNameAndArtistName(name, artistName)) {
+            throw new IllegalArgumentException("[ERROR] 앨범을 중복 등록 할 수 없습니다.");
+        }
     }
 
     public void delete(final Long id) {
