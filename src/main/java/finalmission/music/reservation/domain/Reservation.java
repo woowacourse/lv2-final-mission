@@ -28,9 +28,13 @@ public class Reservation {
 
     private String address;
 
-    public Reservation(Lottery lottery, Member member, String address) {
+    public Reservation(final Lottery lottery, final Member member, String address) {
         this.lottery = lottery;
         this.member = member;
         this.address = address;
+    }
+
+    public void changeAddress(String newAddress) {
+        this.address = newAddress;
     }
 }

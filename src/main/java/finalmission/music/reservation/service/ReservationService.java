@@ -11,6 +11,7 @@ import finalmission.music.reservation.repository.ReservationRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +54,13 @@ public class ReservationService {
             .orElseThrow(() -> new IllegalArgumentException("[ERROR] 멤버에 해당 예약이 존재하지 않습니다."));
 
         return MyReservationResponse.from(reservation);
+    }
+
+    @Transactional
+    public void updateMyReservation(final Long id, String memberName, String newAddress) {
+        Reservation reservation = reservationRepository.findByIdAndMemberName(id, memberName)
+            .orElseThrow(() -> new IllegalArgumentException("[ERROR] 멤버에 해당 예약이 존재하지 않습니다."));
+
+        reservation.changeAddress(newAddress);
     }
 }
