@@ -5,11 +5,13 @@ import ordering.dto.request.OrderRegister;
 import ordering.dto.response.OrderResponse;
 import ordering.service.OrderService;
 import ordering.service.coordinator.OrderMailCoordinator;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,11 +32,13 @@ public class OrderController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse createOrder(OrderRegister request) {
         return orderMailCoordinator.sendOrder(request);
     }
 
     @PutMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse modifyOrder(OrderRegister request) {
         return orderMailCoordinator.sendOrder(request);
     }
