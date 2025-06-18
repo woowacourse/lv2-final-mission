@@ -1,6 +1,9 @@
 package finalmission.infrastructure;
 
+import finalmission.exception.AuthenticationException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -29,5 +32,24 @@ public class JwtTokenProvider {
                 .setExpiration(validity)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String getPayload(String token) {
+        if (validateToken(token)) {
+            Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+        }
+        throw new AuthenticationException("유효하지 않은 토큰입니다.");
+    }
+
+    public boolean validateToken(String token) {
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
+        try {
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 }

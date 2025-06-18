@@ -12,6 +12,11 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    public Member getById(long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 멤버 id 입니다. id: " + id));
+    }
+
     public long getIdBy(String email, String password) {
         if (isMember(email, password)) {
             return getMemberIdByEmail(email);
