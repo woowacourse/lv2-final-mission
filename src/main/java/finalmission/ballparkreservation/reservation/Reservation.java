@@ -30,6 +30,10 @@ public class Reservation {
         this.amount = getAmount(isHoliday);
     }
 
+    public void updateSchedule(final Schedule newSchedule) {
+        this.schedule = newSchedule;
+    }
+
     private int getAmount(final boolean isHoliday) {
         int amount = schedule.getWeekdayAmount();
         if (isHoliday || schedule.isWeekend()) {

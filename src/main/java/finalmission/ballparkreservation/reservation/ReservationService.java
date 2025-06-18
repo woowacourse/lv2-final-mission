@@ -4,10 +4,7 @@ import finalmission.ballparkreservation.auth.dto.LoginMember;
 import finalmission.ballparkreservation.external.HolidayClient;
 import finalmission.ballparkreservation.member.Member;
 import finalmission.ballparkreservation.member.MemberService;
-import finalmission.ballparkreservation.reservation.dto.MemberReservationResponse;
-import finalmission.ballparkreservation.reservation.dto.ReservationCreateRequest;
-import finalmission.ballparkreservation.reservation.dto.ReservationCreateResponse;
-import finalmission.ballparkreservation.reservation.dto.ReservationResponse;
+import finalmission.ballparkreservation.reservation.dto.*;
 import finalmission.ballparkreservation.schedule.Schedule;
 import finalmission.ballparkreservation.schedule.ScheduleService;
 import finalmission.ballparkreservation.schedule.SeatRank;
@@ -60,9 +57,40 @@ public class ReservationService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<MemberReservationResponse> getAllByMember(final LoginMember loginMember) {
         return reservationRepository.findAllByMember_Id(loginMember.id()).stream()
                 .map(MemberReservationResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void update(final ReservationSeatUpdateRequest request, final LoginMember requestMember) {
+        final Reservation reservation = getById(request.id());
+        validateAuthorization(reservation.getMember().getId(), requestMember.id());
+
+        final Schedule schedule = reservation.getSchedule();
+        validateIfScheduleAvailable(schedule.getDate(), schedule.getRank(), request.seatNumber());
+
+        Schedule newSchedule = scheduleService.getByRankAndNumberAndDate(schedule.getRank(), request.seatNumber(), schedule.getDate());
+        reservation.updateSchedule(newSchedule);
+    }
+
+    private Reservation getById(final Long id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id에 대한 예약이 존재하지 않습니다."));
+    }
+
+    private void validateAuthorization(final Long reservationMemberId, final Long requestMemberId) {
+        if (!reservationMemberId.equals(requestMemberId)) {
+            throw new IllegalArgumentException("해당 예약을 생성한 사용자만 수정할 수 있습니다.");
+        }
+    }
+
+    private void validateIfScheduleAvailable(final LocalDate date, final SeatRank rank, final int seatNumber) {
+        boolean isReservationAlreadyExist = reservationRepository.existsBySchedule_DateAndSchedule_RankAndSchedule_Number(date, rank, seatNumber);
+        if (isReservationAlreadyExist) {
+            throw new IllegalArgumentException("이미 해당 좌석에 대한 예약이 존재합니다.");
+        }
     }
 }

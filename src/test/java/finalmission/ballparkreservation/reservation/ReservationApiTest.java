@@ -41,6 +41,7 @@ public class ReservationApiTest {
         jdbcTemplate.update("ALTER TABLE member ALTER COLUMN id RESTART WITH 1");
 
         jdbcTemplate.update("INSERT INTO schedule(number, rank, date) VALUES (1, 'TABLE', '2025-05-05')");
+        jdbcTemplate.update("INSERT INTO schedule(number, rank, date) VALUES (2, 'TABLE', '2025-05-05')");
         jdbcTemplate.update("INSERT INTO member(email, password, name, age) VALUES ('may@gmail.com', '1234', '메이', 13)");
     }
 
@@ -97,5 +98,19 @@ public class ReservationApiTest {
                 .cookie(cookie)
                 .body(Map.of("seatRank", "TABLE", "seatNumber", 1, "date", LocalDate.of(2025, 5, 5)))
                 .when().post("/reservations");
+    }
+
+    @DisplayName("/reservations/seat PATCH 예약 좌석 변경 테스트")
+    @Test
+    void patch1() {
+        Cookie cookie = loginForTest();
+        createReservationForTest(cookie);
+
+        RestAssured.given().port(port).log().all()
+                .contentType(ContentType.JSON)
+                .cookie(cookie)
+                .body(Map.of("id", 1L, "seatNumber", 2))
+                .when().patch("/reservations/seat")
+                .then().statusCode(200);
     }
 }

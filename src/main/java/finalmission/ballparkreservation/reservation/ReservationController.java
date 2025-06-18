@@ -2,10 +2,7 @@ package finalmission.ballparkreservation.reservation;
 
 import finalmission.ballparkreservation.auth.MemberAuthentication;
 import finalmission.ballparkreservation.auth.dto.LoginMember;
-import finalmission.ballparkreservation.reservation.dto.MemberReservationResponse;
-import finalmission.ballparkreservation.reservation.dto.ReservationCreateRequest;
-import finalmission.ballparkreservation.reservation.dto.ReservationCreateResponse;
-import finalmission.ballparkreservation.reservation.dto.ReservationResponse;
+import finalmission.ballparkreservation.reservation.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,5 +41,14 @@ public class ReservationController {
     ) {
         List<MemberReservationResponse> reservations = reservationService.getAllByMember(member);
         return ResponseEntity.ok(reservations);
+    }
+
+    @PatchMapping("/seat")
+    public ResponseEntity<Void> updateSeat(
+            @Valid @RequestBody ReservationSeatUpdateRequest request,
+            @MemberAuthentication LoginMember member
+    ) {
+        reservationService.update(request, member);
+        return ResponseEntity.ok().build();
     }
 }
