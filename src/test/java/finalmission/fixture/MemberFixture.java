@@ -8,8 +8,15 @@ import java.util.Map;
 
 public class MemberFixture {
 
+    private static final String ADMIN_EMAIL = "admin@email.com";
+    private static final String ADMIN_PASSWORD = "password";
+
     private static final String USER_EMAIL = "member1@email.com";
     private static final String USER_PASSWORD = "1234";
+
+    public static Map<String, String> loginAdmin() {
+        return login(ADMIN_EMAIL, ADMIN_PASSWORD);
+    }
 
     public static Map<String, String> loginUser() {
         return login(USER_EMAIL, USER_PASSWORD);

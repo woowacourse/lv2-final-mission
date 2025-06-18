@@ -1,6 +1,7 @@
 INSERT INTO member (email, password, name, role)
 VALUES ('admin@email.com', 'password', '관리자', 'ADMIN'),
-       ('member1@email.com', '1234', '회원1', 'USER');
+       ('member1@email.com', '1234', '회원1', 'USER'),
+       ('member2@email.com', '1234', '회원2', 'USER');
 
 INSERT INTO reservation_time (start_at)
 VALUES ('09:00'),
@@ -22,4 +23,5 @@ INSERT INTO reservation (date, time_id, member_id, room_id)
 VALUES ('2026-12-06', 1, 2, 3),
        ('2026-12-07', 2, 2, 2),
        ('2026-12-08', 3, 2, 3),
-       ('2026-12-09', 4, 2, 4);
+       ('2026-12-09', 4, 2, 4),
+       ('2026-12-15', 4, 3, 4);
