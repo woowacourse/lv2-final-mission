@@ -1,6 +1,7 @@
 package finalmission.service;
 
 import finalmission.domain.MemberRole;
+import finalmission.dto.request.CreateTokenRequest;
 import finalmission.dto.request.LoginRequest;
 import finalmission.dto.request.SignUpRequest;
 import finalmission.dto.response.SignUpResponse;
@@ -9,6 +10,7 @@ import finalmission.exception.custom.DuplicatedValueException;
 import finalmission.exception.custom.UnauthorizedException;
 import finalmission.jwt.JwtTokenProvider;
 import finalmission.repository.MemberRepository;
+import java.util.Date;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +27,7 @@ public class MemberService {
     public String login(final LoginRequest request) {
         Member member = memberRepository.findByEmailAndPassword(request.email(), request.password())
                 .orElseThrow(() -> new UnauthorizedException("유효하지 않은 이메일 또는 패스워드입니다."));
-        return jwtTokenProvider.createTokenByMember(member);
+        return jwtTokenProvider.createTokenByMember(new CreateTokenRequest(member, new Date()));
     }
 
     public SignUpResponse signup(final SignUpRequest request) {

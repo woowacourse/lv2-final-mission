@@ -25,7 +25,7 @@ public class BlackListService {
     }
 
     public List<BlackListResponse> findAllBlackList() {
-        return blackListRepository.findAll()
+        return blackListRepository.findAllFetch()
                 .stream()
                 .map(BlackListResponse::from)
                 .toList();

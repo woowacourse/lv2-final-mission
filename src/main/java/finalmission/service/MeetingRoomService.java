@@ -6,6 +6,7 @@ import finalmission.dto.response.MeetingRoomResponse;
 import finalmission.entity.MeetingRoom;
 import finalmission.exception.custom.CannotRemoveException;
 import finalmission.exception.custom.DuplicatedValueException;
+import finalmission.exception.custom.InvalidValueException;
 import finalmission.exception.custom.NotExistedValueException;
 import finalmission.repository.MeetingRoomRepository;
 import finalmission.repository.ReservationRepository;
@@ -34,6 +35,9 @@ public class MeetingRoomService {
     }
 
     public CreateMeetingRoomResponse addMeetingRoom(final CreateMeetingRoomRequest request) {
+        if (request.availablePeopleCount() <= 0) {
+            throw new InvalidValueException("가용 인원은 0보다 커야 합니다.");
+        }
         if (meetingRoomRepository.existsByName(request.name())) {
             throw new DuplicatedValueException("중복된 회의실 명입니다.");
         }

@@ -4,7 +4,7 @@ import finalmission.exception.custom.CannotAccessException;
 import finalmission.exception.custom.CannotConnectException;
 import finalmission.exception.custom.CannotRemoveException;
 import finalmission.exception.custom.DuplicatedValueException;
-import finalmission.exception.custom.InvalidDateException;
+import finalmission.exception.custom.InvalidValueException;
 import finalmission.exception.custom.NotAuthenticatedException;
 import finalmission.exception.custom.NotExistedValueException;
 import finalmission.exception.custom.UnauthorizedException;
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidDateException(final InvalidDateException e) {
+    public ErrorResponse handleInvalidDateException(final InvalidValueException e) {
         return new ErrorResponse(e.getMessage());
     }
 
