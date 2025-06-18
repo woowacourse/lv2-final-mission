@@ -1,6 +1,10 @@
 jwt:
   secret-key: Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=s
 
+
+holiday:
+  secret-key: /a6OkrMKxy0EOtdvCD3ehZQd8ZGYAYRwcA87hlVXDHTvvCSYpYtexup3jDazY9jGVMWHOZRXKcr/Ym7XdnIplg==
+  base-url: http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo
 spring:
   application:
     name=lv2-final-mission
