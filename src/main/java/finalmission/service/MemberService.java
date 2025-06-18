@@ -1,19 +1,24 @@
 package finalmission.service;
 
-import finalmission.controller.dto.MemberLoginResponse;
 import finalmission.controller.dto.MemberSignUpRequest;
 import finalmission.domain.Member;
 import finalmission.domain.vo.LolName;
 import finalmission.exception.NotFoundException;
 import finalmission.exception.UnauthorizedException;
 import finalmission.repository.MemberRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class MemberService {
+
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     private final MemberRepository memberRepository;
     private final RiotRestClient riotRestClient;
@@ -32,7 +37,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public MemberLoginResponse login(
+    public String createToken(
             final LolName lolName,
             final String password
     ) {
@@ -43,7 +48,10 @@ public class MemberService {
             throw new UnauthorizedException("비밀번호가 틀립니다.");
         }
 
-        return MemberLoginResponse.from(member);
+        return Jwts.builder()
+                .setSubject(member.getId().toString())
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .compact();
     }
 
     public Member getById(final Long memberId) {

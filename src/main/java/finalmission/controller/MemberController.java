@@ -4,6 +4,8 @@ import finalmission.controller.dto.MemberLoginResponse;
 import finalmission.controller.dto.MemberSignUpRequest;
 import finalmission.domain.vo.LolName;
 import finalmission.service.MemberService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,14 +32,26 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<MemberLoginResponse> login(
+    public ResponseEntity<Void> login(
             @RequestParam("playerName") final String playerName,
             @RequestParam("playerTag") final String playerTag,
-            @RequestParam("password") final String password
+            @RequestParam("password") final String password,
+            final HttpServletResponse response
+
     ) {
         final LolName lolName = new LolName(playerName, playerTag);
-        final MemberLoginResponse response = memberService.login(lolName, password);
+        final String accessToken = memberService.createToken(lolName, password);
 
-        return ResponseEntity.ok(response);
+        final Cookie cookieWithAccessToken = createCookieWithAccessToken(accessToken);
+        response.addCookie(cookieWithAccessToken);
+
+        return ResponseEntity.ok().build();
+    }
+
+    private Cookie createCookieWithAccessToken(final String accessToken) {
+        final Cookie cookie = new Cookie("token", accessToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        return cookie;
     }
 }
