@@ -51,4 +51,13 @@ public class ReservationController {
         reservationService.update(request, member);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id,
+            @MemberAuthentication LoginMember member
+    ) {
+        reservationService.delete(id, member);
+        return ResponseEntity.ok().build();
+    }
 }

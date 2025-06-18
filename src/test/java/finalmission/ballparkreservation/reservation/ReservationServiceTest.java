@@ -186,4 +186,22 @@ class ReservationServiceTest {
         assertThatThrownBy(() -> reservationService.update(request, loginMember))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    @DisplayName("예약을 생성한 사용자와 예약을 삭제하려는 사용자가 일치하지 않는 경우 예외를 발생시킨다.")
+    void delete_memberNotAuthorizedError() {
+        // given
+        LoginMember loginMember = new LoginMember(2L);
+        Member reservationMember = TestFactory.memberWithId(1L, new Member("may@gmail.com", "1234", "메이", 13));
+        Schedule schedule = new Schedule(1, SeatRank.TABLE, LocalDate.of(2025, 5, 5));
+        Long reservationId = 1L;
+        Reservation reservation = TestFactory.reservationWithId(reservationId, new Reservation(reservationMember, schedule, true));
+
+        given(reservationRepository.findById(reservationId))
+                .willReturn(Optional.of(reservation));
+
+        // when & then
+        assertThatThrownBy(() -> reservationService.delete(reservationId, loginMember))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }

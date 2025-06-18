@@ -81,6 +81,13 @@ public class ReservationService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 id에 대한 예약이 존재하지 않습니다."));
     }
 
+    @Transactional
+    public void delete(final Long id, final LoginMember requestMember) {
+        final Reservation reservation = getById(id);
+        validateAuthorization(reservation.getMember().getId(), requestMember.id());
+        reservationRepository.deleteById(id);
+    }
+
     private void validateAuthorization(final Long reservationMemberId, final Long requestMemberId) {
         if (!reservationMemberId.equals(requestMemberId)) {
             throw new IllegalArgumentException("해당 예약을 생성한 사용자만 수정할 수 있습니다.");

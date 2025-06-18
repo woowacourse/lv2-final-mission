@@ -113,4 +113,17 @@ public class ReservationApiTest {
                 .when().patch("/reservations/seat")
                 .then().statusCode(200);
     }
+
+    @DisplayName("/reservations DELETE 예약 삭제 테스트")
+    @Test
+    void delete1() {
+        Cookie cookie = loginForTest();
+        createReservationForTest(cookie);
+
+        RestAssured.given().port(port).log().all()
+                .contentType(ContentType.JSON)
+                .cookie(cookie)
+                .when().delete("/reservations/1")
+                .then().statusCode(200);
+    }
 }
