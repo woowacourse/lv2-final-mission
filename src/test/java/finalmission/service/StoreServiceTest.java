@@ -51,7 +51,7 @@ class StoreServiceTest {
 
         LoginMember loginMember = new LoginMember(1L, "email", "name", MemberRole.MASTER);
 
-        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", MemberRole.MASTER);
+        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", "password", MemberRole.MASTER);
         Member owner = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
                 memberResponse.memberRole());
         Store store = new Store("storeName", StoreStatus.CLOSED, "descrption", 0.0, owner);
@@ -76,7 +76,7 @@ class StoreServiceTest {
         // given
         AddWaitingRequest addWaitingRequest = new AddWaitingRequest(1L);
         LoginMember loginMember = new LoginMember(1L, "email", "name", MemberRole.CUSTOMER);
-        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", MemberRole.CUSTOMER);
+        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", "password", MemberRole.CUSTOMER);
         Member customer = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
                 memberResponse.memberRole());
         Member owner = new Member(2L, "owner@email.com", "owner", MemberRole.MASTER);
@@ -101,7 +101,7 @@ class StoreServiceTest {
         Long storeId = 1L;
         StoreStatus newStatus = StoreStatus.OPEN;
         LoginMember loginMember = new LoginMember(1L, "email", "name", MemberRole.MASTER);
-        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", MemberRole.MASTER);
+        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", "password", MemberRole.MASTER);
         Member owner = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
                 memberResponse.memberRole());
         Store store = new Store("storeName", StoreStatus.CLOSED, "description", 0.0, owner);
@@ -123,7 +123,7 @@ class StoreServiceTest {
         // given
         Long storeId = 1L;
         LoginMember loginMember = new LoginMember(1L, "email", "name", MemberRole.CUSTOMER);
-        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", MemberRole.CUSTOMER);
+        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", "password", MemberRole.CUSTOMER);
         Member customer = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
                 memberResponse.memberRole());
         Member owner = new Member(2L, "owner@email.com", "owner", MemberRole.MASTER);
@@ -147,7 +147,7 @@ class StoreServiceTest {
         // given
         Long storeId = 1L;
         LoginMember loginMember = new LoginMember(1L, "email", "name", MemberRole.CUSTOMER);
-        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", MemberRole.CUSTOMER);
+        MemberResponse memberResponse = new MemberResponse(1L, "email", "name", "password", MemberRole.CUSTOMER);
         Member customer = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
                 memberResponse.memberRole());
         Member owner = new Member(2L, "owner@email.com", "owner", MemberRole.MASTER);
