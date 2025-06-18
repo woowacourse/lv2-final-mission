@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -20,6 +21,9 @@ import lombok.ToString;
 @ToString
 @Entity
 public class Reservation {
+
+    private static final LocalTime START_TIME = LocalTime.of(10, 0);
+    private static final LocalTime END_TIME = LocalTime.of(20, 0);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +57,8 @@ public class Reservation {
                                        final LocalTime time,
                                        final Design design,
                                        final Designer designer) {
+
+        validateDateAndTime(design, date, time);
         return new Reservation(null, customer, date, time, design, designer);
     }
 
@@ -63,6 +69,29 @@ public class Reservation {
                                          final Design design,
                                          final Designer designer) {
         return new Reservation(reservationId, customer, date, time, design, designer);
+    }
+
+    private static void validateDateAndTime(final Design design, final LocalDate date, final LocalTime time) {
+        LocalDateTime selectedDateAndTime = date.atTime(time);
+
+        if (selectedDateAndTime.isBefore(date.atTime(START_TIME))) {
+            throw new IllegalArgumentException("샵 운영 시간 전에는 예약할 수 없습니다.");
+        }
+
+        if (selectedDateAndTime.isAfter(date.atTime(END_TIME))) {
+            throw new IllegalArgumentException("샵 운영 시간 후에는 예약할 수 없습니다.");
+        }
+
+        if (selectedDateAndTime.isBefore(LocalDateTime.now().plusHours(1))) {
+            throw new IllegalArgumentException("예약은 현재 시간을 기준으로 1시간 이후부터 가능합니다.");
+        }
+
+        int turnAroundTime = design.getTurnaroundTime();
+        LocalDateTime serviceEndTime = selectedDateAndTime.plusMinutes(turnAroundTime);
+
+        if (serviceEndTime.isAfter(date.atTime(END_TIME))) {
+            throw new IllegalArgumentException("서비스 완료 시간이 마감 시간 이후 입니다.");
+        }
     }
 
     public Long getReservationId() {

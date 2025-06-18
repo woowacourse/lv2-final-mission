@@ -45,13 +45,13 @@ public class ReservationService {
         Designer designer = designerRepository.findById(designerId)
                 .orElseThrow(() -> new IllegalArgumentException("디자이너가 존재하지 않습니다."));
 
-        validateDate(date);
+        validateSelectedDate(date);
 
         Reservation reservation = Reservation.register(customer, date, time, design, designer);
         return reservationRepository.save(reservation);
     }
 
-    private void validateDate(LocalDate date) {
+    private void validateSelectedDate(final LocalDate date) {
         publicHolidayService.validatePublicHoliday(date);
     }
 
