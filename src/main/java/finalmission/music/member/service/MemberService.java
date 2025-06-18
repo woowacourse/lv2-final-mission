@@ -3,6 +3,7 @@ package finalmission.music.member.service;
 import finalmission.music.member.controller.dto.MemberRequest;
 import finalmission.music.member.controller.dto.MemberResponse;
 import finalmission.music.member.domain.Member;
+import finalmission.music.member.domain.Role;
 import finalmission.music.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class MemberService {
         if (memberRepository.existsById(request.name())) {
             throw new IllegalArgumentException("[ERROR] 중복된 이름입니다.");
         }
-        Member member = memberRepository.save(new Member(request.name()));
+        Member member = memberRepository.save(new Member(request.name(), Role.USER));
 
         return MemberResponse.from(member);
     }
