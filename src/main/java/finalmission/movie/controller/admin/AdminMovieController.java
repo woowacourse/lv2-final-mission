@@ -1,5 +1,7 @@
 package finalmission.movie.controller.admin;
 
+import finalmission.global.auth.annotation.RoleRequired;
+import finalmission.member.entity.RoleType;
 import finalmission.movie.dto.request.MovieCreateRequest;
 import finalmission.movie.dto.request.MovieSlotCreateRequest;
 import finalmission.movie.dto.response.MovieCreateResponse;
@@ -23,6 +25,7 @@ public class AdminMovieController {
     }
 
     @PostMapping("/movies")
+    @RoleRequired(roleType = RoleType.ADMIN)
     public ResponseEntity<MovieCreateResponse> createMovie(@RequestBody MovieCreateRequest movieCreateRequest) {
         MovieCreateResponse movieCreateResponse = adminMovieService.createMovie(
                 movieCreateRequest.name(), movieCreateRequest.description());
@@ -31,8 +34,10 @@ public class AdminMovieController {
     }
 
     @PostMapping("/movie-slots")
+    @RoleRequired(roleType = RoleType.ADMIN)
     public ResponseEntity<MovieSlotCreateResponse> createMovieSlot(
-            @RequestBody MovieSlotCreateRequest movieSlotCreateRequest) {
+            @RequestBody MovieSlotCreateRequest movieSlotCreateRequest
+    ) {
         MovieSlotCreateResponse movieSlotCreateResponse = adminMovieService.createMovieSlot(
                 movieSlotCreateRequest.movieId(),
                 movieSlotCreateRequest.date(),
