@@ -20,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
 
 import finalmission.meetingroom.common.exception.AlreadyInUseException;
@@ -33,6 +34,7 @@ import finalmission.meetingroom.service.request.ReservationTimeChangeRequest;
 import finalmission.meetingroom.service.response.ReservationResponse;
 
 @ActiveProfiles("test")
+@Transactional
 @SpringBootTest
 class ReservationServiceTest {
 
@@ -185,6 +187,24 @@ class ReservationServiceTest {
                 result.reservationId(), loginMember.name(), "임팩트룸",
                 nextDate(), getTime("12:00"), getTime("13:00")
         ));
+    }
+
+    @DisplayName("회의실 예약을 취소할 수 있다.")
+    @Test
+    void cancelReservation() {
+        // given
+        ReservationCreateRequest request = new ReservationCreateRequest(
+                "임팩트룸", nextDate(), getTime("10:00"), getTime("11:00")
+        );
+        LoginMember loginMember = getLoginMember();
+        sendEmailByMockServer();
+        ReservationResponse response = reservationService.reserveMeetingRoom(request, loginMember);
+
+        // when
+        reservationService.cancel(response.reservationId(), loginMember);
+
+        // then
+        assertThat(reservationRepository.findById(response.reservationId())).isEmpty();
     }
 
     private void sendEmailByMockServer() {
