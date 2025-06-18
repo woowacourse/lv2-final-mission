@@ -83,6 +83,45 @@ class MemberMovieControllerTest {
     }
 
     @Test
+    @DisplayName("회원 영화 예약 - 실패 - 이미 예약됨")
+    void createMovieReservation_fail_alreadyBooked() {
+        // given
+        Movie movie = MovieFixture.createDefault();
+        movieRepository.save(movie);
+
+        MovieSlot movieSlot = MovieSlotFixture.create(movie);
+        movieSlotRepository.save(movieSlot);
+
+        Member member = MemberFixture.createDefault();
+        memberRepository.save(member);
+        Integer selectSeat = 1;
+        MovieReservationCreateRequest request = new MovieReservationCreateRequest(movieSlot.getId(), selectSeat);
+        String token = RestAssureHelper.getLoginToken(member.getEmail(), member.getPassword());
+
+        RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .body(request)
+
+                .when()
+                .post("movies/reservation");
+
+        // when & then
+        RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .body(request)
+
+                .when()
+                .post("movies/reservation")
+
+                .then()
+                .statusCode(HttpStatus.CONFLICT.value());
+    }
+    
+    @Test
     @DisplayName("회원 예약 조회 - 성공")
     void readMovieReservation() {
         // given
@@ -124,7 +163,7 @@ class MemberMovieControllerTest {
     }
 
     @Test
-    @DisplayName("회원 영화 예약 - 성공")
+    @DisplayName("회원 영화 예약 삭제 - 성공")
     void deleteMovieReservation() {
         // given
         Movie movie = MovieFixture.createDefault();
@@ -166,7 +205,7 @@ class MemberMovieControllerTest {
     }
 
     @Test
-    @DisplayName("회원 영화 예약 - 실패 - 다른 회원 요청")
+    @DisplayName("회원 영화 예약 삭제 - 실패 - 다른 회원 요청")
     void deleteMovieReservation_fail_otherMemberRequest() {
         // given
         Movie movie = MovieFixture.createDefault();

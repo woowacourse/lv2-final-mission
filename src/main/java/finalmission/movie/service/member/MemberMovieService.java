@@ -1,5 +1,6 @@
 package finalmission.movie.service.member;
 
+import finalmission.global.error.exception.ConflictException;
 import finalmission.global.error.exception.ForbiddenException;
 import finalmission.member.entity.Member;
 import finalmission.member.repository.MemberRepository;
@@ -33,6 +34,8 @@ public class MemberMovieService {
     public MovieReservationCreateResponse createMovieReservation(Long memberId, Long movieSlotId, Integer seat) {
         Member member = findMemberByIdOrThrow(memberId);
         MovieSlot movieSlot = findMovieSlotByIdOrThrow(movieSlotId);
+        validateSlotNotBooked(movieSlotId, seat);
+
         MovieReservation reservation = new MovieReservation(member, movieSlot, seat);
         movieReservationRepository.save(reservation);
 
@@ -52,6 +55,12 @@ public class MemberMovieService {
     private MovieSlot findMovieSlotByIdOrThrow(Long movieSlotId) {
         return movieSlotRepository.findById(movieSlotId)
                 .orElseThrow(() -> new IllegalArgumentException("영화 슬롯을 찾을 수 없습니다."));
+    }
+
+    private void validateSlotNotBooked(Long movieSlotId, Integer seat) {
+        if (movieReservationRepository.existsByMovieSlotIdAndSeat(movieSlotId, seat)) {
+            throw new ConflictException("이미 좌석이 예약되어 있습니다.");
+        }
     }
 
     public List<MovieReservationReadResponse> readMovieReservation(Long memberId) {

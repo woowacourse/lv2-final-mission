@@ -11,4 +11,6 @@ public interface MovieReservationRepository extends JpaRepository<MovieReservati
     List<MovieReservation> findByMemberId(Long memberId);
 
     Integer countByMovieSlot(MovieSlot movieSlot);
+
+    boolean existsByMovieSlotIdAndSeat(Long movieSlotId, Integer seat);
 }
