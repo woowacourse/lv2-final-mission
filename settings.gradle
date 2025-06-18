@@ -1,1 +1,4 @@
 rootProject.name = 'lv2-final-mission'
+include 'src:test:resources'
+findProject(':src:test:resources')?.name = 'resources'
+
