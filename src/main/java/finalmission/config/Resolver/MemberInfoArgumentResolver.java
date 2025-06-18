@@ -24,7 +24,7 @@ public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
-        return parameter.getParameter().equals(MemberInfo.class);
+        return parameter.getParameterType().equals(MemberInfo.class);
     }
 
     @Override

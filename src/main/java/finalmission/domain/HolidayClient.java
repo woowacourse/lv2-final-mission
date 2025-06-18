@@ -78,8 +78,14 @@ public class HolidayClient {
             JsonNode bodyNode = responseNode.get("body");
             JsonNode itemsNode = bodyNode.get("items");
 
+            if (!itemsNode.has("item")) {
+                return holidayElementResponses;
+            }
+
             JsonNode itemNode = itemsNode.get("item");
-            for (JsonNode element : itemNode) {
+
+            for (int i = 0; i < itemNode.size(); i++) {
+                JsonNode element = itemNode.get(i);
                 String dateName = element.get("dateName").asText();
                 String isHoliday = element.get("isHoliday").asText();
                 String locdate = element.get("locdate").asText();
