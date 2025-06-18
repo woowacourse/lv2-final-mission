@@ -57,7 +57,7 @@ public class ReservationService {
 
         MeetingRoom meetingRoom = getMeetingRoom(request.meetingRoomName());
         if (isAlreadyReserved(meetingRoom, reservationDate, startAt, endAt)) {
-            throw new IllegalArgumentException("");
+            throw new AlreadyInUseException("해당 시간에 예약이 이미 존재합니다.");
         }
         Member member = getMember(loginMember);
 
