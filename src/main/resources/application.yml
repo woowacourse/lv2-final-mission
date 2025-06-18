@@ -1,0 +1,41 @@
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        ddl-auto: create-drop
+    defer-datasource-initialization: true
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    url: jdbc:h2:mem:DATABASE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+jwt:
+  secret-key: SecretKeyForMong2SecretKeyForMong2
+  expire-length: 36000000
+
+sendgrid:
+  authorization: Bearer SecretKeyForMong2SecretKeyForMong2
+  timeout:
+    connect: 3
+    read: 10
+  url:
+    base: https://api.sendgrid.com/v3
+    send: /mail/send
+  render:
+    from: wodnd0131@naver.com
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+

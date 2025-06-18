@@ -1,0 +1,33 @@
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        ddl-auto: create-drop
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    url: jdbc:h2:mem:DATABASE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+jwt:
+  secret-key: SecretKeyForMong2SecretKeyForMong2
+  expire-length: 36000000
+  
+sendgrid:
+  authorization: for-test-auth
+  render:
+    from: for-test-email
+  url:
+    base: for-test-url
+    send: for-test-path
+  timeout:
+    connect: 3
+    read: 10
+
