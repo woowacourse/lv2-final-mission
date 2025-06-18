@@ -24,9 +24,4 @@ public class MeetingRoom {
     protected MeetingRoom() {
 
     }
-
-    public MeetingRoom(String roomName, int maximumNumber) {
-        this.roomName = roomName;
-        this.maximumNumber = maximumNumber;
-    }
 }

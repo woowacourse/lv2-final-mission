@@ -44,4 +44,8 @@ public class Member {
     public boolean isCorrectPassword(String password) {
         return this.password.equals(password);
     }
+
+    public boolean equalMember(Long memberId) {
+        return this.id.equals(memberId);
+    }
 }

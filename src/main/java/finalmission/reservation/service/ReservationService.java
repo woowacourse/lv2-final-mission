@@ -10,6 +10,8 @@ import finalmission.member.repository.MemberRepository;
 import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.dto.ReservationRequest;
 import finalmission.reservation.dto.ReservationResponse;
+import finalmission.reservation.dto.ReservationUpdateRequest;
+import finalmission.reservation.exception.ReservationAccessDeniedException;
 import finalmission.reservation.repository.ReservationRepository;
 import finalmission.reservationtime.domain.ReservationTime;
 import finalmission.reservationtime.repository.ReservationTimeRepository;
@@ -33,16 +35,15 @@ public class ReservationService {
             ReservationRequest request,
             @AuthenticationPrincipal LoginMember loginMember
     ) {
-        if (holidayRestClient.checkHoliday(request.date())) {
-            throw new IllegalArgumentException("공휴일엔 예약할 수 없습니다.");
-        }
+//        if (holidayRestClient.checkHoliday(request.date())) {
+//            throw new IllegalArgumentException("공휴일엔 예약할 수 없습니다.");
+//        }
 
         MeetingRoom meetingRoom = getMeetingRoom(request.roomId());
 
         Member member = getMember(loginMember);
 
-        ReservationTime reservationTime = timeRepository.findById(request.timeId())
-                .orElseThrow(() -> new NoSuchElementException("해당 예약 시간은 존재하지 않습니다."));
+        ReservationTime reservationTime = getReservationTime(request.timeId());
 
         Reservation reservation = new Reservation(request.date(), reservationTime, member, meetingRoom);
         Reservation savedReservation = reservationRepository.save(reservation);
@@ -64,6 +65,29 @@ public class ReservationService {
             throw new NoSuchElementException("해당 예약은 존재하지 않습니다.");
         }
         reservationRepository.deleteById(reservationId);
+    }
+
+    public ReservationResponse updateReservation(Long reservationId, ReservationUpdateRequest request, LoginMember loginMember) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NoSuchElementException("해당 예약은 존재하지 않습니다."));
+
+        validateUpdate(reservation, loginMember);
+
+        MeetingRoom meetingRoom = getMeetingRoom(request.roomId());
+        ReservationTime reservationTime = getReservationTime(request.timeId());
+        reservation.update(request.date(), reservationTime, meetingRoom);
+        return new ReservationResponse(reservation.getId(), reservation.getDate(), reservation.getTime().getStartAt(), reservation.getMeetingRoom().getRoomName());
+    }
+
+    private void validateUpdate(Reservation reservation, LoginMember loginMember) {
+        if (!reservation.equalMember(loginMember.id())) {
+            throw new ReservationAccessDeniedException("해당 예약을 수정할 권한이 없습니다.");
+        }
+    }
+
+    private ReservationTime getReservationTime(Long timeId) {
+        return timeRepository.findById(timeId)
+                .orElseThrow(() -> new NoSuchElementException("해당 예약 시간은 존재하지 않습니다."));
     }
 
     private MeetingRoom getMeetingRoom(Long roomId) {

@@ -49,4 +49,14 @@ public class Reservation {
         this.member = member;
         this.meetingRoom = meetingRoom;
     }
+
+    public void update(LocalDate date, ReservationTime time, MeetingRoom room) {
+        this.date = date;
+        this.time = time;
+        this.meetingRoom = room;
+    }
+
+    public boolean equalMember(Long memberId) {
+        return this.member.equalMember(memberId);
+    }
 }
