@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: lv2-final-mission
+
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:db
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+
+jwt:
+  secret-key: /VCEkdrvbjkCLRp0G0LK12VsDYViO/kufd8UVphCq80MdiZzNlefqOcwqfpvW+jIRNBmhiNKbNUGXSwum0DSgUjkEl2To/350R/ffncBkVeO7tfNq/4rNXWGGHre9p8s14m0k2z/QS4=
+  expiration: 360000
+
+payment:
+  key: DEV2DCA4FEB63365FB5CA62D7AE96906147C1C42
+  cid: TC0ONETIME

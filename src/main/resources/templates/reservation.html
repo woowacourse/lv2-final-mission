@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>티켓팅 페이지</title>
+    <link rel="stylesheet" href="/css/kakao.css">
+</head>
+<body>
+    <div class="area-box">
+        <label for="concert-id">콘서트 ID</label><input id="concert-id" placeholder="콘서트 ID">
+        <label for="seat-id">좌석 ID</label><input id="seat-id" placeholder="좌석 ID">
+        <button id="pay-btn" class="kakao-btn">카카오페이 결제하기</button>
+    </div>
+    <div class="area-box">
+        <label for="token-id">PG Token</label><input id="token-id" placeholder="Token">
+        <label for="tid">TID</label><input id="tid" placeholder="tid">
+        <button id="reserve-btn">예약 확정하기</button>
+    </div>
+    <script src="/js/reservation.js"></script>
+</body>
+</html>

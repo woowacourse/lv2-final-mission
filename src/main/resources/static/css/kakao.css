@@ -1,0 +1,21 @@
+.kakao-btn {
+    background-color: #fee500;
+    color: #000000;
+    border-radius: 5%;
+    padding: 10px 20px;
+}
+
+#reserve-btn {
+    background-color: #00FF00;
+    color: #000000;
+    border-radius: 5%;
+    padding: 10px 20px;
+}
+
+button:hover {
+    border: 2px solid #000000;
+}
+
+.area-box {
+    margin: 20px;
+}
