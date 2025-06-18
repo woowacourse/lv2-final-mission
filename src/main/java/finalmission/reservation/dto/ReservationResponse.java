@@ -6,17 +6,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record ReservationResponse(
-        Long reservationId,
-        String userName,
-        LocalDate reservationDate,
-        LocalTime reservationTime,
+        Long id,
+        LocalDate date,
+        LocalTime time,
         String meetingRoomName
 ) {
 
     public static ReservationResponse from(Reservation reservation) {
         return new ReservationResponse(
                 reservation.getId(),
-                reservation.getMember().getName(),
                 reservation.getDate(),
                 reservation.getTime().getStartAt(),
                 reservation.getMeetingRoom().getRoomName()
