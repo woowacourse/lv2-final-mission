@@ -26,6 +26,10 @@ spring:
     init:
       mode: always
 
+logging:
+  level:
+    org.springframework.web.client.RestTemplate: DEBUG
+    
 data:
   base-url: http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo
   api-key: ovyeTLwI4XTSqZMSPn11ddvnFFEY1FzQzoyZYMWfJzR5BJLGG74qE%2B0BVKdWWcrnrJbp1hggA9cwktQGxQ4mMQ%3D%3D

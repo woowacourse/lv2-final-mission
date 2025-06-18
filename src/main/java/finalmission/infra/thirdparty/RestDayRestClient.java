@@ -1,12 +1,12 @@
 package finalmission.infra.thirdparty;
 
 import finalmission.infra.thirdparty.dto.RestDayRequest;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class RestDayRestClient {
@@ -28,18 +28,14 @@ public class RestDayRestClient {
     }
 
     public ResponseEntity<String> getRestDay(RestDayRequest restDayRequest) {
-        String uri = makeURI(restDayRequest.year(), restDayRequest.month());
+        URI uri = makeURI(restDayRequest.year(), restDayRequest.month());
         return restTemplate.getForEntity(uri, String.class);
     }
 
-    private String makeURI(int year, int month) {
-        return UriComponentsBuilder.fromUriString(baseUrl)
-                .queryParam("ServiceKey", dataKey)
-                .queryParam("solYear", year)
-                .queryParam("solMonth", String.format("%02d", month))
-                .queryParam("_type", "json")
-                .build(false)
-                .toUriString();
+    private URI makeURI(int year, int month) {
+        String uriString = String.format("%s?ServiceKey=%s&solYear=%d&solMonth=%02d&_type=json",
+                baseUrl, dataKey, year, month);
+        return URI.create(uriString);
     }
 }
 

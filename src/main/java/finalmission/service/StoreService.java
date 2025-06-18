@@ -70,9 +70,8 @@ public class StoreService {
                 memberResponse.memberRole());
         validateCustomerRole(member);
 
-        waitingLineService.addWaitingMember(store, member);
-
-        int rank = waitingLineService.getWaitingRank(store, member);
+        store.addWaiting(member);
+        int rank = store.getWaitingRank(member);
         return new AddWaitingResponse(rank);
     }
 
@@ -101,7 +100,7 @@ public class StoreService {
         MemberResponse memberResponse = memberService.findById(loginMember.id());
         Member member = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
                 memberResponse.memberRole());
-        int rank = waitingLineService.getWaitingRank(store, member);
+        int rank = store.getWaitingRank(member);
         return new RankResponse(rank);
     }
 

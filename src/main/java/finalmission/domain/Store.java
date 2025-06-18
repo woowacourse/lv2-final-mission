@@ -61,4 +61,12 @@ public class Store {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    public void addWaiting(Member member) {
+        this.waitingLine.addMember(member);
+    }
+
+    public int getWaitingRank(Member member) {
+        return this.waitingLine.getSequenceByMember(member);
+    }
 }
