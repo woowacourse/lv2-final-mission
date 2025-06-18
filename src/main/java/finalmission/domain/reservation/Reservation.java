@@ -58,7 +58,8 @@ public class Reservation {
                                        final Design design,
                                        final Designer designer) {
 
-        validateDateAndTime(design, date, time);
+        validateTime(design, date, time);
+        validateDesigner(designer, date);
         return new Reservation(null, customer, date, time, design, designer);
     }
 
@@ -71,7 +72,7 @@ public class Reservation {
         return new Reservation(reservationId, customer, date, time, design, designer);
     }
 
-    private static void validateDateAndTime(final Design design, final LocalDate date, final LocalTime time) {
+    private static void validateTime(final Design design, final LocalDate date, final LocalTime time) {
         LocalDateTime selectedDateAndTime = date.atTime(time);
 
         if (selectedDateAndTime.isBefore(date.atTime(START_TIME))) {
@@ -91,6 +92,12 @@ public class Reservation {
 
         if (serviceEndTime.isAfter(date.atTime(END_TIME))) {
             throw new IllegalArgumentException("서비스 완료 시간이 마감 시간 이후 입니다.");
+        }
+    }
+
+    private static void validateDesigner(final Designer designer, final LocalDate date) {
+        if (designer.isOffDay(date.getDayOfWeek())) {
+            throw new IllegalArgumentException("해당 디자이너의 휴무 요일입니다.");
         }
     }
 
