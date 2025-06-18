@@ -29,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
@@ -133,6 +134,8 @@ class ReservationRestControllerTest {
             softAssertions.assertThat(reservationResponse.phoneNumber()).isEqualTo(restaurantPhoneNumber);
             softAssertions.assertThat(reservationResponse.memberId()).isEqualTo(memberResponse.id());
         });
+        Mockito.verify(emailClient, Mockito.times(1))
+                .sendEmail(SendEmailRequest.confirmReservation(memberResponse.email()));
     }
 
     @Test
