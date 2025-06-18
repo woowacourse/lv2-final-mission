@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoomService {
 
-    private static final int MAXIMUM_PARTICIPANTS_SIZE = 10;
-
     private final MemberService memberService;
     private final RoomRepository roomRepository;
     private final RoomMemberRepository roomMemberRepository;
@@ -75,16 +73,13 @@ public class RoomService {
     }
 
     private void validateParticipantsSize(final Room room) {
-        if (room.getRoomMembers().size() > MAXIMUM_PARTICIPANTS_SIZE) {
+        if (room.isFull()) {
             throw new IllegalArgumentException("이미 방이 꽉 찼습니다.");
         }
     }
 
     private void validateAlreadyJoin(final Room room, final Member member) {
-        boolean alreadyJoin = room.getRoomMembers().stream()
-                .anyMatch(roomMember -> roomMember.getMember().equals(member));
-
-        if (alreadyJoin) {
+        if (room.isJoined(member)) {
             throw new IllegalStateException("이미 해당 내전방에 참여한 유저입니다.");
         }
     }

@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Room {
 
+    private static final int MAXIMUM_PARTICIPANTS_SIZE = 10;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -51,5 +53,14 @@ public class Room {
         this.startTime = startTime;
         this.description = description;
         this.manager = manager;
+    }
+
+    public boolean isFull() {
+        return roomMembers.size() >= MAXIMUM_PARTICIPANTS_SIZE;
+    }
+
+    public boolean isJoined(final Member member) {
+        return roomMembers.stream()
+                .anyMatch(roomMember -> roomMember.getMember().equals(member));
     }
 }
