@@ -60,7 +60,7 @@ class ReservationServiceTest extends BaseServiceTest {
 
     @Test
     @DisplayName("중복 추첨할 수 없다.")
-    void dont_reserve_over_once() {
+    void dont_reserve_over_twice() {
         // given
         Member member = memberRepository.save(new Member("test-member", Role.USER));
         Album album = albumRepository.save(

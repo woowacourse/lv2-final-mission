@@ -37,6 +37,16 @@ class AlbumServiceTest extends BaseServiceTest {
     }
 
     @Test
+    @DisplayName("앨범은 중복 등록 할 수 없다.")
+    void dont_create_album_over_twice() {
+        AlbumRequest albumRequest = new AlbumRequest("test", "test", 0, LocalDate.of(2020, 5, 24), "test-spotify");
+        sut.create(albumRequest);
+
+        Assertions.assertThatThrownBy(() -> sut.create(albumRequest))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     @DisplayName("앨범 조회가 가능하다.")
     void can_find_album() {
         Album album = albumRepository.save(new Album("test", "test", 0, LocalDate.of(2020, 5, 24), "test-spotify"));
