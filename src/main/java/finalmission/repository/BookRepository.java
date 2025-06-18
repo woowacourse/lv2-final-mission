@@ -26,12 +26,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b.period FROM Book b WHERE b.id = :id")
     Optional<Integer> findPeriodById(@Param("id") Long id);
 
-    @Modifying
-    @Transactional
     @Query("""
-            UPDATE Book b
-                SET b.stock = b.stock - 1
-                WHERE b.id = :id
+            SELECT b.inventory - COUNT(*)
+            FROM Book b
+            LEFT JOIN Rental r ON b.id = r.book.id
+            WHERE b.id = :bookId
+            GROUP BY b.id
             """)
-    int removeOneStockById(@Param("id") Long id);
+    Optional<Integer> getAvailableStock(@Param("bookId") Long bookId);
 }

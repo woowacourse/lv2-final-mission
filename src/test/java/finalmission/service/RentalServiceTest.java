@@ -1,13 +1,10 @@
 package finalmission.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 import finalmission.dto.request.RentalRequest;
 import finalmission.dto.response.RentalResponse;
-import finalmission.entity.Book;
 import finalmission.repository.BookRepository;
 import java.time.LocalDate;
 import java.util.List;
@@ -97,25 +94,6 @@ class RentalServiceTest {
         // when & then
         assertThatThrownBy(() -> rentalService.createRental(rentalRequest))
                 .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void 대여시_재고_하나_감소() {
-
-        // given
-        Long memberId = 1L;
-        Long bookId = 2L;
-        LocalDate rentalDate = LocalDate.of(2024, 1, 2);
-        LocalDate returnDate = LocalDate.of(2024, 1, 16);
-        Book bookBefore = bookRepository.findById(bookId).get();
-        RentalRequest rentalRequest = new RentalRequest(memberId, bookId, rentalDate, returnDate);
-
-        // when
-        rentalService.createRental(rentalRequest);
-        Book bookAfter = bookRepository.findById(bookId).get();
-
-        // then
-        assertThat(bookBefore.getStock() - 1).isEqualTo(bookAfter.getStock());
     }
 
     @Test

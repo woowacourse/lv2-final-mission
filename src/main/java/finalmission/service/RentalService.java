@@ -39,11 +39,11 @@ public class RentalService {
         validateRentalPeriod(rentalRequest);
         validateDuplicateRental(rentalRequest);
         validateRentalLimit(rentalRequest);
+        validateAvailableStock(rentalRequest);
 
         Member member = memberService.findById(rentalRequest.memberId());
         Book book = bookService.findById(rentalRequest.bookId());
         Rental rental = new Rental(member, book, rentalRequest.rentalDate(), rentalRequest.returnDate());
-        bookService.removeOneStockById(book.getId());
         return RentalResponse.from(rentalRepository.save(rental));
     }
 
@@ -85,5 +85,9 @@ public class RentalService {
         if (existingRental.size() > 3) {
             throw new IllegalArgumentException("대여는 최대 3권까지만 가능합니다.");
         }
+    }
+
+    private void validateAvailableStock(RentalRequest rentalRequest) {
+        bookService.validateAvailableStock(rentalRequest.bookId());
     }
 }

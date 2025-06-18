@@ -7,8 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 public class Book {
@@ -22,8 +20,6 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
     private int inventory;
-    @ColumnDefault("0")
-    private int stock;
     private int period;
 
     public Book() {
@@ -64,10 +60,6 @@ public class Book {
 
     public int getInventory() {
         return inventory;
-    }
-
-    public int getStock() {
-        return stock;
     }
 
     public int getPeriod() {

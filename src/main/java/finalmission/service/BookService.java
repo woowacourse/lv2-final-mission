@@ -34,7 +34,7 @@ public class BookService {
             return BookResponse.from(bookRepository.findById(bookId).get());
         }
         Category category = categoryRepository.findById(bookRequest.category_id()).get();
-        Book book = new Book(bookRequest.name(), bookRequest.author(),  category, bookRequest.inventory(), bookRequest.period());
+        Book book = new Book(bookRequest.name(), bookRequest.author(), category, bookRequest.inventory(), bookRequest.period());
         return BookResponse.from(bookRepository.save(book));
     }
 
@@ -43,12 +43,20 @@ public class BookService {
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 책이 없습니다."));
     }
 
-    public void removeOneStockById(Long id) {
-        bookRepository.removeOneStockById(id);
-    }
-
     public int findPeriodById(Long id) {
         return bookRepository.findPeriodById(id)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 책이 없습니다."));
+    }
+
+    public int getAvailableStock(Long bookId) {
+        return bookRepository.getAvailableStock(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 책이 없습니다."));
+    }
+
+    public void validateAvailableStock(Long bookId) {
+        int availableStock = getAvailableStock(bookId);
+        if (availableStock <= 0) {
+            throw new IllegalArgumentException("재고가 부족합니다.");
+        }
     }
 }
