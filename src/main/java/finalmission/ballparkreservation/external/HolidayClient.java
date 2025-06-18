@@ -1,8 +1,11 @@
 package finalmission.ballparkreservation.external;
 
-import finalmission.ballparkreservation.external.dto.HolidayResponse;
+import finalmission.ballparkreservation.external.dto.HolidayCountResponse;
+import finalmission.ballparkreservation.external.dto.HolidayPluralResponse;
+import finalmission.ballparkreservation.external.dto.HolidaySingularResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClient.ResponseSpec;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -31,12 +34,19 @@ public class HolidayClient {
                 .queryParam("_type", "json")
                 .build(true).toUri();
 
-        HolidayResponse response = restClient.get()
-                .uri(uri)
-                .retrieve()
-                .toEntity(HolidayResponse.class)
-                .getBody();
+        System.out.println("uri = " + uri);
 
-        return response.getHolidays();
+        final ResponseSpec response = restClient.get()
+                .uri(uri)
+                .retrieve();
+
+        HolidayCountResponse count = response.toEntity(HolidayCountResponse.class).getBody();
+        if (count.getCount() > 1) {
+            return response.toEntity(HolidayPluralResponse.class).getBody().getHolidays();
+        }
+        if (count.getCount() == 1) {
+            return response.toEntity(HolidaySingularResponse.class).getBody().getHolidays();
+        }
+        return List.of();
     }
 }
