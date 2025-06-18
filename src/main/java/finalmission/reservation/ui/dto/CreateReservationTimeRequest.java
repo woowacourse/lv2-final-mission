@@ -6,7 +6,7 @@ import java.time.LocalTime;
 
 public record CreateReservationTimeRequest(
         @JsonFormat(pattern = "HH:mm")
-        @NotNull
+        @NotNull(message = "시간은 필수입니다.")
         LocalTime startAt
 ) {
 

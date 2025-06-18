@@ -4,13 +4,13 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record CreateWaitingRequest(
-        @NotNull
+        @NotNull(message = "date는 필수입니다.")
         LocalDate date,
-        @NotNull
+        @NotNull(message = "timeId는 필수입니다.")
         Long timeId,
-        @NotNull
+        @NotNull(message = "restaurantId는 필수입니다.")
         Long restaurantId,
-        @NotNull
+        @NotNull(message = "memberId는 필수입니다.")
         Long memberId
 ) {
 
