@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record CreateReservationRequest(
-        Long customerId,
         LocalDate date,
         LocalTime time,
         Long designId,

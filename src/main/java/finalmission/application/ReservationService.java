@@ -66,7 +66,7 @@ public class ReservationService {
             throw new IllegalArgumentException("예약이 존재하지 않습니다.");
         }
 
-        if (reservation.get().getCustomer().equals(customer)) {
+        if (!reservation.get().getCustomer().equals(customer)) {
             throw new IllegalArgumentException("해당 예약은 고객의 것이 아닙니다.");
         }
 

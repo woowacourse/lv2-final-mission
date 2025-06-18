@@ -43,7 +43,7 @@ public class ReservationController {
         return ReservationResponse.fromReservation(reservation);
     }
 
-    @GetMapping("reservations")
+    @GetMapping("/reservations")
     public List<ReservationResponse> readMyReservation(
             @Authenticated final Customer customer
     ) {
