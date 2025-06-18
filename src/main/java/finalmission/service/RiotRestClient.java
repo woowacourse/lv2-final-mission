@@ -10,7 +10,7 @@ import org.springframework.web.client.RestClient.Builder;
 @Component
 public class RiotRestClient {
 
-    private static final String RIOT_API_KEY = "RGAPI-f6300294-cc71-40cd-8c6b-9f7d02999e33";
+    private static final String RIOT_API_KEY = "RGAPI-3feb1d2c-b3d2-4dd4-88f9-b849d5830f04";
 
     private final RestClient restClient;
 

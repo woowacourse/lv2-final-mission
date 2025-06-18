@@ -18,6 +18,6 @@ public class RiotRestClientErrorHandler extends DefaultResponseErrorHandler {
             throw new NotFoundException();
         }
 
-        throw new RuntimeException();
+        throw new RuntimeException(response.getBody().toString());
     }
 }
