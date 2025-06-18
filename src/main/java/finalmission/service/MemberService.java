@@ -18,4 +18,9 @@ public class MemberService {
         return memberRepository.findByEmailAndPassword(loginRequest.email(), loginRequest.password())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 로그인 정보입니다."));
     }
+
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 멤버가 없습니다"));
+    }
 }

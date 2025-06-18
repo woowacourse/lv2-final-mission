@@ -37,4 +37,18 @@ public class BookService {
         Book book = new Book(bookRequest.name(), bookRequest.author(),  category, bookRequest.inventory(), bookRequest.period());
         return BookResponse.from(bookRepository.save(book));
     }
+
+    public Book findById(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 책이 없습니다."));
+    }
+
+    public void removeOneStockById(Long id) {
+        bookRepository.removeOneStockById(id);
+    }
+
+    public int findPeriodById(Long id) {
+        return bookRepository.findPeriodById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 책이 없습니다."));
+    }
 }
