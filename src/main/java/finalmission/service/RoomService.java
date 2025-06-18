@@ -12,7 +12,6 @@ import finalmission.repository.RoomMemberRepository;
 import finalmission.repository.RoomRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoomService {
 
-    private static final int MAXIMUM_PARTICIPATNS_SIZE = 10;
+    private static final int MAXIMUM_PARTICIPANTS_SIZE = 10;
 
     private final MemberService memberService;
     private final RoomRepository roomRepository;
@@ -76,7 +75,7 @@ public class RoomService {
     }
 
     private void validateParticipantsSize(final Room room) {
-        if (room.getRoomMembers().size() > MAXIMUM_PARTICIPATNS_SIZE) {
+        if (room.getRoomMembers().size() > MAXIMUM_PARTICIPANTS_SIZE) {
             throw new IllegalArgumentException("이미 방이 꽉 찼습니다.");
         }
     }
