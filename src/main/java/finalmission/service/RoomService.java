@@ -11,6 +11,9 @@ import finalmission.exception.NotFoundException;
 import finalmission.repository.RoomMemberRepository;
 import finalmission.repository.RoomRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,11 +30,20 @@ public class RoomService {
     public RoomCreateResponse create(final RoomCreateRequest request) {
         final Member manager = memberService.getById(request.memberId());
 
+        validateStartDateAndTimeNotFuture(request.startDate(), request.startTime());
         final Room room = roomRepository.save(request.toRoom(manager));
         final RoomMember roomMember = roomMemberRepository.save(new RoomMember(room, manager));
         room.addRoomMember(roomMember);
 
         return RoomCreateResponse.from(room);
+    }
+
+    private void validateStartDateAndTimeNotFuture(final LocalDate startDate, final LocalTime startTime) {
+        final LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
+
+        if (startDateTime.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("과거의 날짜 및 시간으로 내전방을 생성할 수 없습니다.");
+        }
     }
 
     public RoomResponse getById(final Long id) {

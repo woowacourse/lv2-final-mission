@@ -80,6 +80,27 @@ public class RoomApiTest {
         assertThat(roomMemberRepository.findAll()).isNotEmpty();
     }
 
+    @DisplayName("과거의 날짜로 방을 생성하면 400을 응답한다.")
+    @Test
+    void createPastDateTime() {
+        // given
+        final RoomCreateRequest request = new RoomCreateRequest(
+                "5대5 내전 구함",
+                LocalDate.now().minusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                1L
+        );
+
+        // when & then
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/room")
+                .then().log().all()
+                .statusCode(400);
+    }
+
     @DisplayName("방 정보와 참여 인원들을 조회한다.")
     @Test
     void findById() {
