@@ -10,10 +10,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(MissingLoginException.class)
+    public ResponseEntity<ErrorResponse> handleMissingLoginException(MissingLoginException e) {
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(HttpStatus.FORBIDDEN.value());
+        ErrorResponse response = ErrorResponse.builder(e, statusCode, e.getMessage()).build();
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-        ErrorResponse response = ErrorResponse.builder(e, HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), e.getMessage())
-                .build();
-        return ResponseEntity.badRequest().body(response);
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value());
+        ErrorResponse response = ErrorResponse.builder(e, statusCode, e.getMessage()).build();
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleAllException(Exception e) {
+        HttpStatusCode statusCode = HttpStatusCode.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        ErrorResponse response = ErrorResponse.builder(e, statusCode, e.getMessage()).build();
+        return ResponseEntity.status(statusCode).body(response);
     }
 }

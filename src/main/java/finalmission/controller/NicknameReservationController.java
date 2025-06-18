@@ -40,10 +40,6 @@ public class NicknameReservationController {
                 .body(new ReservationCreateResponse(reservation));
     }
 
-    /**
-     * TODO
-     * put? patch?
-     */
     @PatchMapping("/{reservationId}")
     public ResponseEntity<ReservationUpdateResponse> update(
             @PathVariable(value = "reservationId") long reservationId,

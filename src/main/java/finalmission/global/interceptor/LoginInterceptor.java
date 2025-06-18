@@ -1,5 +1,6 @@
 package finalmission.global.interceptor;
 
+import finalmission.global.exception.MissingLoginException;
 import finalmission.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,6 @@ public class LoginInterceptor implements HandlerInterceptor {
                 }
             }
         }
-        throw new IllegalArgumentException("로그인이 필요합니다.");
+        throw new MissingLoginException("로그인이 필요합니다.");
     }
 }

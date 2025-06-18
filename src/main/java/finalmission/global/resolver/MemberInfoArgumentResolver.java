@@ -1,6 +1,7 @@
 package finalmission.global.resolver;
 
 import finalmission.controller.dto.MemberInfo;
+import finalmission.global.exception.MissingLoginException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -23,6 +24,6 @@ public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver
         if (memberInfo instanceof MemberInfo) {
             return memberInfo;
         }
-        throw new IllegalArgumentException("로그인이 필요합니다.");
+        throw new MissingLoginException("로그인이 필요합니다.");
     }
 }
