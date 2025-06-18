@@ -53,6 +53,14 @@ public class ReservationService {
         }
     }
 
+    private void validateUsingWithoutCurrent(Long reservationId, Long roomId, LocalDate date, LocalTime startAt,
+                                             LocalTime endAt) {
+        if (!reservationRepository.findReservationByExcludingCurrent(reservationId, roomId, date, startAt, endAt)
+                .isEmpty()) {
+            throw new IllegalArgumentException("이미 예약 중인 시간입니다.");
+        }
+    }
+
     public List<ReservationResponse> getMyReservation(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
@@ -73,7 +81,7 @@ public class ReservationService {
     }
 
     private void validateIsOwner(Reservation reservation, Long memberId) {
-        if (!reservation.getId().equals(memberId)) {
+        if (!reservation.getMember().getId().equals(memberId)) {
             throw new IllegalArgumentException("삭제 권한이 없습니다.");
         }
     }
@@ -106,7 +114,8 @@ public class ReservationService {
         reservation.checkValidTime();
         reservation.getMeetingRoom().checkAvailableTime(reservation.getStartAt(), reservation.getEndAt());
 
-        validateUsing(reservation.getMeetingRoom().getId(), reservation.getDate(), reservation.getStartAt(),
+        validateUsingWithoutCurrent(reservation.getId(), reservation.getMeetingRoom().getId(), reservation.getDate(),
+                reservation.getStartAt(),
                 reservation.getEndAt());
         return ReservationResponse.from(reservation);
     }

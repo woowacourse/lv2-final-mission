@@ -29,4 +29,16 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             
             """)
     List<Reservation> findReservationBy(Long roomId, LocalDate date, LocalTime startAt, LocalTime endAt);
+
+    @Query("""
+                    SELECT r FROM Reservation r
+                    WHERE r.id != :reservationId
+                    AND (r.meetingRoom.id = :roomId)
+                    AND (r.date.value = :date)
+                    AND ((r.startAt.value between :startAt and :endAt)
+                                OR r.endAt.value between :startAt and :endAt)
+            """)
+    List<Reservation> findReservationByExcludingCurrent(Long reservationId, Long roomId, LocalDate date,
+                                                        LocalTime startAt, LocalTime endAt);
+
 }
