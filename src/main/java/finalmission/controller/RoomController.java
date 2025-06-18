@@ -8,6 +8,7 @@ import finalmission.service.RoomService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,7 +64,7 @@ public class RoomController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/leave")
+    @DeleteMapping("/leave")
     public ResponseEntity<Void> leave(
             @RequestParam("memberId") final Long memberId,
             @RequestParam("roomId") final Long roomId

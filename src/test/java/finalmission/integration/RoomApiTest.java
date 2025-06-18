@@ -268,7 +268,7 @@ public class RoomApiTest {
         RestAssured.given().log().all()
                 .param("memberId", 2L)
                 .param("roomId", 1L)
-                .when().get("/room/leave")
+                .when().delete("/room/leave")
                 .then().log().all()
                 .statusCode(204);
 
@@ -292,7 +292,7 @@ public class RoomApiTest {
         RestAssured.given().log().all()
                 .param("memberId", 2L)
                 .param("roomId", 1L)
-                .when().get("/room/leave")
+                .when().delete("/room/leave")
                 .then().log().all()
                 .statusCode(400);
     }
