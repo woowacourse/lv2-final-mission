@@ -1,6 +1,7 @@
 package finalmission.reservation.service;
 
-import finalmission.external.holiday.HolidayRestClient;
+import finalmission.external.holiday.RestDayRestClient;
+import finalmission.external.holiday.dto.SimpleHoliday;
 import finalmission.global.AuthenticationPrincipal;
 import finalmission.meetingroom.domain.MeetingRoom;
 import finalmission.meetingroom.repository.MeetingRoomRepository;
@@ -18,6 +19,8 @@ import finalmission.reservationtime.repository.ReservationTimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -29,13 +32,13 @@ public class ReservationService {
     private final MeetingRoomRepository meetingRoomRepository;
     private final MemberRepository memberRepository;
     private final ReservationTimeRepository timeRepository;
-    private final HolidayRestClient holidayRestClient;
+    private final RestDayRestClient restDayRestClient;
 
     public ReservationResponse addReservation(
             ReservationRequest request,
             @AuthenticationPrincipal LoginMember loginMember
     ) {
-//        if (holidayRestClient.checkHoliday(request.date())) {
+//        if (checkHoliday(request.date())) {
 //            throw new IllegalArgumentException("공휴일엔 예약할 수 없습니다.");
 //        }
 
@@ -98,5 +101,15 @@ public class ReservationService {
     private Member getMember(LoginMember loginMember) {
         return memberRepository.findById(loginMember.id())
                 .orElseThrow(() -> new NoSuchElementException("해당 멤버는 존재하지 않는 회원입니다."));
+    }
+
+    private boolean checkHoliday(LocalDate date) {
+        List<SimpleHoliday> holidays = restDayRestClient.getHolidays(date.getYear(), date.getMonthValue());
+
+        return holidays.stream()
+                .anyMatch(holiday -> {
+                    LocalDate holidayDate = LocalDate.parse(holiday.locdate(), DateTimeFormatter.ofPattern("yyyyMMdd"));
+                    return holidayDate.isEqual(date);
+                });
     }
 }
