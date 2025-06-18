@@ -29,8 +29,15 @@ public class ReservationService {
         Member member = memberRepository.findById(memberName)
             .orElseThrow(() -> new IllegalArgumentException("[ERROR] 존재하지 않는 멤버입니다."));
 
+        validateIsDuplicatedReservation(lottery, member);
         Reservation reservation = reservationRepository.save(new Reservation(lottery, member, address));
         return ReservationResponse.from(reservation);
+    }
+
+    private void validateIsDuplicatedReservation(Lottery lottery, Member member) {
+        if (reservationRepository.existsByLottery_IdAndMember_name(lottery.getId(), member.getName())) {
+            throw new IllegalStateException("[ERROR] 하나의 추첨을 중복 예약할 수 없습니다.");
+        }
     }
 
     private void validateIsExpired(final Lottery lottery) {

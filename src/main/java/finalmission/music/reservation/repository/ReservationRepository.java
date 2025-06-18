@@ -11,4 +11,6 @@ public interface ReservationRepository extends ListCrudRepository<Reservation, L
     void deleteByIdAndMemberName(Long id, String memberName);
 
     Optional<Reservation> findByIdAndMemberName(Long id, String memberName);
+
+    boolean existsByLottery_IdAndMember_name(Long lotteryId, String memberName);
 }

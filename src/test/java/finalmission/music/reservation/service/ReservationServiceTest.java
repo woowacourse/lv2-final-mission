@@ -57,4 +57,20 @@ class ReservationServiceTest extends BaseServiceTest {
 
         Assertions.assertThat(response.lotteryId()).isEqualTo(lottery.getId());
     }
+
+    @Test
+    @DisplayName("중복 추첨할 수 없다.")
+    void dont_reserve_over_once() {
+        // given
+        Member member = memberRepository.save(new Member("test-member", Role.USER));
+        Album album = albumRepository.save(
+            new Album("test", "test", 0, LocalDate.now(), "test-id")
+        );
+        Lottery lottery = lotteryRepository.save(new Lottery(album, LocalDateTime.now().plusDays(1)));
+        sut.reserve(lottery.getId(), "test-address", member.getName());
+
+        // when-then
+        Assertions.assertThatThrownBy(() -> sut.reserve(lottery.getId(), "test-address", member.getName()))
+            .isInstanceOf(IllegalStateException.class);
+    }
 }
