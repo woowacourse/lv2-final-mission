@@ -20,7 +20,7 @@ public class MeetingRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String roomName;
 
     public MeetingRoom(final Long id, final String roomName) {
