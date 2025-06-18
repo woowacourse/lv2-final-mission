@@ -20,7 +20,7 @@ public class BlackList {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "member_id", nullable = false)
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id", nullable = false)
     private Member member;
 
     @Column(nullable = false)

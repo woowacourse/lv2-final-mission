@@ -18,7 +18,6 @@ import finalmission.repository.MeetingRoomRepository;
 import finalmission.repository.MemberRepository;
 import finalmission.repository.ReservationRepository;
 import finalmission.repository.ReservationTimeRepository;
-import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -51,7 +50,7 @@ public class ReservationService {
                 .toList();
     }
 
-    public CreateReservationResponse addReservation(final @Valid CreateReservationRequest request,
+    public CreateReservationResponse addReservation(final CreateReservationRequest request,
                                                     final MemberInfo memberInfo) {
 
         Member member = memberRepository.findById(memberInfo.id())
@@ -59,7 +58,7 @@ public class ReservationService {
 
         checkBannedMember(member);
 
-        MeetingRoom meetingRoom = meetingRoomRepository.findById(request.MeetingRoomId())
+        MeetingRoom meetingRoom = meetingRoomRepository.findById(request.meetingRoomId())
                 .orElseThrow(() -> new NotExistedValueException("존재하지 않는 회의실입니다."));
         ReservationTime reservationTime = reservationTimeRepository.findById(request.timeId())
                 .orElseThrow(() -> new NotExistedValueException("존재하지 않는 예약 가능 시간입니다."));
