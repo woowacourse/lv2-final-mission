@@ -1,6 +1,7 @@
 package finalmission.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 import finalmission.application.dto.request.CreateReservationRequest;
 import finalmission.application.dto.request.UpdateReservationRequest;
@@ -44,15 +45,14 @@ class ReservationServiceTest extends AbstractServiceIntegrationTest {
     void 특정_몬스터_에너지_드링크를_예약할_수_있다() {
         //given
         Member member = memberRepository.save(Member.create(new Email("user@gmail.com"), "서프", "password", Role.USER));
-        Refrigerator refrigerator = refrigeratorRepository.save(new Refrigerator("우테코"));
-        monsterEnergyStockRepository.save(new MonsterEnergyStock(MonsterEnergy.ULTRA, 10, refrigerator));
+        Refrigerator refrigerator = new Refrigerator("우테코");
+        new MonsterEnergyStock(MonsterEnergy.ULTRA, 10, refrigerator);
+        Refrigerator savedRefrigerator = refrigeratorRepository.save(refrigerator);
         CreateReservationRequest createReservationRequest = new CreateReservationRequest(
                 MonsterEnergy.ULTRA,
                 8,
                 LocalDateTime.now().plusDays(3)
         );
-        entityManager.flush();
-        entityManager.clear();
 
         //when
         CreateReservationResponse createReservationResponse = reservationService.reserve(
@@ -66,29 +66,37 @@ class ReservationServiceTest extends AbstractServiceIntegrationTest {
                 .get()
                 .extracting("monsterEnergy", "quantity", "dateTime", "refrigerator", "member")
                 .containsExactly(MonsterEnergy.ULTRA, 8, createReservationRequest.dateTime(), refrigerator, member);
-        assertThat(monsterEnergyStockRepository.findById(MonsterEnergy.ULTRA))
-                .isPresent().get()
-                .extracting("stock")
-                .isEqualTo(2);
+        assertThat(savedRefrigerator.getMonsterEnergyStocks())
+                .extracting("monsterEnergy", "stock")
+                .containsExactly(tuple(MonsterEnergy.ULTRA, 2));
     }
 
     @Test
     void 사용자는_예약의_재고를_변경할_수_있다() {
         //given
         Member member = memberRepository.save(Member.create(new Email("user@gmail.com"), "서프", "password", Role.USER));
-        Refrigerator refrigerator = refrigeratorRepository.save(new Refrigerator("우테코"));
-        monsterEnergyStockRepository.save(new MonsterEnergyStock(MonsterEnergy.ULTRA, 10, refrigerator));
+        Refrigerator refrigerator = new Refrigerator("우테코");
+        MonsterEnergyStock monsterEnergyStock = new MonsterEnergyStock(MonsterEnergy.ULTRA, 10, refrigerator);
+        refrigeratorRepository.save(refrigerator);
         Reservation reservation = reservationRepository.save(
-                Reservation.create(MonsterEnergy.ULTRA, 8, LocalDateTime.now().plusDays(3), refrigerator, member,
-                        LocalDateTime.now()));
+                Reservation.create(
+                        MonsterEnergy.ULTRA,
+                        8,
+                        LocalDateTime.now().plusDays(3),
+                        refrigerator,
+                        member,
+                        LocalDateTime.now()
+                )
+        );
+
         //when
         reservationService.update(member.getId(), reservation.getId(), new UpdateReservationRequest(9));
 
         //then
-        assertThat(reservationRepository.findById(reservation.getId()))
-                .isPresent()
-                .get()
+        assertThat(reservation)
                 .extracting("monsterEnergy", "quantity")
                 .containsExactly(MonsterEnergy.ULTRA, 9);
+        assertThat(monsterEnergyStock.getStock())
+                .isEqualTo(1);
     }
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,5 +49,19 @@ public class MonsterEnergyStock {
 
     public boolean isMonsterEnergy(MonsterEnergy monsterEnergy) {
         return this.monsterEnergy == monsterEnergy;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof MonsterEnergyStock that)) {
+            return false;
+        }
+
+        return getMonsterEnergy() == that.getMonsterEnergy();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getMonsterEnergy());
     }
 }

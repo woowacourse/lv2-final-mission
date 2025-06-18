@@ -1,5 +1,6 @@
 package finalmission.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -18,7 +19,7 @@ public class Refrigerator {
     @Id
     private String id;
 
-    @OneToMany(mappedBy = "refrigerator")
+    @OneToMany(mappedBy = "refrigerator", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MonsterEnergyStock> monsterEnergyStocks = new ArrayList<>();
 
     public Refrigerator(String id) {
