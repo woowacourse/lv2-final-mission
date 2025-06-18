@@ -29,7 +29,6 @@ public class SpotifySearchService {
 
     public SpotifyAlbums search(String q) {
         SpotifyToken token = getToken();
-        System.out.println(token.access_token());
 
         RestClient restClient = RestClient.create();
 
