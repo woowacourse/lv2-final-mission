@@ -4,6 +4,7 @@ import finalmission.application.ReservationService;
 import finalmission.application.dto.ReservationRequest;
 import finalmission.application.dto.ReservationResponse;
 import finalmission.domain.Reservation;
+import finalmission.presentation.AuthenticationElement;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,18 +23,18 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping()
-    public Reservation reserve(@RequestBody ReservationRequest request, Long memberId) {
+    public Reservation reserve(@RequestBody ReservationRequest request, @AuthenticationElement Long memberId) {
         return reservationService.register(memberId, request.classId(), request.date(), request.time());
     }
 
     @GetMapping("/mine")
-    public List<ReservationResponse> getMyReservations(Long memberId) {
+    public List<ReservationResponse> getMyReservations(@AuthenticationElement Long memberId) {
         var reservations = reservationService.getMyReservations(memberId);
         return ReservationResponse.from(reservations);
     }
 
     @DeleteMapping("/{id}")
-    public void cancel(@PathVariable Long id, Long memberId) {
+    public void cancel(@PathVariable Long id, @AuthenticationElement Long memberId) {
         reservationService.cancel(id, memberId);
     }
 }
