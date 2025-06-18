@@ -14,6 +14,7 @@ import finalmission.repository.RoomRepository;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class ReservationService {

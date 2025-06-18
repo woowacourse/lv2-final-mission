@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,8 +43,8 @@ public class ReservationController {
         return ResponseEntity.ok().body(reservationService.findMyReservation(member));
     }
 
-    @DeleteMapping("/delete")
-    ResponseEntity<Void> deleteMyReservation(Long reservationId, Member member) {
+    @DeleteMapping
+    ResponseEntity<Void> deleteMyReservation(@RequestBody Long reservationId, Member member) {
 
         reservationService.deleteMyReservation(reservationId, member);
 
