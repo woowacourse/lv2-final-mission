@@ -69,4 +69,8 @@ public class Store {
     public int getWaitingRank(Member member) {
         return this.waitingLine.getSequenceByMember(member);
     }
+
+    public void removeWaitingMember(Member member) {
+        this.waitingLine.removeMember(member);
+    }
 }

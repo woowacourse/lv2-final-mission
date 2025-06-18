@@ -25,15 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class StoreService {
 
     private final MemberService memberService;
-    private final WaitingLineService waitingLineService;
     private final RestDataService restDataService;
     private final StoreRepository storeRepository;
 
-    public StoreService(MemberService memberService, WaitingLineService waitingLineService,
-                        final RestDataService restDataService,
-                        StoreRepository storeRepository) {
+    public StoreService(MemberService memberService, RestDataService restDataService, StoreRepository storeRepository) {
         this.memberService = memberService;
-        this.waitingLineService = waitingLineService;
         this.restDataService = restDataService;
         this.storeRepository = storeRepository;
     }
@@ -81,7 +77,7 @@ public class StoreService {
         MemberResponse memberResponse = memberService.findById(loginMember.id());
         Member member = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
                 memberResponse.memberRole());
-        waitingLineService.removeWaitingMember(store, member);
+        store.removeWaitingMember(member);
     }
 
     @Transactional

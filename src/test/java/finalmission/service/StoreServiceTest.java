@@ -1,7 +1,9 @@
 package finalmission.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import finalmission.domain.Member;
@@ -17,10 +19,9 @@ import finalmission.dto.response.RankResponse;
 import finalmission.dto.response.StoreCreateResponse;
 import finalmission.dto.response.StoreResponse;
 import finalmission.infra.auth.LoginMember;
-import finalmission.infra.thirdparty.dto.RestDayRequest;
 import finalmission.repository.StoreRepository;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,9 +37,6 @@ class StoreServiceTest {
 
     @Mock
     private MemberService memberService;
-
-    @Mock
-    private WaitingLineService waitingLineService;
 
     @Mock
     private RestDataService restDataService;
@@ -79,22 +77,22 @@ class StoreServiceTest {
         AddWaitingRequest addWaitingRequest = new AddWaitingRequest(1L);
         LoginMember loginMember = new LoginMember(1L, "email", "name", MemberRole.CUSTOMER);
         MemberResponse memberResponse = new MemberResponse(1L, "email", "name", MemberRole.CUSTOMER);
+        Member customer = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
+                memberResponse.memberRole());
         Member owner = new Member(2L, "owner@email.com", "owner", MemberRole.MASTER);
         Store store = new Store("storeName", StoreStatus.OPEN, "description", 0.0, owner);
         Store savedStore = new Store(1L, "storeName", StoreStatus.OPEN, "description", 0.0, owner,
                 WaitingLine.makeNewWaiting(store));
 
-        // when
         when(storeRepository.findById(1L)).thenReturn(Optional.of(savedStore));
-        when(restDataService.checkRestDay(
-                new RestDayRequest(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now()
-                        .getDayOfMonth()))).thenReturn(false);
+        when(restDataService.checkRestDay(any())).thenReturn(false);
         when(memberService.findById(1L)).thenReturn(memberResponse);
 
+        // when
         AddWaitingResponse response = storeService.addWaiting(addWaitingRequest, loginMember);
 
         // then
-        assertThat(response.rank()).isEqualTo(1);
+        assertThat(savedStore.getWaitingLine().getSequenceByMember(customer)).isEqualTo(response.rank());
     }
 
     @Test
@@ -133,16 +131,15 @@ class StoreServiceTest {
         Store savedStore = new Store(storeId, "storeName", StoreStatus.OPEN, "description", 0.0, owner,
                 WaitingLine.makeNewWaiting(store));
 
-        // when
-        when(storeRepository.findById(storeId)).thenReturn(Optional.of(savedStore));
-        when(memberService.findById(loginMember.id())).thenReturn(memberResponse);
+        savedStore.addWaiting(customer);
+        assertThat(savedStore.getWaitingLine().getSequenceByMember(customer)).isEqualTo(1);
 
-        storeService.removeWaiting(storeId, loginMember);
-        RankResponse rank = storeService.getWaitingRank(1L, loginMember);
+        // when
+        savedStore.removeWaitingMember(customer);
 
         // then
-        assertThat(rank.rank()).isEqualTo(-1);
-
+        assertThatThrownBy(() -> savedStore.getWaitingLine().getSequenceByMember(customer))
+                .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
@@ -157,12 +154,12 @@ class StoreServiceTest {
         Store store = new Store("storeName", StoreStatus.OPEN, "description", 0.0, owner);
         Store savedStore = new Store(storeId, "storeName", StoreStatus.OPEN, "description", 0.0, owner,
                 WaitingLine.makeNewWaiting(store));
+        savedStore.addWaiting(customer);
 
-        // when
         when(storeRepository.findById(storeId)).thenReturn(Optional.of(savedStore));
         when(memberService.findById(loginMember.id())).thenReturn(memberResponse);
-        when(waitingLineService.getWaitingRank(savedStore, customer)).thenReturn(1);
 
+        // when
         RankResponse response = storeService.getWaitingRank(storeId, loginMember);
 
         // then

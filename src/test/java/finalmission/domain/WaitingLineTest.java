@@ -1,8 +1,10 @@
 package finalmission.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Test;
 
 class WaitingLineTest {
@@ -35,7 +37,7 @@ class WaitingLineTest {
         waitingLine.addMember(member);
 
         // then
-        assertThat(waitingLine.hasMember(member)).isTrue();
+        assertThat(waitingLine.getSequenceByMember(member)).isEqualTo(1);
     }
 
     @Test
@@ -52,7 +54,8 @@ class WaitingLineTest {
         waitingLine.addMember(member);
 
         // then
-        assertThat(waitingLine.hasMember(anotherMember)).isFalse();
+        assertThatThrownBy(() -> waitingLine.getSequenceByMember(anotherMember))
+                .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test

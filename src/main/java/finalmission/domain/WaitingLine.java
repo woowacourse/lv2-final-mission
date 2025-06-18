@@ -10,6 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -48,12 +49,10 @@ public class WaitingLine {
         waitingMembers.add(waitingMember);
     }
 
-    public boolean hasMember(Member member) {
-        return waitingMembers.stream()
-                .anyMatch(wm -> wm.getMember().equals(member));
-    }
-
     public int getSequenceByMember(Member member) {
+        if (!hasMember(member)) {
+            throw new NoSuchElementException("[ERROR] 해당 대기에 존재하지 않습니다.");
+        }
         for (int i = 0; i < waitingMembers.size(); i++) {
             if (waitingMembers.get(i).getMember().equals(member)) {
                 return i + 1;
@@ -63,7 +62,14 @@ public class WaitingLine {
     }
 
     public void removeMember(Member member) {
-        waitingMembers.removeIf(wm -> wm.getMember().equals(member));
+        if (this.hasMember(member)) {
+            this.waitingMembers.remove(WaitingMember.create(member, this));
+        }
+    }
+
+    private boolean hasMember(Member member) {
+        return waitingMembers.stream()
+                .anyMatch(wm -> wm.getMember().equals(member));
     }
 
     @Override
