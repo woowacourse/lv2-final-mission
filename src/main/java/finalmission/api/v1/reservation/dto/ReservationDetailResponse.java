@@ -11,10 +11,17 @@ public record ReservationDetailResponse(
         @JsonFormat(pattern = "HH:mm") LocalTime time,
         String restaurantName,
         String restaurantAddress,
+        String nickname,
         String phoneNumber
 ) {
     public ReservationDetailResponse(final Reservation reservation, final LocalDate date, final LocalTime time) {
-        this(reservation.getId(), date, time, reservation.getRestaurant().getName(), reservation.getRestaurant().getAddress(), reservation.getPhoneNumber());
+        this(reservation.getId(),
+                date,
+                time,
+                reservation.getRestaurant().getName(),
+                reservation.getRestaurant().getAddress(),
+                reservation.getNickname(),
+                reservation.getPhoneNumber());
     }
 }
 

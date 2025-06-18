@@ -2,6 +2,7 @@ package finalmission.api.v1.reservation.service;
 
 import finalmission.api.v1.exception.NotFoundException;
 import finalmission.api.v1.exception.ReservationException;
+import finalmission.api.v1.openapi.OpenapiService;
 import finalmission.api.v1.reservation.domain.Reservation;
 import finalmission.api.v1.reservation.domain.ReservationTime;
 import finalmission.api.v1.reservation.dto.ReservationDeleteRequest;
@@ -25,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
+
+    private final OpenapiService openapiService;
 
     private final ReservationRepository reservationRepository;
     private final RestaurantRepository restaurantRepository;
@@ -52,8 +55,12 @@ public class ReservationService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 시간입니다."));
         final Restaurant restaurant = restaurantRepository.findById(request.restaurantId())
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 식당입니다."));
+
+        final String nickname = openapiService.getNickname();
+
         final Reservation reservation = Reservation.builder()
                 .phoneNumber(request.phoneNumber())
+                .nickname(nickname)
                 .restaurant(restaurant)
                 .date(request.date())
                 .reservationTime(reservationTime)

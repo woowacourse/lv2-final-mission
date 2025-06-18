@@ -27,6 +27,9 @@ public class Reservation {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Column(nullable = false)
+    private String nickname;
+
     @JoinColumn(name = "restaurant_time_id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ReservationTime reservationTime;
@@ -39,11 +42,12 @@ public class Reservation {
     private String phoneNumber;
 
     @Builder
-    public Reservation(final Long id, final LocalDate date, final ReservationTime reservationTime,
-                       final Restaurant restaurant,
+    public Reservation(final Long id, final LocalDate date, final String nickname,
+                       final ReservationTime reservationTime, final Restaurant restaurant,
                        final String phoneNumber) {
         this.id = id;
         this.date = date;
+        this.nickname = nickname;
         this.reservationTime = reservationTime;
         this.restaurant = restaurant;
         this.phoneNumber = phoneNumber;
