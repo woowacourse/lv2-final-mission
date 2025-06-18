@@ -7,6 +7,7 @@ import finalmission.member.domain.MemberRepository;
 import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.domain.ReservationRepository;
 import finalmission.reservation.domain.ReservationSlot;
+import finalmission.reservation.domain.ReservationSlotRepository;
 import finalmission.reservation.domain.ReservationTime;
 import finalmission.reservation.domain.ReservationTimeRepository;
 import finalmission.restaurant.domain.Restaurant;
@@ -29,6 +30,7 @@ public class AdminWaitingService {
     private final ReservationTimeRepository reservationTimeRepository;
     private final RestaurantRepository restaurantRepository;
     private final MemberRepository memberRepository;
+    private final ReservationSlotRepository reservationSlotRepository;
     private final ReservationRepository reservationRepository;
     private final WaitingRepository waitingRepository;
 
@@ -50,7 +52,7 @@ public class AdminWaitingService {
             final Member member,
             final int maxReservationCount
     ) {
-        final ReservationSlot reservationSlot = new ReservationSlot(date, time, restaurant, maxReservationCount);
+        final ReservationSlot reservationSlot = getReservationSlot(date, time, restaurant, maxReservationCount);
         final Reservation reservation = reservationRepository.findByReservationSlot(reservationSlot)
                 .orElseThrow(() -> new ResourceNotFoundException("예약이 없는 상태에서 예약 대기를 추가할 수 없습니다."));
 
@@ -68,6 +70,18 @@ public class AdminWaitingService {
         );
 
         return waitingRepository.save(waiting);
+    }
+
+    private ReservationSlot getReservationSlot(
+            final LocalDate date,
+            final ReservationTime time,
+            final Restaurant restaurant,
+            final int maxReservationCount
+    ) {
+        if (!reservationSlotRepository.existsByRestaurantId(restaurant.getId())) {
+            return reservationSlotRepository.save(new ReservationSlot(date, time, restaurant, maxReservationCount));
+        }
+        return reservationSlotRepository.getByRestaurantId(restaurant.getId());
     }
 
     @Transactional
