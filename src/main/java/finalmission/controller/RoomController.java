@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -42,9 +41,9 @@ public class RoomController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/member/{memberId}")
+    @GetMapping("/member")
     public ResponseEntity<List<RoomWithoutParticipantsResponse>> findByMemberId(
-            @PathVariable("memberId") final Long memberId
+            @MemberId final Long memberId
     ) {
         final List<RoomWithoutParticipantsResponse> response = roomService.findByMemberId(memberId);
 
@@ -58,20 +57,20 @@ public class RoomController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/join")
+    @GetMapping("/join/{id}")
     public ResponseEntity<Void> join(
-            @RequestParam("memberId") final Long memberId,
-            @RequestParam("roomId") final Long roomId
+            @MemberId final Long memberId,
+            @PathVariable("id") final Long roomId
     ) {
         roomService.join(roomId, memberId);
 
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/leave")
+    @DeleteMapping("/leave/{id}")
     public ResponseEntity<Void> leave(
-            @RequestParam("memberId") final Long memberId,
-            @RequestParam("roomId") final Long roomId
+            @MemberId final Long memberId,
+            @PathVariable("id") final Long roomId
     ) {
         roomService.leave(roomId, memberId);
 

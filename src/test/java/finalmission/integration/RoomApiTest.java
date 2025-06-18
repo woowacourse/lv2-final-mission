@@ -38,7 +38,8 @@ public class RoomApiTest {
 
     @Value("${jwt.secret}")
     private String secretKey;
-    private String accessToken;
+    private String member1AccessToken;
+    private String member2AccessToken;
 
     @Autowired
     public RoomApiTest(
@@ -61,8 +62,13 @@ public class RoomApiTest {
                 new LolName("훌라보노", "KR1"),
                 "qwe123"
         ));
-        accessToken = Jwts.builder()
+        member1AccessToken = Jwts.builder()
                 .setSubject(member1.getId().toString())
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .compact();
+
+        member2AccessToken = Jwts.builder()
+                .setSubject(member2.getId().toString())
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .compact();
     }
@@ -80,7 +86,7 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .cookie("token", accessToken)
+                .cookie("token", member1AccessToken)
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().post("/room")
@@ -104,7 +110,7 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .cookie("token", accessToken)
+                .cookie("token", member1AccessToken)
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().post("/room")
@@ -164,7 +170,8 @@ public class RoomApiTest {
         roomMemberRepository.save(new RoomMember(room3, member1));
 
         RestAssured.given().log().all()
-                .when().get("/room/member/{id}", member1.getId())
+                .cookie("token", member1AccessToken)
+                .when().get("/room/member")
                 .then().log().all()
                 .statusCode(200)
                 .body("[0].name", response -> equalTo("5대5 내전 구함1"))
@@ -208,9 +215,8 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .param("memberId", 2L)
-                .param("roomId", 1L)
-                .when().get("/room/join")
+                .cookie("token", member2AccessToken)
+                .when().get("/room/join/{id}", 1L)
                 .then().log().all()
                 .statusCode(204);
 
@@ -232,9 +238,8 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .param("memberId", 2L)
-                .param("roomId", 1L)
-                .when().get("/room/join")
+                .cookie("token", member2AccessToken)
+                .when().get("/room/join/{id}", 1L)
                 .then().log().all()
                 .statusCode(400);
     }
@@ -254,9 +259,8 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .param("memberId", 1L)
-                .param("roomId", 1L)
-                .when().get("/room/join")
+                .cookie("token", member1AccessToken)
+                .when().get("/room/join/{id}", 1L)
                 .then().log().all()
                 .statusCode(400);
     }
@@ -277,9 +281,8 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .param("memberId", 2L)
-                .param("roomId", 1L)
-                .when().delete("/room/leave")
+                .cookie("token", member2AccessToken)
+                .when().delete("/room/leave/{id}", 1L)
                 .then().log().all()
                 .statusCode(204);
 
@@ -302,9 +305,8 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .param("memberId", 2L)
-                .param("roomId", 1L)
-                .when().delete("/room/leave")
+                .cookie("token", member2AccessToken)
+                .when().delete("/room/leave/{id}", 1L)
                 .then().log().all()
                 .statusCode(400);
     }
@@ -324,9 +326,8 @@ public class RoomApiTest {
 
         // when & then
         RestAssured.given().log().all()
-                .param("memberId", 2L)
-                .param("roomId", 1L)
-                .when().delete("/room/leave")
+                .cookie("token", member2AccessToken)
+                .when().delete("/room/leave/{id}", 1L)
                 .then().log().all()
                 .statusCode(400);
     }
