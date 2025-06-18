@@ -6,7 +6,6 @@ import finalmission.domain.NicknameReservation;
 import finalmission.repository.MemberRepository;
 import finalmission.repository.NicknameReservationRepository;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,27 +23,19 @@ public class NicknameReservationService {
         this.memberRepository = memberRepository;
     }
 
-    /**
-     * TODO
-     * findAll 조회를 줄일 수 있지 않을까?
-     */
+    @Transactional
     public NicknameReservation reserve(String name, long memberId) {
-        Nickname nickname = new Nickname(name);
-        validateDuplicateName(nickname);
+        Nickname nickname = makeNickname(name);
         Member member = getMember(memberId);
-        validateReservationCount(member);
-        validateAlreadyConfirmed(member);
-        NicknameReservation reservation = new NicknameReservation(member, nickname);
+        NicknameReservation reservation = makeReservation(member, nickname);
         return nicknameReservationRepository.save(reservation);
     }
 
-    private void validateDuplicateName(Nickname nickname) {
-        List<NicknameReservation> nicknameReservations = nicknameReservationRepository.findAll();
-        for (NicknameReservation nicknameReservation : nicknameReservations) {
-            if (nicknameReservation.getNickname().equals(nickname)) {
-                throw new IllegalArgumentException("이미 예약 중인 닉네임입니다.");
-            }
-        }
+    private NicknameReservation makeReservation(Member member, Nickname nickname) {
+        validateReservationCount(member);
+        validateAlreadyConfirmed(member);
+        NicknameReservation reservation = new NicknameReservation(member, nickname);
+        return reservation;
     }
 
     private void validateReservationCount(Member member) {
@@ -64,19 +55,44 @@ public class NicknameReservationService {
     }
 
     @Transactional
+    public void update(String newName, long reservationId, long memberId) {
+        NicknameReservation reservation = getReservation(reservationId);
+        checkSameMember(reservation, memberId);
+        Nickname newNickname = makeNickname(newName);
+        reservation.updateNickname(newNickname);
+    }
+
+    private Nickname makeNickname(String name) {
+        Nickname nickname = new Nickname(name);
+        validateDuplicateName(nickname);
+        return nickname;
+    }
+
+    private void validateDuplicateName(Nickname nickname) {
+        List<NicknameReservation> nicknameReservations = nicknameReservationRepository.findAll();
+        for (NicknameReservation nicknameReservation : nicknameReservations) {
+            if (nicknameReservation.getNickname().equals(nickname)) {
+                throw new IllegalArgumentException("이미 예약 중인 닉네임입니다.");
+            }
+        }
+    }
+
+    @Transactional
     public void confirm(long reservationId, long memberId) {
         NicknameReservation reservation = getReservation(reservationId);
         checkSameMember(reservation, memberId);
         reservation.confirm();
-        cancelAnotherReservations(reservationId);
+        cancelAnotherReservations(reservationId, memberId);
     }
 
-    private void cancelAnotherReservations(long exceptionReservationId) {
+    private void cancelAnotherReservations(long exceptionReservationId, long memberId) {
         findAll().stream()
-                .filter(r -> r.getId() != exceptionReservationId)
+                .filter(reservation -> reservation.hasSameMemberId(memberId))
+                .filter(reservation -> reservation.getId() != exceptionReservationId)
                 .forEach(nicknameReservationRepository::delete);
     }
 
+    @Transactional
     public void cancel(long reservationId, long memberId) {
         NicknameReservation reservation = getReservation(reservationId);
         if (reservation.isConfirmed()) {
@@ -88,7 +104,7 @@ public class NicknameReservationService {
 
     private void checkSameMember(NicknameReservation reservation, long memberId) {
         if (!reservation.hasSameMemberId(memberId)) {
-            throw new IllegalArgumentException("해당 예약에 대한 삭제 권한이 없습니다.");
+            throw new IllegalArgumentException("해당 예약에 대한 권한이 없습니다.");
         }
     }
 

@@ -4,6 +4,8 @@ import finalmission.controller.dto.MemberInfo;
 import finalmission.controller.dto.ReservationCreateRequest;
 import finalmission.controller.dto.ReservationCreateResponse;
 import finalmission.controller.dto.ReservationResponse;
+import finalmission.controller.dto.ReservationUpdateRequest;
+import finalmission.controller.dto.ReservationUpdateResponse;
 import finalmission.domain.NicknameReservation;
 import finalmission.service.NicknameReservationService;
 import java.net.URI;
@@ -11,6 +13,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,13 +40,27 @@ public class NicknameReservationController {
                 .body(new ReservationCreateResponse(reservation));
     }
 
+    /**
+     * TODO
+     * put? patch?
+     */
+    @PatchMapping("/{reservationId}")
+    public ResponseEntity<ReservationUpdateResponse> update(
+            @PathVariable(value = "reservationId") long reservationId,
+            @RequestBody ReservationUpdateRequest request,
+            MemberInfo memberInfo
+    ) {
+        nicknameReservationService.update(request.name(), reservationId, memberInfo.memberId());
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/{reservationId}/confirm")
     public ResponseEntity<ReservationCreateResponse> confirm(
             @PathVariable(value = "reservationId") long reservationId,
             MemberInfo memberInfo
     ) {
         nicknameReservationService.confirm(reservationId, memberInfo.memberId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{reservationId}")
