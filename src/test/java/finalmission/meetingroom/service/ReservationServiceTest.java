@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
@@ -36,6 +38,7 @@ import finalmission.meetingroom.service.response.ReservationResponse;
 @ActiveProfiles("test")
 @Transactional
 @SpringBootTest
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 class ReservationServiceTest {
 
     @Value("${api.sendgrid.base-url}")
@@ -226,3 +229,4 @@ class ReservationServiceTest {
         return new LoginMember(1L, "유저1");
     }
 }
+
