@@ -33,6 +33,13 @@ public class MemberApiFixture {
         return SIGN_UP_REQUESTS.get(1);
     }
 
+    public static SignUpRequest signUpRequest3() {
+        if (SIGN_UP_REQUESTS.size() < 3) {
+            throw new IllegalStateException("회원 픽스처 개수가 부족합니다.");
+        }
+        return SIGN_UP_REQUESTS.get(2);
+    }
+
     public static MemberResponse signUp(final SignUpRequest signUpRequest) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

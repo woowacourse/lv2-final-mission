@@ -19,6 +19,8 @@ import finalmission.reservation.ui.dto.ReservationResponse;
 import finalmission.reservation.ui.dto.ReservationTimeResponse;
 import finalmission.restaurant.ui.dto.CreateRestaurantRequest;
 import finalmission.restaurant.ui.dto.RestaurantResponse;
+import finalmission.waiting.ui.dto.CreateWaitingRequest;
+import finalmission.waiting.ui.dto.WaitingResponse;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -285,23 +287,42 @@ class ReservationRestControllerTest {
     void 예약을_삭제한다() {
         final LocalDate reservationDate = LocalDate.now().plusDays(1);
         final LocalTime reservationTime = LocalTime.of(12, 0);
-        final String restaurantName = "삭제할 음식점";
+        final String restaurantName = "차이나 스토리";
+        final String restaurantDescription = "역시 차스입니다.";
+        final String restaurantPlace = "서울시 어딘가1";
+        final String restaurantPhoneNumber = "02-1234-5678";
+        final int maxReservationCount = 20;
 
         final Map<String, String> adminCookies = adminLoginAndGetCookies();
 
-        // 회원가입 후 로그인
-        final SignUpRequest signUpRequest = MemberApiFixture.signUpRequest1();
-        final MemberResponse memberResponse = MemberApiFixture.signUp(signUpRequest);
-        final Map<String, String> memberCookies = memberLoginAndGetCookies(
-                new LoginRequest(signUpRequest.email(), signUpRequest.password())
+        // member1 회원가입 후 로그인
+        final SignUpRequest signUpRequest1 = MemberApiFixture.signUpRequest1();
+        final MemberResponse member1 = MemberApiFixture.signUp(signUpRequest1);
+        final Map<String, String> member1Cookies = memberLoginAndGetCookies(
+                new LoginRequest(signUpRequest1.email(), signUpRequest1.password())
         );
 
-        // 예약 시간 생성
-        final CreateReservationTimeRequest timeRequest = new CreateReservationTimeRequest(reservationTime);
+        // member2 회원가입 후 로그인
+        final SignUpRequest signUpRequest2 = MemberApiFixture.signUpRequest2();
+        final MemberResponse member2 = MemberApiFixture.signUp(signUpRequest2);
+        final Map<String, String> member2Cookies = memberLoginAndGetCookies(
+                new LoginRequest(signUpRequest2.email(), signUpRequest2.password())
+        );
+
+        // member3 회원 가입 후 로그인
+        final SignUpRequest signUpRequest3 = MemberApiFixture.signUpRequest3();
+        final MemberResponse member3 = MemberApiFixture.signUp(signUpRequest3);
+        final Map<String, String> member3Cookies = memberLoginAndGetCookies(
+                new LoginRequest(signUpRequest3.email(), signUpRequest3.password())
+        );
+
+        // admin이 예약 시간 생성
+        final CreateReservationTimeRequest createReservationTimeRequest = new CreateReservationTimeRequest(
+                reservationTime);
         final ReservationTimeResponse timeResponse = given().log().all()
                 .cookies(adminCookies)
                 .contentType(ContentType.JSON)
-                .body(timeRequest)
+                .body(createReservationTimeRequest)
                 .when()
                 .post("/times")
                 .then().log().all()
@@ -309,14 +330,18 @@ class ReservationRestControllerTest {
                 .extract()
                 .as(ReservationTimeResponse.class);
 
-        // 음식점 생성
-        final CreateRestaurantRequest restaurantRequest = new CreateRestaurantRequest(
-                restaurantName, "삭제될 음식점 설명", "서울시 마포구", "02-3333-3333", 30
+        // admin이 음식점 생성
+        final CreateRestaurantRequest createRestaurantRequest = new CreateRestaurantRequest(
+                restaurantName,
+                restaurantDescription,
+                restaurantPlace,
+                restaurantPhoneNumber,
+                maxReservationCount
         );
         final RestaurantResponse restaurantResponse = given().log().all()
                 .cookies(adminCookies)
                 .contentType(ContentType.JSON)
-                .body(restaurantRequest)
+                .body(createRestaurantRequest)
                 .when()
                 .post("/restaurants")
                 .then().log().all()
@@ -324,14 +349,18 @@ class ReservationRestControllerTest {
                 .extract()
                 .as(RestaurantResponse.class);
 
-        // 예약 생성
-        final CreateReservationRequest reservationRequest = new CreateReservationRequest(
-                reservationDate, timeResponse.id(), restaurantResponse.id(), memberResponse.id()
+        // member1이 예약 생성
+        final CreateReservationRequest createReservationRequest = new CreateReservationRequest(
+                reservationDate,
+                timeResponse.id(),
+                restaurantResponse.id(),
+                member1.id()
         );
-        final ReservationResponse createdReservation = given().log().all()
-                .cookies(memberCookies)
+
+        final ReservationResponse reservationResponse = given().log().all()
+                .cookies(member1Cookies)
                 .contentType(ContentType.JSON)
-                .body(reservationRequest)
+                .body(createReservationRequest)
                 .when()
                 .post("/reservations")
                 .then().log().all()
@@ -339,19 +368,58 @@ class ReservationRestControllerTest {
                 .extract()
                 .as(ReservationResponse.class);
 
-        assertThat(createdReservation).isNotNull();
+        // member2가 예약 대기 생성
+        final CreateWaitingRequest member2WaitingRequest = new CreateWaitingRequest(
+                reservationResponse.date(),
+                timeResponse.id(),
+                restaurantResponse.id(),
+                member2.id()
+        );
 
-        // 예약 삭제
-        given().log().all()
-                .cookies(memberCookies)
+        final WaitingResponse member2WaitingResponse = given().log().all()
+                .cookies(member2Cookies)
+                .contentType(ContentType.JSON)
+                .body(member2WaitingRequest)
                 .when()
-                .delete("/reservations/" + createdReservation.restaurantId())
+                .post("/waitings")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value())
+                .extract()
+                .as(WaitingResponse.class);
+
+        // member3가 예약 대기 생성
+        final CreateWaitingRequest member3WaitingRequest = new CreateWaitingRequest(
+                reservationResponse.date(),
+                timeResponse.id(),
+                restaurantResponse.id(),
+                member2.id()
+        );
+
+        final WaitingResponse member3WaitingResponse = given().log().all()
+                .cookies(member3Cookies)
+                .contentType(ContentType.JSON)
+                .body(member3WaitingRequest)
+                .when()
+                .post("/waitings")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value())
+                .extract()
+                .as(WaitingResponse.class);
+
+        assertThat(member2WaitingResponse).isNotNull();
+        assertThat(member3WaitingResponse).isNotNull();
+
+        // member1의 예약 삭제
+        given().log().all()
+                .cookies(member1Cookies)
+                .when()
+                .delete("/reservations/" + reservationResponse.restaurantId())
                 .then().log().all()
                 .statusCode(HttpStatus.NO_CONTENT.value());
 
-        // 삭제 확인
-        final List<ReservationResponse> responses = given().log().all()
-                .cookies(memberCookies)
+        // member1의 예약 목록 확인
+        final List<ReservationResponse> reservationResponses = given().log().all()
+                .cookies(member1Cookies)
                 .when()
                 .get("/reservations/mine")
                 .then().log().all()
@@ -360,6 +428,10 @@ class ReservationRestControllerTest {
                 .jsonPath()
                 .getList(".", ReservationResponse.class);
 
-        assertThat(responses).isEmpty();
+        assertThat(reservationResponses).isEmpty();
+
+        // 예약 성공자에게 예약 성공 메일 1개 + 예약 대기자 2명에게 알람 메일 2개 = 총 3개 전송
+        Mockito.verify(emailClient, Mockito.times(3))
+                .sendEmail(any());
     }
 }
