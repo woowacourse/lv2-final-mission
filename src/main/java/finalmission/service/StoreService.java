@@ -12,7 +12,9 @@ import finalmission.dto.response.RankResponse;
 import finalmission.dto.response.StoreCreateResponse;
 import finalmission.dto.response.StoreResponse;
 import finalmission.infra.auth.LoginMember;
+import finalmission.infra.thirdparty.dto.RestDayRequest;
 import finalmission.repository.StoreRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
@@ -24,12 +26,15 @@ public class StoreService {
 
     private final MemberService memberService;
     private final WaitingLineService waitingLineService;
+    private final RestDataService restDataService;
     private final StoreRepository storeRepository;
 
     public StoreService(MemberService memberService, WaitingLineService waitingLineService,
+                        final RestDataService restDataService,
                         StoreRepository storeRepository) {
         this.memberService = memberService;
         this.waitingLineService = waitingLineService;
+        this.restDataService = restDataService;
         this.storeRepository = storeRepository;
     }
 
@@ -56,6 +61,10 @@ public class StoreService {
         Store store = findStoreById(addWaitingRequest.storeId());
         validateStoreIsOpen(store);
 
+        if (restDataService.checkRestDay(new RestDayRequest(LocalDate.now().getYear(), LocalDate.now().getMonthValue(),
+                LocalDate.now().getDayOfMonth()))) {
+            throw new IllegalArgumentException("[ERROR] 공휴일에 테이블링은 불가능합니다.");
+        }
         MemberResponse memberResponse = memberService.findById(loginMember.id());
         Member member = new Member(memberResponse.id(), memberResponse.email(), memberResponse.name(),
                 memberResponse.memberRole());

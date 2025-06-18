@@ -10,11 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
-public class SendGridErrorResponseFilter implements ResponseErrorHandler {
+public class RestDayErrorResponseFilter implements ResponseErrorHandler {
 
     private final ObjectMapper objectMapper;
 
-    public SendGridErrorResponseFilter(ObjectMapper objectMapper) {
+    public RestDayErrorResponseFilter(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

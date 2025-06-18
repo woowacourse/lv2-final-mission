@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfig {
 
-    @Bean("SendGridRestTemplate")
+    @Bean("RestDay")
     public RestTemplate restTemplate() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(3000);
@@ -19,7 +19,7 @@ public class RestTemplateConfig {
     }
 
     @Bean
-    public SendGridErrorResponseFilter sendGridErrorResponseFilter(ObjectMapper objectMapper) {
-        return new SendGridErrorResponseFilter(objectMapper);
+    public RestDayErrorResponseFilter RestDayErrorResponseFilter(ObjectMapper objectMapper) {
+        return new RestDayErrorResponseFilter(objectMapper);
     }
 } 

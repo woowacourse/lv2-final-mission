@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException e) {
         String message = e.getMessage();
         log.warn(message);

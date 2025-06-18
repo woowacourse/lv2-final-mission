@@ -1,4 +1,7 @@
 spring:
+  application:
+    name: lv2-final-mission
+
   h2:
     console:
       enabled: true
@@ -23,7 +26,12 @@ spring:
     init:
       mode: always
 
-sendgrid:
-  base-url: "https://api.sendgrid.com"
-  api-key: "test-key"
-  from-email: "test@email.com"
+data:
+  base-url: http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo
+  api-key: ovyeTLwI4XTSqZMSPn11ddvnFFEY1FzQzoyZYMWfJzR5BJLGG74qE%2B0BVKdWWcrnrJbp1hggA9cwktQGxQ4mMQ%3D%3D
+
+security:
+  jwt:
+    token:
+      secret-key: wn7OCzJrGc+Ze3wFRCwLV0Nn0hm7sr+Oo/ooLDREz6ZtkgLgQLguluevBe08qsiavRTc6GJ+mccLHeL6xMFzaw
+      expire-length: 3600000
