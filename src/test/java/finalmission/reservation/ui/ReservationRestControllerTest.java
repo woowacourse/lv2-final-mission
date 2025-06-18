@@ -125,6 +125,7 @@ class ReservationRestControllerTest {
 
         assertThat(reservationResponse).isNotNull();
         SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(reservationResponse.id()).isNotNull();
             softAssertions.assertThat(reservationResponse.restaurantId()).isEqualTo(restaurantResponse.id());
             softAssertions.assertThat(reservationResponse.date()).isEqualTo(reservationDate);
             softAssertions.assertThat(reservationResponse.time()).isEqualTo(reservationTime);
