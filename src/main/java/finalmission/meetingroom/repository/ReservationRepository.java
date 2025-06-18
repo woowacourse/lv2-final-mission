@@ -32,6 +32,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             """)
     List<Reservation> findByMember(Member member);
 
+    @Query("""
+            SELECT r
+            FROM Reservation r
+            JOIN FETCH r.meetingRoom
+            JOIN FETCH r.member
+            WHERE r.id = :id
+                AND r.member = :member
+            """)
     Optional<Reservation> findByIdAndMember(Long id, Member member);
 
     @Query("""

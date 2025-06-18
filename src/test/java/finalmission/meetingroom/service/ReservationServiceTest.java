@@ -29,6 +29,7 @@ import finalmission.meetingroom.repository.MemberRepository;
 import finalmission.meetingroom.repository.ReservationRepository;
 import finalmission.meetingroom.service.request.LoginMember;
 import finalmission.meetingroom.service.request.ReservationCreateRequest;
+import finalmission.meetingroom.service.request.ReservationTimeChangeRequest;
 import finalmission.meetingroom.service.response.ReservationResponse;
 
 @ActiveProfiles("test")
@@ -115,8 +116,6 @@ class ReservationServiceTest {
     @ParameterizedTest
     void reserveMeetingRoomWithInvalidTime(String startAt, String endAt) {
         // given
-        System.out.println("startAt = " + startAt);
-        System.out.println("endAt = " + endAt);
         ReservationCreateRequest request = new ReservationCreateRequest(
                 "임팩트룸", nextDate(), getTime(startAt), getTime(endAt)
         );
@@ -161,6 +160,31 @@ class ReservationServiceTest {
         // when & then
         assertThatThrownBy(() -> reservationService.reserveMeetingRoom(overlapsRequest, loginMember))
                 .isInstanceOf(AlreadyInUseException.class);
+    }
+
+    @DisplayName("회의실 예약 시간을 변경할 수 있다.")
+    @Test
+    void changeReservationTime() {
+        // given
+        ReservationCreateRequest request = new ReservationCreateRequest(
+                "임팩트룸", nextDate(), getTime("10:00"), getTime("11:00")
+        );
+        LoginMember loginMember = getLoginMember();
+        sendEmailByMockServer();
+        ReservationResponse response = reservationService.reserveMeetingRoom(request, loginMember);
+        ReservationTimeChangeRequest timeChangeRequest =
+                new ReservationTimeChangeRequest(getTime("12:00"), getTime("13:00"));
+
+        // when
+        ReservationResponse result = reservationService.changeReservationTime(
+                response.reservationId(), timeChangeRequest, loginMember
+        );
+
+        // then
+        assertThat(result).isEqualTo(new ReservationResponse(
+                result.reservationId(), loginMember.name(), "임팩트룸",
+                nextDate(), getTime("12:00"), getTime("13:00")
+        ));
     }
 
     private void sendEmailByMockServer() {
