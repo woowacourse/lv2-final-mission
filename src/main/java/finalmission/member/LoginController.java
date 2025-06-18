@@ -27,10 +27,4 @@ public class LoginController {
         tokenCookieManager.addTokenCookie(response, token);
         return ResponseEntity.ok().build();
     }
-
-//    @GetMapping("/login/check")
-//    public ResponseEntity<LoginCheckResponse> loginCheck(@Login LoginMember member) {
-//        return ResponseEntity.ok().body(new LoginCheckResponse(member.name()));
-//    }
-
 }

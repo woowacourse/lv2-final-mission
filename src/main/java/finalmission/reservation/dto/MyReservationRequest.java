@@ -1,10 +1,11 @@
 package finalmission.reservation.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 
 public record MyReservationRequest(
         String name,
-        LocalDate date,
+        @JsonFormat(pattern = "yyyy-MM-dd") LocalDate date,
         Long timeId,
         Long exerciseCourseId
 ) {

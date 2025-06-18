@@ -3,6 +3,7 @@ package finalmission.reservation.service;
 import finalmission.client.SpcdeInfoClient;
 import finalmission.client.dto.SpcdeInfoResponse.Item;
 import finalmission.client.dto.SpcdeInfoResponseWrapper;
+import finalmission.common.exceptionHandler.HolidayException;
 import finalmission.exercisecourse.domain.ExerciseCourse;
 import finalmission.exercisecourse.infrastructure.ExerciseCourseRepository;
 import finalmission.member.domain.Member;
@@ -15,6 +16,7 @@ import finalmission.reservation.infrastructure.ReservationRepository;
 import finalmission.reservationtime.domain.ReservationTime;
 import finalmission.reservationtime.infrastructure.ReservationTimeRepository;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +63,8 @@ public class ReservationService {
             throw new RuntimeException(e);
         }
 
-        validateHoliday(response, request.date().getDayOfMonth());
+        String targetDate = request.date().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        validateHoliday(response, Integer.parseInt(targetDate));
         Reservation reservation = Reservation.createWithoutId(request.name(), request.date(), member, reservationTime, exerciseCourse);
         Reservation savedReservation = reservationRepository.save(reservation);
         return MyReservationResponse.from(savedReservation);
@@ -77,13 +80,13 @@ public class ReservationService {
 
         if (!items.isEmpty()) {
             for (Item item : items) {
-                if (item.locdate() == targetDate) {
+                if (item.locdate().equals(targetDate)) {
                     isHoliday = true;
                 }
             }
         }
         if (isHoliday) {
-            throw new IllegalArgumentException("공휴일은 예약할 수 없습니다.");
+            throw new HolidayException("공휴일은 예약할 수 없습니다.");
         }
     }
 

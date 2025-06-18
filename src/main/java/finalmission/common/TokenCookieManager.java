@@ -1,5 +1,6 @@
 package finalmission.common;
 
+import finalmission.common.exceptionHandler.UnauthorizedException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,8 +32,7 @@ public class TokenCookieManager {
     private Cookie[] getCookies(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            // TODO: 권한 에러 커스텀
-            throw new IllegalArgumentException("로그인 되어있지 않습니다.");
+            throw new UnauthorizedException("로그인 되어있지 않습니다.");
         }
         return cookies;
     }
