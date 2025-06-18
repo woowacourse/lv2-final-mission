@@ -15,8 +15,10 @@ import ordering.repository.OrderJpaRepository;
 import ordering.repository.ProductJpaRepository;
 import ordering.repository.UserJpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class OrderService {
 
     private final OrderJpaRepository orderJpaRepository;
@@ -38,6 +40,7 @@ public class OrderService {
             .toList();
     }
 
+    @Transactional
     public OrderResponse registerOrder(OrderRegister request) {
         return OrderResponse.from(orderJpaRepository.save(createProcessingOrder(request)));
     }
@@ -54,6 +57,7 @@ public class OrderService {
             LocalDateTime.now(), EmailStatus.PROCESSING, OrderStatus.PROCESSING);
     }
 
+    @Transactional
     public OrderResponse deleteOrder(Long orderId) {
         Order order = orderJpaRepository.findById(orderId)
             .orElseThrow(IllegalArgumentException::new);
