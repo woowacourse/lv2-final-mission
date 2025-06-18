@@ -1,6 +1,6 @@
 package finalmission.fixture;
 
-import finalmission.entity.Movie;
+import finalmission.movie.entity.Movie;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

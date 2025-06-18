@@ -1,7 +1,7 @@
 package finalmission.fixture;
 
-import finalmission.entity.Movie;
-import finalmission.entity.MovieSlot;
+import finalmission.movie.entity.Movie;
+import finalmission.movie.entity.MovieSlot;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
