@@ -54,7 +54,7 @@ public class OrderService {
             .orElseThrow(IllegalArgumentException::new);
 
         return new Order(user, category, product, request.count(), request.detail(),
-            LocalDateTime.now(), EmailStatus.PROCESSING, OrderStatus.PROCESSING);
+            LocalDateTime.now(), EmailStatus.PROCESSING, OrderStatus.SUCCESS);
     }
 
     @Transactional
@@ -62,6 +62,7 @@ public class OrderService {
         Order order = orderJpaRepository.findById(orderId)
             .orElseThrow(IllegalArgumentException::new);
 
+        order.setEmailStatus(EmailStatus.PROCESSING);
         order.setOrderStatus(OrderStatus.DELETE);
 
         return OrderResponse.from(order);

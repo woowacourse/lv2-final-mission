@@ -11,6 +11,7 @@ public record OrderResponse(
     String product,
     Long count,
     String emailStatus,
+    String orderStatus,
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime createdAt) {
 
     public static OrderResponse from(Order order) {
@@ -21,6 +22,7 @@ public record OrderResponse(
             order.getProduct().getName(),
             order.getCount(),
             order.getEmailStatus().getText(),
+            order.getOrderStatus().getText(),
             order.getCreatedAt()
         );
     }
