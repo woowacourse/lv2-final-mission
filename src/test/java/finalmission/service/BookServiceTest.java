@@ -20,7 +20,7 @@ class BookServiceTest {
 
         // given & when
         List<BookResponse> allBooks = bookService.getAllBooks();
-        assertThat(allBooks).hasSize(1);
+        assertThat(allBooks).hasSize(2);
     }
 
 

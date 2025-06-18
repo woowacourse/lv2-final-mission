@@ -20,7 +20,7 @@ public class RentalService {
     private final HolidayService holidayService;
 
     public RentalService(RentalRepository rentalRepository, MemberService memberService, BookService bookService,
-                         HolidayService holidayService) {
+            HolidayService holidayService) {
         this.rentalRepository = rentalRepository;
         this.memberService = memberService;
         this.bookService = bookService;
@@ -37,6 +37,8 @@ public class RentalService {
     public RentalResponse createRental(RentalRequest rentalRequest) {
         validateHoliday(rentalRequest);
         validateRentalPeriod(rentalRequest);
+        validateDuplicateRental(rentalRequest);
+        validateRentalLimit(rentalRequest);
 
         Member member = memberService.findById(rentalRequest.memberId());
         Book book = bookService.findById(rentalRequest.bookId());
@@ -58,14 +60,30 @@ public class RentalService {
         LocalDate rentalDate = rentalRequest.rentalDate();
         LocalDate returnDate = rentalRequest.returnDate();
         Long bookId = rentalRequest.bookId();
-        if(returnDate.isBefore(rentalDate)) {
+        if (returnDate.isBefore(rentalDate)) {
             throw new IllegalArgumentException("반납 날짜는 대여 날짜보다 이전일 수 없습니다.");
         }
         int period = bookService.findPeriodById(bookId);
 
         int betweenDays = Period.between(rentalDate, returnDate).getDays();
-        if(betweenDays >  period) {
+        if (betweenDays > period) {
             throw new IllegalArgumentException("대여 가능 날짜를 초과하였습니다.");
+        }
+    }
+
+    private void validateDuplicateRental(RentalRequest rentalRequest) {
+        List<Rental> existingRentals = rentalRepository.findByMemberIdAndBookId(
+                rentalRequest.memberId(), rentalRequest.bookId());
+
+        if (!existingRentals.isEmpty()) {
+            throw new IllegalArgumentException("동일한 책은 대여 불가능합니다.");
+        }
+    }
+
+    private void validateRentalLimit(RentalRequest rentalRequest) {
+        List<Rental> existingRental = rentalRepository.findByMemberId(rentalRequest.memberId());
+        if (existingRental.size() > 3) {
+            throw new IllegalArgumentException("대여는 최대 3권까지만 가능합니다.");
         }
     }
 }

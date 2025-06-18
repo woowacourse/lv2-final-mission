@@ -41,15 +41,15 @@ class RentalServiceTest {
 
         // given
         Long memberId = 1L;
-        Long bookId = 1L;
-        LocalDate rentalDate = LocalDate.of(2024,1,2);
-        LocalDate returnDate = LocalDate.of(2024,1,16);
+        Long bookId = 2L;
+        LocalDate rentalDate = LocalDate.of(2024, 1, 2);
+        LocalDate returnDate = LocalDate.of(2024, 1, 16);
         RentalRequest rentalRequest = new RentalRequest(memberId, bookId, rentalDate, returnDate);
 
         // when
         RentalResponse rental = rentalService.createRental(rentalRequest);
 
-        //then
+        // then
         assertThat(rental.member().getId()).isEqualTo(memberId);
         assertThat(rental.book().getId()).isEqualTo(bookId);
         assertThat(rental.rentalDate()).isEqualTo(rentalDate);
@@ -62,8 +62,8 @@ class RentalServiceTest {
         // given
         Long memberId = 1L;
         Long bookId = 1L;
-        LocalDate rentalDate = LocalDate.of(2024,1,1);
-        LocalDate returnDate = LocalDate.of(2024,1,15);
+        LocalDate rentalDate = LocalDate.of(2024, 1, 1);
+        LocalDate returnDate = LocalDate.of(2024, 1, 15);
         RentalRequest rentalRequest = new RentalRequest(memberId, bookId, rentalDate, returnDate);
 
         // when & then
@@ -76,8 +76,8 @@ class RentalServiceTest {
         // given
         Long memberId = 1L;
         Long bookId = 1L;
-        LocalDate rentalDate = LocalDate.of(2024,1,3);
-        LocalDate returnDate = LocalDate.of(2024,1,2);
+        LocalDate rentalDate = LocalDate.of(2024, 1, 3);
+        LocalDate returnDate = LocalDate.of(2024, 1, 2);
         RentalRequest rentalRequest = new RentalRequest(memberId, bookId, rentalDate, returnDate);
 
         // when & then
@@ -90,8 +90,8 @@ class RentalServiceTest {
         // given
         Long memberId = 1L;
         Long bookId = 1L;
-        LocalDate rentalDate = LocalDate.of(2024,1,2);
-        LocalDate returnDate = LocalDate.of(2024,1,17);
+        LocalDate rentalDate = LocalDate.of(2024, 1, 2);
+        LocalDate returnDate = LocalDate.of(2024, 1, 17);
         RentalRequest rentalRequest = new RentalRequest(memberId, bookId, rentalDate, returnDate);
 
         // when & then
@@ -104,9 +104,9 @@ class RentalServiceTest {
 
         // given
         Long memberId = 1L;
-        Long bookId = 1L;
-        LocalDate rentalDate = LocalDate.of(2024,1,2);
-        LocalDate returnDate = LocalDate.of(2024,1,16);
+        Long bookId = 2L;
+        LocalDate rentalDate = LocalDate.of(2024, 1, 2);
+        LocalDate returnDate = LocalDate.of(2024, 1, 16);
         Book bookBefore = bookRepository.findById(bookId).get();
         RentalRequest rentalRequest = new RentalRequest(memberId, bookId, rentalDate, returnDate);
 
@@ -115,6 +115,23 @@ class RentalServiceTest {
         Book bookAfter = bookRepository.findById(bookId).get();
 
         // then
-        assertThat(bookBefore.getStock()-1).isEqualTo(bookAfter.getStock());
+        assertThat(bookBefore.getStock() - 1).isEqualTo(bookAfter.getStock());
+    }
+
+    @Test
+    void 동일한_책_중복_대여_불가능() {
+        // given
+        Long memberId = 1L;
+        Long bookId = 2L;
+        LocalDate rentalDate = LocalDate.of(2024, 1, 2);
+        LocalDate returnDate = LocalDate.of(2024, 1, 16);
+        RentalRequest rentalRequest = new RentalRequest(memberId, bookId, rentalDate, returnDate);
+
+        // when
+        rentalService.createRental(rentalRequest);
+
+        // then
+        assertThatThrownBy(() -> rentalService.createRental(rentalRequest))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
