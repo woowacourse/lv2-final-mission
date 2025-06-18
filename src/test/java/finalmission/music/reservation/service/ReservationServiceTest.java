@@ -1,5 +1,6 @@
 package finalmission.music.reservation.service;
 
+import finalmission.music.member.domain.Role;
 import finalmission.music.reservation.controller.dto.ReservationResponse;
 import finalmission.music.album.domain.Album;
 import finalmission.music.lottery.domain.Lottery;
@@ -34,7 +35,7 @@ class ReservationServiceTest {
     @DisplayName("지나간 추첨에 대해서 예약할 수 없다.")
     @Transactional
     void dont_reserve_to_expired_lottery() {
-        Member member = memberRepository.save(new Member("test-member"));
+        Member member = memberRepository.save(new Member("test-member", Role.USER));
         Album album = albumRepository.save(
             new Album("test", "test", 0, LocalDate.now(), "test-id")
         );
@@ -48,7 +49,7 @@ class ReservationServiceTest {
     @DisplayName("올바른 추첨에 대해서 예약할 수 있다.")
     @Transactional
     void can_reserve_to_lottery() {
-        Member member = memberRepository.save(new Member("test-member"));
+        Member member = memberRepository.save(new Member("test-member", Role.USER));
         Album album = albumRepository.save(
             new Album("test", "test", 0, LocalDate.now(), "test-id")
         );
