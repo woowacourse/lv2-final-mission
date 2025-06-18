@@ -68,6 +68,14 @@ public class Order {
         return product.getPrice() * count;
     }
 
+    public void setEmailStatus(EmailStatus emailStatus) {
+        this.emailStatus = emailStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public Long getId() {
         return id;
     }
@@ -102,5 +110,9 @@ public class Order {
 
     public EmailStatus getEmailStatus() {
         return emailStatus;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
 }
