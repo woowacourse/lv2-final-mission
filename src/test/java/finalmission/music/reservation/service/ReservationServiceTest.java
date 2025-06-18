@@ -1,4 +1,4 @@
-package finalmission.music.service;
+package finalmission.music.reservation.service;
 
 import finalmission.music.reservation.controller.dto.ReservationResponse;
 import finalmission.music.album.domain.Album;
@@ -7,7 +7,6 @@ import finalmission.music.member.domain.Member;
 import finalmission.music.album.repository.AlbumRepository;
 import finalmission.music.lottery.repository.LotteryRepository;
 import finalmission.music.member.repository.MemberRepository;
-import finalmission.music.reservation.service.ReservationService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
@@ -34,7 +33,7 @@ class ReservationServiceTest {
     @Test
     @DisplayName("지나간 추첨에 대해서 예약할 수 없다.")
     @Transactional
-    void dont_reserve_to_expire_lottery() {
+    void dont_reserve_to_expired_lottery() {
         Member member = memberRepository.save(new Member("test-member"));
         Album album = albumRepository.save(
             new Album("test", "test", 0, LocalDate.now(), "test-id")

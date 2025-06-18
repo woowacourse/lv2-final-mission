@@ -1,4 +1,4 @@
-package finalmission.music.domain;
+package finalmission.music.lottery.domain;
 
 import finalmission.music.album.domain.Album;
 import finalmission.music.lottery.domain.Lottery;

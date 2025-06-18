@@ -35,7 +35,6 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations/{id}")
-    @DeleteMapping("/reservations/{id}")
     public ResponseEntity<MyReservationResponse> getMyReservation(@PathVariable("id") final Long id,
                                                                   @LoginMember final String memberName) {
         MyReservationResponse memberReservation = reservationService.getMemberReservation(id, memberName);
