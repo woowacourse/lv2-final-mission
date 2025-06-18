@@ -5,15 +5,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
 
 @Configuration
 public class RestClientConfiguration {
 
     @Bean
     public RestClient restClient() {
+
+        DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory("https://apis.data.go.kr");
+        uriBuilderFactory.setEncodingMode(EncodingMode.NONE);
+
         return RestClient.builder()
-                .baseUrl("http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo")
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
+                .uriBuilderFactory(uriBuilderFactory)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
 }
