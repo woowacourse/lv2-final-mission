@@ -25,6 +25,11 @@ public class Refrigerator {
         this.id = id;
     }
 
+    public Refrigerator(String id, List<MonsterEnergyStock> monsterEnergyStocks) {
+        this.id = id;
+        this.monsterEnergyStocks = monsterEnergyStocks;
+    }
+
     public void increment(MonsterEnergy monsterEnergy, int quantity) {
         for (MonsterEnergyStock monsterEnergyStock : monsterEnergyStocks) {
             if (monsterEnergyStock.isMonsterEnergy(monsterEnergy)) {
