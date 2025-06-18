@@ -5,14 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.DayOfWeek;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 @Entity
 public class Designer {
 
@@ -27,6 +22,9 @@ public class Designer {
         this.designerId = designerId;
         this.name = name;
         this.offDay = offDay;
+    }
+
+    protected Designer() {
     }
 
     public static Designer register(String name, DayOfWeek offDay) {

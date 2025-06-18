@@ -1,17 +1,14 @@
 package finalmission.domain.customer;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 @Entity
 public class Customer {
 
@@ -23,6 +20,7 @@ public class Customer {
     private String password;
     private String name;
     private String PhoneNumber;
+    @Enumerated(EnumType.STRING)
     private CustomerRole role;
 
     private Customer(final Long customerId,
@@ -38,6 +36,9 @@ public class Customer {
         this.name = name;
         this.PhoneNumber = phoneNumber;
         this.role = role;
+    }
+
+    protected Customer() {
     }
 
     public static Customer register(String email, String password, String name, String phoneNumber) {

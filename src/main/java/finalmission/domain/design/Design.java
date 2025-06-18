@@ -4,14 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 @Entity
 public class Design {
 
@@ -28,6 +23,9 @@ public class Design {
         this.name = name;
         this.price = price;
         this.turnaroundTime = turnaroundTime;
+    }
+
+    protected Design() {
     }
 
     public static Design register(String name, int price, int turnaroundTime) {

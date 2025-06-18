@@ -11,14 +11,9 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 @Entity
 public class Reservation {
 
@@ -50,6 +45,9 @@ public class Reservation {
         this.time = time;
         this.design = design;
         this.designer = designer;
+    }
+
+    protected Reservation() {
     }
 
     public static Reservation register(final Customer customer,
