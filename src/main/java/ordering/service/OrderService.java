@@ -39,10 +39,10 @@ public class OrderService {
     }
 
     public OrderResponse registerOrder(OrderRegister request) {
-        return OrderResponse.from(orderJpaRepository.save(createOrder(request)));
+        return OrderResponse.from(orderJpaRepository.save(createProcessingOrder(request)));
     }
 
-    private Order createOrder(OrderRegister request) {
+    private Order createProcessingOrder(OrderRegister request) {
         User user = userJpaRepository.findByName(request.username())
             .orElse(new User(request.username())); // 없는 사용자라면 새로 생성
         Category category = categoryJpaRepository.findById(request.categoryId())
@@ -51,6 +51,15 @@ public class OrderService {
             .orElseThrow(IllegalArgumentException::new);
 
         return new Order(user, category, product, request.count(), request.detail(),
-            LocalDateTime.now(), EmailStatus.DONE, OrderStatus.PROCESSING);
+            LocalDateTime.now(), EmailStatus.PROCESSING, OrderStatus.PROCESSING);
+    }
+
+    public OrderResponse deleteOrder(Long orderId) {
+        Order order = orderJpaRepository.findById(orderId)
+            .orElseThrow(IllegalArgumentException::new);
+
+        order.setOrderStatus(OrderStatus.DELETE);
+
+        return OrderResponse.from(order);
     }
 }

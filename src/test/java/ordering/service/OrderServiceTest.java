@@ -51,7 +51,7 @@ public class OrderServiceTest {
     void findOrderByUser() {
         User user = userJpaRepository.save(new User("사용자"));
 
-        Order order = createOrder(user, 1L, 1L, 3L, "사무용품으로 볼펜 구입");
+        Order order = createProcessingOrder(user, 1L, 1L, 3L, "사무용품으로 볼펜 구입");
         orderJpaRepository.save(order);
 
         assertThat(orderService.findByUser(user.getId())).hasSize(1);
@@ -59,7 +59,7 @@ public class OrderServiceTest {
 
     @Test
     @DisplayName("사용자 입력에 대한 발주를 저장할 수 있다.")
-    void createOrder() {
+    void createProcessingOrder() {
         OrderRegister request = new OrderRegister(
             "사용자1", 1L, 1L, 3L, "사무용품으로 볼펜 구입");
 
@@ -71,7 +71,7 @@ public class OrderServiceTest {
         });
     }
 
-    private Order createOrder(User user, Long categoryId, Long productId, Long count,
+    private Order createProcessingOrder(User user, Long categoryId, Long productId, Long count,
         String detail) {
         Category category = categoryJpaRepository.findById(categoryId)
             .orElseThrow(IllegalArgumentException::new);

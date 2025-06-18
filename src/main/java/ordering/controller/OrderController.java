@@ -6,6 +6,7 @@ import ordering.dto.response.OrderResponse;
 import ordering.service.OrderService;
 import ordering.service.coordinator.OrderMailCoordinator;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,12 @@ public class OrderController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderResponse modifyOrder(OrderRegister request) {
+    public OrderResponse updateOrder(OrderRegister request) {
         return orderMailCoordinator.sendOrder(request);
+    }
+
+    @DeleteMapping("/{orderId}")
+    public void deleteOrder(@PathVariable Long orderId) {
+        orderMailCoordinator.deleteAndSendOrder(orderId);
     }
 }
