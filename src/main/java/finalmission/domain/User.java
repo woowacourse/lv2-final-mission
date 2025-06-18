@@ -1,0 +1,91 @@
+package finalmission.domain;
+
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.Objects;
+
+@Entity
+@Table(name = "\"User\"")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    private Long id;
+
+    @Embedded
+    private UserName name;
+
+    @Embedded
+    private UserEmail email;
+
+    @Embedded
+    private UserPassword password;
+
+    @Enumerated(EnumType.STRING)
+    @Getter
+    private Role role;
+
+    public static User createCoach(UserName name, UserEmail email, UserPassword password) {
+        return new User(null, name, email, password, Role.COACH);
+    }
+
+    public static User createCrew(UserName name, UserEmail email, UserPassword password) {
+        return new User(null, name, email, password, Role.CREW);
+    }
+
+    public boolean isSamePassword(UserPassword password) {
+        return password.equals(this.password);
+    }
+
+    public String getName() {
+        return name.getName();
+    }
+
+    public String getEmail() {
+        return email.getEmail();
+    }
+
+    public String getPassword() {
+        return password.getPassword();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name=" + name +
+                ", email=" + email +
+                ", password=" + password +
+                ", role=" + role +
+                '}';
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        if (id != null && user.id != null) {
+            return Objects.equals(id, user.id);
+        }
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? Objects.hashCode(id) : Objects.hashCode(email);
+    }
+}
