@@ -1,5 +1,7 @@
 package finalmission.controller;
 
+import finalmission.annotation.CheckRole;
+import finalmission.domain.MemberRole;
 import finalmission.dto.request.CreateReservationTimeRequest;
 import finalmission.dto.response.CreateReservationTimeResponse;
 import finalmission.dto.response.ReservationTimeResponse;
@@ -30,12 +32,14 @@ public class ReservationTimeController {
         return reservationTimeService.findAllReservationTime();
     }
 
+    @CheckRole({MemberRole.ADMIN})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateReservationTimeResponse addReservationTime(@RequestBody CreateReservationTimeRequest request) {
         return reservationTimeService.addReservationTime(request);
     }
 
+    @CheckRole({MemberRole.ADMIN})
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteReservationTime(@PathVariable Long id) {

@@ -1,5 +1,7 @@
 package finalmission.controller;
 
+import finalmission.annotation.CheckRole;
+import finalmission.domain.MemberRole;
 import finalmission.dto.request.CreateMeetingRoomRequest;
 import finalmission.dto.response.CreateMeetingRoomResponse;
 import finalmission.dto.response.MeetingRoomResponse;
@@ -31,12 +33,14 @@ public class MeetingRoomController {
         return meetingRoomService.findAllMeetingRoom();
     }
 
+    @CheckRole({MemberRole.ADMIN})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateMeetingRoomResponse addMeetingRoom(@Valid @RequestBody final CreateMeetingRoomRequest request) {
         return meetingRoomService.addMeetingRoom(request);
     }
 
+    @CheckRole({MemberRole.ADMIN})
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMeetingRoom(@PathVariable("id") final Long id) {

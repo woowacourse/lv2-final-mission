@@ -43,6 +43,7 @@ public class ReservationController {
         return reservationService.addReservation(request, memberInfo);
     }
 
+    @CheckRole({MemberRole.MEMBER, MemberRole.ADMIN})
     @DeleteMapping("/{id}")
     public void deleteReservation(@PathVariable("id") Long id, MemberInfo memberInfo) {
         reservationService.deleteReservation(id, memberInfo);

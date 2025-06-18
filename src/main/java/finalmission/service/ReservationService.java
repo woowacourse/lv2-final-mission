@@ -1,5 +1,6 @@
 package finalmission.service;
 
+import finalmission.domain.MemberRole;
 import finalmission.dto.request.CreateReservationRequest;
 import finalmission.dto.request.MemberInfo;
 import finalmission.dto.response.CreateReservationResponse;
@@ -88,7 +89,8 @@ public class ReservationService {
         if (!reservationRepository.existsById(id)) {
             throw new NotExistedValueException("존재하지 않는 예약입니다.");
         }
-        if (!reservationRepository.existsByIdAndMemberId(id, memberInfo.id())) {
+        if (memberInfo.role() != MemberRole.ADMIN
+                || !reservationRepository.existsByIdAndMemberId(id, memberInfo.id())) {
             throw new CannotAccessException("예약자만 삭제할 수 있습니다.");
         }
         reservationRepository.deleteById(id);

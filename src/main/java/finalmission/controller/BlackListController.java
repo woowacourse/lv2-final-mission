@@ -1,5 +1,7 @@
 package finalmission.controller;
 
+import finalmission.annotation.CheckRole;
+import finalmission.domain.MemberRole;
 import finalmission.dto.request.CreateBlackListRequest;
 import finalmission.dto.response.BlackListResponse;
 import finalmission.dto.response.CreateBlackListResponse;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@CheckRole({MemberRole.ADMIN})
 @RestController
 @RequestMapping("/blacklists")
 public class BlackListController {
@@ -27,7 +30,7 @@ public class BlackListController {
     }
 
     @GetMapping
-    public List<BlackListResponse> getAllBlackListResponse() {
+    public List<BlackListResponse> getAllBlackList() {
         return blackListService.findAllBlackList();
     }
 
