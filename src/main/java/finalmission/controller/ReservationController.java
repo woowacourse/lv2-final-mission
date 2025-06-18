@@ -1,6 +1,8 @@
 package finalmission.controller;
 
+import finalmission.annotation.CheckRole;
 import finalmission.domain.HolidayClient;
+import finalmission.domain.MemberRole;
 import finalmission.dto.request.CreateReservationRequest;
 import finalmission.dto.request.MemberInfo;
 import finalmission.dto.response.CreateReservationResponse;
@@ -33,6 +35,7 @@ public class ReservationController {
         return reservationService.findAllReservation();
     }
 
+    @CheckRole({MemberRole.MEMBER, MemberRole.ADMIN})
     @PostMapping
     public CreateReservationResponse addReservation(@Valid @RequestBody CreateReservationRequest request,
                                                     MemberInfo memberInfo) {
