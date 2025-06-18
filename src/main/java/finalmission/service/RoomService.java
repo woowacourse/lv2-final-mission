@@ -8,6 +8,7 @@ import finalmission.domain.Member;
 import finalmission.domain.Room;
 import finalmission.domain.RoomMember;
 import finalmission.exception.NotFoundException;
+import finalmission.exception.UnauthorizedException;
 import finalmission.repository.RoomMemberRepository;
 import finalmission.repository.RoomRepository;
 import jakarta.transaction.Transactional;
@@ -72,6 +73,22 @@ public class RoomService {
         return rooms.stream()
                 .map(RoomWithoutParticipantsResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void delete(final Long roomId, final Long memberId) {
+        final Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new NotFoundException("해당 id의 내전방을 찾을 수 없습니다. id: " + roomId));
+        validateGameAlreadyStart(room);
+
+        final Member member = memberService.getById(memberId);
+
+        if (!room.isManager(member)) {
+            throw new UnauthorizedException("방장 이외에는 내전방을 삭제할 수 없습니다.");
+        }
+
+        roomMemberRepository.deleteByRoomId(roomId);
+        roomRepository.deleteById(roomId);
     }
 
     @Transactional

@@ -15,6 +15,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -198,6 +199,71 @@ public class RoomApiTest {
                 .then().log().all()
                 .statusCode(200)
                 .body("[0].name", response -> equalTo("5대5 내전 구함"));
+    }
+
+    @DisplayName("내전방을 삭제한다.")
+    @Test
+    void delete() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        // when & then
+        RestAssured.given().log().all()
+                .cookie("token", member1AccessToken)
+                .when().delete("/room/{id}", room.getId())
+                .then().log().all()
+                .statusCode(204);
+
+        assertThat(roomRepository.findAll()).isEmpty();
+    }
+
+    @DisplayName("방장이 아닌 유저가 내전방 삭제를 요청하면 401을 응답한다.")
+    @Test
+    void deleteByNonManager() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().plusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        // when & then
+        RestAssured.given().log().all()
+                .cookie("token", member2AccessToken)
+                .when().delete("/room/{id}", room.getId())
+                .then().log().all()
+                .statusCode(401);
+    }
+
+    @DisplayName("날짜가 지난 내전방의 삭제를 요청하면 400을 응답한다.")
+    @Test
+    void deleteAlreadyStart() {
+        // given
+        final Room room = roomRepository.save(new Room(
+                "5대5 내전 구함",
+                LocalDate.now().minusDays(1),
+                LocalTime.NOON,
+                "5대5 내전 구함, 훌라 필참",
+                member1
+        ));
+        roomMemberRepository.save(new RoomMember(room, member1));
+
+        // when & then
+        RestAssured.given().log().all()
+                .cookie("token", member1AccessToken)
+                .when().delete("/room/{id}", room.getId())
+                .then().log().all()
+                .statusCode(400);
     }
 
     @DisplayName("해당 내전방에 참여한다.")

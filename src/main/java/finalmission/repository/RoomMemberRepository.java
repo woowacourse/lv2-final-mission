@@ -9,4 +9,6 @@ public interface RoomMemberRepository extends JpaRepository<RoomMember, Long> {
     List<RoomMember> findByMemberId(Long memberId);
 
     Optional<RoomMember> findByRoomIdAndMemberId(Long roomId, Long memberId);
+
+    void deleteByRoomId(Long roomId);
 }

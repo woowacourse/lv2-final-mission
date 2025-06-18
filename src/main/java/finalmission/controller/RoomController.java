@@ -57,10 +57,20 @@ public class RoomController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable("id") final Long roomId,
+            @MemberId final Long memberId
+    ) {
+        roomService.delete(roomId, memberId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/join/{id}")
     public ResponseEntity<Void> join(
-            @MemberId final Long memberId,
-            @PathVariable("id") final Long roomId
+            @PathVariable("id") final Long roomId,
+            @MemberId final Long memberId
     ) {
         roomService.join(roomId, memberId);
 
@@ -69,8 +79,8 @@ public class RoomController {
 
     @DeleteMapping("/leave/{id}")
     public ResponseEntity<Void> leave(
-            @MemberId final Long memberId,
-            @PathVariable("id") final Long roomId
+            @PathVariable("id") final Long roomId,
+            @MemberId final Long memberId
     ) {
         roomService.leave(roomId, memberId);
 

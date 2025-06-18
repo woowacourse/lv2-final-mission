@@ -65,6 +65,10 @@ public class Room {
                 .anyMatch(roomMember -> roomMember.getMember().equals(member));
     }
 
+    public boolean isManager(final Member member) {
+        return manager.equals(member);
+    }
+
     public boolean isGameStarted() {
         final LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
 
