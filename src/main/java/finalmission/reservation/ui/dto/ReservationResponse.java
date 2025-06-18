@@ -7,6 +7,7 @@ import lombok.Builder;
 
 @Builder
 public record ReservationResponse(
+        Long id,
         Long restaurantId,
         LocalDate date,
         LocalTime time,
@@ -18,6 +19,7 @@ public record ReservationResponse(
 ) {
     public static ReservationResponse from(final Reservation reservation) {
         return ReservationResponse.builder()
+                .id(reservation.getId())
                 .restaurantId(reservation.getReservationSlot().getRestaurant().getId())
                 .date(reservation.getReservationSlot().getDate())
                 .time(reservation.getReservationSlot().getTime().getStartAt())

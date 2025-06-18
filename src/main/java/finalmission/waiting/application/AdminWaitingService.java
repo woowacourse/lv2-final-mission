@@ -16,7 +16,6 @@ import finalmission.waiting.domain.WaitingRepository;
 import finalmission.waiting.ui.dto.CreateWaitingRequest;
 import finalmission.waiting.ui.dto.WaitingResponse;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -65,8 +64,7 @@ public class AdminWaitingService {
 
         final Waiting waiting = new Waiting(
                 reservationSlot,
-                member,
-                LocalDateTime.now()
+                member
         );
 
         return waitingRepository.save(waiting);

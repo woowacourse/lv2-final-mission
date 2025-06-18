@@ -67,7 +67,7 @@ public class WaitingService {
             throw new AlreadyExistException("신청한 예약 대기가 이미 존재합니다.");
         }
 
-        final Waiting waiting = new Waiting(reservationSlot, member, LocalDateTime.now());
+        final Waiting waiting = new Waiting(reservationSlot, member);
 
         return waitingRepository.save(waiting);
     }

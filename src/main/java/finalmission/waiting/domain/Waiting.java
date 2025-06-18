@@ -3,7 +3,6 @@ package finalmission.waiting.domain;
 import finalmission.member.domain.Member;
 import finalmission.reservation.domain.ReservationSlot;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,21 +34,15 @@ public class Waiting {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
     public Waiting(
             final ReservationSlot reservationSlot,
-            final Member member,
-            final LocalDateTime createdAt
+            final Member member
     ) {
         validateReservationSlot(reservationSlot);
         validateMember(member);
-        validateCreatedAt(createdAt);
 
         this.reservationSlot = reservationSlot;
         this.member = member;
-        this.createdAt = createdAt;
     }
 
     private void validateReservationSlot(final ReservationSlot reservationSlot) {
@@ -62,12 +54,6 @@ public class Waiting {
     private void validateMember(final Member member) {
         if (member == null) {
             throw new IllegalArgumentException("멤버는 null이면 안됩니다.");
-        }
-    }
-
-    private void validateCreatedAt(final LocalDateTime createdAt) {
-        if (createdAt == null) {
-            throw new IllegalArgumentException("생성 시간이 null이면 안됩니다.");
         }
     }
 }

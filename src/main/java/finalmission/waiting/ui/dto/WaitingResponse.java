@@ -4,7 +4,6 @@ import finalmission.reservation.ui.dto.ReservationTimeResponse;
 import finalmission.restaurant.ui.dto.RestaurantResponse;
 import finalmission.waiting.domain.Waiting;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.Builder;
 
 @Builder
@@ -14,8 +13,7 @@ public record WaitingResponse(
         ReservationTimeResponse time,
         RestaurantResponse restaurant,
         Long memberId,
-        String memberNickname,
-        LocalDateTime createdAt
+        String memberNickname
 ) {
 
     public static WaitingResponse from(final Waiting waiting) {
@@ -26,7 +24,6 @@ public record WaitingResponse(
                 .restaurant(RestaurantResponse.from(waiting.getReservationSlot().getRestaurant()))
                 .memberId(waiting.getMember().getId())
                 .memberNickname(waiting.getMember().getNickname())
-                .createdAt(waiting.getCreatedAt())
                 .build();
     }
 }
