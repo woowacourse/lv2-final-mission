@@ -1,6 +1,7 @@
 package finalmission.ballparkreservation.reservation;
 
 import finalmission.ballparkreservation.auth.dto.LoginMember;
+import finalmission.ballparkreservation.exception.customexception.UnauthorizedException;
 import finalmission.ballparkreservation.external.HolidayClient;
 import finalmission.ballparkreservation.member.Member;
 import finalmission.ballparkreservation.member.MemberService;
@@ -137,7 +138,7 @@ class ReservationServiceTest {
 
         // when & then
         assertThatThrownBy(() -> reservationService.update(request, loginMember))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(UnauthorizedException.class);
     }
 
     @Test
@@ -202,6 +203,6 @@ class ReservationServiceTest {
 
         // when & then
         assertThatThrownBy(() -> reservationService.delete(reservationId, loginMember))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(UnauthorizedException.class);
     }
 }

@@ -65,7 +65,7 @@ public class AuthApiTest {
 
     @DisplayName("/auth/login POST 로그인 실패 테스트")
     @Test
-    void login2() {
+    void login_passwordWrongError() {
         // given
         Map<String, Object> parameters = Map.of("email", "may@gmail.com", "password", "1234", "name", "메이", "age", 24);
         signupForTest(parameters);
@@ -75,7 +75,7 @@ public class AuthApiTest {
                 .contentType(ContentType.JSON)
                 .body(Map.of("email", "may@gmail.com", "password", "abcd"))
                 .when().post("/auth/login")
-                .then().statusCode(500) // TODO : 로그인 실패 상태 코드 변경
+                .then().statusCode(400)
                 .header(HttpHeaders.SET_COOKIE.toString(), nullValue());
     }
 

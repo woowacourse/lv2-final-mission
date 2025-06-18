@@ -1,6 +1,7 @@
 package finalmission.ballparkreservation.reservation;
 
 import finalmission.ballparkreservation.auth.dto.LoginMember;
+import finalmission.ballparkreservation.exception.customexception.UnauthorizedException;
 import finalmission.ballparkreservation.external.HolidayClient;
 import finalmission.ballparkreservation.member.Member;
 import finalmission.ballparkreservation.member.MemberService;
@@ -90,7 +91,7 @@ public class ReservationService {
 
     private void validateAuthorization(final Long reservationMemberId, final Long requestMemberId) {
         if (!reservationMemberId.equals(requestMemberId)) {
-            throw new IllegalArgumentException("해당 예약을 생성한 사용자만 수정할 수 있습니다.");
+            throw new UnauthorizedException();
         }
     }
 

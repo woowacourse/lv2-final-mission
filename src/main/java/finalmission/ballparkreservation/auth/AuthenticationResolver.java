@@ -1,6 +1,7 @@
 package finalmission.ballparkreservation.auth;
 
 import finalmission.ballparkreservation.auth.dto.LoginMember;
+import finalmission.ballparkreservation.exception.customexception.UnauthenticatedException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class AuthenticationResolver implements HandlerMethodArgumentResolver {
         try {
             return LoginMember.createLoginMemberBySubject(memberId);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("토큰 subject 정보가 올바르지 않습니다.");
+            throw new UnauthenticatedException();
         }
     }
 
@@ -47,18 +48,18 @@ public class AuthenticationResolver implements HandlerMethodArgumentResolver {
                 .filter(cookie -> Objects.equals(cookie.getName(), "token"))
                 .map(Cookie::getValue)
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("로그인 요청 정보가 올바르지 않습니다."));
+                .orElseThrow(UnauthenticatedException::new);
     }
 
     private void validateToken(final String token) {
         if (!jwtProvider.isValidToken(token)) {
-            throw new IllegalArgumentException("로그인 요청 정보가 올바르지 않습니다.");
+            throw new UnauthenticatedException();
         }
     }
 
     private void validateExistsCookies(final Cookie[] cookies) {
         if (cookies == null) {
-            throw new IllegalArgumentException("로그인 요청 정보가 올바르지 않습니다.");
+            throw new UnauthenticatedException();
         }
     }
 }
