@@ -64,6 +64,7 @@ public class ReservationService {
         Reservation reservation = new Reservation(
                 meetingRoom, member, reservationDate, startAt, endAt
         );
+        validateTotalReservationTime(reservation);
         reservationRepository.save(reservation);
         sendReservationCompleteEmail(loginMember);
 
@@ -111,6 +112,12 @@ public class ReservationService {
         return endAt.isBefore(startAt);
     }
 
+    private void validateTotalReservationTime(final Reservation reservation) {
+        if (reservation.isOverOneHour()) {
+            throw new BusinessException("총 예약 시간은 한 시간을 초과할 수 없습니다.");
+        }
+    }
+
     private void sendReservationCompleteEmail(final LoginMember loginMember) {
         Member member = getMember(loginMember);
 
@@ -155,6 +162,7 @@ public class ReservationService {
             throw new AlreadyInUseException("해당 시간에 예약이 이미 존재합니다.");
         }
         reservation.changeReservationTime(newStartAt, newEndAt);
+        validateTotalReservationTime(reservation);
 
         return ReservationResponse.from(reservation);
     }

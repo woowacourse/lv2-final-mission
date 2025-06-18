@@ -2,6 +2,7 @@ package finalmission.meetingroom.domain;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Reservation {
 
+    private static final long ONE_HOUR_TO_MINUTES = 60L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -74,6 +76,11 @@ public class Reservation {
     ) {
         this.startAt = newStartAt;
         this.endAt = newEndAt;
+    }
+
+    public boolean isOverOneHour() {
+        long totalReservationTime = ChronoUnit.MINUTES.between(startAt, endAt);
+        return totalReservationTime > ONE_HOUR_TO_MINUTES;
     }
 
     @Override
