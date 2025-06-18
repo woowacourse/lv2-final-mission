@@ -19,15 +19,18 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final DesignRepository designRepository;
     private final DesignerRepository designerRepository;
+    private final PublicHolidayService publicHolidayService;
 
     public ReservationService(
             final ReservationRepository reservationRepository,
             final DesignRepository designRepository,
-            final DesignerRepository designerRepository
+            final DesignerRepository designerRepository,
+            final PublicHolidayService publicHolidayService
     ) {
         this.reservationRepository = reservationRepository;
         this.designRepository = designRepository;
         this.designerRepository = designerRepository;
+        this.publicHolidayService = publicHolidayService;
     }
 
     public Reservation createReservation(final Customer customer,
@@ -42,8 +45,14 @@ public class ReservationService {
         Designer designer = designerRepository.findById(designerId)
                 .orElseThrow(() -> new IllegalArgumentException("디자이너가 존재하지 않습니다."));
 
+        validateDate(date);
+
         Reservation reservation = Reservation.register(customer, date, time, design, designer);
         return reservationRepository.save(reservation);
+    }
+
+    private void validateDate(LocalDate date) {
+        publicHolidayService.validatePublicHoliday(date);
     }
 
     public List<Reservation> getReservationsByCustomer(final Customer customer) {
