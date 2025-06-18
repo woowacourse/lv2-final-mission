@@ -1,9 +1,12 @@
 package finalmission.integration;
 
+import static org.mockito.Mockito.when;
+
 import finalmission.controller.dto.MemberSignUpRequest;
 import finalmission.domain.Member;
 import finalmission.domain.vo.LolName;
 import finalmission.repository.MemberRepository;
+import finalmission.service.RiotRestClient;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.restassured.RestAssured;
@@ -14,10 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class MemberApiTest {
+
+    @MockitoBean
+    private RiotRestClient riotRestClient;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -33,8 +40,12 @@ public class MemberApiTest {
     @Test
     void signUp() {
         // given
+        final LolName lolName = new LolName("누신누황", "nunu");
+
+        when(riotRestClient.existsLolName(lolName)).thenReturn(true);
+
         final MemberSignUpRequest request = new MemberSignUpRequest(
-                new LolName("누신누황", "nunu"),
+                lolName,
                 "qwe123"
         );
 
