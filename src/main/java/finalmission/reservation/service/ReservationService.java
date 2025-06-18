@@ -33,20 +33,20 @@ public class ReservationService {
             ReservationRequest request,
             @AuthenticationPrincipal LoginMember loginMember
     ) {
-        if (holidayRestClient.checkHoliday(request.reservationDate())) {
+        if (holidayRestClient.checkHoliday(request.date())) {
             throw new IllegalArgumentException("공휴일엔 예약할 수 없습니다.");
         }
 
-        MeetingRoom meetingRoom = getMeetingRoom(request.meetingRoomId());
+        MeetingRoom meetingRoom = getMeetingRoom(request.roomId());
 
         Member member = getMember(loginMember);
 
-        ReservationTime reservationTime = timeRepository.findById(request.reservationTimeId())
+        ReservationTime reservationTime = timeRepository.findById(request.timeId())
                 .orElseThrow(() -> new NoSuchElementException("해당 예약 시간은 존재하지 않습니다."));
 
-        Reservation reservation = new Reservation(request.reservationDate(), reservationTime, member, meetingRoom);
+        Reservation reservation = new Reservation(request.date(), reservationTime, member, meetingRoom);
         Reservation savedReservation = reservationRepository.save(reservation);
-        return new ReservationResponse(savedReservation.getId(), savedReservation.getMember().getName(), savedReservation.getDate(), savedReservation.getTime().getStartAt(), savedReservation.getMeetingRoom().getRoomName());
+        return new ReservationResponse(savedReservation.getId(), savedReservation.getDate(), savedReservation.getTime().getStartAt(), savedReservation.getMeetingRoom().getRoomName());
     }
 
     public List<ReservationResponse> findAllByMember(
@@ -60,9 +60,10 @@ public class ReservationService {
     }
 
     public void deleteReservationById(Long reservationId, LoginMember loginMember) {
-        if (reservationRepository.existsReservationByIdAndMemberId(reservationId, loginMember.id())) {
-            reservationRepository.deleteById(reservationId);
+        if (!reservationRepository.existsReservationByIdAndMemberId(reservationId, loginMember.id())) {
+            throw new NoSuchElementException("해당 예약은 존재하지 않습니다.");
         }
+        reservationRepository.deleteById(reservationId);
     }
 
     private MeetingRoom getMeetingRoom(Long roomId) {
