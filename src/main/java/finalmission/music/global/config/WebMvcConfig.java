@@ -1,5 +1,6 @@
 package finalmission.music.global.config;
 
+import finalmission.music.global.auth.interceptor.AdminAuthInterceptor;
 import finalmission.music.global.auth.interceptor.MemberAuthInterceptor;
 import finalmission.music.global.auth.resolver.MemberArgumentResolver;
 import java.util.List;
@@ -14,12 +15,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final MemberAuthInterceptor memberAuthInterceptor;
+    private final AdminAuthInterceptor adminAuthInterceptor;
     private final MemberArgumentResolver memberArgumentResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(memberAuthInterceptor)
             .addPathPatterns("/reservations/**");
+        registry.addInterceptor(adminAuthInterceptor)
+            .addPathPatterns("/albums/**")
+            .addPathPatterns("/spotify/**");
     }
 
     @Override
