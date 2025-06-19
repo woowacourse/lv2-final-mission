@@ -77,7 +77,7 @@ class ReservationControllerIntTest {
         int expectedId = reservationCount + 1;
 
         //when & then
-        var response = RestAssured.given().log().all()
+        RestAssured.given().log().all()
                 .cookie("token", token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(request)
