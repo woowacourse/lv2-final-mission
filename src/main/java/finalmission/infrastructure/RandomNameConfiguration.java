@@ -9,14 +9,9 @@ import org.springframework.web.client.RestClient;
 @Configuration
 public class RandomNameConfiguration {
 
-    private final RestClient.Builder builder;
-
-    public RandomNameConfiguration(final RestClient.Builder builder) {
-        this.builder = builder;
-    }
-
+    @Bean
     public RestClient.Builder restClientBuilder() {
-        return builder.requestFactory(requestFactory());
+        return RestClient.builder().requestFactory(requestFactory());
     }
 
     private ClientHttpRequestFactory requestFactory() {
