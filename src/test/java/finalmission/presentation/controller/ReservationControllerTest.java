@@ -9,7 +9,6 @@ import finalmission.presentation.dto.ReservationRequest;
 import finalmission.presentation.dto.ReservationResponse;
 import finalmission.presentation.dto.YogaSessionForBookingResponse;
 import io.restassured.RestAssured;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,7 +70,7 @@ class ReservationControllerTest {
         String token = jwtTokenProvider.createToken(String.valueOf(1));
         var request = new ReservationRequest(2);
 
-        int reservationCount = jdbcTemplate.queryForObject("SELECT count(*) FROM reservation", Integer.class);
+        int reservationCount = getReservationCount();
 
         assertThat(reservationCount).isEqualTo(9);
 
@@ -117,5 +116,57 @@ class ReservationControllerTest {
                 () -> assertThat(reservation2.sessionServiceResponse().sessionId()).isEqualTo(2),
                 () -> assertThat(reservation2.sessionServiceResponse().courseName()).isEqualTo("빈야사")
         );
+    }
+
+    @DisplayName("사용자는 본인의 예약을 삭제할 수 있다.")
+    @Test
+    @Sql("/test-get-yoga-sessions-for-booking-data.sql")
+    void deleteReservation() {
+        //given
+        String token = jwtTokenProvider.createToken(String.valueOf(1));
+
+        int reservationCount = getReservationCount();
+
+        assertThat(reservationCount).isEqualTo(9);
+
+        int expectedSize = reservationCount - 1;
+
+        //when & then
+        RestAssured.given().log().all()
+                .cookie("token", token)
+                .when().delete("/reservations/1")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+
+        int deletedCount = getReservationCount();
+
+        assertThat(deletedCount).isEqualTo(expectedSize);
+    }
+
+    @DisplayName("사용자는 본인의 것이 아닌 예약을 삭제할 수 없다.")
+    @Test
+    @Sql("/test-get-yoga-sessions-for-booking-data.sql")
+    void throwException_whenDeleteOthersReservation() {
+        //given
+        String token = jwtTokenProvider.createToken(String.valueOf(1));
+
+        int reservationCount = getReservationCount();
+
+        assertThat(reservationCount).isEqualTo(9);
+
+        //when & then
+        RestAssured.given().log().all()
+                .cookie("token", token)
+                .when().delete("/reservations/2")
+                .then().log().all()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+
+        int deletedCount = getReservationCount();
+
+        assertThat(deletedCount).isEqualTo(reservationCount);
+    }
+
+    private int getReservationCount() {
+        return jdbcTemplate.queryForObject("SELECT count(*) FROM reservation", Integer.class);
     }
 }
