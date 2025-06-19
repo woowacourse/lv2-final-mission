@@ -7,11 +7,11 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
 @Configuration
-public class HolidayConfiguration {
+public class RandomNameConfiguration {
 
     private final RestClient.Builder builder;
 
-    public HolidayConfiguration(final RestClient.Builder builder) {
+    public RandomNameConfiguration(final RestClient.Builder builder) {
         this.builder = builder;
     }
 
@@ -24,11 +24,6 @@ public class HolidayConfiguration {
         factory.setConnectTimeout(1000);
         factory.setReadTimeout(2000);
         return factory;
-    }
-
-    @Bean
-    public HolidayClient holidayClient() {
-        return new HolidayClient(restClientBuilder());
     }
 
     @Bean
