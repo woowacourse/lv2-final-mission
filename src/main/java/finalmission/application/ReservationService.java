@@ -6,6 +6,7 @@ import finalmission.domain.YogaSessionForBooking;
 import finalmission.domain.repository.MemberRepository;
 import finalmission.domain.repository.ReservationRepository;
 import finalmission.domain.repository.YogaSessionRepository;
+import finalmission.exception.AuthorizationException;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class ReservationService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다. id: " + reservationId));
 
         if (!reservation.isOwner(memberId)) {
-            throw new IllegalArgumentException(
+            throw new AuthorizationException(
                     String.format("해당 예약의 삭제 권한이 없는 사용자입니다. 예약 id: %d, 사용자 id: %d", reservationId, memberId)
             );
         }
