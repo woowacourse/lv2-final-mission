@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final RandomNameService randomNameService;
 
     public Member getById(long id) {
         return memberRepository.findById(id)
@@ -32,5 +33,11 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new AuthenticationException("가입된 이메일이 아닙니다."));
         return member.getId();
+    }
+
+    public Member register(final String email, final String password) {
+        String name = randomNameService.getFirstName();
+        Member member = new Member(name, email, password);
+        return memberRepository.save(member);
     }
 }

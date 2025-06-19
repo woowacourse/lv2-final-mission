@@ -30,4 +30,9 @@ public class HolidayConfiguration {
     public HolidayClient holidayClient() {
         return new HolidayClient(restClientBuilder());
     }
+
+    @Bean
+    public RandomNameClient randomNameClient() {
+        return new RandomNameClient(restClientBuilder());
+    }
 }
