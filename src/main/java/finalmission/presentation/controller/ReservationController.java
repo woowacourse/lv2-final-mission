@@ -3,7 +3,6 @@ package finalmission.presentation.controller;
 import finalmission.application.ReservationService;
 import finalmission.application.dto.ReservationRequest;
 import finalmission.application.dto.ReservationResponse;
-import finalmission.domain.Reservation;
 import finalmission.presentation.AuthenticationElement;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +22,9 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping()
-    public Reservation reserve(@RequestBody ReservationRequest request, @AuthenticationElement Long memberId) {
-        return reservationService.register(memberId, request.classId(), request.date(), request.time());
+    public ReservationResponse reserve(@RequestBody ReservationRequest request, @AuthenticationElement Long memberId) {
+        var reservation = reservationService.register(memberId, request.sessionId());
+        return ReservationResponse.from(reservation);
     }
 
     @GetMapping("/mine")

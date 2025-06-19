@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,22 +14,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Reservation {
+public class YogaSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private Member member;
-    @ManyToOne
-    private YogaSession session;
+    private YogaCourse course;
+    private LocalDate date;
+    private LocalTime time;
+    private int maximumAttendance;
 
-    public Reservation(Member member, YogaSession session) {
-        this.member = member;
-        this.session = session;
-    }
-
-    public boolean isOwner(Long memberId) {
-        return this.member.getId().equals(memberId);
+    public boolean isOverCapacity(long attendance) {
+        return attendance > maximumAttendance;
     }
 }
