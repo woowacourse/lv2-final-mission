@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import finalmission.infrastructure.JwtTokenProvider;
-import finalmission.presentation.dto.ReservationRequest;
+import finalmission.presentation.dto.ReservationCreateRequest;
 import finalmission.presentation.dto.ReservationResponse;
 import finalmission.presentation.dto.YogaSessionForBookingResponse;
 import io.restassured.RestAssured;
@@ -21,7 +21,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ReservationControllerTest {
+class ReservationControllerIntTest {
 
     @LocalServerPort
     int port;
@@ -39,7 +39,7 @@ class ReservationControllerTest {
 
     @DisplayName("특정 날짜의 요가 세션 조회 시 현재 예약자 수와 추가 예약 가능 여부를 함께 응답한다.")
     @Test
-    @Sql("/test-get-yoga-sessions-for-booking-data.sql")
+    @Sql("/test-reservation-controller-data.sql")
     void getYogaSessionsForBooking() {
         //given
         int sessionCount = jdbcTemplate.queryForObject("SELECT count(*) FROM yoga_session", Integer.class);
@@ -64,11 +64,11 @@ class ReservationControllerTest {
 
     @DisplayName("로그인된 사용자는 요가 세션을 예약할 수 있다.")
     @Test
-    @Sql("/test-get-yoga-sessions-for-booking-data.sql")
+    @Sql("/test-reservation-controller-data.sql")
     void registerReservation() {
         //given
         String token = jwtTokenProvider.createToken(String.valueOf(1));
-        var request = new ReservationRequest(2);
+        var request = new ReservationCreateRequest(2);
 
         int reservationCount = getReservationCount();
 
@@ -89,7 +89,7 @@ class ReservationControllerTest {
 
     @DisplayName("사용자 본인은 자신이 한 예약의 상세 정보를 확인할 수 있다.")
     @Test
-    @Sql("/test-get-yoga-sessions-for-booking-data.sql")
+    @Sql("/test-reservation-controller-data.sql")
     void getMyReservations() {
         //given
         String token = jwtTokenProvider.createToken(String.valueOf(1));
@@ -109,10 +109,10 @@ class ReservationControllerTest {
         var reservation2 = reservations.getLast();
 
         assertAll(
-                () -> assertThat(reservation1.memberDto().id()).isEqualTo(1),
+                () -> assertThat(reservation1.memberResponse().id()).isEqualTo(1),
                 () -> assertThat(reservation1.sessionServiceResponse().sessionId()).isEqualTo(1),
                 () -> assertThat(reservation1.sessionServiceResponse().courseName()).isEqualTo("아쉬탕가베이직"),
-                () -> assertThat(reservation2.memberDto().id()).isEqualTo(1),
+                () -> assertThat(reservation2.memberResponse().id()).isEqualTo(1),
                 () -> assertThat(reservation2.sessionServiceResponse().sessionId()).isEqualTo(2),
                 () -> assertThat(reservation2.sessionServiceResponse().courseName()).isEqualTo("빈야사")
         );
@@ -120,7 +120,7 @@ class ReservationControllerTest {
 
     @DisplayName("사용자는 본인의 예약을 삭제할 수 있다.")
     @Test
-    @Sql("/test-get-yoga-sessions-for-booking-data.sql")
+    @Sql("/test-reservation-controller-data.sql")
     void deleteReservation() {
         //given
         String token = jwtTokenProvider.createToken(String.valueOf(1));
@@ -145,7 +145,7 @@ class ReservationControllerTest {
 
     @DisplayName("사용자는 본인의 것이 아닌 예약을 삭제할 수 없다.")
     @Test
-    @Sql("/test-get-yoga-sessions-for-booking-data.sql")
+    @Sql("/test-reservation-controller-data.sql")
     void throwException_whenDeleteOthersReservation() {
         //given
         String token = jwtTokenProvider.createToken(String.valueOf(1));

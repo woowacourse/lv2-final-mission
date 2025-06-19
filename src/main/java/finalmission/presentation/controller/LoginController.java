@@ -5,7 +5,7 @@ import finalmission.domain.Member;
 import finalmission.infrastructure.JwtTokenProvider;
 import finalmission.presentation.AuthenticationElement;
 import finalmission.presentation.dto.LoginRequest;
-import finalmission.presentation.dto.MemberDto;
+import finalmission.presentation.dto.MemberResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +41,8 @@ public class LoginController {
     }
 
     @GetMapping("/check")
-    public ResponseEntity<MemberDto> checkLogin(@AuthenticationElement Long memberId) {
+    public ResponseEntity<MemberResponse> checkLogin(@AuthenticationElement Long memberId) {
         Member member = memberService.getById(memberId);
-        return ResponseEntity.ok(new MemberDto(member.getId(), member.getName()));
+        return ResponseEntity.ok(new MemberResponse(member.getId(), member.getName()));
     }
 }

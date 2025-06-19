@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import finalmission.Fixture;
 import finalmission.presentation.dto.CheckLoginRequest;
 import finalmission.presentation.dto.LoginRequest;
-import finalmission.presentation.dto.MemberDto;
+import finalmission.presentation.dto.MemberResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class LoginControllerTest {
+class LoginControllerIntTest {
 
     @LocalServerPort
     int port;
@@ -63,14 +63,14 @@ class LoginControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .extract().cookie("token");
 
-        MemberDto member = RestAssured.given().log().all()
+        MemberResponse member = RestAssured.given().log().all()
                 .cookie("token", token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new CheckLoginRequest(1))
                 .when().get("/login/check")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
-                .extract().body().as(MemberDto.class);
+                .extract().body().as(MemberResponse.class);
 
         assertThat(member.id()).isEqualTo(1);
     }

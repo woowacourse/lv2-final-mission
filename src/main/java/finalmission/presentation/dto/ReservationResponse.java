@@ -5,14 +5,14 @@ import java.util.List;
 
 public record ReservationResponse(
         long id,
-        MemberDto memberDto,
+        MemberResponse memberResponse,
         YogaSessionResponse sessionServiceResponse
 ) {
 
     public static ReservationResponse from(Reservation reservation) {
         var member = reservation.getMember();
         var session = reservation.getSession();
-        return new ReservationResponse(reservation.getId(), MemberDto.from(member), YogaSessionResponse.from(session));
+        return new ReservationResponse(reservation.getId(), MemberResponse.from(member), YogaSessionResponse.from(session));
     }
 
     public static List<ReservationResponse> from(List<Reservation> reservations) {

@@ -2,7 +2,7 @@ package finalmission.presentation.controller;
 
 import finalmission.application.ReservationService;
 import finalmission.presentation.AuthenticationElement;
-import finalmission.presentation.dto.ReservationRequest;
+import finalmission.presentation.dto.ReservationCreateRequest;
 import finalmission.presentation.dto.ReservationResponse;
 import finalmission.presentation.dto.YogaSessionForBookingResponse;
 import java.time.LocalDate;
@@ -31,7 +31,7 @@ public class ReservationController {
     }
 
     @PostMapping()
-    public ReservationResponse reserve(@RequestBody ReservationRequest request, @AuthenticationElement Long memberId) {
+    public ReservationResponse reserve(@RequestBody ReservationCreateRequest request, @AuthenticationElement Long memberId) {
         var reservation = reservationService.register(memberId, request.sessionId());
         return ReservationResponse.from(reservation);
     }
