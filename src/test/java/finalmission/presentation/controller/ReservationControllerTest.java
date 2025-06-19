@@ -1,8 +1,11 @@
 package finalmission.presentation.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import finalmission.infrastructure.JwtTokenProvider;
+import finalmission.presentation.dto.ReservationRequest;
 import finalmission.presentation.dto.YogaSessionForBookingResponse;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -23,6 +27,9 @@ class ReservationControllerTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     void setUp() {
@@ -52,5 +59,31 @@ class ReservationControllerTest {
                 () -> assertThat(sessions.getLast().isFullBooking()).isFalse(),
                 () -> assertThat(sessions.getLast().currentAttendance()).isEqualTo(1L)
         );
+    }
+
+    @DisplayName("로그인된 사용자는 요가 세션을 예약할 수 있다.")
+    @Test
+    @Sql("/test-get-yoga-sessions-for-booking-data.sql")
+    void registerReservation() {
+        //given
+        String token = jwtTokenProvider.createToken(String.valueOf(1));
+        var request = new ReservationRequest(2);
+
+        int reservationCount = jdbcTemplate.queryForObject("SELECT count(*) FROM reservation", Integer.class);
+
+        assertThat(reservationCount).isEqualTo(9);
+
+        int expectedId = reservationCount + 1;
+
+        //when & then
+        var response = RestAssured.given().log().all()
+                .cookie("token", token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(request)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("id", is(expectedId));
+
     }
 }
