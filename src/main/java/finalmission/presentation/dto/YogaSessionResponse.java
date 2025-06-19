@@ -1,4 +1,4 @@
-package finalmission.application.dto;
+package finalmission.presentation.dto;
 
 import finalmission.domain.YogaSession;
 import java.time.LocalDate;

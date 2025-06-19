@@ -1,4 +1,4 @@
-package finalmission.application.dto;
+package finalmission.presentation.dto;
 
 public record ReservationRequest(long sessionId) {
 }

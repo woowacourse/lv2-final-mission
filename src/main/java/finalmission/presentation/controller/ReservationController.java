@@ -3,6 +3,8 @@ package finalmission.presentation.controller;
 import finalmission.application.ReservationService;
 import finalmission.application.dto.ReservationRequest;
 import finalmission.application.dto.ReservationResponse;
+import finalmission.presentation.dto.ReservationRequest;
+import finalmission.presentation.dto.ReservationResponse;
 import finalmission.presentation.AuthenticationElement;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

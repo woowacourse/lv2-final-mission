@@ -1,7 +1,6 @@
-package finalmission.application.dto;
+package finalmission.presentation.dto;
 
 import finalmission.domain.Reservation;
-import finalmission.presentation.dto.MemberDto;
 import java.util.List;
 
 public record ReservationResponse(
