@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import finalmission.infrastructure.JwtTokenProvider;
 import finalmission.presentation.dto.ReservationRequest;
+import finalmission.presentation.dto.ReservationResponse;
 import finalmission.presentation.dto.YogaSessionForBookingResponse;
 import io.restassured.RestAssured;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -84,6 +86,36 @@ class ReservationControllerTest {
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("id", is(expectedId));
+    }
 
+    @DisplayName("사용자 본인은 자신이 한 예약의 상세 정보를 확인할 수 있다.")
+    @Test
+    @Sql("/test-get-yoga-sessions-for-booking-data.sql")
+    void getMyReservations() {
+        //given
+        String token = jwtTokenProvider.createToken(String.valueOf(1));
+        jdbcTemplate.update("INSERT INTO reservation (member_id, session_id) VALUES (1, 2)");
+
+        //when & then
+        var reservations = RestAssured.given().log().all()
+                .cookie("token", token)
+                .when().get("/reservations/mine")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("size()", is(2))
+                .extract().body().jsonPath()
+                .getList(".", ReservationResponse.class);
+
+        var reservation1 = reservations.getFirst();
+        var reservation2 = reservations.getLast();
+
+        assertAll(
+                () -> assertThat(reservation1.memberDto().id()).isEqualTo(1),
+                () -> assertThat(reservation1.sessionServiceResponse().sessionId()).isEqualTo(1),
+                () -> assertThat(reservation1.sessionServiceResponse().courseName()).isEqualTo("아쉬탕가베이직"),
+                () -> assertThat(reservation2.memberDto().id()).isEqualTo(1),
+                () -> assertThat(reservation2.sessionServiceResponse().sessionId()).isEqualTo(2),
+                () -> assertThat(reservation2.sessionServiceResponse().courseName()).isEqualTo("빈야사")
+        );
     }
 }
