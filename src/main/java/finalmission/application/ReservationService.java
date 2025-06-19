@@ -2,9 +2,11 @@ package finalmission.application;
 
 import finalmission.domain.Reservation;
 import finalmission.domain.YogaSession;
+import finalmission.domain.YogaSessionForBooking;
 import finalmission.domain.repository.MemberRepository;
 import finalmission.domain.repository.ReservationRepository;
 import finalmission.domain.repository.YogaSessionRepository;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,13 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final YogaSessionRepository yogaSessionRepository;
     private final MemberRepository memberRepository;
+
+    public List<YogaSessionForBooking> getYogaSessionsForBooking(LocalDate date) {
+        var sessions = yogaSessionRepository.findAllByDate(date);
+        return sessions.stream()
+                .map(session -> YogaSessionForBooking.of(session, getCountBySession(session)))
+                .toList();
+    }
 
     public Reservation register(final long memberId, final long sessionId) {
         var session = yogaSessionRepository.findById(sessionId)
@@ -30,10 +39,14 @@ public class ReservationService {
     }
 
     private void validateSessionAttendance(final YogaSession session) {
-        var attendance = reservationRepository.countBySession(session);
+        var attendance = getCountBySession(session);
         if (session.isOverCapacity(attendance + 1)) {
             throw new IllegalArgumentException("정원 초과로 예약할 수 없습니다.");
         }
+    }
+
+    private long getCountBySession(final YogaSession session) {
+        return reservationRepository.countBySession(session);
     }
 
     public List<Reservation> getMyReservations(final long memberId) {

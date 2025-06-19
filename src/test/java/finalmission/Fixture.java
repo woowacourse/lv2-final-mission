@@ -14,8 +14,10 @@ public class Fixture {
                 statement.execute("ALTER TABLE reservation ALTER COLUMN id RESTART WITH 1");
                 statement.execute("TRUNCATE TABLE member");
                 statement.execute("ALTER TABLE member ALTER COLUMN id RESTART WITH 1");
-                statement.execute("TRUNCATE TABLE yoga_class");
-                statement.execute("ALTER TABLE yoga_class ALTER COLUMN id RESTART WITH 1");
+                statement.execute("TRUNCATE TABLE yoga_session");
+                statement.execute("ALTER TABLE yoga_session ALTER COLUMN id RESTART WITH 1");
+                statement.execute("TRUNCATE TABLE yoga_course");
+                statement.execute("ALTER TABLE yoga_course ALTER COLUMN id RESTART WITH 1");
                 statement.execute("SET REFERENTIAL_INTEGRITY TRUE");
             }
             return null;
