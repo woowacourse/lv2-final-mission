@@ -1,6 +1,5 @@
 package finalmission.configuration;
 
-import finalmission.domain.entity.Member;
 import finalmission.domain.service.MemberService;
 import finalmission.infrastructure.JwtTokenProvider;
 import finalmission.presentation.AuthInfo;
