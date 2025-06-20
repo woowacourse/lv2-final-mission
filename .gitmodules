@@ -1,0 +1,3 @@
+[submodule "lv2-final-mission-submodule"]
+	path = lv2-final-mission-submodule
+	url = https://github.com/phk1128/lv2-final-mission-submodule.git
