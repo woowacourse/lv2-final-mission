@@ -10,10 +10,10 @@ import org.springframework.http.HttpStatus;
 public class MemberApiFixture {
 
     public static final List<SignUpRequest> SIGN_UP_REQUESTS = List.of(
-            new SignUpRequest("one@doesnexist.domain", "password1", "name1"),
-            new SignUpRequest("two@doesnexist.domain", "password2", "name2"),
-            new SignUpRequest("three@doesnexist.domain", "password3", "name3"),
-            new SignUpRequest("four@doesnexist.domain", "password4", "name4")
+            new SignUpRequest("name1", "one@doesnexist.domain", "password1"),
+            new SignUpRequest("name2", "two@doesnexist.domain", "password2"),
+            new SignUpRequest("name3", "three@doesnexist.domain", "password3"),
+            new SignUpRequest("name4", "four@doesnexist.domain", "password4")
     );
 
     private MemberApiFixture() {
