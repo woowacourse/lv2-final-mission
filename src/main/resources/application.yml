@@ -22,3 +22,4 @@ spring:
 secret:
   jwt-key: regjeoigjroigji3j2io3io4h2bjasbdjaksbdkjqu3hu23hru3rhashudhausdhas
   jwt-expiration: 3600_000
+  api-key: 120ad57b98b04dd5a6851a3ecf4bb996

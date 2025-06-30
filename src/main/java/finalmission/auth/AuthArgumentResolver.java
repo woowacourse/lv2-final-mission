@@ -32,7 +32,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         validateToken(token);
 
         final String phoneNumber = jwtProvider.extractSubject(token);
-        return new Member(phoneNumber);
+        return new Member("User", phoneNumber);
     }
 
     private String extractToken(final NativeWebRequest request) {

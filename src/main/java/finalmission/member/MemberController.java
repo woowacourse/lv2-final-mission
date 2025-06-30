@@ -16,7 +16,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    // 실제 프로덕션에서 인증 서비스를 활용하면, 인증 키도 요청으로 받아야 함.
+    // 실제 프로덕션에서 전화번호 인증 서비스를 활용하면, 인증 키도 요청으로 받아야 함.
     public ResponseEntity<Void> createMember(@RequestBody String phoneNumber) {
         memberService.createMember(phoneNumber);
         return ResponseEntity.status(HttpStatus.CREATED).build();
