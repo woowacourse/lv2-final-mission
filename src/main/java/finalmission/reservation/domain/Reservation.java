@@ -20,6 +20,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -53,4 +54,16 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Station arriveStation;
+
+    public boolean isOwner(Member member) {
+        return this.member.equals(member);
+    }
+
+    public void updateReservation(LocalDate date, Subway subway, Seat seat, Station departStation, Station arriveStation) {
+        this.date = date;
+        this.subway = subway;
+        this.seat = seat;
+        this.departStation = departStation;
+        this.arriveStation = arriveStation;
+    }
 }

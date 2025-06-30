@@ -12,6 +12,7 @@ import finalmission.subway.SubwayRepository;
 import finalmission.subway.domain.Subway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -69,10 +70,31 @@ public class ReservationService {
         Reservation foundReservation = reservationRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
 
-        if (!Objects.equals(foundReservation.getMember().getId(), foundMember.getId())) {
+        if (foundReservation.isOwner(foundMember)) {
             throw new IllegalArgumentException("자신의 예약이 아니라서 삭제할 수 없습니다.") ;
         }
 
         reservationRepository.delete(foundReservation);
+    }
+
+    @Transactional
+    public void replaceReservation(Member member, Long id, ReservationRequest request) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+
+        if (!reservation.isOwner(member)) {
+            throw new IllegalArgumentException("자신의 예약이 아니라서 수정할 수 없습니다.");
+        }
+
+        Subway subway = subwayRepository.findById(Long.valueOf(request.subway_number()))
+                .orElseThrow(IllegalArgumentException::new);
+
+        Station departStation = stationRepository.findByName(request.departStation())
+                .orElseThrow(IllegalArgumentException::new);
+
+        Station arriveStation = stationRepository.findByName(request.arriveStation())
+                .orElseThrow(IllegalArgumentException::new);
+
+        reservation.updateReservation(request.date(), subway, Seat.valueOf(request.seat()), departStation, arriveStation);
     }
 }

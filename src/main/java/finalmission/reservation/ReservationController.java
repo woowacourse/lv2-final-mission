@@ -9,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,5 +40,15 @@ public class ReservationController {
     public ResponseEntity<Void> deleteReservation(@Auth Member member, @PathVariable("id") final Long id) {
         reservationService.deleteReservation(member, id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateReservation(
+            @Auth Member member,
+            @PathVariable("id") final Long id,
+            @RequestBody final ReservationRequest request
+    ) {
+        reservationService.replaceReservation(member, id, request);
+        return ResponseEntity.ok().build();
     }
 }
