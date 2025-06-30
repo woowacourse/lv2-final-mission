@@ -50,7 +50,7 @@ public class MemberApiTest {
     }
 
     private void givenMember(String phoneNumber) {
-        final String sql = "INSERT INTO member (phone_number) VALUES ('" + phoneNumber + "')";
+        final String sql = "INSERT INTO member (name, phone_number) VALUES ('name', '" + phoneNumber + "')";
         jdbcTemplate.update(sql);
     }
 
