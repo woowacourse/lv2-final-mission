@@ -26,7 +26,7 @@ public class AuthController {
         final String jwt = authService.generateToken(phoneNumber);
         final ResponseCookie responseCookie = ResponseCookie
                 .from(TOKEN_NAME, jwt)
-                .secure(true)
+//                .secure(true) - dev용으로 비활성화
                 .httpOnly(true)
                 .sameSite(SameSite.LAX.attributeValue())
                 .build();

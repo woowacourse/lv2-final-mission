@@ -1,11 +1,12 @@
 package finalmission.reservation;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import finalmission.member.MemberRepository;
 import finalmission.member.domain.Member;
 import finalmission.reservation.domain.Reservation;
 import finalmission.reservation.dto.ReservationRequest;
+import finalmission.reservation.util.SubwayLineOverlapChecker;
 import finalmission.station.StationRepository;
 import finalmission.station.domain.Station;
 import finalmission.subway.SubwayRepository;
@@ -23,17 +24,27 @@ public class ReservationService {
     private final StationRepository stationRepository;
     private final MemberRepository memberRepository;
 
+    public boolean isReservable(LocalDate date, Subway subway, Seat seat, Station departStation, Station arriveStation) {
+        List<Reservation> existingReservations = reservationRepository.findByDateAndSubwayAndSeat(date, subway, seat);
+        if (existingReservations.isEmpty()) {
+            return true;
+        }
+
+        for (Reservation reservation : existingReservations) {
+            if (SubwayLineOverlapChecker.isOverlap(
+                    reservation.getDepartStation().getName(),
+                    reservation.getArriveStation().getName(),
+                    departStation.getName(),
+                    arriveStation.getName()
+            )) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public Reservation createReservation(Member member, ReservationRequest request) {
-        /*
-        1. 겹치는 예약 없는지 확인
-        2. 예약 추가
-
-        - 겹치는 예약이란 아래 세가지 조건을 모두 만족한다.
-        1. 날짜가 같다.
-        2. 라인이 같다.
-        3. 거치는 역이 단 하나라도 겹친다 (알고리즘)
-         */
-
         Member foundMember = memberRepository.findByPhoneNumber(member.getPhoneNumber())
                 .orElseThrow(IllegalArgumentException::new);
 
@@ -45,6 +56,10 @@ public class ReservationService {
 
         Station arriveStation = stationRepository.findByName(request.arriveStation())
                 .orElseThrow(IllegalArgumentException::new);
+
+        if (!isReservable(request.date(), subway, Seat.valueOf(request.seat()), departStation, arriveStation)) {
+            throw new IllegalArgumentException("이미 예약된 좌석입니다. 예약할 수 없습니다.");
+        }
 
         Reservation reservation = new Reservation(
                 null,
@@ -71,7 +86,7 @@ public class ReservationService {
                 .orElseThrow(IllegalArgumentException::new);
 
         if (foundReservation.isOwner(foundMember)) {
-            throw new IllegalArgumentException("자신의 예약이 아니라서 삭제할 수 없습니다.") ;
+            throw new IllegalArgumentException("자신의 예약이 아니라서 삭제할 수 없습니다.");
         }
 
         reservationRepository.delete(foundReservation);
@@ -95,6 +110,7 @@ public class ReservationService {
         Station arriveStation = stationRepository.findByName(request.arriveStation())
                 .orElseThrow(IllegalArgumentException::new);
 
-        reservation.updateReservation(request.date(), subway, Seat.valueOf(request.seat()), departStation, arriveStation);
+        reservation.updateReservation(request.date(), subway, Seat.valueOf(request.seat()), departStation,
+                arriveStation);
     }
 }

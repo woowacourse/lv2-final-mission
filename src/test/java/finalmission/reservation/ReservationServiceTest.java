@@ -52,7 +52,7 @@ class ReservationServiceTest {
 //        boolean exist = reservationRepository.existsById(1L);
 //        Assertions.assertThat(exist).isTrue();
 //    }
-
+//
 //    @DisplayName("Reservation 삭제 테스트")
 //    @Test
 //    void deleteReservationTest() {

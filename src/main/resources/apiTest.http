@@ -1,12 +1,13 @@
 POST http://localhost:8080/reservations
 Content-Type: application/json
+Cookie: token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMTAxMjM0NTY3OCIsImlhdCI6MTc1MTM1NDg0NSwiZXhwIjoxNzUxMzU4NDQ1fQ.zLaKkKJRGAKtcCzva619OX4SFolJEC4d0MtmsSxC4oI
 
 {
   "date": "2023-10-01",
   "subway_number": 1,
-  "seat": "A",
-  "departStation": "강남",
-  "arriveStation": "잠실새내"
+  "seat": "B",
+  "departStation": "신림",
+  "arriveStation": "영등포구청"
 }
 
 ###
@@ -26,6 +27,12 @@ GET http://localhost:8080/reservations
 
 ###
 POST http://localhost:8080/member/signup
+Content-Type: text/plain
+
+01012345678
+
+###
+POST http://localhost:8080/auth/login
 Content-Type: text/plain
 
 01012345678
