@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: prod-self-hosted
     defaults:
       run:
         working-directory: ./backend
