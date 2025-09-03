@@ -1,0 +1,82 @@
+name: BD CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./backend
+    outputs:
+      jar_path: ${{ steps.build_app.outputs.jar_path }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build application
+        id: build_app
+        run: |
+          ./gradlew build -x test
+          # 빌드된 JAR 파일의 경로를 환경 변수에 저장
+          JAR_PATH=$(find build/libs -name "*.jar" -not -name "*-plain.jar" -print -quit)
+          echo "jar_path=$JAR_PATH" >> $GITHUB_OUTPUT
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-jar
+          path: ./backend/${{ steps.build_app.outputs.jar_path }}
+
+  deploy:
+    runs-on: dev-self-hosted
+    needs: build
+    steps:
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: application-jar
+          path: ./deploy
+      
+      - name: Deploy application
+        run: |
+          cd ./deploy
+          
+          # 기존 프로세스 종료 (PID를 통해 더 안전하게)
+          if [ -f "pid.txt" ]; then
+            OLD_PID=$(cat pid.txt)
+            if kill -0 $OLD_PID 2>/dev/null; then
+              kill $OLD_PID
+              echo "Stopped old application (PID: $OLD_PID)"
+              sleep 3
+            fi
+          fi
+          
+          # 새 애플리케이션 백그라운드에서 시작
+          nohup java -jar *.jar > app.log 2>&1 &
+          NEW_PID=$!
+          
+          # PID 저장
+          echo $NEW_PID > pid.txt
+          
+          # 잠시 대기 후 프로세스 확인
+          sleep 5
+          if kill -0 $NEW_PID 2>/dev/null; then
+            echo "Application deployed successfully (PID: $NEW_PID)"
+          else
+            echo "Application failed to start"
+            cat app.log
+            exit 1
+          fi
