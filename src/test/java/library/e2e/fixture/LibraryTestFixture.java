@@ -6,11 +6,10 @@ import io.restassured.http.ContentType;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -18,6 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(properties = {
         "spring.sql.init.data-locations=classpath:test-data.sql"
 })
+@ActiveProfiles("test")
 public class LibraryTestFixture {
 
     @LocalServerPort
@@ -68,8 +68,9 @@ public class LibraryTestFixture {
                 .then().log().all()
                 .statusCode(201);
     }
+
     public static void createTestReservation(String email, Long collectionId) {
-          Map<String, Object> reservation = new HashMap<>();
+        Map<String, Object> reservation = new HashMap<>();
         reservation.put("email", email);
 
         RestAssured.given().log().all()
