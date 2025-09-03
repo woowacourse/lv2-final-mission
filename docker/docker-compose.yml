@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: ..             # 현재 디렉토리 (Dockerfile 위치)
+      dockerfile: Dockerfile  # 사용할 Dockerfile
+    image: lv2-final-mission:latest
+    container_name: lv2-final-mission
+    env_file:
+      - .env
+    ports:
+      - "80:8080"             # 외부 80포트 -> 컨테이너 8080
+               # DB 접속 정보 등 환경변수 주입
+    restart: always           # 서버 재부팅 시 자동 실행
