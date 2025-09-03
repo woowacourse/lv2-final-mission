@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    runtimeOnly 'com.mysql:mysql-connector-j:9.4.0'
     runtimeOnly 'com.h2database:h2'
 
     testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:4.3.0'
