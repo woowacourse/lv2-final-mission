@@ -6,9 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Table(name = "member")
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,11 +32,8 @@ public class Member {
     @Column(nullable = false)
     private Role role = Role.USER;
 
-    protected Member() {
-    }
-
+    @Builder
     private Member(final Long id, final String name, final String email, final String password, final Role role) {
-
         this.id = id;
         this.name = name;
         this.email = email;
@@ -38,27 +41,7 @@ public class Member {
         this.role = role;
     }
 
-    public static Member withoutId(String name, String email, String password, Role role) {
+    public static Member withoutId(final String name, final String email, final String password, final Role role) {
         return new Member(null, name, email, password, role);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Role getRole() {
-        return role;
     }
 }

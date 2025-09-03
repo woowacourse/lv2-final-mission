@@ -29,8 +29,7 @@ public class JwtTokenProvider {
         this.expirationTime = expirationTime;
     }
 
-
-    public String createToken(Member member) {
+    public String createToken(final Member member) {
         return Jwts.builder()
                 .subject(member.getId().toString())
                 .claim("name", member.getName())
@@ -41,41 +40,41 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Long extractId(String token) {
+    public Long extractId(final String token) {
         try {
-            String stringId = parseClaims(token).getSubject();
+            final String stringId = parseClaims(token).getSubject();
             return Long.parseLong(stringId);
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             throw new AuthenticationException("잘못된 사용자 ID 형식입니다.");
         }
     }
 
-    public Role extractRole(String token) {
-        String stringRole = parseClaims(token).get("role", String.class);
+    public Role extractRole(final String token) {
+        final String stringRole = parseClaims(token).get("role", String.class);
         return Role.valueOf(stringRole);
     }
 
-    private Claims parseClaims(String token) {
+    private Claims parseClaims(final String token) {
         try {
-            Jws<Claims> jws = Jwts.parser()
+            final Jws<Claims> jws = Jwts.parser()
                     .verifyWith(secretKey)
                     .build()
                     .parseSignedClaims(token);
-            Claims claims = jws.getPayload();
+            final Claims claims = jws.getPayload();
             if (claims.getExpiration().before(new Date())) {
                 throw new AuthenticationException("토큰이 만료되었습니다.");
             }
             return claims;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (final JwtException | IllegalArgumentException e) {
             throw new AuthenticationException("유효하지 않은 토큰입니다.");
         }
     }
 
-    public String extractTokenFromCookie(Cookie[] cookies) {
+    public String extractTokenFromCookie(final Cookie[] cookies) {
         if (cookies == null) {
             throw new AuthenticationException("쿠키가 존재하지 않습니다.");
         }
-        for (Cookie cookie : cookies) {
+        for (final Cookie cookie : cookies) {
             if (Objects.equals(cookie.getName(), "token")) {
                 return cookie.getValue();
             }

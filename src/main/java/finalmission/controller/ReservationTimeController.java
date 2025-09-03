@@ -31,13 +31,15 @@ public class ReservationTimeController {
 
     @PostMapping
     public ResponseEntity<ReservationTimeResponse> createReservationTime(
-            @RequestBody ReservationTimeCreateRequest request) {
-        ReservationTimeResponse response = reservationTimeService.create(request);
+            @RequestBody final ReservationTimeCreateRequest request,
+            @RequestBody final ReservationTimeCreateRequest requ2
+    ) {
+        final ReservationTimeResponse response = reservationTimeService.create(request);
         return ResponseEntity.created(URI.create("times/" + response.id())).body(response);
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> removeReservationTime(LoginInfo loginInfo) {
+    public ResponseEntity<Void> removeReservationTime(final LoginInfo loginInfo) {
         reservationTimeService.removeReservationTime(loginInfo.id());
         return ResponseEntity.noContent().build();
     }

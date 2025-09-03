@@ -12,7 +12,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final AuthenticationArgumentResolver authenticationArgumentResolver;
 
     public WebMvcConfig(final AuthorizationAdminInterceptor authorizationAdminInterceptor,
-                        final AuthenticationArgumentResolver authenticationArgumentResolver) {
+            final AuthenticationArgumentResolver authenticationArgumentResolver) {
         this.authorizationAdminInterceptor = authorizationAdminInterceptor;
         this.authenticationArgumentResolver = authenticationArgumentResolver;
     }

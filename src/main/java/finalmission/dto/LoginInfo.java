@@ -7,7 +7,7 @@ public record LoginInfo(
         String name,
         String email
 ) {
-    public static LoginInfo from(Member member) {
+    public static LoginInfo from(final Member member) {
         return new LoginInfo(member.getId(), member.getName(), member.getEmail());
     }
 }

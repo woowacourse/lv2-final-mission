@@ -4,7 +4,7 @@ public class InvalidRequestException extends RuntimeException {
     public InvalidRequestException() {
     }
 
-    public InvalidRequestException(String message) {
+    public InvalidRequestException(final String message) {
         super(message);
     }
 }

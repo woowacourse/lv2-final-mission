@@ -10,17 +10,14 @@ import jakarta.persistence.Table;
 @Table(name = "sport")
 @Entity
 public class Sport {
+    @Column(nullable = false, unique = true)
+    String name;
+    @Column(nullable = false)
+    String description;
+    Long reservationLimit = 5L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true)
-    String name;
-
-    @Column(nullable = false)
-    String description;
-
-    Long reservationLimit = 5L;
 
     private Sport(final Long id, final String name, final String description, final Long reservationLimit) {
         this.id = id;

@@ -18,11 +18,11 @@ public class AuthorizationAdminInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler)
-            throws Exception {
-        Cookie[] cookies = request.getCookies();
-        String token = tokenProvider.extractTokenFromCookie(cookies);
-        Role role = tokenProvider.extractRole(token);
+    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response,
+            final Object handler) throws Exception {
+        final Cookie[] cookies = request.getCookies();
+        final String token = tokenProvider.extractTokenFromCookie(cookies);
+        final Role role = tokenProvider.extractRole(token);
         if (!Role.isAdmin(role)) {
             throw new AccessDeniedException("관리자 권한이 필요합니다");
         }

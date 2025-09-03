@@ -16,13 +16,13 @@ public class ReservationTimeService {
     private final ReservationRepository reservationRepository;
 
     public ReservationTimeService(final ReservationTimeRepository reservationTimeRepository,
-                                  final ReservationRepository reservationRepository) {
+            final ReservationRepository reservationRepository) {
         this.reservationTimeRepository = reservationTimeRepository;
         this.reservationRepository = reservationRepository;
     }
 
-    public ReservationTimeResponse create(ReservationTimeCreateRequest request) {
-        ReservationTime savedReservationTime = reservationTimeRepository.save(request.toDomain());
+    public ReservationTimeResponse create(final ReservationTimeCreateRequest request) {
+        final ReservationTime savedReservationTime = reservationTimeRepository.save(request.toDomain());
         return ReservationTimeResponse.from(savedReservationTime);
     }
 
@@ -44,7 +44,7 @@ public class ReservationTimeService {
                 .toList();
     }
 
-    public ReservationTime find(Long id) {
+    public ReservationTime find(final Long id) {
         return reservationTimeRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
     }

@@ -11,12 +11,11 @@ import java.time.LocalTime;
 @Table(name = "reservation_time")
 @Entity
 public class ReservationTime {
+    @Column(nullable = false, unique = true)
+    LocalTime time;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true)
-    LocalTime time;
 
     private ReservationTime(final Long id, final LocalTime time) {
         this.id = id;

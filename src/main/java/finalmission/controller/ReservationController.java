@@ -30,13 +30,13 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationCreateRequest request) {
-        ReservationResponse response = reservationService.create(request);
+    public ResponseEntity<ReservationResponse> createReservation(@RequestBody final ReservationCreateRequest request) {
+        final ReservationResponse response = reservationService.create(request);
         return ResponseEntity.created(URI.create("reservations/" + response.id())).body(response);
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> removeReservation(LoginInfo loginInfo) {
+    public ResponseEntity<Void> removeReservation(final LoginInfo loginInfo) {
         reservationService.removeReservation(loginInfo.id());
         return ResponseEntity.noContent().build();
     }

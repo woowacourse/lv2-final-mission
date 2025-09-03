@@ -5,8 +5,7 @@ import finalmission.domain.ReservationTime;
 import java.time.LocalTime;
 
 public record ReservationTimeCreateRequest(
-        @JsonFormat(pattern = "HH:mm")
-        LocalTime time
+        @JsonFormat(pattern = "HH:mm") LocalTime time
 ) {
     public ReservationTime toDomain() {
         return ReservationTime.withoutId(time);

@@ -1,6 +1,5 @@
 package finalmission.client;
 
-import finalmission.dto.response.RandomNameResponse;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,7 +11,7 @@ public class RandommerClient {
     private final String secretKey;
 
     public RandommerClient(final RestClient.Builder clientBuilder,
-                           @Value("${randommer-secret-key}") final String secretKey) {
+            @Value("${randommer-secret-key}") final String secretKey) {
         this.clientBuilder = clientBuilder;
         this.secretKey = secretKey;
     }

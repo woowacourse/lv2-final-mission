@@ -23,29 +23,29 @@ public class AuthController {
     private final RandommerService randommerService;
 
     public AuthController(final MemberService memberService, final JwtTokenProvider jwtTokenProvider,
-                          final RandommerService randommerService) {
+            final RandommerService randommerService) {
         this.memberService = memberService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.randommerService = randommerService;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<MemberResponse> signup(@RequestBody MemberSignupRequest request) {
+    public ResponseEntity<MemberResponse> signup(@RequestBody final MemberSignupRequest request) {
         String name = request.name();
         if (request.name() == null) {
             name = randommerService.generateRandomName();
         }
-        MemberCreateRequest memberCreateRequest = new MemberCreateRequest(name, request.email(),
+        final MemberCreateRequest memberCreateRequest = new MemberCreateRequest(name, request.email(),
                 request.password(), request.role());
         return ResponseEntity.ok(memberService.create(memberCreateRequest));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(LoginInfo loginInfo, HttpServletResponse response) {
-        Long id = loginInfo.id();
-        Member member = memberService.find(id);
-        String token = jwtTokenProvider.createToken(member);
-        Cookie cookie = new Cookie("token", token);
+    public ResponseEntity<Void> login(final LoginInfo loginInfo, final HttpServletResponse response) {
+        final Long id = loginInfo.id();
+        final Member member = memberService.find(id);
+        final String token = jwtTokenProvider.createToken(member);
+        final Cookie cookie = new Cookie("token", token);
         response.addCookie(cookie);
 
         return ResponseEntity.ok().build();

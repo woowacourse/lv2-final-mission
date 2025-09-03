@@ -30,13 +30,12 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
 
     @Override
     public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
-                                  final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory)
-            throws Exception {
-        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        Cookie[] cookies = request.getCookies();
-        String token = tokenProvider.extractTokenFromCookie(cookies);
-        Long memberId = tokenProvider.extractId(token);
-        Member member = memberService.find(memberId);
+            final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) throws Exception {
+        final HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        final Cookie[] cookies = request.getCookies();
+        final String token = tokenProvider.extractTokenFromCookie(cookies);
+        final Long memberId = tokenProvider.extractId(token);
+        final Member member = memberService.find(memberId);
 
         return LoginInfo.from(member);
     }

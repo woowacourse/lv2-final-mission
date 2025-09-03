@@ -20,8 +20,8 @@ public class SportService {
         this.reservationRepository = reservationRepository;
     }
 
-    public SportResponse create(SportCreateRequest request) {
-        Sport savedSport = sportRepository.save(request.toDomain());
+    public SportResponse create(final SportCreateRequest request) {
+        final Sport savedSport = sportRepository.save(request.toDomain());
         return SportResponse.from(savedSport);
     }
 
@@ -43,7 +43,7 @@ public class SportService {
                 .toList();
     }
 
-    public Sport find(Long id) {
+    public Sport find(final Long id) {
         return sportRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
     }

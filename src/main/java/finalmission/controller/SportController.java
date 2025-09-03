@@ -30,13 +30,13 @@ public class SportController {
     }
 
     @PostMapping
-    public ResponseEntity<SportResponse> createReservation(@RequestBody SportCreateRequest request) {
-        SportResponse response = sportService.create(request);
+    public ResponseEntity<SportResponse> createReservation(@RequestBody final SportCreateRequest request) {
+        final SportResponse response = sportService.create(request);
         return ResponseEntity.created(URI.create("reservations/" + response.id())).body(response);
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> removeReservation(LoginInfo loginInfo) {
+    public ResponseEntity<Void> removeReservation(final LoginInfo loginInfo) {
         sportService.removeSport(loginInfo.id());
         return ResponseEntity.noContent().build();
     }

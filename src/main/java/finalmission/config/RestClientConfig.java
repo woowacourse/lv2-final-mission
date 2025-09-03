@@ -17,7 +17,7 @@ public class RestClientConfig {
 
     @Bean
     public RestClient.Builder restClientBuilder() {
-        var clientFactory = new HttpComponentsClientHttpRequestFactory();
+        final var clientFactory = new HttpComponentsClientHttpRequestFactory();
         clientFactory.setConnectTimeout(connectTimeoutThreshold);
         clientFactory.setReadTimeout(readTimeoutThreshold);
 

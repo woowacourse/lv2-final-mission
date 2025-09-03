@@ -1,10 +1,9 @@
 package finalmission.domain;
 
 public enum Role {
-    USER,
-    ADMIN;
+    USER, ADMIN;
 
-    public static boolean isAdmin(Role role) {
+    public static boolean isAdmin(final Role role) {
         return role.equals(Role.ADMIN);
     }
 }

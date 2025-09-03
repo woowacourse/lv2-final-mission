@@ -23,8 +23,8 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse create(MemberCreateRequest request) {
-        Member savedMember = memberRepository.save(request.toDomain());
+    public MemberResponse create(final MemberCreateRequest request) {
+        final Member savedMember = memberRepository.save(request.toDomain());
         return MemberResponse.from(savedMember);
     }
 
@@ -40,7 +40,7 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    public Member find(Long id) {
+    public Member find(final Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
     }

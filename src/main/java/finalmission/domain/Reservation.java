@@ -30,7 +30,7 @@ public class Reservation {
     private ReservationTime time;
 
     private Reservation(final Long id, final LocalDate date, final Member member, final Sport sport,
-                        final ReservationTime time) {
+            final ReservationTime time) {
         this.id = id;
         this.date = date;
         this.member = member;
@@ -41,7 +41,8 @@ public class Reservation {
     protected Reservation() {
     }
 
-    public static Reservation withoutId(LocalDate date, Member member, Sport sport, ReservationTime time) {
+    public static Reservation withoutId(final LocalDate date, final Member member, final Sport sport,
+            final ReservationTime time) {
         return new Reservation(null, date, member, sport, time);
     }
 

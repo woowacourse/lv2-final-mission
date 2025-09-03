@@ -20,17 +20,17 @@ public class ReservationService {
     private final SportService sportService;
 
     public ReservationService(final ReservationRepository reservationRepository, final MemberService memberService,
-                              final ReservationTimeService reservationTimeService, final SportService sportService) {
+            final ReservationTimeService reservationTimeService, final SportService sportService) {
         this.reservationRepository = reservationRepository;
         this.memberService = memberService;
         this.reservationTimeService = reservationTimeService;
         this.sportService = sportService;
     }
 
-    public ReservationResponse create(ReservationCreateRequest request) {
-        Member member = memberService.find(request.memberId());
-        ReservationTime time = reservationTimeService.find(request.timeId());
-        Sport sport = sportService.find(request.sportId());
+    public ReservationResponse create(final ReservationCreateRequest request) {
+        final Member member = memberService.find(request.memberId());
+        final ReservationTime time = reservationTimeService.find(request.timeId());
+        final Sport sport = sportService.find(request.sportId());
 
         if (reservationRepository.existsByMemberId(request.memberId())) {
             throw new InvalidRequestException("한 사용자가 여러번 예약할 수 없습니다");
@@ -44,7 +44,7 @@ public class ReservationService {
             throw new InvalidRequestException("최대 예약자 수에 도달하여 예약할 수 없습니다");
         }
 
-        Reservation savedReservation = reservationRepository.save(
+        final Reservation savedReservation = reservationRepository.save(
                 Reservation.withoutId(request.date(), member, sport, time));
         return ReservationResponse.from(savedReservation);
     }

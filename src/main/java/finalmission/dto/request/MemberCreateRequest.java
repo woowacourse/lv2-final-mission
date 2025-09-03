@@ -10,6 +10,11 @@ public record MemberCreateRequest(
         Role role
 ) {
     public Member toDomain() {
-        return Member.withoutId(name, email, password, role);
+        return Member.builder()
+                .name(name)
+                .email(email)
+                .password(password)
+                .role(role)
+                .build();
     }
 }
