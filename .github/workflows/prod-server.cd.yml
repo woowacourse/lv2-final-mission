@@ -2,7 +2,7 @@ name: Prod Server CD
 
 on:
   workflow_run:
-    workflows: [ "Dev Server CI" ]
+    workflows: [ "Prod Server CI" ]
     types: [ completed ]
     branches: [ prod ]
 
