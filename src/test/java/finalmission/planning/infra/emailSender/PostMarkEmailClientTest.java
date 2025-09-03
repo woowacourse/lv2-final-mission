@@ -1,7 +1,5 @@
 package finalmission.planning.infra.emailSender;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import finalmission.planning.infra.EmailRequest;
 import finalmission.planning.ui.IntegrationTest;
 import org.junit.jupiter.api.Disabled;
