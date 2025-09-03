@@ -6,10 +6,8 @@ on:
 
 jobs:
   build:
-    runs-on: prod-self-hosted
-    defaults:
-      run:
-        working-directory: ./backend
+    runs-on: self-hosted
+    # working-directory 설정을 제거하여 저장소 루트에서 실행합니다.
     outputs:
       jar_path: ${{ steps.build_app.outputs.jar_path }}
     steps:
@@ -23,60 +21,39 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Make gradlew executable
-        run: chmod +x gradlew
-
       - name: Build application
         id: build_app
         run: |
           ./gradlew build -x test
-          # 빌드된 JAR 파일의 경로를 환경 변수에 저장
-          JAR_PATH=$(find build/libs -name "*.jar" -not -name "*-plain.jar" -print -quit)
+          JAR_PATH=$(find build/libs -name "*.jar" -print -quit)
           echo "jar_path=$JAR_PATH" >> $GITHUB_OUTPUT
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: application-jar
-          path: ./backend/${{ steps.build_app.outputs.jar_path }}
+          path: ${{ steps.build_app.outputs.jar_path }}
 
   deploy:
-    runs-on: dev-self-hosted
+    runs-on: self-hosted
     needs: build
+    defaults:
+      run:
+        working-directory: .
     steps:
       - name: Download JAR artifact
         uses: actions/download-artifact@v4
         with:
           name: application-jar
-          path: ./deploy
-      
+
       - name: Deploy application
         run: |
-          cd ./deploy
-          
-          # 기존 프로세스 종료 (PID를 통해 더 안전하게)
           if [ -f "pid.txt" ]; then
-            OLD_PID=$(cat pid.txt)
-            if kill -0 $OLD_PID 2>/dev/null; then
-              kill $OLD_PID
-              echo "Stopped old application (PID: $OLD_PID)"
-              sleep 3
-            fi
+            kill $(cat pid.txt) || true
           fi
           
-          # 새 애플리케이션 백그라운드에서 시작
-          nohup java -jar *.jar > app.log 2>&1 &
-          NEW_PID=$!
+          nohup java -jar *.jar > /dev/null 2>&1 &
           
-          # PID 저장
-          echo $NEW_PID > pid.txt
+          echo $! > pid.txt
           
-          # 잠시 대기 후 프로세스 확인
-          sleep 5
-          if kill -0 $NEW_PID 2>/dev/null; then
-            echo "Application deployed successfully (PID: $NEW_PID)"
-          else
-            echo "Application failed to start"
-            cat app.log
-            exit 1
-          fi
+          echo "Application deployed successfully."
