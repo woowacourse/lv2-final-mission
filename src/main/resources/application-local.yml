@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3307/final_mission
+    username: root
+    password: verysecret
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+auth:
+  jwt:
+    secret-key: fdjslfjsdlfsjfieofnlsdfjoeihfnwlfdskfjlsdsfjld
+    valid-time: 1800000
+  cookie:
+    max-age: 1800
+
+nickname-suggestion:
+  randommer:
+    secret-key: 9a91fc6afa05428a91a223c297e719b6
+    base-url: https://randommer.io/

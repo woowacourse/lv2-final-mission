@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+auth:
+  jwt:
+    secret-key: fdjslfjsdlfsjfieofnlsdfjoeihfnwlfdskfjlsdsfjld
+    valid-time: 1800000
+  cookie:
+    max-age: 1800
+
+nickname-suggestion:
+  randommer:
+    secret-key: 9a91fc6afa05428a91a223c297e719b6
+    base-url: https://randommer.io/
