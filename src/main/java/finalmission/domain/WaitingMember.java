@@ -31,6 +31,12 @@ public class WaitingMember {
 
     private LocalDateTime createdAt;
 
+    public WaitingMember(Member member, WaitingLine waitingLine, LocalDateTime createdAt) {
+        this.member = member;
+        this.waitingLine = waitingLine;
+        this.createdAt = createdAt;
+    }
+
     private WaitingMember(Member member, WaitingLine waitingLine) {
         this(null, member, waitingLine, LocalDateTime.now());
     }

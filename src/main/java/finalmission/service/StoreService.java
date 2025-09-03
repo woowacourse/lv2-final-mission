@@ -112,7 +112,7 @@ public class StoreService {
                 .toList();
     }
 
-    private Store findStoreById(Long id) {
+    public Store findStoreById(Long id) {
         return storeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 가게가 존재하지 않습니다."));
     }
