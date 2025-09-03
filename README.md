@@ -24,3 +24,10 @@
 ### Database ERD
 
 ![ERD](./images/ordering_ERD.png)
+
+### Infra Structure
+
+- [x] 애플리케이션을 AWS에 배포 가능한 상태로 구축
+  - Spring Boot Application이 돌아가는가?
+- [ ] 애플리케이션 서버 / 데이터베이스 서버 분리
+- [ ] dev/prod의 설정을 서로 독립적으로 관리 및 배포
