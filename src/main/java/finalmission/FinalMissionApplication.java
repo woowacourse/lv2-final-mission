@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class FinalMissionApplication {
-
-  public static void main(String[] args) {
-    SpringApplication.run(FinalMissionApplication.class, args);
-  }
-
+    public static void main(final String[] args) {
+        SpringApplication.run(FinalMissionApplication.class, args);
+    }
 }
