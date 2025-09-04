@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Docker Credentials ###
+build-and-push.sh
+
+### Data directories ###
+data/

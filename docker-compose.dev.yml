@@ -1,0 +1,32 @@
+services:
+  dev-server:
+    image: koseonje/woowa-level3-final:latest-dev
+    container_name: woowa-level3-final
+    ports:
+      - "80:8080"
+    volumes:
+      - ./data/springboot/logs:/var/log/spring
+    environment:
+      - TZ=Asia/Seoul
+    env_file:
+      - /home/ubuntu/env/dev.env
+    depends_on:
+      dev-db:
+        condition: service_healthy
+
+  dev-db:
+    image: mysql:8.4
+    container_name: dev-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    env_file:
+      - /home/ubuntu/env/dev.env
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping" ]
+      interval: 3s
+      retries: 5
