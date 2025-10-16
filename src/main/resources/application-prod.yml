@@ -1,0 +1,31 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  application:
+    name: final-mission-prod
+
+  datasource:
+    url:
+    username:
+    password:
+  sql:
+    init:
+      mode: always
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+
+spotify:
+  client:
+    id:
+    secret.key:
+  timeout:
+    read:
+    connect:

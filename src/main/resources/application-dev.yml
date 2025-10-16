@@ -1,0 +1,31 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  application:
+    name: final-mission-dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/lv3final?characterEncoding=UTF-8&serverTimezone=UTC
+    username:
+    password:
+  sql:
+    init:
+      mode: always
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+
+spotify:
+  client:
+    id:
+    secret.key:
+  timeout:
+    read:
+    connect:
