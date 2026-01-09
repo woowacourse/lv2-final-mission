@@ -1,0 +1,15 @@
+# .github/workflows/deployProd.yml
+name: Deploy-Prod (self-hosted)
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: [ self-hosted, Linux, ARM64 ]
+    steps:
+      - name: Run deploy
+        run: |
+          BRANCH_OVERRIDE="${{ github.ref_name }}" bash ~/deploy.sh
