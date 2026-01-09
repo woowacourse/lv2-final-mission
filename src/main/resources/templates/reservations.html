@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약 - 회의실 예약 시스템</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .time-slot {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        .time-slot:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .time-slot.available {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 2px solid #28a745;
+        }
+        .time-slot.reserved {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border: 2px solid #dc3545;
+            cursor: not-allowed;
+        }
+        .time-slot.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: 2px solid #667eea;
+        }
+        .btn-reserve {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+        }
+        .btn-reserve:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-calendar-alt me-2"></i>회의실 예약 시스템
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/meetingroom">
+                            <i class="fas fa-door-open me-1"></i>회의실
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/reservation">
+                            <i class="fas fa-calendar-plus me-1"></i>예약
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my-reservation">
+                            <i class="fas fa-list me-1"></i>내 예약
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="userInfo" style="display: none;">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i><span id="userEmail"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/my-reservation">
+                                    <i class="fas fa-list me-2"></i>내 예약
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt me-2"></i>로그아웃
+                                </a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item" id="loginLink">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i>로그인
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-4">
+                    <i class="fas fa-calendar-plus me-2"></i>회의실 예약
+                </h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-cog me-2"></i>예약 설정
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="reservationForm">
+                            <div class="mb-3">
+                                <label for="meetingroomSelect" class="form-label">회의실 선택</label>
+                                <select class="form-select" id="meetingroomSelect" required>
+                                    <option value="">회의실을 선택하세요</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dateSelect" class="form-label">날짜 선택</label>
+                                <input type="date" class="form-control" id="dateSelect" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-1"></i>예약 가능 시간 조회
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-3 shadow-sm" id="reservationFormCard" style="display: none;">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-calendar-check me-2"></i>예약 정보
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="createReservationForm">
+                            <div class="mb-3">
+                                <label for="selectedTime" class="form-label">선택된 시간</label>
+                                <input type="text" class="form-control" id="selectedTime" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="selectedDate" class="form-label">선택된 날짜</label>
+                                <input type="text" class="form-control" id="selectedDate" readonly>
+                            </div>
+                            <button type="submit" class="btn btn-reserve w-100">
+                                <i class="fas fa-calendar-plus me-1"></i>예약하기
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-clock me-2"></i>예약 가능 시간
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="timeSlots" class="row g-2">
+                            <div class="col-12 text-center text-muted">
+                                <i class="fas fa-calendar-alt fa-3x mb-3"></i>
+                                <p>회의실과 날짜를 선택하여 예약 가능 시간을 확인하세요.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-3">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; 2024 회의실 예약 시스템. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedTimeId = null; // 선택된 timeId를 저장할 변수
+        
+        // 페이지 로드 시 로그인 상태 확인 및 회의실 목록 로드
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            loadMeetingRooms();
+        });
+
+        function checkLoginStatus() {
+            fetch('/login/check')
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('로그인되지 않음');
+                    }
+                })
+                .then(data => {
+                    // 로그인된 경우 사용자 정보 표시
+                    showUserInfo(data.email);
+                })
+                .catch(error => {
+                    // 로그인되지 않은 경우 로그인 링크 표시
+                    showLoginLink();
+                });
+        }
+
+        function showUserInfo(email) {
+            document.getElementById('userEmail').textContent = email;
+            document.getElementById('userInfo').style.display = 'block';
+            document.getElementById('loginLink').style.display = 'none';
+        }
+
+        function showLoginLink() {
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('loginLink').style.display = 'block';
+        }
+
+        function logout() {
+            // 쿠키에서 토큰 삭제
+            document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            // 페이지 새로고침
+            window.location.reload();
+        }
+
+        // URL 파라미터에서 회의실 ID와 날짜 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const meetingroomId = urlParams.get('meetingroom');
+        const dateParam = urlParams.get('date');
+
+        // 오늘 날짜를 기본값으로 설정
+        if (!dateParam) {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateSelect').value = today;
+        }
+
+        function loadMeetingRooms() {
+            fetch('/meetingrooms')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('회의실 목록을 불러오는데 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    populateMeetingRoomSelect(data);
+                    
+                    // URL 파라미터에서 회의실 ID가 있으면 선택
+                    if (meetingroomId) {
+                        document.getElementById('meetingroomSelect').value = meetingroomId;
+                    }
+                    if (dateParam) {
+                        document.getElementById('dateSelect').value = dateParam;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('회의실 목록을 불러오는데 실패했습니다.');
+                });
+        }
+
+        function populateMeetingRoomSelect(meetingRooms) {
+            const select = document.getElementById('meetingroomSelect');
+            
+            // 기존 옵션들 제거 (첫 번째 옵션 제외)
+            while (select.children.length > 1) {
+                select.removeChild(select.lastChild);
+            }
+            
+            // 회의실 옵션들 추가
+            meetingRooms.forEach(room => {
+                const option = document.createElement('option');
+                option.value = room.id;
+                option.textContent = room.name;
+                select.appendChild(option);
+            });
+        }
+
+        document.getElementById('reservationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const meetingroomId = document.getElementById('meetingroomSelect').value;
+            const date = document.getElementById('dateSelect').value;
+            
+            if (!meetingroomId || !date) {
+                alert('회의실과 날짜를 모두 선택해주세요.');
+                return;
+            }
+
+            loadAvailableTimes(meetingroomId, date);
+        });
+
+        document.getElementById('createReservationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            createReservation();
+        });
+
+        function loadAvailableTimes(meetingroomId, date) {
+            fetch(`/reservations?meetingroom=${meetingroomId}&date=${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayTimeSlots(data);
+                    document.getElementById('reservationFormCard').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('예약 가능 시간을 불러오는데 실패했습니다.');
+                });
+        }
+
+        function displayTimeSlots(availableTimes) {
+            const container = document.getElementById('timeSlots');
+            container.innerHTML = '';
+
+            if (availableTimes.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center text-muted">
+                        <i class="fas fa-calendar-times fa-3x mb-3"></i>
+                        <p>해당 날짜에 예약 가능한 시간이 없습니다.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            availableTimes.forEach(timeSlot => {
+                const col = document.createElement('div');
+                col.className = 'col-md-3 col-sm-4 col-6 mb-2';
+                
+                const isAvailable = !timeSlot.isReserved;
+                const timeClass = isAvailable ? 'available' : 'reserved';
+                const timeText = timeSlot.time.substring(0, 5); // HH:MM 형식으로 변환
+                const nextHour = parseInt(timeSlot.time.substring(0, 2)) + 1;
+                const endTime = `${nextHour.toString().padStart(2, '0')}:00`;
+                
+                col.innerHTML = `
+                    <div class="time-slot ${timeClass} p-3 text-center" 
+                         onclick="${isAvailable ? `selectTimeSlot(${timeSlot.timeId}, '${timeSlot.time}', '${endTime}')` : ''}"
+                         data-time-id="${timeSlot.timeId}"
+                         data-time="${timeSlot.time}"
+                         data-end-time="${endTime}">
+                        <div class="fw-bold">${timeText}</div>
+                        <div class="small text-muted">~ ${endTime}</div>
+                        <div class="badge ${isAvailable ? 'bg-success' : 'bg-danger'} mt-1">
+                            ${isAvailable ? '예약 가능' : '예약됨'}
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(col);
+            });
+        }
+
+        function selectTimeSlot(timeId, startTime, endTime) {
+            // 이전 선택 해제
+            document.querySelectorAll('.time-slot.selected').forEach(el => {
+                el.classList.remove('selected');
+                if (!el.classList.contains('reserved')) {
+                    el.classList.add('available');
+                }
+            });
+
+            // 현재 선택
+            const selectedElement = event.target.closest('.time-slot');
+            if (selectedElement && !selectedElement.classList.contains('reserved')) {
+                selectedElement.classList.remove('available');
+                selectedElement.classList.add('selected');
+            }
+
+            // 선택된 timeId 저장
+            selectedTimeId = timeId;
+
+            // 폼에 시간과 날짜 설정
+            const timeText = startTime.substring(0, 5) + ' ~ ' + endTime;
+            document.getElementById('selectedTime').value = timeText;
+            
+            const selectedDate = document.getElementById('dateSelect').value;
+            const dateObj = new Date(selectedDate);
+            const formattedDate = dateObj.toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+            document.getElementById('selectedDate').value = formattedDate;
+        }
+
+        function createReservation() {
+            const meetingroomId = document.getElementById('meetingroomSelect').value;
+            const date = document.getElementById('dateSelect').value;
+
+            if (!meetingroomId || !date || !selectedTimeId) {
+                alert('회의실, 날짜, 시간을 모두 선택해주세요.');
+                return;
+            }
+
+            const reservationData = {
+                meetingRoomId: parseInt(meetingroomId),
+                timeId: selectedTimeId,
+                date: date
+            };
+
+            fetch('/reservations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reservationData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('예약이 성공적으로 완료되었습니다.');
+                    window.location.href = '/my-reservation';
+                } else {
+                    alert('예약에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('예약 중 오류가 발생했습니다.');
+            });
+        }
+    </script>
+</body>
+</html> 

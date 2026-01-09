@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ? ${title} + ' - 회의실 예약 시스템' : '회의실 예약 시스템'">회의실 예약 시스템</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+        .user-email {
+            color: #fff;
+            font-weight: 500;
+            margin-right: 15px;
+        }
+        .dropdown-toggle::after {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-calendar-alt me-2"></i>회의실 예약 시스템
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/meetingroom">
+                            <i class="fas fa-door-open me-1"></i>회의실
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reservation">
+                            <i class="fas fa-calendar-plus me-1"></i>예약
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my-reservation">
+                            <i class="fas fa-list me-1"></i>내 예약
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="userInfo" style="display: none;">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i><span id="userEmail"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/my-reservation">
+                                    <i class="fas fa-list me-2"></i>내 예약
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt me-2"></i>로그아웃
+                                </a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item" id="loginLink">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i>로그인
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        <div th:replace="${content}">
+            <!-- 페이지 내용이 여기에 들어갑니다 -->
+        </div>
+    </main>
+
+    <footer class="bg-light mt-5 py-3">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; 2024 회의실 예약 시스템. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 페이지 로드 시 로그인 상태 확인
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+        });
+
+        function checkLoginStatus() {
+            fetch('/login/check')
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('로그인되지 않음');
+                    }
+                })
+                .then(data => {
+                    // 로그인된 경우 사용자 정보 표시
+                    showUserInfo(data.email);
+                })
+                .catch(error => {
+                    // 로그인되지 않은 경우 로그인 링크 표시
+                    showLoginLink();
+                });
+        }
+
+        function showUserInfo(email) {
+            document.getElementById('userEmail').textContent = email;
+            document.getElementById('userInfo').style.display = 'block';
+            document.getElementById('loginLink').style.display = 'none';
+        }
+
+        function showLoginLink() {
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('loginLink').style.display = 'block';
+        }
+
+        function logout() {
+            // 쿠키에서 토큰 삭제
+            document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            // 페이지 새로고침
+            window.location.reload();
+        }
+    </script>
+</body>
+</html> 

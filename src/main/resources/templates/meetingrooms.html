@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회의실 - 회의실 예약 시스템</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .meetingroom-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 15px;
+        }
+        .meetingroom-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .meetingroom-icon {
+            font-size: 3rem;
+            color: #667eea;
+        }
+        .btn-reserve {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+        }
+        .btn-reserve:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-calendar-alt me-2"></i>회의실 예약 시스템
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/meetingroom">
+                            <i class="fas fa-door-open me-1"></i>회의실
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reservation">
+                            <i class="fas fa-calendar-plus me-1"></i>예약
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my-reservation">
+                            <i class="fas fa-list me-1"></i>내 예약
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="userInfo" style="display: none;">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i><span id="userEmail"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/my-reservation">
+                                    <i class="fas fa-list me-2"></i>내 예약
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt me-2"></i>로그아웃
+                                </a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item" id="loginLink">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i>로그인
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">
+                        <i class="fas fa-door-open me-2"></i>회의실 목록
+                    </h2>
+                    <button class="btn btn-primary" onclick="createMeetingRoom()">
+                        <i class="fas fa-plus me-1"></i>회의실 생성
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4" id="meetingroomList">
+            <!-- 회의실 카드들이 여기에 동적으로 추가됩니다 -->
+        </div>
+    </div>
+
+    <!-- 회의실 생성 모달 -->
+    <div class="modal fade" id="createMeetingRoomModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-plus me-2"></i>회의실 생성
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>새로운 회의실을 생성하시겠습니까?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmCreateMeetingRoom()">
+                        <i class="fas fa-plus me-1"></i>생성
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-3">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; 2024 회의실 예약 시스템. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 페이지 로드 시 로그인 상태 확인 및 회의실 목록 로드
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            loadMeetingRooms();
+        });
+
+        function checkLoginStatus() {
+            fetch('/login/check')
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('로그인되지 않음');
+                    }
+                })
+                .then(data => {
+                    // 로그인된 경우 사용자 정보 표시
+                    showUserInfo(data.email);
+                })
+                .catch(error => {
+                    // 로그인되지 않은 경우 로그인 링크 표시
+                    showLoginLink();
+                });
+        }
+
+        function showUserInfo(email) {
+            document.getElementById('userEmail').textContent = email;
+            document.getElementById('userInfo').style.display = 'block';
+            document.getElementById('loginLink').style.display = 'none';
+        }
+
+        function showLoginLink() {
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('loginLink').style.display = 'block';
+        }
+
+        function logout() {
+            // 쿠키에서 토큰 삭제
+            document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            // 페이지 새로고침
+            window.location.reload();
+        }
+
+        function loadMeetingRooms() {
+            fetch('/meetingrooms')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('회의실 목록을 불러오는데 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayMeetingRooms(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showEmptyState('회의실 목록을 불러오는데 실패했습니다.', '잠시 후 다시 시도해주세요.');
+                });
+        }
+
+        function displayMeetingRooms(meetingRooms) {
+            const container = document.getElementById('meetingroomList');
+            container.innerHTML = '';
+
+            if (meetingRooms.length === 0) {
+                showEmptyState('회의실이 없습니다.', '새로운 회의실을 생성해보세요!');
+                return;
+            }
+
+            meetingRooms.forEach(room => {
+                const card = createMeetingRoomCard(room);
+                container.appendChild(card);
+            });
+        }
+
+        function showEmptyState(title, message) {
+            const container = document.getElementById('meetingroomList');
+            container.innerHTML = `
+                <div class="col-12">
+                    <div class="text-center py-5">
+                        <i class="fas fa-door-open fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">${title}</h4>
+                        <p class="text-muted">${message}</p>
+                        <button class="btn btn-primary" onclick="createMeetingRoom()">
+                            <i class="fas fa-plus me-1"></i>회의실 생성
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createMeetingRoomCard(room) {
+            const col = document.createElement('div');
+            col.className = 'col-md-4 col-lg-3';
+            
+            col.innerHTML = `
+                <div class="card meetingroom-card h-100 shadow-sm" onclick="viewReservations(${room.id})" style="cursor: pointer;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-door-open meetingroom-icon"></i>
+                        </div>
+                        <h5 class="card-title">${room.name}</h5>
+                    </div>
+                </div>
+            `;
+            
+            return col;
+        }
+
+        function viewReservations(meetingRoomId) {
+            // 예약 페이지로 이동하면서 회의실 ID를 파라미터로 전달
+            window.location.href = `/reservation?meetingroom=${meetingRoomId}`;
+        }
+
+        function createMeetingRoom() {
+            const modal = new bootstrap.Modal(document.getElementById('createMeetingRoomModal'));
+            modal.show();
+        }
+
+        function confirmCreateMeetingRoom() {
+            fetch('/meetingrooms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('회의실 생성에 실패했습니다.');
+                }
+            })
+            .then(data => {
+                alert('회의실이 성공적으로 생성되었습니다.');
+                loadMeetingRooms(); // 목록 새로고침
+                bootstrap.Modal.getInstance(document.getElementById('createMeetingRoomModal')).hide();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || '회의실 생성 중 오류가 발생했습니다.');
+            });
+        }
+    </script>
+</body>
+</html> 

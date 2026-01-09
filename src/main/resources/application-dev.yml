@@ -1,0 +1,16 @@
+spring:
+    h2:
+        console:
+            enabled: true
+    datasource:
+        url: jdbc:h2:mem:DATABASE
+        username: ${DB_USERNAME}
+        password: ${DB_PASSWORD}
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: create
+        properties:
+            hibernate:
+                format_sql: true
+        defer-datasource-initialization: true
